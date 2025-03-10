@@ -124,18 +124,12 @@ const Index = () => {
                 </div>
                 
                 <div className="space-y-4">
-                  {blogPosts.map((post) => (
-                    <ArticleCard
-                      key={post.id}
-                      title={post.title}
-                      category={post.category}
-                      author={post.author}
-                      date={post.date}
-                      image={post.image}
-                      slug={post.slug}
-                      variant="compact"
-                    />
-                  ))}
+                  <ArticleGrid 
+                    articles={blogPosts} 
+                    columns={1} 
+                    variant="compact" 
+                    className="gap-4"
+                  />
                 </div>
               </div>
               
@@ -155,18 +149,12 @@ const Index = () => {
                 </div>
                 
                 <div className="space-y-4">
-                  {interviews.map((interview) => (
-                    <ArticleCard
-                      key={interview.id}
-                      title={interview.title}
-                      category={interview.category}
-                      author={interview.author}
-                      date={interview.date}
-                      image={interview.image}
-                      slug={interview.slug}
-                      variant="compact"
-                    />
-                  ))}
+                  <ArticleGrid 
+                    articles={interviews} 
+                    columns={1} 
+                    variant="compact" 
+                    className="gap-4"
+                  />
                 </div>
               </div>
               
@@ -186,18 +174,12 @@ const Index = () => {
                 </div>
                 
                 <div className="space-y-4">
-                  {reviews.map((review) => (
-                    <ArticleCard
-                      key={review.id}
-                      title={review.title}
-                      category={review.category}
-                      author={review.author}
-                      date={review.date}
-                      image={review.image}
-                      slug={review.slug}
-                      variant="compact"
-                    />
-                  ))}
+                  <ArticleGrid 
+                    articles={reviews} 
+                    columns={1} 
+                    variant="compact" 
+                    className="gap-4"
+                  />
                 </div>
               </div>
             </div>
