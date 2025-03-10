@@ -19,7 +19,6 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
   title,
   excerpt,
   category,
-  author,
   date,
   image,
   slug,
@@ -75,10 +74,6 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
         {!isCompact && excerpt && (
           <p className="text-muted-foreground text-sm mb-3 line-clamp-2">{excerpt}</p>
         )}
-        
-        <div className="mt-auto text-xs text-muted-foreground">
-          By {author}
-        </div>
       </div>
     </article>
   );

@@ -6,7 +6,6 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import Hero from '@/components/Hero';
 import ArticleGrid from '@/components/ArticleGrid';
-import SubscribeForm from '@/components/SubscribeForm';
 import { getArticlesByCategory, articles } from '@/lib/articles';
 import { Button } from '@/components/ui/button';
 
@@ -75,8 +74,6 @@ const Index = () => {
                   </h3>
                   
                   <div className="flex items-center gap-x-3 mb-4 text-sm text-muted-foreground">
-                    <span>By {post.author}</span>
-                    <span>•</span>
                     <span>{post.date}</span>
                     <span>•</span>
                     <Link 
@@ -197,13 +194,6 @@ const Index = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </section>
-        
-        {/* Newsletter */}
-        <section className="py-16">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <SubscribeForm />
           </div>
         </section>
       </main>
