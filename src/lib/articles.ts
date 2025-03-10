@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 
 export interface Article {
   id: string;
@@ -12,7 +13,8 @@ export interface Article {
   featured?: boolean;
 }
 
-export const articles: Article[] = [
+// Default articles to use while loading remote content
+export const defaultArticles: Article[] = [
   {
     id: '1',
     title: 'The Future of Digital Humanities in a Post-Pandemic World',
@@ -279,19 +281,100 @@ export const articles: Article[] = [
   }
 ];
 
+// This is the ID of a public Google Sheet to use for content
+// You will replace this with your own sheet ID
+const SHEET_ID = '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms';
+const SHEET_NAME = 'Articles';
+const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
+
+// Function to fetch articles from a Google Sheet
+export const fetchArticlesFromSheet = async (): Promise<Article[]> => {
+  try {
+    const response = await fetch(SHEET_URL);
+    const text = await response.text();
+    
+    // Google's response comes with some extra text that needs to be removed
+    const jsonStr = text.replace('/*O_o*/', '').replace(/google\.visualization\.Query\.setResponse\(|\);$/g, '');
+    const data = JSON.parse(jsonStr);
+    
+    if (!data || !data.table || !data.table.rows) {
+      console.error('Invalid data format from Google Sheets');
+      return defaultArticles;
+    }
+    
+    const cols = data.table.cols.map((col: any) => col.label);
+    
+    return data.table.rows.map((row: any, index: number) => {
+      const values = row.c.map((cell: any) => (cell ? cell.v : ''));
+      const article: any = {};
+      
+      cols.forEach((col: string, i: number) => {
+        let key = col.toLowerCase().replace(/\s+/g, '');
+        article[key] = values[i] || '';
+      });
+      
+      // Ensure id exists
+      article.id = article.id || String(index + 1);
+      
+      // Create slug if it doesn't exist
+      article.slug = article.slug || article.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+      
+      // Ensure category is one of the valid types
+      if (!['Blog', 'Interview', 'Review'].includes(article.category)) {
+        article.category = 'Blog';
+      }
+      
+      return article as Article;
+    });
+  } catch (error) {
+    console.error('Error fetching spreadsheet data:', error);
+    return defaultArticles;
+  }
+};
+
+// Custom hook to get articles
+export const useArticles = () => {
+  const [articles, setArticles] = useState<Article[]>(defaultArticles);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    const getArticles = async () => {
+      try {
+        setIsLoading(true);
+        const data = await fetchArticlesFromSheet();
+        setArticles(data);
+        setError(null);
+      } catch (err) {
+        console.error('Failed to fetch articles:', err);
+        setError(err instanceof Error ? err : new Error('Unknown error'));
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getArticles();
+  }, []);
+
+  return { articles, isLoading, error };
+};
+
+// All the functions below use the default articles for now,
+// but they can be updated to use the current articles state if needed
+
 export const getFeaturedArticles = () => {
-  return articles.filter(article => article.featured);
+  return defaultArticles.filter(article => article.featured);
 };
 
 export const getLatestArticles = (count: number = 6) => {
   // Sort by date (newest first) and return the specified count
-  return [...articles]
+  return [...defaultArticles]
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, count);
 };
 
 export const getArticlesByCategory = (category: string, count?: number) => {
-  const filtered = articles.filter(
+  const filtered = defaultArticles.filter(
     article => article.category.toLowerCase() === category.toLowerCase()
   );
   
@@ -299,5 +382,8 @@ export const getArticlesByCategory = (category: string, count?: number) => {
 };
 
 export const getArticleBySlug = (slug: string) => {
-  return articles.find(article => article.slug === slug);
+  return defaultArticles.find(article => article.slug === slug);
 };
+
+// For backward compatibility, export the default articles as "articles"
+export const articles = defaultArticles;
