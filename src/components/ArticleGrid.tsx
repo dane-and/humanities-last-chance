@@ -16,7 +16,7 @@ interface Article {
 
 interface ArticleGridProps {
   articles: Article[];
-  columns?: 2 | 3 | 4;
+  columns?: 1 | 2 | 3 | 4;
   variant?: 'default' | 'compact';
   className?: string;
 }
@@ -28,6 +28,7 @@ const ArticleGrid: React.FC<ArticleGridProps> = ({
   className,
 }) => {
   const gridCols = {
+    1: '',
     2: 'md:grid-cols-2',
     3: 'md:grid-cols-2 lg:grid-cols-3',
     4: 'md:grid-cols-2 lg:grid-cols-4',
