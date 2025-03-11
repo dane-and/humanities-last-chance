@@ -40,17 +40,18 @@ const BlogSection: React.FC<BlogSectionProps> = ({
   const currentPosts = blogPosts.slice(indexOfFirstPost, indexOfLastPost);
   
   return (
-    <div className="space-y-10">
-      <h2 className="font-serif text-2xl font-medium tracking-tight mb-8">
+    <div className="space-y-8">
+      <h2 className="font-serif text-2xl font-medium tracking-tight mb-6">
         Latest Blog Posts
       </h2>
       
       {/* Blog Posts */}
-      <div className="space-y-12">
+      <div className="space-y-8">
         {currentPosts.map((post) => (
           <ArticleCardWithTags
             key={post.id}
             article={post}
+            className="w-full"
           />
         ))}
       </div>

@@ -10,10 +10,10 @@ const SidebarSection: React.FC = () => {
   const reviews = getArticlesByCategory('review', 2);
   
   return (
-    <div className="lg:w-1/3 space-y-10 mt-10 lg:mt-0">
+    <div className="space-y-8 sticky top-4">
       {/* Interviews Section */}
-      <div className="space-y-6">
-        <div className="flex justify-between items-end">
+      <div className="space-y-4 bg-background border rounded-lg p-4">
+        <div className="flex justify-between items-end mb-4">
           <h2 className="font-serif text-xl font-medium tracking-tight">
             Latest Interviews
           </h2>
@@ -26,19 +26,19 @@ const SidebarSection: React.FC = () => {
           </Link>
         </div>
         
-        <div className="space-y-6">
+        <div className="space-y-4">
           {interviews.map((interview) => (
-            <article key={interview.id} className="border-b border-border/30 pb-4">
+            <article key={interview.id} className="border-b border-border/30 pb-4 last:border-b-0 last:pb-0">
               {interview.image && (
                 <Link to={`/article/${interview.slug}`}>
                   <img 
                     src={interview.image} 
                     alt={interview.title} 
-                    className="w-full h-40 object-cover mb-3 rounded"
+                    className="w-full h-32 object-cover mb-3 rounded"
                   />
                 </Link>
               )}
-              <h3 className="font-serif text-lg font-medium mb-2">
+              <h3 className="font-serif text-base font-medium mb-2">
                 <Link 
                   to={`/article/${interview.slug}`} 
                   className="hover:text-primary/80 transition-colors"
@@ -46,7 +46,7 @@ const SidebarSection: React.FC = () => {
                   {interview.title}
                 </Link>
               </h3>
-              <div className="text-sm text-muted-foreground">
+              <div className="text-xs text-muted-foreground">
                 {interview.date}
               </div>
             </article>
@@ -55,8 +55,8 @@ const SidebarSection: React.FC = () => {
       </div>
       
       {/* Reviews Section */}
-      <div className="space-y-6">
-        <div className="flex justify-between items-end">
+      <div className="space-y-4 bg-background border rounded-lg p-4">
+        <div className="flex justify-between items-end mb-4">
           <h2 className="font-serif text-xl font-medium tracking-tight">
             Latest Reviews
           </h2>
@@ -69,19 +69,19 @@ const SidebarSection: React.FC = () => {
           </Link>
         </div>
         
-        <div className="space-y-6">
+        <div className="space-y-4">
           {reviews.map((review) => (
-            <article key={review.id} className="border-b border-border/30 pb-4">
+            <article key={review.id} className="border-b border-border/30 pb-4 last:border-b-0 last:pb-0">
               {review.image && (
                 <Link to={`/article/${review.slug}`}>
                   <img 
                     src={review.image} 
                     alt={review.title} 
-                    className="w-full h-40 object-cover mb-3 rounded"
+                    className="w-full h-32 object-cover mb-3 rounded"
                   />
                 </Link>
               )}
-              <h3 className="font-serif text-lg font-medium mb-2">
+              <h3 className="font-serif text-base font-medium mb-2">
                 <Link 
                   to={`/article/${review.slug}`} 
                   className="hover:text-primary/80 transition-colors"
@@ -89,7 +89,7 @@ const SidebarSection: React.FC = () => {
                   {review.title}
                 </Link>
               </h3>
-              <div className="text-sm text-muted-foreground">
+              <div className="text-xs text-muted-foreground">
                 {review.date}
               </div>
             </article>
