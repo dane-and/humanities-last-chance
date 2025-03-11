@@ -40,19 +40,50 @@ const BlogSection: React.FC<BlogSectionProps> = ({
   const currentPosts = blogPosts.slice(indexOfFirstPost, indexOfLastPost);
   
   return (
-    <div className="space-y-8">
+    <div className="space-y-12">
       <h2 className="font-serif text-2xl font-medium tracking-tight mb-6">
         Latest Blog Posts
       </h2>
       
-      {/* Blog Posts */}
-      <div className="space-y-8">
+      {/* Full Blog Posts */}
+      <div className="space-y-16">
         {currentPosts.map((post) => (
-          <ArticleCardWithTags
-            key={post.id}
-            article={post}
-            className="w-full"
-          />
+          <article key={post.id} className="prose prose-lg max-w-none">
+            <h2 className="font-serif text-2xl font-medium mb-4">
+              <Link to={`/article/${post.slug}`} className="hover:text-primary transition-colors">
+                {post.title}
+              </Link>
+            </h2>
+            
+            {post.image && (
+              <img
+                src={post.image}
+                alt={post.title}
+                className="w-full h-64 object-cover rounded-lg mb-6"
+              />
+            )}
+            
+            <div className="flex items-center gap-x-3 text-sm text-muted-foreground mb-4">
+              <span>{post.date}</span>
+              <span>•</span>
+              <Link 
+                to={`/articles/${post.category.toLowerCase()}`}
+                className="hover:text-primary"
+              >
+                {post.category}
+              </Link>
+            </div>
+            
+            <div className="text-muted-foreground">
+              {post.content}
+            </div>
+            
+            {post.tags && post.tags.length > 0 && (
+              <div className="mt-6">
+                <TagList tags={post.tags} />
+              </div>
+            )}
+          </article>
         ))}
       </div>
       

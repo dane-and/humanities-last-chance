@@ -43,16 +43,16 @@ const Navigation = () => {
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex-shrink-0 flex items-center gap-2">
+        <div className="flex justify-between items-center h-20">
+          <div className="flex-shrink-0 flex items-center gap-3">
             <img 
               src="/lovable-uploads/e658c919-e309-420a-aba2-1cd4af9fd449.png" 
               alt="Humanities Last Chance Logo" 
-              className="h-8 w-auto"
+              className="h-12 w-auto"
             />
             <Link 
               to="/" 
-              className="font-serif text-xl font-bold tracking-tighter"
+              className="font-serif text-2xl font-bold tracking-tighter"
               aria-label="Humanities Last Chance"
             >
               Humanities Last Chance
