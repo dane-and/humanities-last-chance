@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -10,6 +9,9 @@ import { useToast } from '@/hooks/use-toast';
 import { articles, Article } from '@/lib/articles';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { X } from 'lucide-react';
+
+const PREDEFINED_TAGS = ['History', 'Literature', 'Philosophy', 'Teaching', 'News'];
 
 const AdminDashboard: React.FC = () => {
   const { isAuthenticated, logout } = useAuth();
@@ -17,6 +19,8 @@ const AdminDashboard: React.FC = () => {
   const { toast } = useToast();
   const [articleList, setArticleList] = useState<Article[]>([]);
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [customTag, setCustomTag] = useState('');
   
   const [formData, setFormData] = useState({
     id: '',
@@ -28,7 +32,8 @@ const AdminDashboard: React.FC = () => {
     image: '',
     excerpt: '',
     content: '',
-    featured: false
+    featured: false,
+    tags: [] as string[]
   });
 
   useEffect(() => {
@@ -83,13 +88,40 @@ const AdminDashboard: React.FC = () => {
         image: article.image,
         excerpt: article.excerpt || '',
         content: article.content,
-        featured: article.featured || false
+        featured: article.featured || false,
+        tags: article.tags || []
       });
+      setSelectedTags(article.tags || []);
+    }
+  };
+
+  const handleTagSelect = (tag: string) => {
+    if (!selectedTags.includes(tag)) {
+      const newTags = [...selectedTags, tag];
+      setSelectedTags(newTags);
+      setFormData(prev => ({ ...prev, tags: newTags }));
+    }
+  };
+
+  const handleRemoveTag = (tag: string) => {
+    const newTags = selectedTags.filter(t => t !== tag);
+    setSelectedTags(newTags);
+    setFormData(prev => ({ ...prev, tags: newTags }));
+  };
+
+  const handleAddCustomTag = () => {
+    if (customTag && customTag.trim() !== '' && !selectedTags.includes(customTag.trim())) {
+      const newTag = customTag.trim();
+      const newTags = [...selectedTags, newTag];
+      setSelectedTags(newTags);
+      setFormData(prev => ({ ...prev, tags: newTags }));
+      setCustomTag('');
     }
   };
 
   const handleNewArticle = () => {
     setSelectedArticle(null);
+    setSelectedTags([]);
     setFormData({
       id: Date.now().toString(),
       title: '',
@@ -100,7 +132,8 @@ const AdminDashboard: React.FC = () => {
       image: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3',
       excerpt: '',
       content: '',
-      featured: false
+      featured: false,
+      tags: []
     });
   };
 
@@ -162,7 +195,6 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  // Quill editor modules and formats configuration
   const modules = {
     toolbar: [
       [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
@@ -291,6 +323,52 @@ const AdminDashboard: React.FC = () => {
                   onChange={handleInputChange}
                   placeholder="https://example.com/image.jpg"
                 />
+              </div>
+              
+              <div className="space-y-2 md:col-span-2">
+                <label className="text-sm font-medium">Tags</label>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {selectedTags.map(tag => (
+                    <div key={tag} className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-sm flex items-center">
+                      {tag}
+                      <button 
+                        type="button" 
+                        onClick={() => handleRemoveTag(tag)}
+                        className="ml-2 text-secondary-foreground/70 hover:text-secondary-foreground"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="flex gap-2">
+                  <Select onValueChange={(value) => handleTagSelect(value)}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select a tag" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {PREDEFINED_TAGS.filter(tag => !selectedTags.includes(tag)).map(tag => (
+                        <SelectItem key={tag} value={tag}>{tag}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="Add custom tag"
+                      value={customTag}
+                      onChange={(e) => setCustomTag(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleAddCustomTag();
+                        }
+                      }}
+                    />
+                    <Button type="button" onClick={handleAddCustomTag}>Add</Button>
+                  </div>
+                </div>
               </div>
               
               <div className="space-y-2 md:col-span-2">

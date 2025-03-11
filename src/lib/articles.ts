@@ -11,6 +11,7 @@ export interface Article {
   excerpt: string;
   content: string;
   featured?: boolean;
+  tags?: string[]; // Add tags array to the Article interface
 }
 
 // Default articles to use while loading
@@ -424,3 +425,15 @@ export const getArticleBySlug = (slug: string, articleList: Article[] = []) => {
 
 // For backward compatibility, export the default articles as "articles"
 export const articles = defaultArticles;
+
+// Add a new utility function to get articles by tag
+export const getArticlesByTag = (tag: string, count?: number, articleList: Article[] = []) => {
+  // Use provided article list or get from localStorage
+  const articles = articleList.length ? articleList : getArticlesFromStorage();
+  
+  const filtered = articles.filter(
+    article => article.tags && article.tags.includes(tag)
+  );
+  
+  return count ? filtered.slice(0, count) : filtered;
+};

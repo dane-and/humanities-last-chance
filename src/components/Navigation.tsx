@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import SearchBar from './SearchBar';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -56,8 +57,8 @@ const Navigation = () => {
           </div>
           
           {/* Desktop Navigation */}
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-center space-x-8">
+          <div className="hidden md:flex items-center">
+            <div className="flex items-center space-x-8">
               {navItems.map((item) => (
                 <Link
                   key={item.name}
@@ -73,10 +74,14 @@ const Navigation = () => {
                 </Link>
               ))}
             </div>
+            <div className="ml-6">
+              <SearchBar />
+            </div>
           </div>
           
-          {/* Mobile menu button */}
-          <div className="md:hidden">
+          {/* Mobile menu button and search */}
+          <div className="md:hidden flex items-center">
+            <SearchBar className="mr-2" />
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-primary focus:outline-none"
