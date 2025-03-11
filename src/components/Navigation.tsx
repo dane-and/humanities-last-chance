@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
@@ -33,7 +32,6 @@ const Navigation = () => {
   }, []);
   
   useEffect(() => {
-    // Close mobile menu when route changes
     setIsOpen(false);
   }, [location.pathname]);
   
@@ -46,7 +44,12 @@ const Navigation = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 flex items-center gap-2">
+            <img 
+              src="/lovable-uploads/e658c919-e309-420a-aba2-1cd4af9fd449.png" 
+              alt="Humanities Last Chance Logo" 
+              className="h-8 w-auto"
+            />
             <Link 
               to="/" 
               className="font-serif text-xl font-bold tracking-tighter"

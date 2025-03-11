@@ -9,8 +9,8 @@ const Footer = () => {
     <footer className="border-t bg-secondary/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="py-12 md:py-16">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="md:col-span-2">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="md:col-span-1">
               <Link to="/" className="font-serif text-xl font-bold tracking-tighter">
                 Humanities Last Chance
               </Link>
@@ -57,16 +57,6 @@ const Footer = () => {
                 <li>
                   <Link to="/contact" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                     Contact
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/privacy" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                    Privacy Policy
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/terms" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                    Terms of Use
                   </Link>
                 </li>
               </ul>
