@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import Hero from '@/components/Hero';
+import { Mail } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 const Contact = () => {
@@ -46,7 +47,7 @@ const Contact = () => {
       <main className="flex-grow pt-16">
         <Hero
           title="Contact Us"
-          subtitle="Get in touch with our editorial team for inquiries, submissions, or feedback."
+          subtitle="Get in touch with our editorial team for inquiries or feedback."
           size="medium"
         />
         
@@ -58,44 +59,20 @@ const Contact = () => {
                   Get in Touch
                 </h2>
                 <p className="text-muted-foreground mb-8">
-                  Have a question, suggestion, or want to contribute to Humanities Last Chance? 
+                  Have a question or suggestion about Humanities Last Chance? 
                   We'd love to hear from you. Fill out the form, and our team will get back to you as soon as possible.
                 </p>
                 
                 <div className="space-y-6">
                   <div>
-                    <h3 className="font-medium mb-2">Editorial Inquiries</h3>
+                    <h3 className="font-medium mb-2">Contact</h3>
                     <p className="text-sm text-muted-foreground">
-                      For questions about our content, submitting articles, or collaboration opportunities.
+                      For questions about our content or other inquiries.
                     </p>
-                    <p className="text-sm mt-1">
-                      <a href="mailto:editorial@humanitieslastchance.com" className="text-primary hover:text-primary/80">
-                        editorial@humanitieslastchance.com
-                      </a>
-                    </p>
-                  </div>
-                  
-                  <div>
-                    <h3 className="font-medium mb-2">General Information</h3>
-                    <p className="text-sm text-muted-foreground">
-                      For general questions, feedback, or other inquiries.
-                    </p>
-                    <p className="text-sm mt-1">
-                      <a href="mailto:info@humanitieslastchance.com" className="text-primary hover:text-primary/80">
-                        info@humanitieslastchance.com
-                      </a>
-                    </p>
-                  </div>
-                  
-                  <div>
-                    <h3 className="font-medium mb-2">Submission Guidelines</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Interested in contributing? We welcome submissions from scholars, writers, and thinkers 
-                      engaged with humanities scholarship.
-                    </p>
-                    <p className="text-sm mt-1">
-                      <a href="/submission-guidelines" className="text-primary hover:text-primary/80">
-                        Read our submission guidelines
+                    <p className="text-sm mt-1 flex items-center">
+                      <Mail className="mr-2 h-4 w-4" />
+                      <a href="mailto:danea@umich.edu" className="text-primary hover:text-primary/80">
+                        danea@umich.edu
                       </a>
                     </p>
                   </div>
@@ -147,8 +124,7 @@ const Contact = () => {
                       className="w-full px-3 py-2 border border-border text-foreground bg-background focus:outline-none focus:ring-1 focus:ring-primary"
                     >
                       <option value="">Select a subject</option>
-                      <option value="Editorial">Editorial Inquiry</option>
-                      <option value="Submission">Article Submission</option>
+                      <option value="Inquiry">General Inquiry</option>
                       <option value="Feedback">Feedback</option>
                       <option value="Other">Other</option>
                     </select>
