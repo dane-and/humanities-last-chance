@@ -12,6 +12,7 @@ import SearchPage from "./pages/SearchPage";
 import TagsPage from "./pages/TagsPage";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import ArticlePage from "./pages/ArticlePage";
 
 // Create ArticleCategory pages
 import ArticlesBlog from "./pages/articles/ArticlesBlog";
@@ -38,6 +39,8 @@ const App = () => (
           <Route path="/articles/blog" element={<ArticlesBlog />} />
           <Route path="/articles/interviews" element={<ArticlesInterviews />} />
           <Route path="/articles/reviews" element={<ArticlesReviews />} />
+          {/* Individual article route */}
+          <Route path="/article/:slug" element={<ArticlePage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
