@@ -1,3 +1,4 @@
+
 name: Deploy to GitHub Pages
 
 on:
@@ -34,3 +35,4 @@ jobs:
           publish_dir: ./dist
           cname: humanitieslast.com
           force_orphan: true
+
