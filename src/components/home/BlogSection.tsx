@@ -43,9 +43,7 @@ const BlogSection: React.FC<BlogSectionProps> = ({
   
   return (
     <div className="space-y-12">
-      <h2 className="font-serif text-2xl font-medium tracking-tight mb-6">
-        Latest Blog Posts
-      </h2>
+      {/* Removed the "Latest Blog Posts" heading */}
       
       {/* Full Blog Posts */}
       <div className="space-y-16">
