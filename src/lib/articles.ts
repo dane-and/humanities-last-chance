@@ -13,7 +13,7 @@ export interface Article {
   featured?: boolean;
 }
 
-// Default articles to use while loading remote content
+// Default articles to use while loading
 export const defaultArticles: Article[] = [
   {
     id: '1',
@@ -286,7 +286,52 @@ const SHEET_ID = '1oXWfLDlqucIeqI0MKCWL2v3EcdLgha6YYDwYqa9FgX4';
 const SHEET_NAME = 'Articles';
 const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
 
-// Function to fetch articles from a Google Sheet
+// Custom hook to get articles from localStorage or default
+export const useArticles = () => {
+  const [articles, setArticles] = useState<Article[]>(defaultArticles);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    const getArticles = async () => {
+      try {
+        setIsLoading(true);
+        
+        // First check localStorage for admin-managed articles
+        const savedArticles = localStorage.getItem('admin-articles');
+        if (savedArticles) {
+          setArticles(JSON.parse(savedArticles));
+          setError(null);
+          setIsLoading(false);
+          return;
+        }
+        
+        // Fall back to Google Sheets if no admin articles
+        try {
+          const data = await fetchArticlesFromSheet();
+          setArticles(data);
+          setError(null);
+        } catch (err) {
+          console.error('Failed to fetch from Google Sheet, using defaults:', err);
+          // Use default articles as fallback
+          setArticles(defaultArticles);
+          setError(new Error('Failed to fetch articles from external source.'));
+        }
+      } catch (err) {
+        console.error('Error loading articles:', err);
+        setError(err instanceof Error ? err : new Error('Unknown error'));
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getArticles();
+  }, []);
+
+  return { articles, isLoading, error };
+};
+
+// Function to fetch articles from a Google Sheet (as fallback)
 export const fetchArticlesFromSheet = async (): Promise<Article[]> => {
   try {
     const response = await fetch(SHEET_URL);
@@ -331,57 +376,50 @@ export const fetchArticlesFromSheet = async (): Promise<Article[]> => {
   }
 };
 
-// Custom hook to get articles
-export const useArticles = () => {
-  const [articles, setArticles] = useState<Article[]>(defaultArticles);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    const getArticles = async () => {
-      try {
-        setIsLoading(true);
-        const data = await fetchArticlesFromSheet();
-        setArticles(data);
-        setError(null);
-      } catch (err) {
-        console.error('Failed to fetch articles:', err);
-        setError(err instanceof Error ? err : new Error('Unknown error'));
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    getArticles();
-  }, []);
-
-  return { articles, isLoading, error };
+// Helper function to get articles from localStorage or default
+const getArticlesFromStorage = (): Article[] => {
+  try {
+    const savedArticles = localStorage.getItem('admin-articles');
+    return savedArticles ? JSON.parse(savedArticles) : defaultArticles;
+  } catch (e) {
+    console.error('Error reading from localStorage:', e);
+    return defaultArticles;
+  }
 };
 
-// All the functions below use the default articles for now,
-// but they can be updated to use the current articles state if needed
-
-export const getFeaturedArticles = () => {
-  return defaultArticles.filter(article => article.featured);
+// All functions below now work with the current articles - either from localStorage or defaults
+export const getFeaturedArticles = (articleList: Article[] = []) => {
+  // Use provided article list or get from localStorage
+  const articles = articleList.length ? articleList : getArticlesFromStorage();
+  return articles.filter(article => article.featured);
 };
 
-export const getLatestArticles = (count: number = 6) => {
+export const getLatestArticles = (count: number = 6, articleList: Article[] = []) => {
+  // Use provided article list or get from localStorage
+  const articles = articleList.length ? articleList : getArticlesFromStorage();
+  
   // Sort by date (newest first) and return the specified count
-  return [...defaultArticles]
+  return [...articles]
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, count);
 };
 
-export const getArticlesByCategory = (category: string, count?: number) => {
-  const filtered = defaultArticles.filter(
+export const getArticlesByCategory = (category: string, count?: number, articleList: Article[] = []) => {
+  // Use provided article list or get from localStorage
+  const articles = articleList.length ? articleList : getArticlesFromStorage();
+  
+  const filtered = articles.filter(
     article => article.category.toLowerCase() === category.toLowerCase()
   );
   
   return count ? filtered.slice(0, count) : filtered;
 };
 
-export const getArticleBySlug = (slug: string) => {
-  return defaultArticles.find(article => article.slug === slug);
+export const getArticleBySlug = (slug: string, articleList: Article[] = []) => {
+  // Use provided article list or get from localStorage
+  const articles = articleList.length ? articleList : getArticlesFromStorage();
+  
+  return articles.find(article => article.slug === slug);
 };
 
 // For backward compatibility, export the default articles as "articles"
