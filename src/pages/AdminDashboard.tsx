@@ -8,6 +8,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { articles, Article } from '@/lib/articles';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const AdminDashboard: React.FC = () => {
   const { isAuthenticated, logout } = useAuth();
@@ -52,6 +54,10 @@ const AdminDashboard: React.FC = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleEditorChange = (content: string) => {
+    setFormData(prev => ({ ...prev, content }));
   };
 
   const handleSelectChange = (name: string, value: string) => {
@@ -155,6 +161,26 @@ const AdminDashboard: React.FC = () => {
       });
     }
   };
+
+  // Quill editor modules and formats configuration
+  const modules = {
+    toolbar: [
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      ['blockquote', 'code-block'],
+      ['link', 'image'],
+      ['clean']
+    ],
+  };
+  
+  const formats = [
+    'header',
+    'bold', 'italic', 'underline', 'strike',
+    'list', 'bullet',
+    'blockquote', 'code-block',
+    'link', 'image'
+  ];
 
   return (
     <div className="min-h-screen bg-muted/40">
@@ -279,14 +305,18 @@ const AdminDashboard: React.FC = () => {
               </div>
               
               <div className="space-y-2 md:col-span-2">
-                <label className="text-sm font-medium">Content (HTML)</label>
-                <Textarea 
-                  name="content"
-                  value={formData.content}
-                  onChange={handleInputChange}
-                  placeholder="Article content in HTML format"
-                  rows={10}
-                />
+                <label className="text-sm font-medium">Content</label>
+                <div className="border border-input rounded-md overflow-hidden">
+                  <ReactQuill 
+                    theme="snow"
+                    value={formData.content}
+                    onChange={handleEditorChange}
+                    modules={modules}
+                    formats={formats}
+                    placeholder="Write your article content here..."
+                    className="min-h-[300px] bg-background"
+                  />
+                </div>
               </div>
               
               <div className="flex items-center space-x-2">
