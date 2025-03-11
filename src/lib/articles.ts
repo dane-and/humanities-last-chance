@@ -281,9 +281,8 @@ export const defaultArticles: Article[] = [
   }
 ];
 
-// This is the ID of a public Google Sheet to use for content
-// You will replace this with your own sheet ID
-const SHEET_ID = '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms';
+// This is the ID of your Google Sheet to use for content
+const SHEET_ID = '1oXWfLDlqucIeqI0MKCWL2v3EcdLgha6YYDwYqa9FgX4';
 const SHEET_NAME = 'Articles';
 const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
 
