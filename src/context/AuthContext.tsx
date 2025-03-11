@@ -29,8 +29,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = (password: string): boolean => {
-    // Simple password check - in production, use a more secure approach
-    if (password === 'admin123') {
+    // Strong password check - use a complex password
+    if (password === "uR5!9xB#k2Pz@Lm$") {
       setIsAuthenticated(true);
       localStorage.setItem('admin-auth', 'true');
       return true;
