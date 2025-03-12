@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
@@ -88,19 +89,19 @@ const Navigation = () => {
           
           {/* Mobile menu button and search */}
           <div className="flex items-center md:hidden">
-            <SearchBar className="mr-2" />
+            <SearchBar className="mr-4" />
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-md bg-secondary text-primary hover:bg-secondary/80 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="inline-flex items-center justify-center p-2 rounded-md bg-primary text-white hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary"
               aria-label={isOpen ? "Close menu" : "Open menu"}
               aria-expanded={isOpen}
               aria-controls="mobile-menu"
               type="button"
             >
               {isOpen ? (
-                <X className="h-6 w-6" aria-hidden="true" />
+                <X className="h-7 w-7" aria-hidden="true" />
               ) : (
-                <Menu className="h-6 w-6" aria-hidden="true" />
+                <Menu className="h-7 w-7" aria-hidden="true" />
               )}
             </button>
           </div>
@@ -111,7 +112,7 @@ const Navigation = () => {
       <div
         id="mobile-menu"
         className={cn(
-          'absolute top-20 left-0 right-0 md:hidden bg-background border-b shadow-lg',
+          'absolute top-20 inset-x-0 md:hidden bg-background border-b shadow-lg',
           isOpen ? 'block' : 'hidden'
         )}
         style={{ zIndex: 99 }}
