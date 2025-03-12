@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -14,7 +13,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
 
-    --primary: 240 5.9% 10%;
+    --primary: 200 97% 48%;
     --primary-foreground: 0 0% 98%;
 
     --secondary: 240 4.8% 95.9%;
@@ -56,7 +55,7 @@
   }
   
   a {
-    @apply transition-colors duration-200;
+    @apply transition-colors duration-200 hover:text-primary no-underline;
   }
 }
 

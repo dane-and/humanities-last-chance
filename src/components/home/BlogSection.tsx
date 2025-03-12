@@ -55,14 +55,14 @@ const BlogSection: React.FC<BlogSectionProps> = ({
   
   return (
     <div className="space-y-12">
-      {/* Removed the "Latest Blog Posts" heading */}
-      
-      {/* Full Blog Posts */}
       <div className="space-y-16">
         {currentPosts.map((post) => (
           <article key={post.id} className="prose prose-lg max-w-none">
-            <h2 className="font-serif text-2xl font-medium mb-4">
-              <Link to={`/article/${post.slug}`} className="hover:text-primary transition-colors">
+            <h2 className="font-serif text-2xl font-bold mb-4">
+              <Link 
+                to={`/article/${post.slug}`} 
+                className="hover:text-primary transition-colors no-underline"
+              >
                 {post.title}
               </Link>
             </h2>
@@ -111,14 +111,14 @@ const BlogSection: React.FC<BlogSectionProps> = ({
         ))}
       </div>
       
-      {/* Pagination Controls */}
+      {/* Pagination Controls with updated button styles */}
       {totalPages > 1 && (
         <div className="flex justify-between items-center pt-8">
           <Button
             variant="outline"
             onClick={prevPage}
             disabled={currentPage === 1}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 hover:bg-primary/5"
           >
             <ChevronLeft className="h-4 w-4" />
             Previous
@@ -132,7 +132,7 @@ const BlogSection: React.FC<BlogSectionProps> = ({
             variant="outline"
             onClick={nextPage}
             disabled={currentPage === totalPages}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 hover:bg-primary/5"
           >
             Next
             <ChevronRight className="h-4 w-4" />
