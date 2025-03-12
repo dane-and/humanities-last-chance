@@ -46,20 +46,21 @@ const Navigation = () => {
       aria-label="Main Navigation"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-          <div className="flex-shrink-0 flex items-center gap-3">
+        <div className="flex justify-between items-center h-16 md:h-20">
+          <div className="flex-shrink-0 flex items-center gap-2">
             <img 
               src="/lovable-uploads/e658c919-e309-420a-aba2-1cd4af9fd449.png" 
               alt="Humanities Last Chance Logo" 
-              className="h-12 w-auto"
+              className="h-8 w-auto md:h-12"
               loading="eager"
             />
             <Link 
               to="/" 
-              className="font-serif text-2xl font-bold tracking-tighter"
+              className="font-serif text-xl md:text-2xl font-bold tracking-tighter"
               aria-label="Humanities Last Chance - Return to homepage"
             >
-              Humanities Last Chance
+              <span className="hidden sm:inline">Humanities Last Chance</span>
+              <span className="sm:hidden">HLC</span>
             </Link>
           </div>
           
@@ -88,20 +89,20 @@ const Navigation = () => {
           </div>
           
           {/* Mobile menu button and search */}
-          <div className="flex items-center md:hidden">
-            <SearchBar className="mr-4" />
+          <div className="flex items-center gap-3 md:hidden">
+            <SearchBar className="mr-1" />
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md bg-primary text-white hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="flex items-center justify-center p-2 rounded-md bg-primary text-white hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary"
               aria-label={isOpen ? "Close menu" : "Open menu"}
               aria-expanded={isOpen}
               aria-controls="mobile-menu"
               type="button"
             >
               {isOpen ? (
-                <X className="h-7 w-7" aria-hidden="true" />
+                <X className="h-6 w-6" aria-hidden="true" />
               ) : (
-                <Menu className="h-7 w-7" aria-hidden="true" />
+                <Menu className="h-6 w-6" aria-hidden="true" />
               )}
             </button>
           </div>
@@ -112,11 +113,9 @@ const Navigation = () => {
       <div
         id="mobile-menu"
         className={cn(
-          'absolute top-20 inset-x-0 md:hidden bg-background border-b shadow-lg',
+          'fixed top-16 left-0 right-0 md:hidden bg-background border-b shadow-lg z-[101]',
           isOpen ? 'block' : 'hidden'
         )}
-        style={{ zIndex: 99 }}
-        aria-hidden={!isOpen}
       >
         <div className="px-2 py-3 space-y-1">
           {navItems.map((item) => (

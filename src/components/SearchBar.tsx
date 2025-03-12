@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { useArticles } from '@/lib/articles';
+import { cn } from '@/lib/utils';
 
 interface SearchBarProps {
   className?: string;
@@ -65,13 +66,13 @@ const SearchBar: React.FC<SearchBarProps> = ({ className }) => {
   };
 
   return (
-    <div ref={searchRef} className={`relative ${className}`}>
+    <div ref={searchRef} className={cn('relative', className)}>
       {isOpen ? (
         <div className="relative">
           <form onSubmit={handleSearch}>
             <div className="flex">
               <Input
-                className="w-full pr-10"
+                className="w-full md:w-64 pr-10 h-9"
                 placeholder="Search articles..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -80,7 +81,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ className }) => {
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="absolute right-0 top-0"
+                className="absolute right-0 top-0 h-9 w-9"
                 onClick={() => setIsOpen(false)}
                 type="button"
               >
@@ -98,7 +99,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ className }) => {
                     className="px-4 py-2 hover:bg-muted cursor-pointer"
                     onClick={() => navigateToArticle(article.slug)}
                   >
-                    <div className="font-medium">{article.title}</div>
+                    <div className="font-medium truncate">{article.title}</div>
                     <div className="text-xs text-muted-foreground truncate">
                       {article.excerpt || article.content.replace(/<[^>]*>/g, '').substring(0, 60)}...
                     </div>
@@ -114,6 +115,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ className }) => {
           size="icon" 
           onClick={() => setIsOpen(true)}
           aria-label="Search"
+          className="h-9 w-9 min-h-0 min-w-0"
         >
           <Search className="h-5 w-5" />
         </Button>
