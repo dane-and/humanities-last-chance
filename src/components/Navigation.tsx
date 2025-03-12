@@ -88,20 +88,20 @@ const Navigation = () => {
           </div>
           
           {/* Mobile menu button and search */}
-          <div className="flex md:hidden items-center gap-2">
+          <div className="flex md:hidden items-center">
             <SearchBar className="mr-2" />
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-primary bg-secondary/30 hover:bg-secondary/50 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="p-2 rounded-md bg-secondary text-primary hover:bg-secondary/80 focus:outline-none focus:ring-2 focus:ring-primary"
               aria-label={isOpen ? "Close menu" : "Open menu"}
               aria-expanded={isOpen}
               aria-controls="mobile-menu"
               type="button"
             >
               {isOpen ? (
-                <X className="h-8 w-8" aria-hidden="true" />
+                <X className="h-6 w-6" aria-hidden="true" />
               ) : (
-                <Menu className="h-8 w-8" aria-hidden="true" />
+                <Menu className="h-6 w-6" aria-hidden="true" />
               )}
             </button>
           </div>
@@ -112,12 +112,14 @@ const Navigation = () => {
       <div
         id="mobile-menu"
         className={cn(
-          'md:hidden transition-all duration-300 ease-in-out overflow-hidden',
-          isOpen ? 'max-h-[500px] opacity-100 visible bg-background/95 backdrop-blur-md border-b' : 'max-h-0 opacity-0 invisible'
+          'md:hidden',
+          isOpen 
+            ? 'block bg-background border-b shadow-lg' 
+            : 'hidden'
         )}
         aria-hidden={!isOpen}
       >
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <div className="px-2 py-3 space-y-1 sm:px-3">
           {navItems.map((item) => (
             <Link
               key={item.name}
