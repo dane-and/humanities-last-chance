@@ -88,20 +88,20 @@ const Navigation = () => {
           </div>
           
           {/* Mobile menu button and search */}
-          <div className="flex items-center space-x-2 md:hidden">
-            <SearchBar className="mr-1" />
+          <div className="flex md:hidden items-center gap-2">
+            <SearchBar className="mr-2" />
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-primary hover:bg-secondary/50 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="inline-flex items-center justify-center p-2 rounded-md text-primary bg-secondary/30 hover:bg-secondary/50 focus:outline-none focus:ring-2 focus:ring-primary"
               aria-label={isOpen ? "Close menu" : "Open menu"}
               aria-expanded={isOpen}
               aria-controls="mobile-menu"
               type="button"
             >
               {isOpen ? (
-                <X className="h-7 w-7" aria-hidden="true" />
+                <X className="h-8 w-8" aria-hidden="true" />
               ) : (
-                <Menu className="h-7 w-7" aria-hidden="true" />
+                <Menu className="h-8 w-8" aria-hidden="true" />
               )}
             </button>
           </div>
