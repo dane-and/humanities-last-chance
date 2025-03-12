@@ -4,7 +4,6 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import BlogSection from '@/components/home/BlogSection';
 import SidebarSection from '@/components/home/SidebarSection';
-import Hero from '@/components/Hero';
 import { useArticles } from '@/lib/articles';
 
 const Index = () => {
@@ -13,7 +12,6 @@ const Index = () => {
   const { articles, isLoading } = useArticles();
   const [scrollY, setScrollY] = useState(0);
   
-  // Track scroll position for animation effects
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
@@ -23,30 +21,11 @@ const Index = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   
-  // Get the first featured article or fallback
-  const featuredArticle = !isLoading && articles.length > 0 
-    ? articles.find(article => article.category === 'Blog') || articles[0]
-    : null;
-  
   return (
     <div className="page-transition min-h-screen flex flex-col">
       <Navigation />
       
-      {/* Hero Section */}
-      {featuredArticle && (
-        <Hero
-          title="Humanities Last Chance"
-          subtitle="A digital magazine publishing daily blog posts, interviews, and reviews about humanities scholarship."
-          backgroundImage={featuredArticle.image}
-          buttonText="Start Reading"
-          buttonLink="/articles/blog"
-          overlay={true}
-          size="medium"
-          className="mt-14 md:mt-20"
-        />
-      )}
-      
-      <main className="flex-grow pt-12">
+      <main className="flex-grow pt-20 md:pt-24">
         <section className="py-8">
           <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
             <div 
