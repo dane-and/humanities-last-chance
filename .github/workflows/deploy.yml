@@ -1,3 +1,8 @@
+
+# This workflow is kept for reference purposes
+# When migrating to Hostinger, this workflow won't be used
+# as you'll upload files directly to your Hostinger hosting
+
 name: Deploy to GitHub Pages
 
 on:

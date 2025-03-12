@@ -14,26 +14,40 @@ export const useArticles = () => {
       try {
         setIsLoading(true);
         
-        const savedArticles = localStorage.getItem('admin-articles');
-        if (savedArticles) {
-          setArticles(JSON.parse(savedArticles));
-          setError(null);
-          setIsLoading(false);
-          return;
+        // Try to get articles from localStorage first
+        try {
+          const localArticles = getArticlesFromStorage();
+          if (localArticles && localArticles.length > defaultArticles.length) {
+            setArticles(localArticles);
+            setError(null);
+            setIsLoading(false);
+            return;
+          }
+        } catch (localErr) {
+          console.warn('Could not retrieve from localStorage:', localErr);
         }
         
+        // Try to fetch from external source
         try {
           const data = await fetchArticlesFromSheet();
-          setArticles(data);
-          setError(null);
-        } catch (err) {
-          console.error('Failed to fetch from Google Sheet, using defaults:', err);
+          if (data && data.length > 0) {
+            setArticles(data);
+            setError(null);
+          } else {
+            // If we received empty data, use defaults
+            setArticles(defaultArticles);
+            console.warn('Received empty data from external source, using defaults');
+          }
+        } catch (fetchErr) {
+          console.error('Failed to fetch from external source, using defaults:', fetchErr);
           setArticles(defaultArticles);
-          setError(new Error('Failed to fetch articles from external source.'));
+          setError(new Error('Failed to fetch articles from external source. Using default content.'));
         }
       } catch (err) {
         console.error('Error loading articles:', err);
         setError(err instanceof Error ? err : new Error('Unknown error'));
+        // Ensure we at least have the default articles
+        setArticles(defaultArticles);
       } finally {
         setIsLoading(false);
       }

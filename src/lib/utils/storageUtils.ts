@@ -6,8 +6,12 @@ import { Article, defaultArticles } from '../types/article';
  */
 export const getArticlesFromStorage = (): Article[] => {
   try {
-    const savedArticles = localStorage.getItem('admin-articles');
-    return savedArticles ? JSON.parse(savedArticles) : defaultArticles;
+    // Check if we're in a browser environment (for SSR compatibility)
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const savedArticles = localStorage.getItem('admin-articles');
+      return savedArticles ? JSON.parse(savedArticles) : defaultArticles;
+    }
+    return defaultArticles;
   } catch (e) {
     console.error('Error reading from localStorage:', e);
     return defaultArticles;
@@ -19,7 +23,10 @@ export const getArticlesFromStorage = (): Article[] => {
  */
 export const saveArticlesToStorage = (articles: Article[]): void => {
   try {
-    localStorage.setItem('admin-articles', JSON.stringify(articles));
+    // Check if we're in a browser environment (for SSR compatibility)
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem('admin-articles', JSON.stringify(articles));
+    }
   } catch (e) {
     console.error('Error saving to localStorage:', e);
   }
