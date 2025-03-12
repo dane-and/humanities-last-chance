@@ -87,8 +87,8 @@ const Navigation = () => {
             </div>
           </div>
           
-          {/* Mobile menu button and search - Fixing the missing menu button */}
-          <div className="md:hidden flex items-center">
+          {/* Mobile menu button and search */}
+          <div className="flex items-center md:hidden">
             <SearchBar className="mr-2" />
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -98,22 +98,23 @@ const Navigation = () => {
               aria-controls="mobile-menu"
             >
               {isOpen ? (
-                <X className="h-5 w-5" aria-hidden="true" />
+                <X className="h-6 w-6" aria-hidden="true" />
               ) : (
-                <Menu className="h-5 w-5" aria-hidden="true" />
+                <Menu className="h-6 w-6" aria-hidden="true" />
               )}
             </button>
           </div>
         </div>
       </div>
       
-      {/* Mobile Navigation */}
+      {/* Mobile Navigation Menu */}
       <div
         id="mobile-menu"
         className={cn(
           'md:hidden transition-all duration-300 ease-in-out overflow-hidden',
-          isOpen ? 'max-h-screen bg-background/95 backdrop-blur-md border-b' : 'max-h-0'
+          isOpen ? 'max-h-96 bg-background/95 backdrop-blur-md border-b' : 'max-h-0'
         )}
+        aria-hidden={!isOpen}
       >
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
           {navItems.map((item) => (
@@ -121,7 +122,7 @@ const Navigation = () => {
               key={item.name}
               to={item.path}
               className={cn(
-                'block px-3 py-2 rounded-md text-base font-medium',
+                'block px-3 py-3 rounded-md text-base font-medium',
                 location.pathname === item.path
                   ? 'text-primary bg-secondary/50'
                   : 'text-muted-foreground hover:text-primary hover:bg-secondary/50'
