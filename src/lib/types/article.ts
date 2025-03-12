@@ -1,4 +1,14 @@
 
+export interface Comment {
+  id: string;
+  articleId: string;
+  name: string;
+  content: string;
+  date: string;
+  likes: number;
+  dislikes: number;
+}
+
 export interface Article {
   id: string;
   title: string;
@@ -11,6 +21,7 @@ export interface Article {
   content: string;
   featured?: boolean;
   tags?: string[];
+  comments?: Comment[];
 }
 
 // Empty sample articles to maintain structure
@@ -26,6 +37,7 @@ export const defaultArticles: Article[] = [
     excerpt: '',
     content: '',
     featured: true,
+    comments: [],
   },
   {
     id: '2',
@@ -38,6 +50,7 @@ export const defaultArticles: Article[] = [
     excerpt: '',
     content: '',
     featured: true,
+    comments: [],
   },
   {
     id: '3',
@@ -50,5 +63,6 @@ export const defaultArticles: Article[] = [
     excerpt: '',
     content: '',
     featured: false,
+    comments: [],
   }
 ];

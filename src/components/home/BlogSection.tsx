@@ -4,8 +4,9 @@ import { Link } from 'react-router-dom';
 import ArticleCardWithTags from '@/components/ArticleCardWithTags';
 import { Button } from '@/components/ui/button';
 import { getArticlesByCategory } from '@/lib/articles';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, MessageCircle } from 'lucide-react';
 import TagList from '@/components/TagList';
+import { getArticlesFromStorage } from '@/lib/utils/storageUtils';
 
 interface BlogSectionProps {
   currentPage: number;
@@ -20,6 +21,17 @@ const BlogSection: React.FC<BlogSectionProps> = ({
 }) => {
   const [blogPosts, setBlogPosts] = useState(getArticlesByCategory('blog'));
   const totalPages = Math.ceil(blogPosts.length / postsPerPage);
+  
+  // Update blog posts with the latest from storage (including comments)
+  useEffect(() => {
+    const articles = getArticlesFromStorage();
+    const blogArticles = articles.filter(article => 
+      article.category.toLowerCase() === 'blog'
+    );
+    if (blogArticles.length > 0) {
+      setBlogPosts(blogArticles);
+    }
+  }, []);
   
   // Handle navigation
   const nextPage = () => {
@@ -72,6 +84,18 @@ const BlogSection: React.FC<BlogSectionProps> = ({
               >
                 {post.category}
               </Link>
+              {post.comments && post.comments.length > 0 && (
+                <>
+                  <span>•</span>
+                  <Link 
+                    to={`/article/${post.slug}`}
+                    className="flex items-center hover:text-primary"
+                  >
+                    <MessageCircle className="h-4 w-4 mr-1" />
+                    {post.comments.length} comment{post.comments.length !== 1 ? 's' : ''}
+                  </Link>
+                </>
+              )}
             </div>
             
             <div className="text-muted-foreground">

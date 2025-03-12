@@ -1,13 +1,25 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import ArticleGrid from '@/components/ArticleGrid';
-import { getArticlesByCategory, Article } from '@/lib/articles';
+import { getArticlesByCategory } from '@/lib/articles';
+import { getArticlesFromStorage } from '@/lib/utils/storageUtils';
 
 const ArticlesBlog: React.FC = () => {
-  const articles = getArticlesByCategory('blog');
+  const [articles, setArticles] = useState(getArticlesByCategory('blog'));
+
+  // Update articles with the latest from storage (including comments)
+  useEffect(() => {
+    const storedArticles = getArticlesFromStorage();
+    const blogArticles = storedArticles.filter(article => 
+      article.category.toLowerCase() === 'blog'
+    );
+    if (blogArticles.length > 0) {
+      setArticles(blogArticles);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col">

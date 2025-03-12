@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Article, defaultArticles } from '../types/article';
 import { fetchArticlesFromSheet } from '../api/articleApi';
-import { getArticlesFromStorage } from '../utils/storageUtils';
+import { getArticlesFromStorage, saveArticlesToStorage } from '../utils/storageUtils';
 
 export const useArticles = () => {
   const [articles, setArticles] = useState<Article[]>(defaultArticles);
@@ -31,7 +31,15 @@ export const useArticles = () => {
         try {
           const data = await fetchArticlesFromSheet();
           if (data && data.length > 0) {
-            setArticles(data);
+            // Initialize comments arrays if needed
+            const articlesWithComments = data.map(article => ({
+              ...article,
+              comments: article.comments || []
+            }));
+            
+            setArticles(articlesWithComments);
+            // Save to localStorage for future use
+            saveArticlesToStorage(articlesWithComments);
             setError(null);
           } else {
             // If we received empty data, use defaults
