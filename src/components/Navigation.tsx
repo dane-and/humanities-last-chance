@@ -88,19 +88,20 @@ const Navigation = () => {
           </div>
           
           {/* Mobile menu button and search */}
-          <div className="flex items-center md:hidden">
-            <SearchBar className="mr-2" />
+          <div className="flex items-center space-x-2 md:hidden">
+            <SearchBar className="mr-1" />
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-primary hover:bg-secondary/50 focus:outline-none focus:ring-2 focus:ring-primary"
               aria-label={isOpen ? "Close menu" : "Open menu"}
               aria-expanded={isOpen}
               aria-controls="mobile-menu"
+              type="button"
             >
               {isOpen ? (
-                <X className="h-6 w-6" aria-hidden="true" />
+                <X className="h-7 w-7" aria-hidden="true" />
               ) : (
-                <Menu className="h-6 w-6" aria-hidden="true" />
+                <Menu className="h-7 w-7" aria-hidden="true" />
               )}
             </button>
           </div>
@@ -112,7 +113,7 @@ const Navigation = () => {
         id="mobile-menu"
         className={cn(
           'md:hidden transition-all duration-300 ease-in-out overflow-hidden',
-          isOpen ? 'max-h-96 bg-background/95 backdrop-blur-md border-b' : 'max-h-0'
+          isOpen ? 'max-h-[500px] opacity-100 visible bg-background/95 backdrop-blur-md border-b' : 'max-h-0 opacity-0 invisible'
         )}
         aria-hidden={!isOpen}
       >
@@ -122,7 +123,7 @@ const Navigation = () => {
               key={item.name}
               to={item.path}
               className={cn(
-                'block px-3 py-3 rounded-md text-base font-medium',
+                'block px-4 py-3 rounded-md text-base font-medium',
                 location.pathname === item.path
                   ? 'text-primary bg-secondary/50'
                   : 'text-muted-foreground hover:text-primary hover:bg-secondary/50'
