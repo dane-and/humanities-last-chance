@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Clock, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ArticleCardProps {
@@ -19,6 +20,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
   title,
   excerpt,
   category,
+  author,
   date,
   image,
   slug,
@@ -30,7 +32,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
   return (
     <article
       className={cn(
-        'group relative overflow-hidden flex flex-col bg-background border border-border/50 hover:border-border transition-all',
+        'group relative overflow-hidden flex flex-col bg-background border border-border/50 hover:border-border transition-all rounded-sm',
         isCompact ? 'h-full' : '',
         className
       )}
@@ -41,6 +43,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
             src={image}
             alt={title}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
           />
         </Link>
       </div>
@@ -57,9 +60,10 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
             {category}
           </Link>
           <span className={cn(
-            "text-xs text-muted-foreground",
+            "text-xs text-muted-foreground flex items-center",
             isCompact && "text-[10px]"
           )}>
+            <Clock className="h-3 w-3 mr-1" />
             {date}
           </span>
         </div>
@@ -73,6 +77,13 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
         
         {!isCompact && excerpt && (
           <p className="text-muted-foreground text-sm mb-3 line-clamp-2">{excerpt}</p>
+        )}
+        
+        {!isCompact && (
+          <div className="mt-auto pt-2 flex items-center text-xs text-muted-foreground">
+            <User className="h-3 w-3 mr-1" />
+            <span>{author}</span>
+          </div>
         )}
       </div>
     </article>

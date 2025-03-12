@@ -42,6 +42,10 @@
     @apply border-border;
   }
 
+  html {
+    @apply scroll-smooth;
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
     text-rendering: optimizeLegibility;
@@ -73,6 +77,10 @@
   
   button, input, select, textarea {
     @apply focus:outline-none focus:ring-2 focus:ring-primary/30;
+  }
+
+  ::selection {
+    @apply bg-primary/20 text-foreground;
   }
 }
 
@@ -114,14 +122,27 @@
     @apply animate-fade-down;
   }
   
-  /* Improve accessibility with focus styles */
-  .focus-ring {
-    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
+  /* Improved button and link hover effects */
+  .hover-underline {
+    @apply relative after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-current after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100;
   }
   
   /* Optimize for screen readers */
   .sr-only {
     @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+  }
+  
+  /* Image optimizations */
+  .img-loading {
+    @apply transition-opacity duration-500 ease-in;
+  }
+  
+  .img-loaded {
+    @apply opacity-100;
+  }
+  
+  .img-loading:not(.img-loaded) {
+    @apply opacity-0;
   }
 }
 
@@ -148,4 +169,30 @@
   button, a {
     @apply min-h-[44px] min-w-[44px];
   }
+}
+
+/* Add subtle animations */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0px); }
+}
+
+.float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Add progressive image loading */
+.progressive-img {
+  transition: filter 0.5s;
+}
+
+.progressive-img-loading {
+  filter: blur(10px);
+  transform: scale(1.05);
+}
+
+.progressive-img-loaded {
+  filter: blur(0);
+  transform: scale(1);
 }
