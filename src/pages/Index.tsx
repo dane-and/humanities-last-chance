@@ -1,19 +1,21 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import BlogSection from '@/components/home/BlogSection';
 import SidebarSection from '@/components/home/SidebarSection';
+import { useArticles } from '@/lib/articles';
 
 const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 5;
+  const { articles, isLoading } = useArticles();
   
   return (
     <div className="page-transition min-h-screen flex flex-col">
       <Navigation />
       
-      <main className="flex-grow pt-24">
+      <main className="flex-grow pt-20 md:pt-24">
         <section className="py-8">
           <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
             <div className="flex flex-col lg:flex-row gap-8">

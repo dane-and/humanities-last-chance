@@ -1,18 +1,33 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getArticleBySlug } from '@/lib/articles';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
+import ArticleComments from '@/components/ArticleComments';
+import { getArticlesFromStorage } from '@/lib/utils/storageUtils';
 
 const ArticlePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const article = getArticleBySlug(slug || '');
+  const [refreshCounter, setRefreshCounter] = useState(0);
+  const [currentArticle, setCurrentArticle] = useState(article);
 
-  if (!article) {
+  // Fetch the latest version of the article (with comments) from storage
+  useEffect(() => {
+    if (article) {
+      const articles = getArticlesFromStorage();
+      const updatedArticle = articles.find(a => a.slug === article.slug);
+      if (updatedArticle) {
+        setCurrentArticle(updatedArticle);
+      }
+    }
+  }, [article, refreshCounter]);
+
+  if (!currentArticle) {
     return (
       <div className="min-h-screen flex flex-col">
         <Navigation />
@@ -31,6 +46,10 @@ const ArticlePage: React.FC = () => {
     );
   }
 
+  const handleCommentAdded = () => {
+    setRefreshCounter(prev => prev + 1);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
@@ -48,38 +67,38 @@ const ArticlePage: React.FC = () => {
           
           <header className="mb-8">
             <div className="flex items-center gap-3 mb-2 text-sm">
-              <a href={`/articles/${article.category.toLowerCase()}`} className="text-primary font-medium">
-                {article.category}
+              <a href={`/articles/${currentArticle.category.toLowerCase()}`} className="text-primary font-medium">
+                {currentArticle.category}
               </a>
-              <span className="text-muted-foreground">{article.date}</span>
+              <span className="text-muted-foreground">{currentArticle.date}</span>
             </div>
             
-            <h1 className="text-4xl font-serif font-bold mb-4">{article.title}</h1>
+            <h1 className="text-4xl font-serif font-bold mb-4">{currentArticle.title}</h1>
             
-            <p className="text-lg text-muted-foreground mb-6">{article.excerpt}</p>
+            <p className="text-lg text-muted-foreground mb-6">{currentArticle.excerpt}</p>
             
             <div className="text-sm text-muted-foreground">
-              By <span className="font-medium">{article.author}</span>
+              By <span className="font-medium">{currentArticle.author}</span>
             </div>
           </header>
           
           <div className="mb-10 h-80 md:h-96 overflow-hidden rounded-lg">
             <img
-              src={article.image}
-              alt={article.title}
+              src={currentArticle.image}
+              alt={currentArticle.title}
               className="w-full h-full object-cover"
             />
           </div>
           
           <article className="prose prose-slate max-w-none">
-            <div dangerouslySetInnerHTML={{ __html: article.content }} />
+            <div dangerouslySetInnerHTML={{ __html: currentArticle.content }} />
           </article>
           
-          {article.tags && article.tags.length > 0 && (
+          {currentArticle.tags && currentArticle.tags.length > 0 && (
             <div className="mt-10 pt-6 border-t">
               <h3 className="text-lg font-medium mb-3">Tags</h3>
               <div className="flex flex-wrap gap-2">
-                {article.tags.map(tag => (
+                {currentArticle.tags.map(tag => (
                   <a
                     key={tag}
                     href={`/tag/${tag.toLowerCase()}`}
@@ -91,6 +110,13 @@ const ArticlePage: React.FC = () => {
               </div>
             </div>
           )}
+          
+          {/* Comments Section */}
+          <ArticleComments 
+            articleId={currentArticle.id} 
+            comments={currentArticle.comments || []}
+            onCommentAdded={handleCommentAdded}
+          />
         </div>
       </main>
       
