@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
@@ -39,7 +38,7 @@ const Navigation = () => {
   return (
     <nav
       className={cn(
-        'fixed w-full z-50 transition-all duration-300',
+        'fixed w-full z-[100] transition-all duration-300',
         scrolled ? 'bg-background/95 backdrop-blur-md border-b' : 'bg-transparent'
       )}
       role="navigation"
@@ -88,7 +87,7 @@ const Navigation = () => {
           </div>
           
           {/* Mobile menu button and search */}
-          <div className="flex md:hidden items-center">
+          <div className="flex items-center md:hidden">
             <SearchBar className="mr-2" />
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -112,14 +111,13 @@ const Navigation = () => {
       <div
         id="mobile-menu"
         className={cn(
-          'md:hidden',
-          isOpen 
-            ? 'block bg-background border-b shadow-lg' 
-            : 'hidden'
+          'absolute top-20 left-0 right-0 md:hidden bg-background border-b shadow-lg',
+          isOpen ? 'block' : 'hidden'
         )}
+        style={{ zIndex: 99 }}
         aria-hidden={!isOpen}
       >
-        <div className="px-2 py-3 space-y-1 sm:px-3">
+        <div className="px-2 py-3 space-y-1">
           {navItems.map((item) => (
             <Link
               key={item.name}
