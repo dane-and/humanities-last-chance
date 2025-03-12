@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
@@ -41,6 +42,8 @@ const Navigation = () => {
         'fixed w-full z-50 transition-all duration-300',
         scrolled ? 'bg-background/95 backdrop-blur-md border-b' : 'bg-transparent'
       )}
+      role="navigation"
+      aria-label="Main Navigation"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
@@ -49,11 +52,12 @@ const Navigation = () => {
               src="/lovable-uploads/e658c919-e309-420a-aba2-1cd4af9fd449.png" 
               alt="Humanities Last Chance Logo" 
               className="h-12 w-auto"
+              loading="eager"
             />
             <Link 
               to="/" 
               className="font-serif text-2xl font-bold tracking-tighter"
-              aria-label="Humanities Last Chance"
+              aria-label="Humanities Last Chance - Return to homepage"
             >
               Humanities Last Chance
             </Link>
@@ -72,6 +76,7 @@ const Navigation = () => {
                       ? 'text-primary' 
                       : 'text-muted-foreground'
                   )}
+                  aria-current={location.pathname === item.path ? 'page' : undefined}
                 >
                   {item.name}
                 </Link>
@@ -82,13 +87,15 @@ const Navigation = () => {
             </div>
           </div>
           
-          {/* Mobile menu button and search */}
+          {/* Mobile menu button and search - Fixing the missing menu button */}
           <div className="md:hidden flex items-center">
             <SearchBar className="mr-2" />
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-primary focus:outline-none"
+              className="inline-flex items-center justify-center p-2 rounded-md text-primary hover:bg-secondary/50 focus:outline-none focus:ring-2 focus:ring-primary"
               aria-label={isOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isOpen}
+              aria-controls="mobile-menu"
             >
               {isOpen ? (
                 <X className="h-5 w-5" aria-hidden="true" />
@@ -102,6 +109,7 @@ const Navigation = () => {
       
       {/* Mobile Navigation */}
       <div
+        id="mobile-menu"
         className={cn(
           'md:hidden transition-all duration-300 ease-in-out overflow-hidden',
           isOpen ? 'max-h-screen bg-background/95 backdrop-blur-md border-b' : 'max-h-0'
@@ -118,6 +126,7 @@ const Navigation = () => {
                   ? 'text-primary bg-secondary/50'
                   : 'text-muted-foreground hover:text-primary hover:bg-secondary/50'
               )}
+              aria-current={location.pathname === item.path ? 'page' : undefined}
             >
               {item.name}
             </Link>

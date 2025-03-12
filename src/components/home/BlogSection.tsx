@@ -37,14 +37,14 @@ const BlogSection: React.FC<BlogSectionProps> = ({
   const nextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
   
   const prevPage = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
   
@@ -56,12 +56,17 @@ const BlogSection: React.FC<BlogSectionProps> = ({
   return (
     <div className="space-y-12">
       <div className="space-y-16">
-        {currentPosts.map((post) => (
-          <article key={post.id} className="prose prose-lg max-w-none">
-            <h2 className="font-serif text-2xl font-bold mb-4">
+        {currentPosts.map((post, index) => (
+          <article 
+            key={post.id} 
+            className="prose prose-lg max-w-none fade-up"
+            style={{ animationDelay: `${index * 0.1}s` }}
+          >
+            <h2 className="font-serif text-2xl md:text-3xl font-bold mb-4">
               <Link 
                 to={`/article/${post.slug}`} 
                 className="hover:text-primary transition-colors no-underline"
+                aria-label={`Read article: ${post.title}`}
               >
                 {post.title}
               </Link>
@@ -72,12 +77,13 @@ const BlogSection: React.FC<BlogSectionProps> = ({
                 src={post.image}
                 alt={post.title}
                 className="w-full h-64 object-cover rounded-lg mb-6"
+                loading={index < 2 ? "eager" : "lazy"}
               />
             )}
             
-            <div className="flex items-center gap-x-3 text-sm text-muted-foreground mb-4">
+            <div className="flex flex-wrap items-center gap-x-3 text-sm text-muted-foreground mb-4">
               <span>{post.date}</span>
-              <span>•</span>
+              <span aria-hidden="true">•</span>
               <Link 
                 to={`/articles/${post.category.toLowerCase()}`}
                 className="hover:text-primary"
@@ -86,12 +92,13 @@ const BlogSection: React.FC<BlogSectionProps> = ({
               </Link>
               {post.comments && post.comments.length > 0 && (
                 <>
-                  <span>•</span>
+                  <span aria-hidden="true">•</span>
                   <Link 
                     to={`/article/${post.slug}`}
                     className="flex items-center hover:text-primary"
+                    aria-label={`${post.comments.length} comment${post.comments.length !== 1 ? 's' : ''}`}
                   >
-                    <MessageCircle className="h-4 w-4 mr-1" />
+                    <MessageCircle className="h-4 w-4 mr-1" aria-hidden="true" />
                     {post.comments.length} comment{post.comments.length !== 1 ? 's' : ''}
                   </Link>
                 </>
@@ -113,18 +120,19 @@ const BlogSection: React.FC<BlogSectionProps> = ({
       
       {/* Pagination Controls with updated button styles */}
       {totalPages > 1 && (
-        <div className="flex justify-between items-center pt-8">
+        <div className="flex justify-between items-center pt-8 mt-4">
           <Button
             variant="outline"
             onClick={prevPage}
             disabled={currentPage === 1}
-            className="flex items-center gap-2 hover:bg-primary/5"
+            className="flex items-center gap-2 hover:bg-primary/5 focus:ring-2 focus:ring-primary/30"
+            aria-label="Previous page"
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-4 w-4" aria-hidden="true" />
             Previous
           </Button>
           
-          <div className="text-sm">
+          <div className="text-sm" aria-live="polite">
             Page {currentPage} of {totalPages}
           </div>
           
@@ -132,10 +140,11 @@ const BlogSection: React.FC<BlogSectionProps> = ({
             variant="outline"
             onClick={nextPage}
             disabled={currentPage === totalPages}
-            className="flex items-center gap-2 hover:bg-primary/5"
+            className="flex items-center gap-2 hover:bg-primary/5 focus:ring-2 focus:ring-primary/30"
+            aria-label="Next page"
           >
             Next
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight className="h-4 w-4" aria-hidden="true" />
           </Button>
         </div>
       )}
