@@ -36,7 +36,7 @@ const Footer = () => {
                 </span>
               </div>
               <p className="text-sm text-muted-foreground max-w-xs">
-                A digital magazine publishing daily blog posts, interviews, and reviews 
+                A free online resource publishing blog posts, interviews, and reviews 
                 about humanities scholarship.
               </p>
               <div className="mt-4">
