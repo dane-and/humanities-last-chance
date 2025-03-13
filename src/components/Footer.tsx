@@ -68,29 +68,33 @@ const Footer = () => {
                       </Link>
                     </li>
                   ))}
-                  {column2Links.slice(0, 2).map((link) => (
-                    <li key={link.name}>
-                      <Link to={link.path} className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                        {link.name}
-                      </Link>
-                    </li>
-                  ))}
+                  <li>
+                    <Link to="/articles/interviews" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                      Interviews
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/about" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                      About
+                    </Link>
+                  </li>
                 </ul>
                 <ul className="space-y-2">
-                  {column1Links.slice(2).map((link) => (
-                    <li key={link.name}>
-                      <Link to={link.path} className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                        {link.name}
-                      </Link>
-                    </li>
-                  ))}
-                  {column2Links.slice(2).map((link) => (
-                    <li key={link.name}>
-                      <Link to={link.path} className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                        {link.name}
-                      </Link>
-                    </li>
-                  ))}
+                  <li>
+                    <Link to="/articles/reviews" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                      Reviews
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/resources" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                      Resources
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/contact" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                      Contact
+                    </Link>
+                  </li>
                 </ul>
               </div>
             </div>
