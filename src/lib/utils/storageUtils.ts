@@ -1,5 +1,6 @@
-
 import { Article, Comment, defaultArticles } from '../types/article';
+
+const STORAGE_KEY = 'hlc-admin-articles';
 
 /**
  * Gets articles from local storage
@@ -8,7 +9,7 @@ export const getArticlesFromStorage = (): Article[] => {
   try {
     // Check if we're in a browser environment (for SSR compatibility)
     if (typeof window !== 'undefined' && window.localStorage) {
-      const savedArticles = localStorage.getItem('admin-articles');
+      const savedArticles = localStorage.getItem(STORAGE_KEY);
       return savedArticles ? JSON.parse(savedArticles) : defaultArticles;
     }
     return defaultArticles;
@@ -25,7 +26,20 @@ export const saveArticlesToStorage = (articles: Article[]): void => {
   try {
     // Check if we're in a browser environment (for SSR compatibility)
     if (typeof window !== 'undefined' && window.localStorage) {
-      localStorage.setItem('admin-articles', JSON.stringify(articles));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(articles));
+      
+      // Create a download data file to allow manual backup
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(articles, null, 2));
+      
+      // Create and dispatch a custom event that the admin can listen for
+      const event = new CustomEvent('articlesSaved', { 
+        detail: { 
+          timestamp: new Date().toISOString(),
+          articleCount: articles.length,
+          dataUrl: dataStr
+        } 
+      });
+      window.dispatchEvent(event);
     }
   } catch (e) {
     console.error('Error saving to localStorage:', e);
@@ -151,6 +165,41 @@ export const updateCommentVote = (
     return false;
   } catch (e) {
     console.error('Error updating comment vote:', e);
+    return false;
+  }
+};
+
+/**
+ * Export articles data as JSON file
+ */
+export const exportArticlesData = (): void => {
+  try {
+    const articles = getArticlesFromStorage();
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(articles, null, 2));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", `humanities-last-chance-articles-${new Date().toISOString().slice(0,10)}.json`);
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+  } catch (e) {
+    console.error('Error exporting articles data:', e);
+  }
+};
+
+/**
+ * Import articles data from JSON file
+ */
+export const importArticlesData = (jsonData: string): boolean => {
+  try {
+    const articles = JSON.parse(jsonData) as Article[];
+    if (!Array.isArray(articles)) {
+      throw new Error('Invalid data format');
+    }
+    saveArticlesToStorage(articles);
+    return true;
+  } catch (e) {
+    console.error('Error importing articles data:', e);
     return false;
   }
 };

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, ChevronDown } from 'lucide-react';
@@ -61,7 +60,7 @@ const Navigation = () => {
         <div className="flex justify-between items-center h-14 md:h-20">
           <div className="flex-shrink-0 flex items-center gap-2">
             <img 
-              src="/lovable-uploads/e658c919-e309-420a-aba2-1cd4af9fd449.png" 
+              src="/site-favicon-512x512.png" 
               alt="Humanities Last Chance Logo" 
               className="h-7 w-auto md:h-12"
               loading="eager"

@@ -12,6 +12,7 @@ import ArticleList from '@/components/admin/ArticleList';
 import ArticleForm from '@/components/admin/ArticleForm';
 import PageList from '@/components/admin/PageList';
 import PageForm from '@/components/admin/PageForm';
+import DataManagement from '@/components/admin/DataManagement';
 
 const AdminDashboard: React.FC = () => {
   const { isAuthenticated, logout } = useAuth();
@@ -25,23 +26,27 @@ const AdminDashboard: React.FC = () => {
   const [pageList, setPageList] = useState<Page[]>([]);
   const [selectedPage, setSelectedPage] = useState<Page | null>(null);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/admin');
-    }
-    
+  const loadData = () => {
     // Load articles from localStorage or use default
-    const savedArticles = localStorage.getItem('admin-articles');
+    const savedArticles = localStorage.getItem('hlc-admin-articles');
     if (savedArticles) {
       setArticleList(JSON.parse(savedArticles));
     } else {
       setArticleList(articles);
-      localStorage.setItem('admin-articles', JSON.stringify(articles));
+      localStorage.setItem('hlc-admin-articles', JSON.stringify(articles));
     }
     
     // Load pages
     const pages = getPagesFromStorage();
     setPageList(pages);
+  };
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/admin');
+    }
+    
+    loadData();
   }, [isAuthenticated, navigate]);
 
   const handleLogout = () => {
@@ -76,6 +81,10 @@ const AdminDashboard: React.FC = () => {
       <AdminHeader onLogout={handleLogout} />
       
       <main className="container mx-auto p-4 mt-6">
+        <div className="mb-6">
+          <DataManagement onDataImported={loadData} />
+        </div>
+        
         <Tabs defaultValue="articles">
           <TabsList className="mb-6">
             <TabsTrigger value="articles">Articles</TabsTrigger>
