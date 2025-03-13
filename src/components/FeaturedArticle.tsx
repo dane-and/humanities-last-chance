@@ -43,23 +43,27 @@ const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
         layout === 'horizontal' ? 'h-auto' : 'h-auto'
       )}>
         {layout === 'horizontal' ? (
-          <Link to={`/article/${slug}`} aria-label={title} className="block h-full">
-            <img
-              src={image}
-              alt={title}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-          </Link>
-        ) : (
-          <AspectRatio ratio={16 / 9} className="overflow-hidden">
-            <Link to={`/article/${slug}`} aria-label={title} className="block w-full h-full">
+          <div className="max-w-[66%] mx-auto">
+            <Link to={`/article/${slug}`} aria-label={title} className="block h-full">
               <img
                 src={image}
                 alt={title}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
             </Link>
-          </AspectRatio>
+          </div>
+        ) : (
+          <div className="max-w-[66%] mx-auto">
+            <AspectRatio ratio={16 / 9} className="overflow-hidden">
+              <Link to={`/article/${slug}`} aria-label={title} className="block w-full h-full">
+                <img
+                  src={image}
+                  alt={title}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              </Link>
+            </AspectRatio>
+          </div>
         )}
       </div>
       

@@ -39,16 +39,18 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
       )}
     >
       <div className={cn('relative', isCompact ? 'h-auto' : 'h-auto')}>
-        <AspectRatio ratio={16 / 9} className="overflow-hidden">
-          <Link to={`/article/${slug}`} aria-label={title} className="block w-full h-full">
-            <img
-              src={image}
-              alt={title}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              loading="lazy"
-            />
-          </Link>
-        </AspectRatio>
+        <div className="max-w-[66%] mx-auto">
+          <AspectRatio ratio={16 / 9} className="overflow-hidden">
+            <Link to={`/article/${slug}`} aria-label={title} className="block w-full h-full">
+              <img
+                src={image}
+                alt={title}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+              />
+            </Link>
+          </AspectRatio>
+        </div>
       </div>
       
       <div className={cn('flex flex-col flex-grow', isCompact ? 'p-4' : 'p-5')}>

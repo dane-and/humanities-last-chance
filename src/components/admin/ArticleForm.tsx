@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { Article } from '@/lib/types/article';
 import { Button } from '@/components/ui/button';
@@ -8,7 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { X, Upload, Image as ImageIcon } from 'lucide-react';
+import { X, Upload, Image as ImageIcon, Edit2 } from 'lucide-react';
+import ImageEditor from './ImageEditor';
 
 const PREDEFINED_TAGS = ['History', 'Literature', 'Philosophy', 'Teaching', 'News'];
 
@@ -30,6 +30,8 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
   const [customTag, setCustomTag] = useState('');
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  const [isImageEditorOpen, setIsImageEditorOpen] = useState(false);
   
   const [articleFormData, setArticleFormData] = useState({
     id: selectedArticle?.id || '',
@@ -64,7 +66,6 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
     'link', 'image'
   ];
 
-  // Input handlers
   const handleArticleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setArticleFormData(prev => ({ ...prev, [name]: value }));
@@ -83,7 +84,6 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
     setArticleFormData(prev => ({ ...prev, [name]: checked }));
   };
 
-  // Tag handlers
   const handleTagSelect = (tag: string) => {
     if (!selectedTags.includes(tag)) {
       const newTags = [...selectedTags, tag];
@@ -108,7 +108,6 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
     }
   };
 
-  // Image upload handlers
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(true);
@@ -139,7 +138,6 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
   };
 
   const handleImageUpload = (file: File) => {
-    // Check if file is an image
     if (!file.type.startsWith('image/')) {
       toast({
         title: 'Error',
@@ -149,7 +147,6 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
       return;
     }
 
-    // Check file size (limit to 5MB)
     if (file.size > 5 * 1024 * 1024) {
       toast({
         title: 'Error',
@@ -179,10 +176,22 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
     reader.readAsDataURL(file);
   };
 
+  const handleEditImage = () => {
+    setIsImageEditorOpen(true);
+  };
+
+  const handleSaveEditedImage = (editedImage: string) => {
+    setArticleFormData(prev => ({ ...prev, image: editedImage }));
+    setIsImageEditorOpen(false);
+    toast({
+      title: 'Success',
+      description: 'Image edited successfully.',
+    });
+  };
+
   const handleArticleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Simple validation
     if (!articleFormData.title || !articleFormData.content || !articleFormData.author) {
       toast({
         title: 'Error',
@@ -192,17 +201,14 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
       return;
     }
     
-    // Generate slug if empty
     if (!articleFormData.slug) {
       articleFormData.slug = articleFormData.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
     }
     
-    // Generate ID if this is a new article
     if (!articleFormData.id) {
       articleFormData.id = Math.random().toString(36).substring(2, 15);
     }
     
-    // Update or add article
     let updatedList;
     if (selectedArticle) {
       updatedList = articleList.map(article => 
@@ -325,6 +331,10 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
                     />
                   </div>
                   <div className="flex justify-center gap-2">
+                    <Button type="button" variant="outline" size="sm" onClick={handleEditImage}>
+                      <Edit2 className="w-4 h-4 mr-2" />
+                      Edit
+                    </Button>
                     <Button type="button" variant="outline" size="sm" onClick={handleClickUpload}>
                       <Upload className="w-4 h-4 mr-2" />
                       Change
@@ -464,6 +474,15 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           </Button>
         </div>
       </form>
+      
+      {isImageEditorOpen && (
+        <ImageEditor
+          image={articleFormData.image}
+          onSave={handleSaveEditedImage}
+          isOpen={isImageEditorOpen}
+          onClose={() => setIsImageEditorOpen(false)}
+        />
+      )}
     </div>
   );
 };

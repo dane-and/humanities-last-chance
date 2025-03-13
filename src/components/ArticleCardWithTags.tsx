@@ -26,15 +26,17 @@ const ArticleCardWithTags: React.FC<ArticleCardWithTagsProps> = ({
       )}
     >
       {article.image && (
-        <AspectRatio ratio={16 / 9}>
-          <Link to={`/article/${article.slug}`} className="block w-full h-full">
-            <img
-              src={article.image}
-              alt={article.title}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-          </Link>
-        </AspectRatio>
+        <div className="max-w-[66%] mx-auto">
+          <AspectRatio ratio={16 / 9}>
+            <Link to={`/article/${article.slug}`} className="block w-full h-full">
+              <img
+                src={article.image}
+                alt={article.title}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+            </Link>
+          </AspectRatio>
+        </div>
       )}
       
       <div className="p-4">
