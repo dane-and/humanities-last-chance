@@ -75,16 +75,14 @@ const BlogSection: React.FC<BlogSectionProps> = ({
             
             {post.image && (
               <div className="mb-6">
-                <div className="max-w-[66%] mx-auto">
-                  <AspectRatio ratio={16 / 9} className="overflow-hidden rounded-lg">
-                    <img
-                      src={post.image}
-                      alt={post.title}
-                      className="w-full h-full object-cover"
-                      loading={index < 2 ? "eager" : "lazy"}
-                    />
-                  </AspectRatio>
-                </div>
+                <AspectRatio ratio={16 / 9} className="overflow-hidden rounded-lg">
+                  <img
+                    src={post.image}
+                    alt={post.title}
+                    className="w-full h-full object-cover"
+                    loading={index < 2 ? "eager" : "lazy"}
+                  />
+                </AspectRatio>
               </div>
             )}
             

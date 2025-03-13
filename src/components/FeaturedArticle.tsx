@@ -42,29 +42,15 @@ const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
         'overflow-hidden',
         layout === 'horizontal' ? 'h-auto' : 'h-auto'
       )}>
-        {layout === 'horizontal' ? (
-          <div className="max-w-[66%] mx-auto">
-            <Link to={`/article/${slug}`} aria-label={title} className="block h-full">
-              <img
-                src={image}
-                alt={title}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-            </Link>
-          </div>
-        ) : (
-          <div className="max-w-[66%] mx-auto">
-            <AspectRatio ratio={16 / 9} className="overflow-hidden">
-              <Link to={`/article/${slug}`} aria-label={title} className="block w-full h-full">
-                <img
-                  src={image}
-                  alt={title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-              </Link>
-            </AspectRatio>
-          </div>
-        )}
+        <AspectRatio ratio={16 / 9} className="overflow-hidden">
+          <Link to={`/article/${slug}`} aria-label={title} className="block w-full h-full">
+            <img
+              src={image}
+              alt={title}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          </Link>
+        </AspectRatio>
       </div>
       
       <div className="flex flex-col justify-center p-6">
