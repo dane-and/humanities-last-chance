@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { ArrowRight } from 'lucide-react';
 import { Article } from '@/lib/articles';
 import TagList from './TagList';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 interface ArticleCardWithTagsProps {
   article: Article;
@@ -24,18 +25,17 @@ const ArticleCardWithTags: React.FC<ArticleCardWithTagsProps> = ({
         className
       )}
     >
-      <Link to={`/article/${article.slug}`} className="block">
-        {article.image && (
-          <img
-            src={article.image}
-            alt={article.title}
-            className={cn(
-              'w-full object-cover',
-              variant === 'default' ? 'h-48' : 'h-32'
-            )}
-          />
-        )}
-      </Link>
+      {article.image && (
+        <AspectRatio ratio={16 / 9}>
+          <Link to={`/article/${article.slug}`} className="block w-full h-full">
+            <img
+              src={article.image}
+              alt={article.title}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          </Link>
+        </AspectRatio>
+      )}
       
       <div className="p-4">
         <div className="flex flex-col space-y-2">

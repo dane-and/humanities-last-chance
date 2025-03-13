@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 interface FeaturedArticleProps {
   title: string;
@@ -39,15 +40,27 @@ const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
     >
       <div className={cn(
         'overflow-hidden',
-        layout === 'horizontal' ? 'h-64 md:h-full' : 'h-64'
+        layout === 'horizontal' ? 'h-auto' : 'h-auto'
       )}>
-        <Link to={`/article/${slug}`} aria-label={title}>
-          <img
-            src={image}
-            alt={title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        </Link>
+        {layout === 'horizontal' ? (
+          <Link to={`/article/${slug}`} aria-label={title} className="block h-full">
+            <img
+              src={image}
+              alt={title}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          </Link>
+        ) : (
+          <AspectRatio ratio={16 / 9} className="overflow-hidden">
+            <Link to={`/article/${slug}`} aria-label={title} className="block w-full h-full">
+              <img
+                src={image}
+                alt={title}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+            </Link>
+          </AspectRatio>
+        )}
       </div>
       
       <div className="flex flex-col justify-center p-6">

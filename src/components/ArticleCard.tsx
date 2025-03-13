@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 interface ArticleCardProps {
   title: string;
@@ -37,15 +38,17 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
         className
       )}
     >
-      <div className={cn('overflow-hidden', isCompact ? 'h-40' : 'h-48')}>
-        <Link to={`/article/${slug}`} aria-label={title}>
-          <img
-            src={image}
-            alt={title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            loading="lazy"
-          />
-        </Link>
+      <div className={cn('relative', isCompact ? 'h-auto' : 'h-auto')}>
+        <AspectRatio ratio={16 / 9} className="overflow-hidden">
+          <Link to={`/article/${slug}`} aria-label={title} className="block w-full h-full">
+            <img
+              src={image}
+              alt={title}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+            />
+          </Link>
+        </AspectRatio>
       </div>
       
       <div className={cn('flex flex-col flex-grow', isCompact ? 'p-4' : 'p-5')}>

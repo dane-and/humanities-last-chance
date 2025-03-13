@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import ArticleComments from '@/components/ArticleComments';
 import { getArticlesFromStorage } from '@/lib/utils/storageUtils';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 const ArticlePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -78,12 +79,14 @@ const ArticlePage: React.FC = () => {
             <p className="text-lg text-muted-foreground mb-6">{currentArticle.excerpt}</p>
           </header>
           
-          <div className="mb-10 h-80 md:h-96 overflow-hidden rounded-lg">
-            <img
-              src={currentArticle.image}
-              alt={currentArticle.title}
-              className="w-full h-full object-cover"
-            />
+          <div className="mb-10 overflow-hidden rounded-lg">
+            <AspectRatio ratio={16 / 9}>
+              <img
+                src={currentArticle.image}
+                alt={currentArticle.title}
+                className="w-full h-full object-cover"
+              />
+            </AspectRatio>
           </div>
           
           <article className="prose prose-slate max-w-none">

@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { getArticlesByCategory } from '@/lib/articles';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 const SidebarSection: React.FC = () => {
   // Get other content - limit to 2 most recent for sidebar
@@ -30,13 +31,17 @@ const SidebarSection: React.FC = () => {
           {interviews.map((interview) => (
             <article key={interview.id} className="border-b border-border/30 pb-4 last:border-b-0 last:pb-0">
               {interview.image && (
-                <Link to={`/article/${interview.slug}`}>
-                  <img 
-                    src={interview.image} 
-                    alt={interview.title} 
-                    className="w-full h-32 object-cover mb-3 rounded"
-                  />
-                </Link>
+                <div className="mb-3">
+                  <AspectRatio ratio={16 / 9} className="overflow-hidden rounded">
+                    <Link to={`/article/${interview.slug}`}>
+                      <img 
+                        src={interview.image} 
+                        alt={interview.title} 
+                        className="w-full h-full object-cover"
+                      />
+                    </Link>
+                  </AspectRatio>
+                </div>
               )}
               <h3 className="font-serif text-base font-medium mb-2">
                 <Link 
@@ -73,13 +78,17 @@ const SidebarSection: React.FC = () => {
           {reviews.map((review) => (
             <article key={review.id} className="border-b border-border/30 pb-4 last:border-b-0 last:pb-0">
               {review.image && (
-                <Link to={`/article/${review.slug}`}>
-                  <img 
-                    src={review.image} 
-                    alt={review.title} 
-                    className="w-full h-32 object-cover mb-3 rounded"
-                  />
-                </Link>
+                <div className="mb-3">
+                  <AspectRatio ratio={16 / 9} className="overflow-hidden rounded">
+                    <Link to={`/article/${review.slug}`}>
+                      <img 
+                        src={review.image} 
+                        alt={review.title} 
+                        className="w-full h-full object-cover"
+                      />
+                    </Link>
+                  </AspectRatio>
+                </div>
               )}
               <h3 className="font-serif text-base font-medium mb-2">
                 <Link 

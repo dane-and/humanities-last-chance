@@ -7,6 +7,7 @@ import { getArticlesByCategory } from '@/lib/articles';
 import { ChevronLeft, ChevronRight, MessageCircle } from 'lucide-react';
 import TagList from '@/components/TagList';
 import { getArticlesFromStorage } from '@/lib/utils/storageUtils';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 interface BlogSectionProps {
   currentPage: number;
@@ -73,12 +74,16 @@ const BlogSection: React.FC<BlogSectionProps> = ({
             </h2>
             
             {post.image && (
-              <img
-                src={post.image}
-                alt={post.title}
-                className="w-full h-64 object-cover rounded-lg mb-6"
-                loading={index < 2 ? "eager" : "lazy"}
-              />
+              <div className="mb-6">
+                <AspectRatio ratio={16 / 9} className="overflow-hidden rounded-lg">
+                  <img
+                    src={post.image}
+                    alt={post.title}
+                    className="w-full h-full object-cover"
+                    loading={index < 2 ? "eager" : "lazy"}
+                  />
+                </AspectRatio>
+              </div>
             )}
             
             <div className="flex flex-wrap items-center gap-x-3 text-sm text-muted-foreground mb-4">
