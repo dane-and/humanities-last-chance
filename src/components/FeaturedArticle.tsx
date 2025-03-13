@@ -67,9 +67,7 @@ const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
         
         <p className="text-muted-foreground mb-4">{excerpt}</p>
         
-        <div className="mt-auto flex items-center justify-between">
-          <span className="text-sm text-muted-foreground">By {author}</span>
-          
+        <div className="mt-auto">
           <Link
             to={`/article/${slug}`}
             className="inline-flex items-center text-sm font-medium text-primary hover:text-primary/80 transition-colors"

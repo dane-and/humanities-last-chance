@@ -76,10 +76,6 @@ const ArticlePage: React.FC = () => {
             <h1 className="text-4xl font-serif font-bold mb-4">{currentArticle.title}</h1>
             
             <p className="text-lg text-muted-foreground mb-6">{currentArticle.excerpt}</p>
-            
-            <div className="text-sm text-muted-foreground">
-              By <span className="font-medium">{currentArticle.author}</span>
-            </div>
           </header>
           
           <div className="mb-10 h-80 md:h-96 overflow-hidden rounded-lg">

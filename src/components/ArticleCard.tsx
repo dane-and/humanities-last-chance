@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Clock, User } from 'lucide-react';
+import { Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ArticleCardProps {
@@ -77,13 +77,6 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
         
         {!isCompact && excerpt && (
           <p className="text-muted-foreground text-sm mb-3 line-clamp-2">{excerpt}</p>
-        )}
-        
-        {!isCompact && (
-          <div className="mt-auto pt-2 flex items-center text-xs text-muted-foreground">
-            <User className="h-3 w-3 mr-1" />
-            <span>{author}</span>
-          </div>
         )}
       </div>
     </article>
