@@ -39,20 +39,22 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ image, onSave, isOpen, onClos
       preserveObjectStacking: true,
     });
     
-    // Load the image
-    FabricImage.fromURL(image, (img) => {
-      // Scale the image to fit within the canvas
-      img.scale(0.8);
-      img.set({
-        selectable: true,
-        centeredScaling: true,
-      });
-      
-      // Center the image
-      img.center();
-      fabricCanvas.add(img);
-      fabricCanvas.setActiveObject(img);
-      fabricCanvas.renderAll();
+    // Load the image using the correct API for Fabric.js v6
+    FabricImage.fromURL(image, {
+      onLoad: (img) => {
+        // Scale the image to fit within the canvas
+        img.scale(0.8);
+        img.set({
+          selectable: true,
+          centeredScaling: true,
+        });
+        
+        // Center the image
+        img.center();
+        fabricCanvas.add(img);
+        fabricCanvas.setActiveObject(img);
+        fabricCanvas.renderAll();
+      }
     });
     
     setCanvas(fabricCanvas);
@@ -159,11 +161,13 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ image, onSave, isOpen, onClos
         // Clear the canvas and add the cropped image
         canvas.clear();
         
-        FabricImage.fromURL(croppedImage, (newImg) => {
-          newImg.scaleToWidth(400);
-          newImg.center();
-          canvas.add(newImg);
-          canvas.renderAll();
+        FabricImage.fromURL(croppedImage, {
+          onLoad: (newImg) => {
+            newImg.scaleToWidth(400);
+            newImg.center();
+            canvas.add(newImg);
+            canvas.renderAll();
+          }
         });
       };
     }
