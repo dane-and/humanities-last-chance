@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Twitter } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import SearchBar from './SearchBar';
 
@@ -15,6 +15,7 @@ const Navigation = () => {
     { name: 'Blog', path: '/articles/blog' },
     { name: 'Interviews', path: '/articles/interviews' },
     { name: 'Reviews', path: '/articles/reviews' },
+    { name: 'Resources', path: '/resources' },
     { name: 'About', path: '/about' },
     { name: 'Contact', path: '/contact' },
   ];
@@ -84,6 +85,16 @@ const Navigation = () => {
                   {item.name}
                 </Link>
               ))}
+              <a 
+                href="https://x.com/humanitieslc" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary flex items-center gap-1"
+                aria-label="Follow us on X (formerly Twitter)"
+              >
+                <Twitter className="h-4 w-4" />
+                <span className="hidden lg:inline">Follow</span>
+              </a>
             </div>
             <div className="ml-6">
               <SearchBar />
@@ -135,6 +146,15 @@ const Navigation = () => {
               {item.name}
             </Link>
           ))}
+          <a
+            href="https://x.com/humanitieslc"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-4 py-3 rounded-md text-base font-medium text-muted-foreground hover:text-primary hover:bg-secondary/50"
+          >
+            <Twitter className="h-5 w-5" />
+            <span>Follow on X</span>
+          </a>
         </div>
       </div>
     </nav>

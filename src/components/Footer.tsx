@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Twitter } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -25,6 +26,18 @@ const Footer = () => {
                 A digital magazine publishing daily blog posts, interviews, and reviews 
                 about humanities scholarship.
               </p>
+              <div className="mt-4">
+                <a 
+                  href="https://x.com/humanitieslc" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+                  aria-label="Follow us on X (formerly Twitter)"
+                >
+                  <Twitter className="h-5 w-5" />
+                  <span>@humanitieslc</span>
+                </a>
+              </div>
             </div>
             
             <div className="md:col-span-2">
@@ -49,6 +62,11 @@ const Footer = () => {
                   <li>
                     <Link to="/articles/reviews" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                       Reviews
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/resources" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                      Resources
                     </Link>
                   </li>
                 </ul>

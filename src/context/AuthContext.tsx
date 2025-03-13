@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (password: string) => boolean;
+  login: (username: string, password: string) => boolean;
   logout: () => void;
 }
 
@@ -28,9 +28,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-  const login = (password: string): boolean => {
-    // Strong password check - use a complex password
-    if (password === "uR5!9xB#k2Pz@Lm$") {
+  const login = (username: string, password: string): boolean => {
+    // Check username and password
+    if (username === "daneanderson10" && password === "uR5!9xB#k2Pz@Lm$") {
       setIsAuthenticated(true);
       localStorage.setItem('admin-auth', 'true');
       return true;
