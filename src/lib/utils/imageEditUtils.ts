@@ -83,22 +83,20 @@ export const loadImageOntoCanvas = (
   imageUrl: string, 
   scale: number = 0.8
 ): void => {
-  // Update to use the correct Fabric.js v6 API format for fromURL
-  FabricImage.fromURL(imageUrl, {
-    onLoad: (img) => {
-      // Scale the image to fit within the canvas
-      img.scale(scale);
-      img.set({
-        selectable: true,
-        centeredScaling: true,
-      });
-      
-      // Center the image
-      img.center();
-      canvas.add(img);
-      canvas.setActiveObject(img);
-      canvas.renderAll();
-    }
+  // Use the correct Fabric.js v6 API format for loading images
+  FabricImage.fromURL(imageUrl).then(img => {
+    // Scale the image to fit within the canvas
+    img.scale(scale);
+    img.set({
+      selectable: true,
+      centeredScaling: true,
+    });
+    
+    // Center the image
+    img.center();
+    canvas.add(img);
+    canvas.setActiveObject(img);
+    canvas.renderAll();
   });
 };
 
