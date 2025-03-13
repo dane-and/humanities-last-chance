@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { Article, defaultArticles } from '../types/article';
-import { fetchArticlesFromSheet } from '../api/articleApi';
+import { fetchArticlesFromApi, fetchArticlesFromSheet } from '../api/articleApi';
 import { getArticlesFromStorage, saveArticlesToStorage } from '../utils/storageUtils';
 
 export const useArticles = () => {
@@ -14,7 +14,20 @@ export const useArticles = () => {
       try {
         setIsLoading(true);
         
-        // Try to get articles from localStorage first
+        // Primary source: Server API
+        try {
+          const apiArticles = await fetchArticlesFromApi();
+          if (apiArticles && apiArticles.length > 0) {
+            setArticles(apiArticles);
+            setError(null);
+            setIsLoading(false);
+            return;
+          }
+        } catch (apiError) {
+          console.warn('Could not retrieve from API, trying fallbacks:', apiError);
+        }
+        
+        // Secondary source: Local storage
         try {
           const localArticles = getArticlesFromStorage();
           if (localArticles && localArticles.length > defaultArticles.length) {
@@ -27,12 +40,12 @@ export const useArticles = () => {
           console.warn('Could not retrieve from localStorage:', localErr);
         }
         
-        // Try to fetch from external source
+        // Tertiary source: Google Sheets
         try {
-          const data = await fetchArticlesFromSheet();
-          if (data && data.length > 0) {
+          const sheetData = await fetchArticlesFromSheet();
+          if (sheetData && sheetData.length > 0) {
             // Initialize comments arrays if needed
-            const articlesWithComments = data.map(article => ({
+            const articlesWithComments = sheetData.map(article => ({
               ...article,
               comments: article.comments || []
             }));
@@ -44,12 +57,12 @@ export const useArticles = () => {
           } else {
             // If we received empty data, use defaults
             setArticles(defaultArticles);
-            console.warn('Received empty data from external source, using defaults');
+            console.warn('Received empty data from all sources, using defaults');
           }
         } catch (fetchErr) {
-          console.error('Failed to fetch from external source, using defaults:', fetchErr);
+          console.error('Failed to fetch from all sources, using defaults:', fetchErr);
           setArticles(defaultArticles);
-          setError(new Error('Failed to fetch articles from external source. Using default content.'));
+          setError(new Error('Failed to fetch articles from any source. Using default content.'));
         }
       } catch (err) {
         console.error('Error loading articles:', err);
