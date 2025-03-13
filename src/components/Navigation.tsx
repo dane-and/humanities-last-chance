@@ -1,20 +1,31 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Twitter } from 'lucide-react';
+import { Menu, X, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import SearchBar from './SearchBar';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   
-  const navItems = [
+  // Main navigation items that will always be visible
+  const mainNavItems = [
     { name: 'Home', path: '/' },
     { name: 'Blog', path: '/articles/blog' },
     { name: 'Interviews', path: '/articles/interviews' },
     { name: 'Reviews', path: '/articles/reviews' },
+  ];
+  
+  // Items that will go in the dropdown
+  const dropdownItems = [
     { name: 'Resources', path: '/resources' },
     { name: 'About', path: '/about' },
     { name: 'Contact', path: '/contact' },
@@ -70,7 +81,7 @@ const Navigation = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center">
             <div className="flex items-center space-x-8">
-              {navItems.map((item) => (
+              {mainNavItems.map((item) => (
                 <Link
                   key={item.name}
                   to={item.path}
@@ -85,6 +96,30 @@ const Navigation = () => {
                   {item.name}
                 </Link>
               ))}
+              
+              {/* More Pages Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+                  <span>More</span>
+                  <ChevronDown className="ml-1 h-4 w-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="bg-background/95 backdrop-blur-md border w-40">
+                  {dropdownItems.map((item) => (
+                    <DropdownMenuItem key={item.name} asChild>
+                      <Link
+                        to={item.path}
+                        className={cn(
+                          'w-full cursor-pointer',
+                          location.pathname === item.path ? 'text-primary' : ''
+                        )}
+                      >
+                        {item.name}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+              
               <a 
                 href="https://x.com/humanitieslc" 
                 target="_blank" 
@@ -92,7 +127,7 @@ const Navigation = () => {
                 className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary flex items-center gap-1"
                 aria-label="Follow us on X (formerly Twitter)"
               >
-                <Twitter className="h-4 w-4" />
+                <X className="h-4 w-4" />
                 <span className="hidden lg:inline">Follow</span>
               </a>
             </div>
@@ -131,7 +166,7 @@ const Navigation = () => {
         )}
       >
         <div className="px-2 py-3 space-y-1">
-          {navItems.map((item) => (
+          {[...mainNavItems, ...dropdownItems].map((item) => (
             <Link
               key={item.name}
               to={item.path}
@@ -152,7 +187,7 @@ const Navigation = () => {
             rel="noopener noreferrer"
             className="flex items-center gap-2 px-4 py-3 rounded-md text-base font-medium text-muted-foreground hover:text-primary hover:bg-secondary/50"
           >
-            <Twitter className="h-5 w-5" />
+            <X className="h-5 w-5" />
             <span>Follow on X</span>
           </a>
         </div>

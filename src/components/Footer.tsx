@@ -1,10 +1,24 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Twitter } from 'lucide-react';
+import { X } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  
+  // Divide links into two balanced columns
+  const column1Links = [
+    { name: 'Home', path: '/' },
+    { name: 'Blog', path: '/articles/blog' },
+    { name: 'Interviews', path: '/articles/interviews' },
+    { name: 'Reviews', path: '/articles/reviews' },
+  ];
+  
+  const column2Links = [
+    { name: 'Resources', path: '/resources' },
+    { name: 'About', path: '/about' },
+    { name: 'Contact', path: '/contact' },
+  ];
   
   return (
     <footer className="border-t bg-secondary/30">
@@ -34,7 +48,7 @@ const Footer = () => {
                   className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
                   aria-label="Follow us on X (formerly Twitter)"
                 >
-                  <Twitter className="h-5 w-5" />
+                  <X className="h-5 w-5" />
                   <span>@humanitieslc</span>
                 </a>
               </div>
@@ -44,43 +58,22 @@ const Footer = () => {
               <h3 className="text-sm font-medium mb-4">Quick Links</h3>
               <div className="grid grid-cols-2 gap-8">
                 <ul className="space-y-2">
-                  <li>
-                    <Link to="/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                      Home
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/articles/blog" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                      Blog
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/articles/interviews" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                      Interviews
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/articles/reviews" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                      Reviews
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/resources" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                      Resources
-                    </Link>
-                  </li>
+                  {column1Links.map((link) => (
+                    <li key={link.name}>
+                      <Link to={link.path} className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                        {link.name}
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
                 <ul className="space-y-2">
-                  <li>
-                    <Link to="/about" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                      About
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/contact" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                      Contact
-                    </Link>
-                  </li>
+                  {column2Links.map((link) => (
+                    <li key={link.name}>
+                      <Link to={link.path} className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                        {link.name}
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
