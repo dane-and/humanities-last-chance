@@ -1,5 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { AUTH_CONFIG } from '@/lib/config';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -29,8 +30,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = (username: string, password: string): boolean => {
-    // Check username and password
-    if (username === "daneanderson10" && password === "uR5!9xB#k2Pz@Lm$") {
+    // Check username and password against config values
+    if (username === AUTH_CONFIG.ADMIN_USERNAME && password === AUTH_CONFIG.ADMIN_PASSWORD) {
       setIsAuthenticated(true);
       localStorage.setItem('admin-auth', 'true');
       return true;

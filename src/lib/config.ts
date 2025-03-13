@@ -66,4 +66,16 @@ const CMS_CONFIG = {
   },
 };
 
-export { API_CONFIG, CONTENT_CONFIG, SHEETS_CONFIG, CMS_CONFIG };
+// Authentication configuration
+const AUTH_CONFIG = {
+  // Admin credentials - for Vercel, use environment variables
+  ADMIN_USERNAME: isVercel
+    ? import.meta.env.VITE_ADMIN_USERNAME || 'daneanderson10'
+    : 'daneanderson10',
+  ADMIN_PASSWORD: isVercel
+    ? import.meta.env.VITE_ADMIN_PASSWORD || 'uR5!9xB#k2Pz@Lm$'
+    : 'uR5!9xB#k2Pz@Lm$',
+  // Add other auth settings as needed
+};
+
+export { API_CONFIG, CONTENT_CONFIG, SHEETS_CONFIG, CMS_CONFIG, AUTH_CONFIG };

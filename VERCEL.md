@@ -32,6 +32,8 @@ After initial deployment, go to your project settings in Vercel:
      - `contentful`: Uses Contentful as CMS
      - `sanity`: Uses Sanity as CMS
      - `strapi`: Uses Strapi as CMS
+   - `VITE_ADMIN_USERNAME`: Set your admin username
+   - `VITE_ADMIN_PASSWORD`: Set your admin password
 
 ### 3. Content Management Options
 
@@ -72,7 +74,17 @@ For a professional setup, use a headless CMS:
    - `VITE_SANITY_PROJECT_ID`: Your Sanity project ID
    - `VITE_SANITY_DATASET`: Your Sanity dataset (usually "production")
 
-### 4. Custom Domain (Optional)
+### 4. Admin Access Configuration
+
+To access the admin dashboard at `/admin`, you need to set up authentication:
+
+1. In Vercel, add these environment variables:
+   - `VITE_ADMIN_USERNAME`: Your chosen admin username
+   - `VITE_ADMIN_PASSWORD`: Your secure admin password
+
+The default values are used if these are not set, but for security, you should always set your own.
+
+### 5. Custom Domain (Optional)
 
 1. In Vercel, go to "Settings" → "Domains"
 2. Add your custom domain and follow the verification steps
