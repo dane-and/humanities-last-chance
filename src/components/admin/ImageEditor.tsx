@@ -1,6 +1,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Canvas as FabricCanvas, Image, Object as FabricObject } from 'fabric';
+import { Canvas as FabricCanvas, Image as FabricImage, Rect, Object as FabricObject } from 'fabric';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Slider } from '@/components/ui/slider';
@@ -40,12 +40,14 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ image, onSave, isOpen, onClos
     });
     
     // Load the image
-    const img = new Image.fromURL(image, {
-      scaleX: 0.8,
-      scaleY: 0.8,
-      selectable: true,
-      centeredScaling: true,
-    }).then((img) => {
+    FabricImage.fromURL(image, (img) => {
+      // Scale the image to fit within the canvas
+      img.scale(0.8);
+      img.set({
+        selectable: true,
+        centeredScaling: true,
+      });
+      
       // Center the image
       img.center();
       fabricCanvas.add(img);
@@ -101,7 +103,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ image, onSave, isOpen, onClos
     }
     
     // Create a new crop rectangle
-    const rect = new FabricObject.Rect({
+    const rect = new Rect({
       left: 200,
       top: 150,
       width: 300,
@@ -123,7 +125,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ image, onSave, isOpen, onClos
   const applyCrop = () => {
     if (!canvas || !cropRect) return;
     
-    const activeObject = canvas.getObjects().find(obj => obj instanceof Image);
+    const activeObject = canvas.getObjects().find(obj => obj instanceof FabricImage);
     if (!activeObject) return;
     
     // Convert objects to plain objects to access properties
@@ -131,10 +133,10 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ image, onSave, isOpen, onClos
     const img = activeObject.toObject();
     
     // Calculate the actual crop dimensions relative to the image
-    const cropX = (crop.left - img.left) / img.scaleX;
-    const cropY = (crop.top - img.top) / img.scaleY;
-    const cropWidth = crop.width / img.scaleX;
-    const cropHeight = crop.height / img.scaleY;
+    const cropX = (crop.left - img.left) / (img.scaleX || 1);
+    const cropY = (crop.top - img.top) / (img.scaleY || 1);
+    const cropWidth = crop.width / (img.scaleX || 1);
+    const cropHeight = crop.height / (img.scaleY || 1);
     
     // Apply crop by rendering to a temp canvas
     const tempCanvas = document.createElement('canvas');
@@ -157,7 +159,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ image, onSave, isOpen, onClos
         // Clear the canvas and add the cropped image
         canvas.clear();
         
-        Image.fromURL(croppedImage, (newImg) => {
+        FabricImage.fromURL(croppedImage, (newImg) => {
           newImg.scaleToWidth(400);
           newImg.center();
           canvas.add(newImg);
@@ -188,6 +190,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ image, onSave, isOpen, onClos
     const dataURL = canvas.toDataURL({
       format: 'jpeg',
       quality: 0.9,
+      multiplier: 1,
     });
     
     onSave(dataURL);
