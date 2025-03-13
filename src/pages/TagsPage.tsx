@@ -4,15 +4,22 @@ import { useParams } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import ArticleGrid from '@/components/ArticleGrid';
-import { getArticlesByTag, useArticles } from '@/lib/articles';
+import { getArticlesByTag } from '@/lib/queries/articleQueries';
+import { useArticles } from '@/lib/hooks/useArticles';
 
 const TagsPage: React.FC = () => {
   const { tag } = useParams<{ tag: string }>();
   const { articles, isLoading } = useArticles();
   
-  const tagArticles = tag ? getArticlesByTag(tag, undefined, articles) : [];
-  const decodedTag = tag ? decodeURIComponent(tag) : '';
-
+  // Normalize tag for case-insensitive comparison
+  const normalizedTag = tag ? decodeURIComponent(tag) : '';
+  
+  // Get articles with this tag (case-insensitive)
+  const tagArticles = normalizedTag ? 
+    articles.filter(article => 
+      article.tags?.some(t => t.toLowerCase() === normalizedTag.toLowerCase())
+    ) : [];
+  
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
@@ -20,11 +27,11 @@ const TagsPage: React.FC = () => {
       <main className="flex-grow pt-24 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-serif font-bold mb-2">
-            {isLoading ? 'Loading...' : `${decodedTag}`}
+            {isLoading ? 'Loading...' : normalizedTag}
           </h1>
           
           <p className="text-muted-foreground mb-8">
-            {isLoading ? '' : `${tagArticles.length} ${tagArticles.length === 1 ? 'article' : 'articles'} tagged with "${decodedTag}"`}
+            {isLoading ? '' : `${tagArticles.length} ${tagArticles.length === 1 ? 'article' : 'articles'} tagged with "${normalizedTag}"`}
           </p>
           
           {!isLoading && tagArticles.length === 0 ? (

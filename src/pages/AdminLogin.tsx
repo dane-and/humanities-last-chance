@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 
 const AdminLogin: React.FC = () => {
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const { isAuthenticated, login } = useAuth();
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const AdminLogin: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (login(password)) {
+    if (login(username, password)) {
       toast({
         title: 'Success',
         description: 'You have been logged in.',
@@ -31,7 +32,7 @@ const AdminLogin: React.FC = () => {
     } else {
       toast({
         title: 'Error',
-        description: 'Invalid password. Please try again.',
+        description: 'Invalid username or password. Please try again.',
         variant: 'destructive',
       });
     }
@@ -42,17 +43,33 @@ const AdminLogin: React.FC = () => {
       <div className="w-full max-w-md space-y-6 bg-background p-8 rounded-lg shadow-lg border border-border">
         <div className="text-center">
           <h1 className="text-3xl font-bold">Admin Login</h1>
-          <p className="text-muted-foreground mt-2">Enter your password to manage content</p>
+          <p className="text-muted-foreground mt-2">Enter your credentials to manage content</p>
         </div>
         
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
+            <label htmlFor="username" className="text-sm font-medium">Username</label>
             <Input
+              id="username"
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full"
+              required
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <label htmlFor="password" className="text-sm font-medium">Password</label>
+            <Input
+              id="password"
               type="password"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full"
+              required
             />
           </div>
           

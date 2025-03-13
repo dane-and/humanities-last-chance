@@ -5,6 +5,20 @@ import { Link } from 'react-router-dom';
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   
+  // Divide links into two balanced columns
+  const column1Links = [
+    { name: 'Home', path: '/' },
+    { name: 'Blog', path: '/articles/blog' },
+    { name: 'Interviews', path: '/articles/interviews' },
+    { name: 'Reviews', path: '/articles/reviews' },
+  ];
+  
+  const column2Links = [
+    { name: 'Resources', path: '/resources' },
+    { name: 'About', path: '/about' },
+    { name: 'Contact', path: '/contact' },
+  ];
+  
   return (
     <footer className="border-t bg-secondary/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -13,7 +27,7 @@ const Footer = () => {
             <div className="md:col-span-1">
               <div className="flex items-center gap-3 mb-4">
                 <img 
-                  src="/lovable-uploads/e658c919-e309-420a-aba2-1cd4af9fd449.png" 
+                  src="/lovable-uploads/71dce2e5-1d5f-4477-89d1-7e18ea84e7f2.png" 
                   alt="Humanities Last Chance Logo" 
                   className="h-12 w-auto"
                 />
@@ -22,9 +36,25 @@ const Footer = () => {
                 </span>
               </div>
               <p className="text-sm text-muted-foreground max-w-xs">
-                A digital magazine publishing daily blog posts, interviews, and reviews 
+                A free online resource publishing blog posts, interviews, and reviews 
                 about humanities scholarship.
               </p>
+              <div className="mt-4">
+                <a 
+                  href="https://x.com/humanitieslc" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+                  aria-label="Follow us on X"
+                >
+                  <img 
+                    src="/lovable-uploads/f590c355-5b49-4f27-8bef-541f52d68c3b.png" 
+                    alt="X logo" 
+                    className="h-5 w-5" 
+                  />
+                  <span>@humanitieslc</span>
+                </a>
+              </div>
             </div>
             
             <div className="md:col-span-2">
@@ -53,6 +83,11 @@ const Footer = () => {
                   </li>
                 </ul>
                 <ul className="space-y-2">
+                  <li>
+                    <Link to="/resources" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                      Resources
+                    </Link>
+                  </li>
                   <li>
                     <Link to="/about" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                       About

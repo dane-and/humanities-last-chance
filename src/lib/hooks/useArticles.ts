@@ -1,68 +1,85 @@
 
 import { useState, useEffect } from 'react';
 import { Article, defaultArticles } from '../types/article';
-import { fetchArticlesFromSheet } from '../api/articleApi';
+import { fetchArticles } from '../api/articleApi';
 import { getArticlesFromStorage, saveArticlesToStorage } from '../utils/storageUtils';
+import { API_CONFIG } from '../config';
+import { useToast } from '@/hooks/use-toast';
 
 export const useArticles = () => {
-  const [articles, setArticles] = useState<Article[]>(defaultArticles);
+  const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
-    const getArticles = async () => {
+    const getArticlesData = async () => {
+      setIsLoading(true);
+      
       try {
-        setIsLoading(true);
-        
-        // Try to get articles from localStorage first
-        try {
-          const localArticles = getArticlesFromStorage();
-          if (localArticles && localArticles.length > defaultArticles.length) {
-            setArticles(localArticles);
-            setError(null);
-            setIsLoading(false);
-            return;
+        // First check if we have cached articles to show immediately
+        if (API_CONFIG.FEATURES.USE_LOCAL_STORAGE_FALLBACK) {
+          const cachedArticles = getArticlesFromStorage();
+          if (cachedArticles && cachedArticles.length > 0) {
+            setArticles(cachedArticles);
+            // Don't set isLoading to false yet - we'll still try to fetch fresh data
           }
-        } catch (localErr) {
-          console.warn('Could not retrieve from localStorage:', localErr);
         }
         
-        // Try to fetch from external source
-        try {
-          const data = await fetchArticlesFromSheet();
-          if (data && data.length > 0) {
-            // Initialize comments arrays if needed
-            const articlesWithComments = data.map(article => ({
-              ...article,
-              comments: article.comments || []
-            }));
-            
-            setArticles(articlesWithComments);
-            // Save to localStorage for future use
-            saveArticlesToStorage(articlesWithComments);
-            setError(null);
-          } else {
-            // If we received empty data, use defaults
-            setArticles(defaultArticles);
-            console.warn('Received empty data from external source, using defaults');
+        // Fetch fresh articles from all sources in parallel
+        const freshArticles = await fetchArticles();
+        
+        if (freshArticles && freshArticles.length > 0) {
+          setArticles(freshArticles);
+          
+          // Cache the fresh articles if they're different from what we had
+          if (JSON.stringify(freshArticles) !== JSON.stringify(articles)) {
+            saveArticlesToStorage(freshArticles);
           }
-        } catch (fetchErr) {
-          console.error('Failed to fetch from external source, using defaults:', fetchErr);
+          
+          setError(null);
+        } else if (articles.length === 0) {
+          // Only use defaults if we didn't find any articles from cache or API
           setArticles(defaultArticles);
-          setError(new Error('Failed to fetch articles from external source. Using default content.'));
+          
+          // Show a toast notification for fallback content
+          toast({
+            title: "Using default content",
+            description: "Could not load latest articles. Showing placeholder content.",
+            variant: "destructive"
+          });
         }
       } catch (err) {
-        console.error('Error loading articles:', err);
-        setError(err instanceof Error ? err : new Error('Unknown error'));
-        // Ensure we at least have the default articles
-        setArticles(defaultArticles);
+        console.error('Error in useArticles hook:', err);
+        setError(err instanceof Error ? err : new Error('Unknown error loading articles'));
+        
+        // Only use defaults if we have no articles yet
+        if (articles.length === 0) {
+          setArticles(defaultArticles);
+          
+          toast({
+            title: "Connection Error",
+            description: "Could not connect to the server. Showing placeholder content.",
+            variant: "destructive"
+          });
+        }
       } finally {
         setIsLoading(false);
       }
     };
 
-    getArticles();
-  }, []);
+    getArticlesData();
+    
+    // Set up periodic refresh if needed (every 5 minutes)
+    // Uncomment this if you want auto-refresh
+    /*
+    const refreshInterval = setInterval(() => {
+      getArticlesData();
+    }, 5 * 60 * 1000);
+    
+    return () => clearInterval(refreshInterval);
+    */
+  }, [toast]);
 
   return { articles, isLoading, error };
 };

@@ -15,7 +15,7 @@ export interface Article {
   slug: string;
   author: string;
   date: string;
-  category: 'Blog' | 'Interview' | 'Review';
+  category: 'Blog' | 'Interview' | 'Review' | 'Resource';
   image: string;
   excerpt: string;
   content: string;

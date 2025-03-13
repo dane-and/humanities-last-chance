@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { ThumbsUp, ThumbsDown } from 'lucide-react';
-import { addCommentToArticle, updateCommentVote } from '@/lib/utils/storageUtils';
+import { addComment, updateCommentVote } from '@/lib/api/commentApi';
 
 interface ArticleCommentsProps {
   articleId: string;
@@ -24,7 +24,7 @@ const ArticleComments: React.FC<ArticleCommentsProps> = ({
   const [content, setContent] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!name.trim()) {
@@ -47,40 +47,43 @@ const ArticleComments: React.FC<ArticleCommentsProps> = ({
     
     setSubmitting(true);
     
-    const success = addCommentToArticle(articleId, {
-      name: name.trim(),
-      content: content.trim()
-    });
-    
-    if (success) {
+    try {
+      await addComment(articleId, name.trim(), content.trim());
+      
       toast({
         title: "Success",
         description: "Your comment has been added",
       });
+      
       setName('');
       setContent('');
       onCommentAdded();
-    } else {
+    } catch (error) {
+      console.error('Error adding comment:', error);
+      
       toast({
         title: "Error",
         description: "Failed to add your comment. Please try again later.",
         variant: "destructive",
       });
+    } finally {
+      setSubmitting(false);
     }
-    
-    setSubmitting(false);
   };
 
-  const handleVote = (commentId: string, voteType: 'like' | 'dislike') => {
-    const success = updateCommentVote(articleId, commentId, voteType);
-    
-    if (success) {
+  const handleVote = async (commentId: string, voteType: 'like' | 'dislike') => {
+    try {
+      await updateCommentVote(commentId, voteType);
+      
       toast({
         title: "Success",
         description: `You ${voteType}d this comment`,
       });
+      
       onCommentAdded(); // Refresh comments
-    } else {
+    } catch (error) {
+      console.error('Error updating vote:', error);
+      
       toast({
         title: "Error",
         description: "Failed to update vote. Please try again later.",
