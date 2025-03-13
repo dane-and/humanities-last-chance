@@ -1,23 +1,8 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  
-  // Divide links into two balanced columns
-  const column1Links = [
-    { name: 'Home', path: '/' },
-    { name: 'Blog', path: '/articles/blog' },
-    { name: 'Interviews', path: '/articles/interviews' },
-    { name: 'Reviews', path: '/articles/reviews' },
-  ];
-  
-  const column2Links = [
-    { name: 'Resources', path: '/resources' },
-    { name: 'About', path: '/about' },
-    { name: 'Contact', path: '/contact' },
-  ];
   
   return (
     <footer className="border-t bg-secondary/30">
@@ -96,6 +81,11 @@ const Footer = () => {
                   <li>
                     <Link to="/contact" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                       Contact
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/admin" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                      Admin
                     </Link>
                   </li>
                 </ul>
