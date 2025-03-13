@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { X } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -46,9 +45,13 @@ const Footer = () => {
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
-                  aria-label="Follow us on X (formerly Twitter)"
+                  aria-label="Follow us on X"
                 >
-                  <X className="h-5 w-5" />
+                  <img 
+                    src="/lovable-uploads/f590c355-5b49-4f27-8bef-541f52d68c3b.png" 
+                    alt="X logo" 
+                    className="h-5 w-5" 
+                  />
                   <span>@humanitieslc</span>
                 </a>
               </div>
@@ -58,7 +61,14 @@ const Footer = () => {
               <h3 className="text-sm font-medium mb-4">Quick Links</h3>
               <div className="grid grid-cols-2 gap-8">
                 <ul className="space-y-2">
-                  {column1Links.map((link) => (
+                  {column1Links.slice(0, 2).map((link) => (
+                    <li key={link.name}>
+                      <Link to={link.path} className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                        {link.name}
+                      </Link>
+                    </li>
+                  ))}
+                  {column2Links.slice(0, 2).map((link) => (
                     <li key={link.name}>
                       <Link to={link.path} className="text-sm text-muted-foreground hover:text-primary transition-colors">
                         {link.name}
@@ -67,7 +77,14 @@ const Footer = () => {
                   ))}
                 </ul>
                 <ul className="space-y-2">
-                  {column2Links.map((link) => (
+                  {column1Links.slice(2).map((link) => (
+                    <li key={link.name}>
+                      <Link to={link.path} className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                        {link.name}
+                      </Link>
+                    </li>
+                  ))}
+                  {column2Links.slice(2).map((link) => (
                     <li key={link.name}>
                       <Link to={link.path} className="text-sm text-muted-foreground hover:text-primary transition-colors">
                         {link.name}

@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import SearchBar from './SearchBar';
 import {
@@ -125,9 +125,13 @@ const Navigation = () => {
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary flex items-center gap-1"
-                aria-label="Follow us on X (formerly Twitter)"
+                aria-label="Follow us on X"
               >
-                <X className="h-4 w-4" />
+                <img 
+                  src="/lovable-uploads/f590c355-5b49-4f27-8bef-541f52d68c3b.png" 
+                  alt="X logo" 
+                  className="h-4 w-4" 
+                />
                 <span className="hidden lg:inline">Follow</span>
               </a>
             </div>
@@ -148,7 +152,7 @@ const Navigation = () => {
               type="button"
             >
               {isOpen ? (
-                <X className="h-5 w-5" aria-hidden="true" />
+                <img src="/lovable-uploads/f590c355-5b49-4f27-8bef-541f52d68c3b.png" className="h-5 w-5" aria-hidden="true" />
               ) : (
                 <Menu className="h-5 w-5" aria-hidden="true" />
               )}
@@ -187,7 +191,7 @@ const Navigation = () => {
             rel="noopener noreferrer"
             className="flex items-center gap-2 px-4 py-3 rounded-md text-base font-medium text-muted-foreground hover:text-primary hover:bg-secondary/50"
           >
-            <X className="h-5 w-5" />
+            <img src="/lovable-uploads/f590c355-5b49-4f27-8bef-541f52d68c3b.png" className="h-5 w-5" />
             <span>Follow on X</span>
           </a>
         </div>
