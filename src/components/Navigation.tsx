@@ -4,12 +4,14 @@ import { Link, useLocation } from 'react-router-dom';
 import { Menu, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import SearchBar from './SearchBar';
+import MobileNavigation from './MobileNavigation';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { CONTENT_CONFIG } from '@/lib/config';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -59,6 +61,7 @@ const Navigation = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-14 md:h-20">
+          {/* Logo and site name */}
           <div className="flex-shrink-0 flex items-center gap-2">
             <img 
               src="/lovable-uploads/71dce2e5-1d5f-4477-89d1-7e18ea84e7f2.png" 
@@ -73,7 +76,7 @@ const Navigation = () => {
               className="font-serif text-lg md:text-2xl font-bold tracking-tighter transition-colors hover:text-primary/90"
               aria-label="Humanities Last Chance - Return to homepage"
             >
-              <span className="hidden sm:inline">Humanities Last Chance</span>
+              <span className="hidden sm:inline">{CONTENT_CONFIG.SITE_NAME}</span>
               <span className="sm:hidden">HLC</span>
             </Link>
           </div>
@@ -121,7 +124,7 @@ const Navigation = () => {
               </DropdownMenu>
               
               <a 
-                href="https://x.com/humanitieslc" 
+                href={CONTENT_CONFIG.SOCIAL.TWITTER}
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary flex items-center gap-1"
@@ -152,7 +155,7 @@ const Navigation = () => {
               type="button"
             >
               {isOpen ? (
-                <img src="/lovable-uploads/f590c355-5b49-4f27-8bef-541f52d68c3b.png" className="h-5 w-5" aria-hidden="true" />
+                <img src="/lovable-uploads/f590c355-5b49-4f27-8bef-541f52d68c3b.png" className="h-5 w-5" aria-hidden="true" alt="Close menu" />
               ) : (
                 <Menu className="h-5 w-5" aria-hidden="true" />
               )}
@@ -162,40 +165,11 @@ const Navigation = () => {
       </div>
       
       {/* Mobile Navigation Menu */}
-      <div
-        id="mobile-menu"
-        className={cn(
-          'fixed top-14 left-0 right-0 md:hidden bg-background/95 backdrop-blur-md border-b shadow-lg z-[101] transition-all duration-200 ease-in-out',
-          isOpen ? 'translate-y-0 opacity-100' : 'translate-y-[-10px] opacity-0 pointer-events-none'
-        )}
-      >
-        <div className="px-2 py-3 space-y-1">
-          {[...mainNavItems, ...dropdownItems].map((item) => (
-            <Link
-              key={item.name}
-              to={item.path}
-              className={cn(
-                'block px-4 py-3 rounded-md text-base font-medium',
-                location.pathname === item.path
-                  ? 'text-primary bg-secondary/50'
-                  : 'text-muted-foreground hover:text-primary hover:bg-secondary/50'
-              )}
-              aria-current={location.pathname === item.path ? 'page' : undefined}
-            >
-              {item.name}
-            </Link>
-          ))}
-          <a
-            href="https://x.com/humanitieslc"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-3 rounded-md text-base font-medium text-muted-foreground hover:text-primary hover:bg-secondary/50"
-          >
-            <img src="/lovable-uploads/f590c355-5b49-4f27-8bef-541f52d68c3b.png" className="h-5 w-5" />
-            <span>Follow on X</span>
-          </a>
-        </div>
-      </div>
+      <MobileNavigation 
+        isOpen={isOpen}
+        mainNavItems={mainNavItems}
+        dropdownItems={dropdownItems}
+      />
     </nav>
   );
 };
