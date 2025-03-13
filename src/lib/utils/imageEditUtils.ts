@@ -92,8 +92,17 @@ export const loadImageOntoCanvas = (
       centeredScaling: true,
     });
     
-    // Center the image
-    img.center();
+    // Center the image on the canvas
+    const canvasWidth = canvas.getWidth();
+    const canvasHeight = canvas.getHeight();
+    const imgWidth = img.getScaledWidth();
+    const imgHeight = img.getScaledHeight();
+    
+    img.set({
+      left: (canvasWidth - imgWidth) / 2,
+      top: (canvasHeight - imgHeight) / 2
+    });
+    
     canvas.add(img);
     canvas.setActiveObject(img);
     canvas.renderAll();
