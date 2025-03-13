@@ -61,7 +61,7 @@ const Navigation = () => {
         <div className="flex justify-between items-center h-14 md:h-20">
           <div className="flex-shrink-0 flex items-center gap-2">
             <img 
-              src="/site-favicon-512x512.png" 
+              src="/lovable-uploads/71dce2e5-1d5f-4477-89d1-7e18ea84e7f2.png" 
               alt="Humanities Last Chance Logo" 
               className="h-7 w-auto md:h-12"
               loading="eager"

@@ -27,7 +27,7 @@ const Footer = () => {
             <div className="md:col-span-1">
               <div className="flex items-center gap-3 mb-4">
                 <img 
-                  src="/site-favicon-512x512.png" 
+                  src="/lovable-uploads/71dce2e5-1d5f-4477-89d1-7e18ea84e7f2.png" 
                   alt="Humanities Last Chance Logo" 
                   className="h-12 w-auto"
                 />
