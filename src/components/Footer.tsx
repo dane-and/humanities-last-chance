@@ -77,15 +77,15 @@ const Footer = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link to="/resources" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                      Resources
+                    <Link to="/articles/reviews" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                      Reviews
                     </Link>
                   </li>
                 </ul>
                 <ul className="space-y-2">
                   <li>
-                    <Link to="/articles/reviews" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                      Reviews
+                    <Link to="/resources" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                      Resources
                     </Link>
                   </li>
                   <li>
