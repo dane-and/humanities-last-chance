@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Page } from '@/lib/types/page';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -31,6 +31,30 @@ const PageForm: React.FC<PageFormProps> = ({
     lastUpdated: selectedPage?.lastUpdated || new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
     isSystem: selectedPage?.isSystem || false
   });
+
+  // Update form when selectedPage changes
+  useEffect(() => {
+    if (selectedPage) {
+      setPageFormData({
+        id: selectedPage.id,
+        title: selectedPage.title,
+        slug: selectedPage.slug,
+        content: selectedPage.content,
+        lastUpdated: selectedPage.lastUpdated,
+        isSystem: selectedPage.isSystem || false
+      });
+    } else {
+      // Reset form for new page
+      setPageFormData({
+        id: `page_${Date.now()}`,
+        title: '',
+        slug: '',
+        content: '',
+        lastUpdated: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+        isSystem: false
+      });
+    }
+  }, [selectedPage]);
 
   const modules = {
     toolbar: [

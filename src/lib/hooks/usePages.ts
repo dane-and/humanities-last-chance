@@ -6,11 +6,15 @@ export const usePages = () => {
   const [pages, setPages] = useState<Page[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   
-  useEffect(() => {
+  const loadPages = () => {
     // Get the pages from storage
     const storedPages = getPagesFromStorage();
     setPages(storedPages);
     setIsLoading(false);
+  };
+  
+  useEffect(() => {
+    loadPages();
   }, []);
   
   const updatePage = (updatedPage: Page) => {
@@ -27,10 +31,15 @@ export const usePages = () => {
     return pages.find(page => page.slug === slug);
   };
   
+  const refreshPages = () => {
+    loadPages();
+  };
+  
   return {
     pages,
     isLoading,
     updatePage,
-    getPageBySlug
+    getPageBySlug,
+    refreshPages
   };
 };
