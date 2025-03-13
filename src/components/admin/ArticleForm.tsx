@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Article } from '@/lib/types/article';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { X } from 'lucide-react';
+import { X, Upload, Image as ImageIcon } from 'lucide-react';
 
 const PREDEFINED_TAGS = ['History', 'Literature', 'Philosophy', 'Teaching', 'News'];
 
@@ -28,6 +28,8 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
   const { toast } = useToast();
   const [selectedTags, setSelectedTags] = useState<string[]>(selectedArticle?.tags || []);
   const [customTag, setCustomTag] = useState('');
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [articleFormData, setArticleFormData] = useState({
     id: selectedArticle?.id || '',
@@ -106,6 +108,77 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
     }
   };
 
+  // Image upload handlers
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      handleImageUpload(e.dataTransfer.files[0]);
+    }
+  };
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      handleImageUpload(e.target.files[0]);
+    }
+  };
+
+  const handleClickUpload = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleImageUpload = (file: File) => {
+    // Check if file is an image
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: 'Error',
+        description: 'The file must be an image.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    // Check file size (limit to 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: 'Error',
+        description: 'Image size should be less than 5MB.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      if (e.target?.result) {
+        setArticleFormData(prev => ({ ...prev, image: e.target!.result as string }));
+        toast({
+          title: 'Success',
+          description: 'Image uploaded successfully.',
+        });
+      }
+    };
+    reader.onerror = () => {
+      toast({
+        title: 'Error',
+        description: 'Failed to read image file.',
+        variant: 'destructive',
+      });
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleArticleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -122,6 +195,11 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
     // Generate slug if empty
     if (!articleFormData.slug) {
       articleFormData.slug = articleFormData.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+    }
+    
+    // Generate ID if this is a new article
+    if (!articleFormData.id) {
+      articleFormData.id = Math.random().toString(36).substring(2, 15);
     }
     
     // Update or add article
@@ -230,13 +308,62 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           </div>
           
           <div className="space-y-2">
-            <label className="text-sm font-medium">Image URL</label>
-            <Input 
-              name="image"
-              value={articleFormData.image}
-              onChange={handleArticleInputChange}
-              placeholder="https://example.com/image.jpg"
-            />
+            <label className="text-sm font-medium">Image</label>
+            <div 
+              className={`border border-dashed rounded-md p-4 text-center ${isDragging ? 'border-primary bg-primary/5' : 'border-input'}`}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
+              {articleFormData.image ? (
+                <div className="space-y-2">
+                  <div className="relative w-full h-32 mx-auto">
+                    <img 
+                      src={articleFormData.image} 
+                      alt="Article preview" 
+                      className="rounded-md w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="flex justify-center gap-2">
+                    <Button type="button" variant="outline" size="sm" onClick={handleClickUpload}>
+                      <Upload className="w-4 h-4 mr-2" />
+                      Change
+                    </Button>
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => setArticleFormData(prev => ({ ...prev, image: '' }))}
+                    >
+                      <X className="w-4 h-4 mr-2" />
+                      Remove
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <div className="flex flex-col items-center justify-center gap-2">
+                    <ImageIcon className="w-10 h-10 text-muted-foreground" />
+                    <p className="text-sm text-muted-foreground">
+                      Drag & drop an image here or
+                    </p>
+                    <Button type="button" variant="secondary" size="sm" onClick={handleClickUpload}>
+                      Choose file
+                    </Button>
+                  </div>
+                </div>
+              )}
+              <input 
+                type="file"
+                ref={fileInputRef}
+                className="hidden"
+                accept="image/*"
+                onChange={handleFileInputChange}
+              />
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Max size: 5MB. Recommended dimensions: 1200x800px.
+            </p>
           </div>
           
           <div className="space-y-2 md:col-span-2">

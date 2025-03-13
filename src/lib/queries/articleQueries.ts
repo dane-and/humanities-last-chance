@@ -40,12 +40,15 @@ export const getArticleBySlug = (slug: string, articleList: Article[] = []): Art
 };
 
 /**
- * Gets articles by tag
+ * Gets articles by tag (case-insensitive)
  */
 export const getArticlesByTag = (tag: string, count?: number, articleList: Article[] = []): Article[] => {
   const articles = articleList.length ? articleList : getArticlesFromStorage();
-  const filtered = articles.filter(
-    article => article.tags && article.tags.includes(tag)
+  const normalizedTag = tag.toLowerCase();
+  
+  const filtered = articles.filter(article => 
+    article.tags && article.tags.some(t => t.toLowerCase() === normalizedTag)
   );
+  
   return count ? filtered.slice(0, count) : filtered;
 };
