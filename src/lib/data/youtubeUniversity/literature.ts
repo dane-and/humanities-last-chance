@@ -11,6 +11,7 @@ export const literature: Discipline = {
       instructor: 'Arthur Bahr',
       link: 'https://www.youtube.com/playlist?list=PLUl4u3cNGP61XcBw73jdcpNO-pju-mFtw',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=aFIhbqL0IKM&list=PLUl4u3cNGP61XcBw73jdcpNO-pju-mFtw',
       alternateLinks: [
         {
           platform: 'MIT',
