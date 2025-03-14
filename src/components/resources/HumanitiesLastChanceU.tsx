@@ -1,8 +1,10 @@
+
 import React, { useState } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { ExternalLink, Play, Headphones } from 'lucide-react';
 import { disciplines } from '@/lib/data/youtubeUniversity';
-import DisciplinesSidebar from './DisciplinesSidebar';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 // Helper function to get YouTube video ID from URL
 const getYouTubeVideoId = (url: string): string | null => {
@@ -110,8 +112,33 @@ const getThumbnailLink = (course): string => {
   return course.link;
 };
 
+// Function to find a specific course by title and discipline
+const findCourse = (title: string) => {
+  for (const discipline of disciplines) {
+    const course = discipline.courses.find(c => c.title === title);
+    if (course) {
+      return { ...course, disciplineName: discipline.name };
+    }
+  }
+  return null;
+};
+
+// Featured courses
+const featuredCourseTitles = [
+  "Shakespeare After All: The Later Plays",
+  "The Hebrew Bible",
+  "The Human Brain",
+  "Introduction to Theory of Literature",
+  "World Economic History Before the Industrial Revolution"
+];
+
 const HumanitiesLastChanceU: React.FC = () => {
   const [activeDiscipline, setActiveDiscipline] = useState<string | null>(null);
+  
+  // Get featured courses
+  const featuredCourses = featuredCourseTitles
+    .map(findCourse)
+    .filter(course => course !== null);
   
   // Filter the disciplines based on the active selection
   const disciplinesToDisplay = activeDiscipline 
@@ -125,116 +152,177 @@ const HumanitiesLastChanceU: React.FC = () => {
           Humanities Last Chance U
         </h2>
         <p>
-          A curated collection of high-quality educational lectures and courses available on YouTube,
-          organized by academic discipline. Each entry includes the course title and instructor name
-          to help you find the content that interests you.
+          Check out some lectures from our curated collection of courses taught by world-class scholars and teachers.
         </p>
       </div>
 
-      <div className="flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6">
-        <DisciplinesSidebar 
-          activeDiscipline={activeDiscipline} 
-          onDisciplineChange={setActiveDiscipline} 
-        />
-        
-        <div className="flex-1">
-          <Accordion type="multiple" className="w-full">
-            {disciplinesToDisplay.map((discipline) => (
-              <AccordionItem key={discipline.id} value={discipline.id} className="mb-4">
-                <AccordionTrigger className="text-lg font-medium">
-                  {discipline.name} ({discipline.courses.length})
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div className="space-y-6 pt-2">
-                    {discipline.courses.map((course) => {
-                      const thumbnailUrl = getThumbnailUrl(course);
-                      const primaryLink = course.link;
-                      const thumbnailLink = getThumbnailLink(course);
-                      const applePodcastLink = getApplePodcastLink(course);
-                      const resourceIcon = getResourceIcon(course);
-                      
-                      return (
-                        <div key={course.id} className="group relative bg-card rounded-lg p-4 border transition-colors hover:bg-muted/50">
-                          <div className="flex flex-col md:flex-row gap-4">
-                            <div className="relative flex-shrink-0 w-full md:w-48 h-32 overflow-hidden rounded-md bg-muted">
-                              <a 
-                                href={thumbnailLink} 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                className="block relative w-full h-full group"
-                              >
-                                <img 
-                                  src={thumbnailUrl} 
-                                  alt={`Thumbnail for ${course.title}`} 
-                                  className="w-full h-full object-cover transition-transform group-hover:scale-105"
-                                />
-                                <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                  {resourceIcon}
-                                </div>
-                              </a>
+      {/* Featured Lectures Carousel */}
+      <div className="mb-12">
+        <h3 className="text-xl font-semibold mb-4">Featured Lectures</h3>
+        <Carousel className="w-full">
+          <CarouselContent>
+            {featuredCourses.map((course) => {
+              if (!course) return null;
+              
+              const thumbnailUrl = getThumbnailUrl(course);
+              const thumbnailLink = getThumbnailLink(course);
+              const resourceIcon = getResourceIcon(course);
+              
+              return (
+                <CarouselItem key={course.id} className="basis-full md:basis-1/2 lg:basis-1/3">
+                  <div className="p-2">
+                    <div className="overflow-hidden rounded-lg border border-border/40 bg-card transition-all hover:border-border">
+                      <div className="relative">
+                        <AspectRatio ratio={16/9}>
+                          <img 
+                            src={thumbnailUrl} 
+                            alt={`Thumbnail for ${course.title}`}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 opacity-0 hover:opacity-100 bg-black/30 flex items-center justify-center transition-opacity">
+                            {resourceIcon}
+                          </div>
+                        </AspectRatio>
+                      </div>
+                      <div className="p-4">
+                        <h4 className="font-medium text-base mb-1 line-clamp-2">{course.title}</h4>
+                        <p className="text-sm text-muted-foreground mb-2">
+                          {course.instructor} • <span className="text-xs">{course.disciplineName}</span>
+                        </p>
+                        <a
+                          href={thumbnailLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center text-sm font-medium text-primary hover:underline"
+                        >
+                          Watch Lecture
+                          <ExternalLink className="ml-1 h-3 w-3" />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </CarouselItem>
+              );
+            })}
+          </CarouselContent>
+          <div className="hidden md:flex">
+            <CarouselPrevious className="left-0" />
+            <CarouselNext className="right-0" />
+          </div>
+        </Carousel>
+      </div>
+
+      {/* Disciplines Section */}
+      <div className="mb-4">
+        <select 
+          className="w-full md:w-auto p-2 border border-border rounded-md bg-background"
+          value={activeDiscipline || ""}
+          onChange={(e) => setActiveDiscipline(e.target.value || null)}
+        >
+          <option value="">All Disciplines</option>
+          {disciplines.map((discipline) => (
+            <option key={discipline.id} value={discipline.id}>
+              {discipline.name} ({discipline.courses.length})
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <Accordion type="multiple" className="w-full">
+        {disciplinesToDisplay.map((discipline) => (
+          <AccordionItem key={discipline.id} value={discipline.id} className="mb-4">
+            <AccordionTrigger className="text-lg font-medium">
+              {discipline.name} ({discipline.courses.length})
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="space-y-6 pt-2">
+                {discipline.courses.map((course) => {
+                  const thumbnailUrl = getThumbnailUrl(course);
+                  const primaryLink = course.link;
+                  const thumbnailLink = getThumbnailLink(course);
+                  const applePodcastLink = getApplePodcastLink(course);
+                  const resourceIcon = getResourceIcon(course);
+                  
+                  return (
+                    <div key={course.id} className="group relative bg-card rounded-lg p-4 border transition-colors hover:bg-muted/50">
+                      <div className="flex flex-col md:flex-row gap-4">
+                        <div className="relative flex-shrink-0 w-full md:w-48 h-32 overflow-hidden rounded-md bg-muted">
+                          <a 
+                            href={thumbnailLink} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="block relative w-full h-full group"
+                          >
+                            <img 
+                              src={thumbnailUrl} 
+                              alt={`Thumbnail for ${course.title}`} 
+                              className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                            />
+                            <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                              {resourceIcon}
                             </div>
+                          </a>
+                        </div>
+                        
+                        <div className="flex-1">
+                          <h3 className="text-lg font-medium mb-1">{course.title}</h3>
+                          <p className="text-sm text-muted-foreground">Instructor: {course.instructor}</p>
+                          {course.description && (
+                            <p className="text-sm mt-2">{course.description}</p>
+                          )}
+                          <div className="mt-3 space-y-1">
+                            <a
+                              href={primaryLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center text-sm font-medium text-primary hover:underline"
+                            >
+                              {isYoutubeLink(primaryLink) ? 'Watch on YouTube' : 'View Resource'}
+                              <ExternalLink className="ml-1 h-3 w-3" />
+                            </a>
                             
-                            <div className="flex-1">
-                              <h3 className="text-lg font-medium mb-1">{course.title}</h3>
-                              <p className="text-sm text-muted-foreground">Instructor: {course.instructor}</p>
-                              {course.description && (
-                                <p className="text-sm mt-2">{course.description}</p>
-                              )}
-                              <div className="mt-3 space-y-1">
-                                <a
-                                  href={primaryLink}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="inline-flex items-center text-sm font-medium text-primary hover:underline"
-                                >
-                                  {isYoutubeLink(primaryLink) ? 'Watch on YouTube' : 'View Resource'}
-                                  <ExternalLink className="ml-1 h-3 w-3" />
-                                </a>
-                                
-                                {course.alternateLinks && course.alternateLinks.length > 0 && (
-                                  <div className="text-sm mt-1">
-                                    <p className="text-xs text-muted-foreground mt-2 mb-1">Alternative platforms:</p>
-                                    <div className="flex flex-wrap gap-x-4 gap-y-1">
-                                      {course.alternateLinks.map((link, index) => (
-                                        <a
-                                          key={index}
-                                          href={link.url}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                          className="inline-flex items-center text-sm text-primary hover:underline"
-                                        >
-                                          {link.platform}
-                                          <ExternalLink className="ml-1 h-3 w-3" />
-                                        </a>
-                                      ))}
-                                    </div>
-                                  </div>
-                                )}
+                            {course.alternateLinks && course.alternateLinks.length > 0 && (
+                              <div className="text-sm mt-1">
+                                <p className="text-xs text-muted-foreground mt-2 mb-1">Alternative platforms:</p>
+                                <div className="flex flex-wrap gap-x-4 gap-y-1">
+                                  {course.alternateLinks.map((link, index) => (
+                                    <a
+                                      key={index}
+                                      href={link.url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="inline-flex items-center text-sm text-primary hover:underline"
+                                    >
+                                      {link.platform}
+                                      <ExternalLink className="ml-1 h-3 w-3" />
+                                    </a>
+                                  ))}
+                                </div>
                               </div>
-                            </div>
+                            )}
                           </div>
                         </div>
-                      );
-                    })}
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
 
-          {/* Show a reset button when a discipline is selected */}
-          {activeDiscipline && (
-            <div className="mt-4">
-              <button
-                onClick={() => setActiveDiscipline(null)}
-                className="text-sm text-primary hover:underline"
-              >
-                Show all disciplines
-              </button>
-            </div>
-          )}
+      {/* Show a reset button when a discipline is selected */}
+      {activeDiscipline && (
+        <div className="mt-4">
+          <button
+            onClick={() => setActiveDiscipline(null)}
+            className="text-sm text-primary hover:underline"
+          >
+            Show all disciplines
+          </button>
         </div>
-      </div>
+      )}
     </div>
   );
 };

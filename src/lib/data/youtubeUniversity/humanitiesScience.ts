@@ -3,7 +3,7 @@ import { Discipline } from './types';
 
 export const humanitiesScience: Discipline = {
   id: 'humanitiesScience',
-  name: 'Humanities Adjacent Science',
+  name: 'Sciences',
   courses: [
     {
       id: 'humsci101',
