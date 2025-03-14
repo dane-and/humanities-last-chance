@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { ExternalLink, Play } from 'lucide-react';
+import { ExternalLink, Play, Headphones } from 'lucide-react';
 import { disciplines } from '@/lib/data/youtubeUniversity';
 import DisciplinesSidebar from './DisciplinesSidebar';
 
@@ -18,17 +18,76 @@ const getYouTubeVideoId = (url: string): string | null => {
   return videoIdMatch ? videoIdMatch[1] : null;
 };
 
-// Function to generate YouTube thumbnail URL
-const getYouTubeThumbnailUrl = (videoId: string | null, isPlaylist: boolean): string => {
-  if (!videoId) return '';
+// Determine if the course has a YouTube link
+const isYoutubeLink = (url: string): boolean => {
+  return url.includes('youtube.com') || url.includes('youtu.be');
+};
+
+// Determine if the course has an Apple Podcast link
+const hasApplePodcastLink = (course): boolean => {
+  return course.alternateLinks?.some(link => 
+    link.platform.toLowerCase().includes('apple') && 
+    link.url.includes('podcasts.apple.com')
+  );
+};
+
+// Get Apple Podcast link if available
+const getApplePodcastLink = (course): string | null => {
+  if (!course.alternateLinks) return null;
   
-  if (isPlaylist) {
-    // Return a placeholder image for playlists
-    return `https://i.ytimg.com/vi/default/hqdefault.jpg`;
+  const podcastLink = course.alternateLinks.find(link => 
+    link.platform.toLowerCase().includes('apple') && 
+    link.url.includes('podcasts.apple.com')
+  );
+  
+  return podcastLink ? podcastLink.url : null;
+};
+
+// Function to get the appropriate thumbnail URL based on course type
+const getThumbnailUrl = (course): string => {
+  // Check if it's a YouTube link
+  if (isYoutubeLink(course.link)) {
+    const videoId = getYouTubeVideoId(course.link);
+    const isPlaylist = course.link.includes('playlist');
+    
+    if (videoId) {
+      if (isPlaylist) {
+        // For Yale courses
+        if (course.alternateLinks?.some(link => link.platform === 'Yale')) {
+          return '/lovable-uploads/f590c355-5b49-4f27-8bef-541f52d68c3b.png'; // Yale image
+        }
+        // For MIT courses
+        else if (course.alternateLinks?.some(link => link.platform === 'MIT')) {
+          return '/lovable-uploads/e658c919-e309-420a-aba2-1cd4af9fd449.png'; // MIT image
+        }
+        // Default playlist image
+        return 'https://i.ytimg.com/vi/default/hqdefault.jpg';
+      }
+      // Regular YouTube video thumbnail
+      return `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+    }
   }
   
-  // Return the high-quality thumbnail
-  return `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+  // Check for Apple Podcast link
+  if (hasApplePodcastLink(course)) {
+    return '/lovable-uploads/71dce2e5-1d5f-4477-89d1-7e18ea84e7f2.png'; // Apple Podcast image
+  }
+  
+  // Default image if no other condition is met
+  return '/placeholder.svg';
+};
+
+// Function to get the appropriate icon based on course type
+const getResourceIcon = (course): React.ReactNode => {
+  if (isYoutubeLink(course.link)) {
+    return <Play className="h-12 w-12 text-white" />;
+  }
+  
+  if (hasApplePodcastLink(course)) {
+    return <Headphones className="h-12 w-12 text-white" />;
+  }
+  
+  return <ExternalLink className="h-12 w-12 text-white" />;
 };
 
 const HumanitiesLastChanceU: React.FC = () => {
@@ -68,33 +127,31 @@ const HumanitiesLastChanceU: React.FC = () => {
                 <AccordionContent>
                   <div className="space-y-6 pt-2">
                     {discipline.courses.map((course) => {
-                      const isYoutube = course.platform === 'youtube';
-                      const isPlaylist = isYoutube && course.link.includes('playlist');
-                      const videoId = isYoutube ? getYouTubeVideoId(course.link) : null;
-                      const thumbnailUrl = isYoutube ? getYouTubeThumbnailUrl(videoId, isPlaylist) : '';
+                      const thumbnailUrl = getThumbnailUrl(course);
+                      const primaryLink = course.link;
+                      const applePodcastLink = getApplePodcastLink(course);
+                      const resourceIcon = getResourceIcon(course);
                       
                       return (
                         <div key={course.id} className="group relative bg-card rounded-lg p-4 border transition-colors hover:bg-muted/50">
                           <div className="flex flex-col md:flex-row gap-4">
-                            {isYoutube && videoId && (
-                              <div className="relative flex-shrink-0 w-full md:w-48 h-32 overflow-hidden rounded-md bg-muted">
-                                <a 
-                                  href={course.link} 
-                                  target="_blank" 
-                                  rel="noopener noreferrer"
-                                  className="block relative w-full h-full group"
-                                >
-                                  <img 
-                                    src={thumbnailUrl} 
-                                    alt={`Thumbnail for ${course.title}`} 
-                                    className="w-full h-full object-cover transition-transform group-hover:scale-105"
-                                  />
-                                  <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <Play className="h-12 w-12 text-white" />
-                                  </div>
-                                </a>
-                              </div>
-                            )}
+                            <div className="relative flex-shrink-0 w-full md:w-48 h-32 overflow-hidden rounded-md bg-muted">
+                              <a 
+                                href={primaryLink} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="block relative w-full h-full group"
+                              >
+                                <img 
+                                  src={thumbnailUrl} 
+                                  alt={`Thumbnail for ${course.title}`} 
+                                  className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                                />
+                                <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                  {resourceIcon}
+                                </div>
+                              </a>
+                            </div>
                             
                             <div className="flex-1">
                               <h3 className="text-lg font-medium mb-1">{course.title}</h3>
@@ -104,12 +161,12 @@ const HumanitiesLastChanceU: React.FC = () => {
                               )}
                               <div className="mt-3 space-y-1">
                                 <a
-                                  href={course.link}
+                                  href={primaryLink}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className="inline-flex items-center text-sm font-medium text-primary hover:underline"
                                 >
-                                  Watch on {course.platform === 'youtube' ? 'YouTube' : 'External Platform'}
+                                  {isYoutubeLink(primaryLink) ? 'Watch on YouTube' : 'View Resource'}
                                   <ExternalLink className="ml-1 h-3 w-3" />
                                 </a>
                                 
