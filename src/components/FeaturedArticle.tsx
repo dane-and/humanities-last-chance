@@ -17,7 +17,7 @@ interface FeaturedArticleProps {
   className?: string;
 }
 
-const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
+const FeaturedArticle: React.FC<FeaturedArticleProps> = React.memo(({
   title,
   excerpt,
   category,
@@ -48,6 +48,7 @@ const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
               src={image}
               alt={title}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
             />
           </Link>
         </AspectRatio>
@@ -82,6 +83,8 @@ const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
       </div>
     </article>
   );
-};
+});
+
+FeaturedArticle.displayName = 'FeaturedArticle';
 
 export default FeaturedArticle;

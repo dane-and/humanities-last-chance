@@ -13,7 +13,7 @@ interface ArticleCardWithTagsProps {
   variant?: 'default' | 'compact';
 }
 
-const ArticleCardWithTags: React.FC<ArticleCardWithTagsProps> = ({ 
+const ArticleCardWithTags: React.FC<ArticleCardWithTagsProps> = React.memo(({ 
   article, 
   className, 
   variant = 'default' 
@@ -33,6 +33,9 @@ const ArticleCardWithTags: React.FC<ArticleCardWithTagsProps> = ({
                 src={article.image}
                 alt={article.title}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+                width={640}
+                height={274}
               />
             </Link>
           </AspectRatio>
@@ -90,6 +93,8 @@ const ArticleCardWithTags: React.FC<ArticleCardWithTagsProps> = ({
       </div>
     </article>
   );
-};
+});
+
+ArticleCardWithTags.displayName = 'ArticleCardWithTags';
 
 export default ArticleCardWithTags;

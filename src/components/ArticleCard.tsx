@@ -17,7 +17,7 @@ interface ArticleCardProps {
   className?: string;
 }
 
-const ArticleCard: React.FC<ArticleCardProps> = ({
+const ArticleCard: React.FC<ArticleCardProps> = React.memo(({
   title,
   excerpt,
   category,
@@ -46,6 +46,8 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
               alt={title}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               loading="lazy"
+              width={640}
+              height={274}
             />
           </Link>
         </AspectRatio>
@@ -84,6 +86,8 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
       </div>
     </article>
   );
-};
+});
+
+ArticleCard.displayName = 'ArticleCard';
 
 export default ArticleCard;

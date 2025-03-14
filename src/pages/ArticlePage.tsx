@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getArticleBySlug } from '@/lib/articles';
@@ -83,6 +84,10 @@ const ArticlePage: React.FC = () => {
                 src={currentArticle.image}
                 alt={currentArticle.title}
                 className="w-full h-full object-cover"
+                width={1200}
+                height={514}
+                loading="eager"
+                fetchPriority="high"
               />
             </AspectRatio>
           </div>

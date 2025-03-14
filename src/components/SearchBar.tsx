@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Search, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -14,11 +14,23 @@ interface SearchBarProps {
 const SearchBar: React.FC<SearchBarProps> = ({ className }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
   const [results, setResults] = useState<any[]>([]);
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const { articles } = useArticles();
+
+  // Debounce the search query to avoid excessive filtering
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      setDebouncedQuery(query);
+    }, 300);
+
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [query]);
 
   // Close search when clicking outside
   useEffect(() => {
@@ -41,14 +53,14 @@ const SearchBar: React.FC<SearchBarProps> = ({ className }) => {
     }
   }, [isOpen]);
 
-  // Search articles based on query
-  useEffect(() => {
-    if (query.length > 2 && articles) {
+  // Memoized search function
+  const searchArticles = useCallback(() => {
+    if (debouncedQuery.length > 2 && articles) {
       const searchResults = articles.filter(article => 
-        article.title.toLowerCase().includes(query.toLowerCase()) ||
-        article.content.toLowerCase().includes(query.toLowerCase()) ||
+        article.title.toLowerCase().includes(debouncedQuery.toLowerCase()) ||
+        article.content.toLowerCase().includes(debouncedQuery.toLowerCase()) ||
         (article.tags && article.tags.some(tag => 
-          tag.toLowerCase().includes(query.toLowerCase())
+          tag.toLowerCase().includes(debouncedQuery.toLowerCase())
         ))
       ).slice(0, 5); // Limit to 5 results for better UX
       
@@ -56,7 +68,12 @@ const SearchBar: React.FC<SearchBarProps> = ({ className }) => {
     } else {
       setResults([]);
     }
-  }, [query, articles]);
+  }, [debouncedQuery, articles]);
+
+  // Search articles based on debounced query
+  useEffect(() => {
+    searchArticles();
+  }, [debouncedQuery, searchArticles]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -132,4 +149,4 @@ const SearchBar: React.FC<SearchBarProps> = ({ className }) => {
   );
 };
 
-export default SearchBar;
+export default React.memo(SearchBar);
