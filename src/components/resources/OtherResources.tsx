@@ -51,6 +51,11 @@ const resourceCategories: ResourceCategory[] = [
         description: 'Engaging historical storytelling.'
       },
       {
+        name: 'Conversations with Tyler',
+        url: 'https://podcasts.apple.com/us/podcast/conversations-with-tyler/id983795625',
+        description: 'Brilliant interviews, occasionally but not always with humanities scholars.'
+      },
+      {
         name: 'Open Culture Free Audiobooks',
         url: 'https://www.openculture.com/freeaudiobooks',
         description: 'A curated selection of public-domain audiobooks.'
