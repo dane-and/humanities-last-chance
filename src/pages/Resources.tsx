@@ -37,16 +37,14 @@ const Resources = () => {
     <div className="page-transition min-h-screen flex flex-col">
       <Navigation />
       
-      <main className="flex-grow pt-20 md:pt-24">
-        <section className="py-12 md:py-16">
+      <main className="flex-grow">
+        <section className="py-8 md:py-12">
           <div className="container mx-auto px-4 lg:px-8 max-w-6xl">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold mb-6">Resources</h1>
-            
             <Tabs 
               defaultValue={getTabFromURL()} 
               value={getTabFromURL()}
               onValueChange={handleTabChange}
-              className="w-full mt-6"
+              className="w-full"
             >
               <TabsList className="mb-8 w-full justify-start">
                 <TabsTrigger value="humanities-u">Humanities Last Chance U</TabsTrigger>

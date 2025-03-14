@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { ExternalLink, Youtube } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import { disciplines } from '@/lib/data/youtubeUniversity';
 import DisciplinesSidebar from './DisciplinesSidebar';
 
@@ -16,8 +16,7 @@ const HumanitiesLastChanceU: React.FC = () => {
   return (
     <div>
       <div className="prose max-w-none mb-8">
-        <h2 className="flex items-center gap-2 text-2xl font-serif">
-          <Youtube className="h-6 w-6 text-red-600" />
+        <h2 className="text-2xl font-serif">
           Humanities Last Chance U
         </h2>
         <p>

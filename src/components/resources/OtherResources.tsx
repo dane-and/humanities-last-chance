@@ -111,16 +111,6 @@ const resourceCategories: ResourceCategory[] = [
         name: 'Encyclopedia Britannica',
         url: 'https://www.britannica.com/',
         description: 'General knowledge reference.'
-      },
-      {
-        name: 'Bartleby Reference Library',
-        url: 'https://www.bartleby.com/',
-        description: 'Classic reference works, including The Harvard Classics.'
-      },
-      {
-        name: 'The Online Medieval and Classical Library',
-        url: 'http://omacl.org/',
-        description: 'Translations of ancient and medieval texts.'
       }
     ]
   },
