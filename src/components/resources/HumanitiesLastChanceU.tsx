@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { ExternalLink, Play, Headphones } from 'lucide-react';
@@ -152,14 +151,23 @@ const HumanitiesLastChanceU: React.FC = () => {
           Humanities Last Chance U
         </h2>
         <p>
-          Check out some lectures from our curated collection of courses taught by world-class scholars and teachers.
+          Our curated collection of high-quality courses available for free on YouTube, organized by academic discipline. Most entries include links to course sites where you can find reading lists and other supplemental material relevant to the course.
         </p>
       </div>
 
       {/* Featured Lectures Carousel */}
       <div className="mb-12">
         <h3 className="text-xl font-semibold mb-4">Featured Lectures</h3>
-        <Carousel className="w-full">
+        <Carousel 
+          className="w-full" 
+          opts={{
+            align: "start",
+            loop: true,
+            slidesToScroll: 1,
+            autoplay: true,
+            interval: 5000
+          }}
+        >
           <CarouselContent>
             {featuredCourses.map((course) => {
               if (!course) return null;
@@ -169,45 +177,47 @@ const HumanitiesLastChanceU: React.FC = () => {
               const resourceIcon = getResourceIcon(course);
               
               return (
-                <CarouselItem key={course.id} className="basis-full md:basis-1/2 lg:basis-1/3">
-                  <div className="p-2">
-                    <div className="overflow-hidden rounded-lg border border-border/40 bg-card transition-all hover:border-border">
-                      <div className="relative">
-                        <AspectRatio ratio={16/9}>
-                          <img 
-                            src={thumbnailUrl} 
-                            alt={`Thumbnail for ${course.title}`}
-                            className="w-full h-full object-cover"
-                          />
-                          <div className="absolute inset-0 opacity-0 hover:opacity-100 bg-black/30 flex items-center justify-center transition-opacity">
-                            {resourceIcon}
-                          </div>
-                        </AspectRatio>
-                      </div>
-                      <div className="p-4">
-                        <h4 className="font-medium text-base mb-1 line-clamp-2">{course.title}</h4>
-                        <p className="text-sm text-muted-foreground mb-2">
+                <CarouselItem key={course.id} className="basis-full">
+                  <a 
+                    href={thumbnailLink}
+                    target="_blank"
+                    rel="noopener noreferrer" 
+                    className="block"
+                  >
+                    <div className="relative rounded-lg overflow-hidden">
+                      <AspectRatio ratio={16/9}>
+                        <img 
+                          src={thumbnailUrl} 
+                          alt={`Thumbnail for ${course.title}`}
+                          className="w-full h-full object-cover transition-transform hover:scale-105 duration-300"
+                        />
+                      </AspectRatio>
+                      
+                      {/* Overlay with gradient and text */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end p-4">
+                        <h4 className="text-white font-medium text-lg mb-1 line-clamp-2">{course.title}</h4>
+                        <p className="text-white/90 text-sm mb-2">
                           {course.instructor} • <span className="text-xs">{course.disciplineName}</span>
                         </p>
-                        <a
-                          href={thumbnailLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center text-sm font-medium text-primary hover:underline"
-                        >
+                        <div className="inline-flex items-center text-sm font-medium text-white/90 hover:text-white">
                           Watch Lecture
                           <ExternalLink className="ml-1 h-3 w-3" />
-                        </a>
+                        </div>
+                      </div>
+                      
+                      {/* Play icon overlay */}
+                      <div className="absolute inset-0 opacity-0 hover:opacity-100 bg-black/30 flex items-center justify-center transition-opacity">
+                        {resourceIcon}
                       </div>
                     </div>
-                  </div>
+                  </a>
                 </CarouselItem>
               );
             })}
           </CarouselContent>
-          <div className="hidden md:flex">
-            <CarouselPrevious className="left-0" />
-            <CarouselNext className="right-0" />
+          <div className="flex justify-center mt-4">
+            <CarouselPrevious className="static mx-2 transform-none" />
+            <CarouselNext className="static mx-2 transform-none" />
           </div>
         </Carousel>
       </div>
