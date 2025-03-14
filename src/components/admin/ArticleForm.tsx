@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Article } from '@/lib/types/article';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -46,6 +46,40 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
     featured: selectedArticle?.featured || false,
     tags: selectedArticle?.tags || []
   });
+  
+  useEffect(() => {
+    if (selectedArticle) {
+      setArticleFormData({
+        id: selectedArticle.id || '',
+        title: selectedArticle.title || '',
+        slug: selectedArticle.slug || '',
+        author: selectedArticle.author || '',
+        date: selectedArticle.date || new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+        category: selectedArticle.category || 'Blog',
+        image: selectedArticle.image || 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3',
+        excerpt: selectedArticle.excerpt || '',
+        content: selectedArticle.content || '',
+        featured: selectedArticle.featured || false,
+        tags: selectedArticle.tags || []
+      });
+      setSelectedTags(selectedArticle.tags || []);
+    } else {
+      setArticleFormData({
+        id: '',
+        title: '',
+        slug: '',
+        author: '',
+        date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+        category: 'Blog',
+        image: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3',
+        excerpt: '',
+        content: '',
+        featured: false,
+        tags: []
+      });
+      setSelectedTags([]);
+    }
+  }, [selectedArticle]);
   
   const modules = {
     toolbar: [
@@ -227,7 +261,11 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
     }
     
     onArticleListUpdate(updatedList);
-    localStorage.setItem('admin-articles', JSON.stringify(updatedList));
+    localStorage.setItem('hlc-admin-articles', JSON.stringify(updatedList));
+    
+    if (!selectedArticle) {
+      onNewArticle();
+    }
   };
 
   const handleArticleDelete = () => {
@@ -236,7 +274,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
     if (confirm('Are you sure you want to delete this article?')) {
       const updatedList = articleList.filter(article => article.id !== selectedArticle.id);
       onArticleListUpdate(updatedList);
-      localStorage.setItem('admin-articles', JSON.stringify(updatedList));
+      localStorage.setItem('hlc-admin-articles', JSON.stringify(updatedList));
       
       onNewArticle();
       
@@ -250,7 +288,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
   return (
     <div className="md:col-span-3 bg-background p-6 rounded-lg border">
       <h2 className="text-xl font-bold mb-4">
-        {selectedArticle ? 'Edit Article' : 'New Article'}
+        {selectedArticle ? `Edit Article: ${selectedArticle.title}` : 'New Article'}
       </h2>
       
       <form onSubmit={handleArticleSubmit} className="space-y-4">

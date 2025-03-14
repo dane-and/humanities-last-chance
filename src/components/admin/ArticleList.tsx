@@ -2,19 +2,22 @@
 import React from 'react';
 import { Article } from '@/lib/types/article';
 import { Button } from '@/components/ui/button';
+import { Trash2 } from 'lucide-react';
 
 interface ArticleListProps {
   articleList: Article[];
   selectedArticle: Article | null;
   onArticleSelect: (id: string) => void;
   onNewArticle: () => void;
+  onDeleteArticle: (id: string) => void;
 }
 
 const ArticleList: React.FC<ArticleListProps> = ({ 
   articleList, 
   selectedArticle, 
   onArticleSelect,
-  onNewArticle
+  onNewArticle,
+  onDeleteArticle
 }) => {
   return (
     <div className="md:col-span-1 bg-background p-4 rounded-lg border">
@@ -27,11 +30,28 @@ const ArticleList: React.FC<ArticleListProps> = ({
         {articleList.map(article => (
           <div 
             key={article.id}
-            className={`p-2 rounded cursor-pointer hover:bg-muted ${selectedArticle?.id === article.id ? 'bg-muted' : ''}`}
-            onClick={() => onArticleSelect(article.id)}
+            className="flex items-center justify-between p-2 rounded hover:bg-muted"
           >
-            <div className="font-medium truncate">{article.title}</div>
-            <div className="text-xs text-muted-foreground">{article.date}</div>
+            <div 
+              className={`flex-1 cursor-pointer ${selectedArticle?.id === article.id ? 'bg-muted' : ''}`}
+              onClick={() => onArticleSelect(article.id)}
+            >
+              <div className="font-medium truncate">{article.title}</div>
+              <div className="text-xs text-muted-foreground">{article.date}</div>
+            </div>
+            <Button 
+              variant="ghost" 
+              size="icon"
+              className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (window.confirm(`Are you sure you want to delete "${article.title}"?`)) {
+                  onDeleteArticle(article.id);
+                }
+              }}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
           </div>
         ))}
       </div>

@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { articles, Article } from '@/lib/articles';
 import { Page, getPagesFromStorage } from '@/lib/types/page';
+import { useToast } from '@/hooks/use-toast';
 
 // Admin components
 import AdminHeader from '@/components/admin/AdminHeader';
@@ -17,6 +18,7 @@ import DataManagement from '@/components/admin/DataManagement';
 const AdminDashboard: React.FC = () => {
   const { isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
   
   // Articles state
   const [articleList, setArticleList] = useState<Article[]>([]);
@@ -75,6 +77,22 @@ const AdminDashboard: React.FC = () => {
   const handleNewPage = () => {
     setSelectedPage(null);
   };
+  
+  const handleDeleteArticle = (id: string) => {
+    const updatedList = articleList.filter(article => article.id !== id);
+    setArticleList(updatedList);
+    localStorage.setItem('hlc-admin-articles', JSON.stringify(updatedList));
+    
+    // If the deleted article was selected, clear the selection
+    if (selectedArticle && selectedArticle.id === id) {
+      setSelectedArticle(null);
+    }
+    
+    toast({
+      title: "Article Deleted",
+      description: "The article has been successfully deleted.",
+    });
+  };
 
   return (
     <div className="min-h-screen bg-muted/40">
@@ -98,6 +116,7 @@ const AdminDashboard: React.FC = () => {
               selectedArticle={selectedArticle} 
               onArticleSelect={handleArticleSelect}
               onNewArticle={handleNewArticle}
+              onDeleteArticle={handleDeleteArticle}
             />
             
             <ArticleForm 
