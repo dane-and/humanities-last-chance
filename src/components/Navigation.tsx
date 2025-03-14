@@ -170,6 +170,9 @@ const Navigation = () => {
         mainNavItems={mainNavItems}
         dropdownItems={dropdownItems}
       />
+      
+      {/* Added blue line separator */}
+      <div className="h-[2px] w-full bg-primary"></div>
     </nav>
   );
 };

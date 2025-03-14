@@ -63,7 +63,7 @@ const BlogSection: React.FC<BlogSectionProps> = ({
             className="prose prose-lg max-w-none fade-up"
             style={{ animationDelay: `${index * 0.1}s` }}
           >
-            <h2 className="font-serif text-2xl md:text-3xl font-bold mb-4">
+            <h2 className="font-serif text-2xl md:text-3xl font-bold mb-2">
               <Link 
                 to={`/article/${post.slug}`} 
                 className="hover:text-primary transition-colors no-underline"

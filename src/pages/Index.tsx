@@ -15,7 +15,7 @@ const Index = () => {
     <div className="page-transition min-h-screen flex flex-col">
       <Navigation />
       
-      <main className="flex-grow pt-20 md:pt-24">
+      <main className="flex-grow pt-16 md:pt-22">
         <section className="py-8">
           <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
             <div className="flex flex-col lg:flex-row gap-8">
