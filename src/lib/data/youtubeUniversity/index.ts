@@ -7,6 +7,9 @@ import { religion } from './religion';
 import { music } from './music';
 import { architecture } from './architecture';
 import { blackStudies } from './blackStudies';
+import { mediaStudies } from './mediaStudies';
+import { linguistics } from './linguistics';
+import { politicalScience } from './politicalScience';
 
 // Combine all disciplines into a single array
 export const disciplines: Discipline[] = [
@@ -16,7 +19,10 @@ export const disciplines: Discipline[] = [
   religion,
   music,
   architecture,
-  blackStudies
+  blackStudies,
+  mediaStudies,
+  linguistics,
+  politicalScience
 ];
 
 // Re-export types
