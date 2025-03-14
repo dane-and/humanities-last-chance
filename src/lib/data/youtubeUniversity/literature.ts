@@ -24,6 +24,7 @@ export const literature: Discipline = {
       instructor: 'Giuseppe Mazzotta',
       link: 'https://www.youtube.com/playlist?list=PLD1450DFDA859F694',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=679FGDpZBew',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -41,6 +42,7 @@ export const literature: Discipline = {
       instructor: 'Roberto Gonzáles Echevarría',
       link: 'https://www.youtube.com/playlist?list=PL4A35EEAEE3880943',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=P-D0iXLZWO0',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -57,14 +59,16 @@ export const literature: Discipline = {
       title: 'Shakespeare and Politics',
       instructor: 'Paul Cantor',
       link: 'https://www.youtube.com/playlist?list=PLKjJE86mQRtsUKNTj5AmsBqoHkwuJP2kr',
-      platform: 'youtube'
+      platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=0b773Pc1fYs'
     },
     {
       id: 'lit105',
       title: 'Shakespeare After All: The Later Plays',
       instructor: 'Marjorie Garber',
       link: 'https://www.youtube.com/playlist?list=PLLBTlqKLPFAOwyw6tyJdshu-aHOyHA4TN',
-      platform: 'youtube'
+      platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=A0mFFJJLM2M'
     },
     {
       id: 'lit106',
@@ -72,6 +76,7 @@ export const literature: Discipline = {
       instructor: 'John Rogers',
       link: 'https://www.youtube.com/playlist?list=PL2103FD9F9D0615B7',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=pf91LApkCpU',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -89,6 +94,7 @@ export const literature: Discipline = {
       instructor: 'Langdon Hammer',
       link: 'https://www.youtube.com/playlist?list=PLh9mgdi4rNewA25FVJ-lawQ-yr-alF58z',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=aG9el6hOjm8',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -102,6 +108,7 @@ export const literature: Discipline = {
       instructor: 'Wai Chee Dimock',
       link: 'https://www.youtube.com/playlist?list=PL84C3A4DD9C263D79',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=0GLy6_gjenA',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -119,6 +126,7 @@ export const literature: Discipline = {
       instructor: 'Amy Hungerford',
       link: 'https://www.youtube.com/playlist?list=PLE33BCD966FF96F23',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=TyVAU5iGe0k',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -136,6 +144,7 @@ export const literature: Discipline = {
       instructor: 'Paul Fry',
       link: 'https://www.youtube.com/playlist?list=PLD00D35CBC75941BD',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=4YY4CTSQ8nY',
       alternateLinks: [
         {
           platform: 'Yale',

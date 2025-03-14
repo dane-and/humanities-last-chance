@@ -11,6 +11,7 @@ export const philosophy: Discipline = {
       instructor: 'Tamar Gendler',
       link: 'https://www.youtube.com/playlist?list=PL3F6BC200B2930084',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=mUHYlyacMmA',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -28,6 +29,7 @@ export const philosophy: Discipline = {
       instructor: 'Shelly Kagan',
       link: 'https://www.youtube.com/playlist?list=PLEA18FAF1AD9047B0',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=p2J7wSuFRl8',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -45,6 +47,7 @@ export const philosophy: Discipline = {
       instructor: 'Michael Sandel',
       link: 'https://www.youtube.com/playlist?list=PL30C13C91CFFEFEA6',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=kBdfcR-8hEY',
       alternateLinks: [
         {
           platform: 'Harvard',
@@ -61,14 +64,16 @@ export const philosophy: Discipline = {
       title: 'Kant: Critique of Pure Reason',
       instructor: 'Robert Paul Wolff',
       link: 'https://www.youtube.com/playlist?list=PL-84EpGzfQMeg_WsYRpI5EEG0RCgpIvjV',
-      platform: 'youtube'
+      platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=d__In2PQS60'
     },
     {
       id: 'phil105',
       title: 'Marx',
       instructor: 'Robert Paul Wolff',
       link: 'https://www.youtube.com/playlist?list=PLCFOtOThmlATqqQzsdraIBj1tLO8L91rY',
-      platform: 'youtube'
+      platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=35cr_whPC88'
     }
   ]
 };

@@ -8,6 +8,7 @@ export interface Course {
   link: string;
   platform: 'youtube' | 'other';
   description?: string;
+  thumbnailVideoUrl?: string;
   alternateLinks?: {
     platform: string;
     url: string;

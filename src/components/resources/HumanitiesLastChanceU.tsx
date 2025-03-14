@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { ExternalLink, Play, Headphones } from 'lucide-react';
@@ -7,6 +6,8 @@ import DisciplinesSidebar from './DisciplinesSidebar';
 
 // Helper function to get YouTube video ID from URL
 const getYouTubeVideoId = (url: string): string | null => {
+  if (!url) return null;
+  
   // Handle playlist URLs
   if (url.includes('youtube.com/playlist')) {
     const playlistIdMatch = url.match(/list=([^&]+)/);
@@ -45,7 +46,15 @@ const getApplePodcastLink = (course): string | null => {
 
 // Function to get the appropriate thumbnail URL based on course type
 const getThumbnailUrl = (course): string => {
-  // Check if it's a YouTube link
+  // If course has a specific thumbnail video URL, use that
+  if (course.thumbnailVideoUrl && isYoutubeLink(course.thumbnailVideoUrl)) {
+    const videoId = getYouTubeVideoId(course.thumbnailVideoUrl);
+    if (videoId) {
+      return `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+    }
+  }
+  
+  // Otherwise, use the original logic
   if (isYoutubeLink(course.link)) {
     const videoId = getYouTubeVideoId(course.link);
     const isPlaylist = course.link.includes('playlist');
@@ -90,6 +99,17 @@ const getResourceIcon = (course): React.ReactNode => {
   return <ExternalLink className="h-12 w-12 text-white" />;
 };
 
+// Function to get the appropriate thumbnail link
+const getThumbnailLink = (course): string => {
+  // If there's a specific thumbnail video URL, use that for the thumbnail link
+  if (course.thumbnailVideoUrl) {
+    return course.thumbnailVideoUrl;
+  }
+  
+  // Otherwise, use the main course link
+  return course.link;
+};
+
 const HumanitiesLastChanceU: React.FC = () => {
   const [activeDiscipline, setActiveDiscipline] = useState<string | null>(null);
   
@@ -129,6 +149,7 @@ const HumanitiesLastChanceU: React.FC = () => {
                     {discipline.courses.map((course) => {
                       const thumbnailUrl = getThumbnailUrl(course);
                       const primaryLink = course.link;
+                      const thumbnailLink = getThumbnailLink(course);
                       const applePodcastLink = getApplePodcastLink(course);
                       const resourceIcon = getResourceIcon(course);
                       
@@ -137,7 +158,7 @@ const HumanitiesLastChanceU: React.FC = () => {
                           <div className="flex flex-col md:flex-row gap-4">
                             <div className="relative flex-shrink-0 w-full md:w-48 h-32 overflow-hidden rounded-md bg-muted">
                               <a 
-                                href={primaryLink} 
+                                href={thumbnailLink} 
                                 target="_blank" 
                                 rel="noopener noreferrer"
                                 className="block relative w-full h-full group"
