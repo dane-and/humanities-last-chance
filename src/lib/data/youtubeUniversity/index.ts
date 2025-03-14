@@ -10,6 +10,9 @@ import { blackStudies } from './blackStudies';
 import { mediaStudies } from './mediaStudies';
 import { linguistics } from './linguistics';
 import { politicalScience } from './politicalScience';
+import { sociology } from './sociology';
+import { economics } from './economics';
+import { humanitiesScience } from './humanitiesScience';
 
 // Combine all disciplines into a single array
 export const disciplines: Discipline[] = [
@@ -22,7 +25,10 @@ export const disciplines: Discipline[] = [
   blackStudies,
   mediaStudies,
   linguistics,
-  politicalScience
+  politicalScience,
+  sociology,
+  economics,
+  humanitiesScience
 ];
 
 // Re-export types
