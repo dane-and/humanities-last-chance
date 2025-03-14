@@ -34,15 +34,37 @@ const YouTubeUniversity: React.FC = () => {
                     {course.description && (
                       <p className="text-sm mt-2">{course.description}</p>
                     )}
-                    <a
-                      href={course.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-2 inline-flex items-center text-sm font-medium text-primary hover:underline"
-                    >
-                      Watch on {course.platform === 'youtube' ? 'YouTube' : 'External Platform'}
-                      <ExternalLink className="ml-1 h-3 w-3" />
-                    </a>
+                    <div className="mt-2 space-y-1">
+                      <a
+                        href={course.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center text-sm font-medium text-primary hover:underline"
+                      >
+                        Watch on {course.platform === 'youtube' ? 'YouTube' : 'External Platform'}
+                        <ExternalLink className="ml-1 h-3 w-3" />
+                      </a>
+                      
+                      {course.alternateLinks && course.alternateLinks.length > 0 && (
+                        <div className="text-sm mt-1">
+                          <p className="text-xs text-muted-foreground mt-2 mb-1">Alternative platforms:</p>
+                          <div className="flex flex-wrap gap-x-4 gap-y-1">
+                            {course.alternateLinks.map((link, index) => (
+                              <a
+                                key={index}
+                                href={link.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center text-sm text-primary hover:underline"
+                              >
+                                {link.platform}
+                                <ExternalLink className="ml-1 h-3 w-3" />
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
