@@ -11,6 +11,7 @@ export const history: Discipline = {
       instructor: 'Donald Kagan',
       link: 'https://www.youtube.com/playlist?list=PL023BCE5134243987',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=9FrHGAd_yto&list=PL023BCE5134243987',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -28,6 +29,7 @@ export const history: Discipline = {
       instructor: 'Paul Freedman',
       link: 'https://www.youtube.com/playlist?list=PL77A337915A76F660',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=ZC8JcWVRFp8&list=PL77A337915A76F660',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -45,6 +47,7 @@ export const history: Discipline = {
       instructor: 'Keith Wrightson',
       link: 'https://www.youtube.com/playlist?list=PL18B9F132DFD967A3',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=0XYcg1ZKR4o&list=PL18B9F132DFD967A3',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -62,6 +65,7 @@ export const history: Discipline = {
       instructor: 'Frank Snowden',
       link: 'https://www.youtube.com/playlist?list=PL3AE7B3B6917DE8E6',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=Qx4pQo1mmdo&list=PL3AE7B3B6917DE8E6',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -79,6 +83,7 @@ export const history: Discipline = {
       instructor: 'John Merriman',
       link: 'https://www.youtube.com/playlist?list=PL3A8E6CE294860A24',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=ttx9MIg-iFI&list=PL3A8E6CE294860A24',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -96,6 +101,7 @@ export const history: Discipline = {
       instructor: 'Joanne Freeman',
       link: 'https://www.youtube.com/playlist?list=PLDA2BC5E785D495AB',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=shTBSGoYtK0&list=PLDA2BC5E785D495AB',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -113,6 +119,7 @@ export const history: Discipline = {
       instructor: 'David Blight',
       link: 'https://www.youtube.com/playlist?list=PL5DD220D6A1282057',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=QXXp1bHd6gI&list=PL5DD220D6A1282057',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -130,6 +137,7 @@ export const history: Discipline = {
       instructor: 'John Merriman',
       link: 'https://www.youtube.com/playlist?list=PLE653BF062C136B62',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=hYr5o0AMb8I&list=PLE653BF062C136B62',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -147,6 +155,7 @@ export const history: Discipline = {
       instructor: 'David Mindell and Merritt Roe Smith',
       link: 'https://www.youtube.com/playlist?list=PL7590BF3B139A354D',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=WbOtWLRZ2DE&list=PL7590BF3B139A354D',
       alternateLinks: [
         {
           platform: 'MIT',
@@ -160,6 +169,7 @@ export const history: Discipline = {
       instructor: 'Timothy Snyder',
       link: 'https://www.youtube.com/playlist?list=PLh9mgdi4rNewfxO7LhBoz_1Mx1MaO6sw_',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=bJczLlwp-d8&list=PLh9mgdi4rNewfxO7LhBoz_1Mx1MaO6sw_',
       alternateLinks: [
         {
           platform: 'Yale',
