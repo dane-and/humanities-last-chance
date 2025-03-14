@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect, useCallback } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { ExternalLink, Play, Headphones } from 'lucide-react';
 import { disciplines } from '@/lib/data/youtubeUniversity';
@@ -133,11 +134,23 @@ const featuredCourseTitles = [
 
 const HumanitiesLastChanceU: React.FC = () => {
   const [activeDiscipline, setActiveDiscipline] = useState<string | null>(null);
+  const [api, setApi] = useState<any>(null);
   
   // Get featured courses
   const featuredCourses = featuredCourseTitles
     .map(findCourse)
     .filter(course => course !== null);
+  
+  // Setup auto rotation for carousel
+  useEffect(() => {
+    if (!api) return;
+    
+    const interval = setInterval(() => {
+      api.scrollNext();
+    }, 5000);
+    
+    return () => clearInterval(interval);
+  }, [api]);
   
   // Filter the disciplines based on the active selection
   const disciplinesToDisplay = activeDiscipline 
@@ -163,10 +176,9 @@ const HumanitiesLastChanceU: React.FC = () => {
           opts={{
             align: "start",
             loop: true,
-            slidesToScroll: 1,
-            autoplay: true,
-            interval: 5000
+            slidesToScroll: 1
           }}
+          setApi={setApi}
         >
           <CarouselContent>
             {featuredCourses.map((course) => {
@@ -338,3 +350,4 @@ const HumanitiesLastChanceU: React.FC = () => {
 };
 
 export default HumanitiesLastChanceU;
+
