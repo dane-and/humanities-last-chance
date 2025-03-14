@@ -47,7 +47,7 @@ export const history: Discipline = {
       instructor: 'Keith Wrightson',
       link: 'https://www.youtube.com/playlist?list=PL18B9F132DFD967A3',
       platform: 'youtube',
-      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=0XYcg1ZKR4o&list=PL18B9F132DFD967A3',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=e3uBi2TZdUY&list=PL18B9F132DFD967A3',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -65,7 +65,7 @@ export const history: Discipline = {
       instructor: 'Frank Snowden',
       link: 'https://www.youtube.com/playlist?list=PL3AE7B3B6917DE8E6',
       platform: 'youtube',
-      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=Qx4pQo1mmdo&list=PL3AE7B3B6917DE8E6',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=UoWxdlGBVTI&list=PL3AE7B3B6917DE8E6',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -83,7 +83,7 @@ export const history: Discipline = {
       instructor: 'John Merriman',
       link: 'https://www.youtube.com/playlist?list=PL3A8E6CE294860A24',
       platform: 'youtube',
-      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=ttx9MIg-iFI&list=PL3A8E6CE294860A24',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=_IgKHHAjV8Y&list=PL3A8E6CE294860A24',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -137,7 +137,7 @@ export const history: Discipline = {
       instructor: 'John Merriman',
       link: 'https://www.youtube.com/playlist?list=PLE653BF062C136B62',
       platform: 'youtube',
-      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=hYr5o0AMb8I&list=PLE653BF062C136B62',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=4vK73R51rwU&list=PLE653BF062C136B62',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -155,7 +155,7 @@ export const history: Discipline = {
       instructor: 'David Mindell and Merritt Roe Smith',
       link: 'https://www.youtube.com/playlist?list=PL7590BF3B139A354D',
       platform: 'youtube',
-      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=WbOtWLRZ2DE&list=PL7590BF3B139A354D',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=YfmVSPS7EFI&list=PL7590BF3B139A354D',
       alternateLinks: [
         {
           platform: 'MIT',

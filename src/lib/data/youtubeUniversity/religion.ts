@@ -10,7 +10,8 @@ export const religion: Discipline = {
       title: 'The Hebrew Bible',
       instructor: 'Shaye Cohen',
       link: 'https://www.youtube.com/playlist?list=PLirQt4asn3oI_FRsu6xb_LoBhCTLvXhZq',
-      platform: 'youtube'
+      platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=Y-lw-_nf_NM&list=PLirQt4asn3oI_FRsu6xb_LoBhCTLvXhZq'
     },
     {
       id: 'rel102',
@@ -18,6 +19,7 @@ export const religion: Discipline = {
       instructor: 'Christine Hayes',
       link: 'https://www.youtube.com/playlist?list=PLh9mgdi4rNeyuvTEbD-Ei0JdMUujXfyWi',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=mo-YL-lv3RY&list=PLh9mgdi4rNeyuvTEbD-Ei0JdMUujXfyWi',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -35,6 +37,7 @@ export const religion: Discipline = {
       instructor: 'Dale Martin',
       link: 'https://www.youtube.com/playlist?list=PL279CFA55C51E75E0',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=dtQ2TS1CiDY&list=PL279CFA55C51E75E0',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -51,7 +54,8 @@ export const religion: Discipline = {
       title: 'Hebrew Scriptures in Judaism and Christianity',
       instructor: 'Shaye Cohen',
       link: 'https://www.youtube.com/playlist?list=PLirQt4asn3oLOBsPIPkGIHa7hu_ailMsx',
-      platform: 'youtube'
+      platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=Y8bmP1nI0Jg&list=PLirQt4asn3oLOBsPIPkGIHa7hu_ailMsx'
     }
   ]
 };

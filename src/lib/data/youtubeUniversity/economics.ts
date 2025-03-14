@@ -11,6 +11,7 @@ export const economics: Discipline = {
       instructor: 'Jonathan Gruber',
       link: 'https://www.youtube.com/playlist?list=PLUl4u3cNGP62oJSoqb4Rf-vZMGUBe59G-',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=_OkTw766oCs&list=PLUl4u3cNGP62oJSoqb4Rf-vZMGUBe59G-',
       alternateLinks: [
         {
           platform: 'MIT',
@@ -24,6 +25,7 @@ export const economics: Discipline = {
       instructor: 'Ricardo Caballero',
       link: 'https://www.youtube.com/playlist?list=PLUl4u3cNGP62EXoZ4B3_Ob7lRRwpGQxkb',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=heBErnN3ZPk&list=PLUl4u3cNGP62EXoZ4B3_Ob7lRRwpGQxkb',
       alternateLinks: [
         {
           platform: 'MIT',
@@ -37,6 +39,7 @@ export const economics: Discipline = {
       instructor: 'Frank Schilbach',
       link: 'https://www.youtube.com/playlist?list=PLUl4u3cNGP63Z979ri_UXXk_1zrvrF77Q',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=j5XdY5wkVTA&list=PLUl4u3cNGP63Z979ri_UXXk_1zrvrF77Q',
       alternateLinks: [
         {
           platform: 'MIT',
@@ -50,6 +53,7 @@ export const economics: Discipline = {
       instructor: 'Esther Duflo and Abhijit Banerjee',
       link: 'https://www.youtube.com/playlist?list=PLUl4u3cNGP620R91K4KP_fO4l3eeK5lDn',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=K2LvCx8H0OU&list=PLUl4u3cNGP620R91K4KP_fO4l3eeK5lDn',
       alternateLinks: [
         {
           platform: 'MIT',
@@ -62,7 +66,8 @@ export const economics: Discipline = {
       title: 'World Economic History Before the Industrial Revolution',
       instructor: 'Greg Clark',
       link: 'https://www.youtube.com/playlist?list=PL_w_qWAQZtAYqD1KnrMdZ5vpxyNUlq_rr',
-      platform: 'youtube'
+      platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=6XmLBpfsovE&list=PL_w_qWAQZtAYqD1KnrMdZ5vpxyNUlq_rr'
     },
     {
       id: 'econ106',
@@ -70,6 +75,7 @@ export const economics: Discipline = {
       instructor: 'Robert Schiller',
       link: 'https://www.youtube.com/playlist?list=PL8FB14A2200B87185',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=WQui_3Hpmmc&list=PL8FB14A2200B87185',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -87,6 +93,7 @@ export const economics: Discipline = {
       instructor: 'Ben Polak',
       link: 'https://www.youtube.com/playlist?list=PL6EF60E1027E1A10B',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=nM3rTU927io&list=PL6EF60E1027E1A10B',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -104,6 +111,7 @@ export const economics: Discipline = {
       instructor: 'John Geanakoplos',
       link: 'https://www.youtube.com/playlist?list=PLEDC55106E0BA18FC',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=vTs2IQ8OefQ&list=PLEDC55106E0BA18FC',
       alternateLinks: [
         {
           platform: 'Yale',

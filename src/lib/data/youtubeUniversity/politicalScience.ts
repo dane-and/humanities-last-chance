@@ -11,6 +11,7 @@ export const politicalScience: Discipline = {
       instructor: 'Stephen Smith',
       link: 'https://www.youtube.com/playlist?list=PL8D95DEA9B7DFE825',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=xhm55mIdSuk&list=PL8D95DEA9B7DFE825',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -28,6 +29,7 @@ export const politicalScience: Discipline = {
       instructor: 'Ian Shapiro',
       link: 'https://www.youtube.com/playlist?list=PL2FD48CE33DFBEA7E',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=s6MOA_Y3MKE&list=PL2FD48CE33DFBEA7E',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -45,6 +47,7 @@ export const politicalScience: Discipline = {
       instructor: 'Ian Shapiro',
       link: 'https://www.youtube.com/playlist?list=PLh9mgdi4rNeyViG2ar68jkgEi4y6doNZy',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=BDqvzFY72mg&list=PLh9mgdi4rNeyViG2ar68jkgEi4y6doNZy',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -58,6 +61,7 @@ export const politicalScience: Discipline = {
       instructor: 'Douglas Rae',
       link: 'https://www.youtube.com/playlist?list=PL2497FD1251EED4DD',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=M3aw2ih626s&list=PL2497FD1251EED4DD',
       alternateLinks: [
         {
           platform: 'Yale',

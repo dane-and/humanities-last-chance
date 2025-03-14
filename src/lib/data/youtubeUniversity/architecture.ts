@@ -11,6 +11,7 @@ export const architecture: Discipline = {
       instructor: 'Diana Kleiner',
       link: 'https://www.youtube.com/playlist?list=PLBCB3059E45654BCE',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=qd3MJPHaotQ&list=PLBCB3059E45654BCE',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -28,6 +29,7 @@ export const architecture: Discipline = {
       instructor: 'Julian Beinart',
       link: 'https://www.youtube.com/playlist?list=PLUl4u3cNGP63hVXZEMszpS_CWvUFsURr6',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=k2_wuThLG6o&list=PLUl4u3cNGP63hVXZEMszpS_CWvUFsURr6',
       alternateLinks: [
         {
           platform: 'MIT',

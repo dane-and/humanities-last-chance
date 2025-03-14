@@ -11,6 +11,7 @@ export const sociology: Discipline = {
       instructor: 'Iván Szelényi',
       link: 'https://www.youtube.com/playlist?list=PLDF7B08FF8564D1FE',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=hd33BahdAjs&list=PLDF7B08FF8564D1FE',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -28,6 +29,7 @@ export const sociology: Discipline = {
       instructor: 'Stephen Bright',
       link: 'https://www.youtube.com/playlist?list=PLh9mgdi4rNez7ZuPRY3KNJ2ef16qebyZe',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=sL7s0TPy-UQ&list=PLh9mgdi4rNez7ZuPRY3KNJ2ef16qebyZe',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -41,6 +43,7 @@ export const sociology: Discipline = {
       instructor: 'John Wargo',
       link: 'https://www.youtube.com/watch?v=3DyRdQ_Nih0&list=PL84DCD72C5B5DC403',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=3DyRdQ_Nih0&list=PL84DCD72C5B5DC403',
       alternateLinks: [
         {
           platform: 'Yale',

@@ -11,6 +11,7 @@ export const humanitiesScience: Discipline = {
       instructor: 'Alan Guth',
       link: 'https://www.youtube.com/playlist?list=PLUl4u3cNGP61Bf9I0WDDriuDqEnywoxra',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=ANCN7vr9FVk&list=PLUl4u3cNGP61Bf9I0WDDriuDqEnywoxra',
       alternateLinks: [
         {
           platform: 'MIT',
@@ -24,6 +25,7 @@ export const humanitiesScience: Discipline = {
       instructor: 'Stephen Stearns',
       link: 'https://www.youtube.com/playlist?list=PL6299F3195349CCDA',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=VjgHd6HKtvE&list=PL6299F3195349CCDA',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -41,6 +43,7 @@ export const humanitiesScience: Discipline = {
       instructor: 'Robert Sapolsky',
       link: 'https://www.youtube.com/playlist?list=PL150326949691B199',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=NNnIGh9g6fA&list=PL150326949691B199',
       alternateLinks: [
         {
           platform: 'Apple Podcasts',
@@ -54,6 +57,7 @@ export const humanitiesScience: Discipline = {
       instructor: 'James Paradis',
       link: 'https://www.youtube.com/playlist?list=PLF7D7F81CD5E07497',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=fW4JKL0AFxA&list=PLF7D7F81CD5E07497',
       alternateLinks: [
         {
           platform: 'MIT',
@@ -67,6 +71,7 @@ export const humanitiesScience: Discipline = {
       instructor: 'Paul Bloom',
       link: 'https://www.youtube.com/playlist?list=PL6A08EB4EEFF3E91F',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=P3FKHH2RzjI&list=PL6A08EB4EEFF3E91F',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -84,6 +89,7 @@ export const humanitiesScience: Discipline = {
       instructor: 'John Gabrieli',
       link: 'https://www.youtube.com/watch?v=2fbrl6WoIyo&list=PL44ABC9278E2EE706',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=2fbrl6WoIyo&list=PL44ABC9278E2EE706',
       alternateLinks: [
         {
           platform: 'MIT',
@@ -97,6 +103,7 @@ export const humanitiesScience: Discipline = {
       instructor: 'Nancy Kanwisher',
       link: 'https://www.youtube.com/playlist?list=PLUl4u3cNGP60IKRN_pFptIBxeiMc0MCJP',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=ba-HMvDn_vU&list=PLUl4u3cNGP60IKRN_pFptIBxeiMc0MCJP',
       alternateLinks: [
         {
           platform: 'MIT',
@@ -110,6 +117,7 @@ export const humanitiesScience: Discipline = {
       instructor: 'Kelly D. Brownell',
       link: 'https://www.youtube.com/playlist?list=PLh9mgdi4rNeyz0eiyC7pXr_20zPMi-tI9',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=TbUFwGGripI&list=PLh9mgdi4rNeyz0eiyC7pXr_20zPMi-tI9',
       alternateLinks: [
         {
           platform: 'Yale',

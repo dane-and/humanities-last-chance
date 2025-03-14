@@ -11,6 +11,7 @@ export const blackStudies: Discipline = {
       instructor: 'Jonathan Holloway',
       link: 'https://www.youtube.com/playlist?list=PLh9mgdi4rNeyqnC6Gj5VCZERhhy9CC1S6',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=Fp6mjKumW2g&list=PLh9mgdi4rNeyqnC6Gj5VCZERhhy9CC1S6',
       alternateLinks: [
         {
           platform: 'Yale',
@@ -24,6 +25,7 @@ export const blackStudies: Discipline = {
       instructor: 'Michel DeGraff and Noam Chomsky',
       link: 'https://www.youtube.com/playlist?list=PLUl4u3cNGP62ihmDWYj4LMPMdHBHiPa_7',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=yqE5O1ef1wY&list=PLUl4u3cNGP62ihmDWYj4LMPMdHBHiPa_7',
       alternateLinks: [
         {
           platform: 'MIT',

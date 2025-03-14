@@ -11,6 +11,7 @@ export const linguistics: Discipline = {
       instructor: 'Norvin Richards',
       link: 'https://www.youtube.com/playlist?list=PLUl4u3cNGP63BZGNOqrF2qf_yxOjuG35j',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=Mvy5hjAWeZw&list=PLUl4u3cNGP63BZGNOqrF2qf_yxOjuG35j',
       alternateLinks: [
         {
           platform: 'MIT',

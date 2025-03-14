@@ -11,6 +11,7 @@ export const mediaStudies: Discipline = {
       instructor: 'David Thorburn',
       link: 'https://www.youtube.com/playlist?list=PLUl4u3cNGP63wurgwdJKo6UEYBWDLnmCj',
       platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=LFOsw1Vccac&list=PLUl4u3cNGP63wurgwdJKo6UEYBWDLnmCj',
       alternateLinks: [
         {
           platform: 'MIT',
