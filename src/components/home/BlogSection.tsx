@@ -75,7 +75,7 @@ const BlogSection: React.FC<BlogSectionProps> = ({
             
             {post.image && (
               <div className="mb-6">
-                <AspectRatio ratio={16 / 9} className="overflow-hidden rounded-lg">
+                <AspectRatio ratio={21 / 9} className="overflow-hidden rounded-lg">
                   <img
                     src={post.image}
                     alt={post.title}

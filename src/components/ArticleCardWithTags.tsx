@@ -26,8 +26,8 @@ const ArticleCardWithTags: React.FC<ArticleCardWithTagsProps> = ({
       )}
     >
       {article.image && (
-        <div className="max-w-[66%] mx-auto">
-          <AspectRatio ratio={16 / 9}>
+        <div className="w-full">
+          <AspectRatio ratio={21 / 9}>
             <Link to={`/article/${article.slug}`} className="block w-full h-full">
               <img
                 src={article.image}

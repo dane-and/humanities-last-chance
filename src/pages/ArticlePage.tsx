@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getArticleBySlug } from '@/lib/articles';
@@ -17,7 +16,6 @@ const ArticlePage: React.FC = () => {
   const [refreshCounter, setRefreshCounter] = useState(0);
   const [currentArticle, setCurrentArticle] = useState(article);
 
-  // Fetch the latest version of the article (with comments) from storage
   useEffect(() => {
     if (article) {
       const articles = getArticlesFromStorage();
@@ -80,7 +78,7 @@ const ArticlePage: React.FC = () => {
           </header>
           
           <div className="mb-10 overflow-hidden rounded-lg">
-            <AspectRatio ratio={16 / 9}>
+            <AspectRatio ratio={21 / 9}>
               <img
                 src={currentArticle.image}
                 alt={currentArticle.title}
@@ -110,7 +108,6 @@ const ArticlePage: React.FC = () => {
             </div>
           )}
           
-          {/* Comments Section */}
           <ArticleComments 
             articleId={currentArticle.id} 
             comments={currentArticle.comments || []}

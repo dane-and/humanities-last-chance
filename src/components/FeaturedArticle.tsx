@@ -42,7 +42,7 @@ const FeaturedArticle: React.FC<FeaturedArticleProps> = ({
         'overflow-hidden',
         layout === 'horizontal' ? 'h-auto' : 'h-auto'
       )}>
-        <AspectRatio ratio={16 / 9} className="overflow-hidden">
+        <AspectRatio ratio={21 / 9} className="overflow-hidden">
           <Link to={`/article/${slug}`} aria-label={title} className="block w-full h-full">
             <img
               src={image}

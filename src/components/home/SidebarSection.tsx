@@ -32,7 +32,7 @@ const SidebarSection: React.FC = () => {
             <article key={interview.id} className="border-b border-border/30 pb-4 last:border-b-0 last:pb-0">
               {interview.image && (
                 <div className="mb-3">
-                  <AspectRatio ratio={16 / 9} className="overflow-hidden rounded">
+                  <AspectRatio ratio={21 / 9} className="overflow-hidden rounded">
                     <Link to={`/article/${interview.slug}`}>
                       <img 
                         src={interview.image} 
@@ -79,7 +79,7 @@ const SidebarSection: React.FC = () => {
             <article key={review.id} className="border-b border-border/30 pb-4 last:border-b-0 last:pb-0">
               {review.image && (
                 <div className="mb-3">
-                  <AspectRatio ratio={16 / 9} className="overflow-hidden rounded">
+                  <AspectRatio ratio={21 / 9} className="overflow-hidden rounded">
                     <Link to={`/article/${review.slug}`}>
                       <img 
                         src={review.image} 
