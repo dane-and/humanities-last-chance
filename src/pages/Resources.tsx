@@ -1,14 +1,37 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { usePages } from '@/lib/hooks/usePages';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import YouTubeUniversity from '@/components/resources/YouTubeUniversity';
+import HumanitiesLastChanceU from '@/components/resources/HumanitiesLastChanceU';
+import OtherResources from '@/components/resources/OtherResources';
 
 const Resources = () => {
   const { getPageBySlug, isLoading } = usePages();
   const resourcesPage = getPageBySlug('resources');
+  
+  const location = useLocation();
+  const navigate = useNavigate();
+  
+  // Get the tab from the URL query parameter, defaulting to 'humanities-u'
+  const getTabFromURL = () => {
+    const searchParams = new URLSearchParams(location.search);
+    return searchParams.get('tab') || 'humanities-u';
+  };
+  
+  // Update the URL when the tab changes
+  const handleTabChange = (tab: string) => {
+    navigate(`/resources?tab=${tab}`, { replace: true });
+  };
+  
+  // Set the default tab based on URL on component mount
+  useEffect(() => {
+    if (!location.search) {
+      navigate(`/resources?tab=humanities-u`, { replace: true });
+    }
+  }, [navigate, location.search]);
   
   return (
     <div className="page-transition min-h-screen flex flex-col">
@@ -16,29 +39,26 @@ const Resources = () => {
       
       <main className="flex-grow pt-20 md:pt-24">
         <section className="py-12 md:py-16">
-          <div className="container mx-auto px-4 lg:px-8 max-w-5xl">
+          <div className="container mx-auto px-4 lg:px-8 max-w-6xl">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold mb-6">Resources</h1>
             
-            <Tabs defaultValue="general" className="w-full mt-6">
+            <Tabs 
+              defaultValue={getTabFromURL()} 
+              value={getTabFromURL()}
+              onValueChange={handleTabChange}
+              className="w-full mt-6"
+            >
               <TabsList className="mb-8 w-full justify-start">
-                <TabsTrigger value="general">General Resources</TabsTrigger>
-                <TabsTrigger value="youtube">YouTube University</TabsTrigger>
+                <TabsTrigger value="humanities-u">Humanities Last Chance U</TabsTrigger>
+                <TabsTrigger value="general">Other Resources</TabsTrigger>
               </TabsList>
               
-              <TabsContent value="general" className="focus-visible:outline-none focus-visible:ring-0">
-                {isLoading ? (
-                  <div className="flex justify-center py-20">
-                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-                  </div>
-                ) : resourcesPage ? (
-                  <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: resourcesPage.content }}></div>
-                ) : (
-                  <p className="text-muted-foreground">Content not available.</p>
-                )}
+              <TabsContent value="humanities-u" className="focus-visible:outline-none focus-visible:ring-0">
+                <HumanitiesLastChanceU />
               </TabsContent>
               
-              <TabsContent value="youtube" className="focus-visible:outline-none focus-visible:ring-0">
-                <YouTubeUniversity />
+              <TabsContent value="general" className="focus-visible:outline-none focus-visible:ring-0">
+                <OtherResources />
               </TabsContent>
             </Tabs>
           </div>

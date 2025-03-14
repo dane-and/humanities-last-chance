@@ -21,14 +21,14 @@ const Navigation = () => {
   // Main navigation items that will always be visible
   const mainNavItems = [
     { name: 'Home', path: '/' },
-    { name: 'Blog', path: '/articles/blog' },
     { name: 'Interviews', path: '/articles/interviews' },
     { name: 'Reviews', path: '/articles/reviews' },
+    { name: 'Resources', path: '/resources' },
   ];
   
   // Items that will go in the dropdown
   const dropdownItems = [
-    { name: 'Resources', path: '/resources' },
+    { name: 'Blog', path: '/articles/blog' },
     { name: 'About', path: '/about' },
     { name: 'Contact', path: '/contact' },
   ];
@@ -84,21 +84,63 @@ const Navigation = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center">
             <div className="flex items-center space-x-8">
-              {mainNavItems.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.path}
-                  className={cn(
-                    'text-sm font-medium transition-colors hover:text-primary',
-                    location.pathname === item.path 
-                      ? 'text-primary' 
-                      : 'text-muted-foreground'
-                  )}
-                  aria-current={location.pathname === item.path ? 'page' : undefined}
-                >
-                  {item.name}
-                </Link>
-              ))}
+              {mainNavItems.map((item) => {
+                // Special handling for Resources with dropdown
+                if (item.name === 'Resources') {
+                  return (
+                    <DropdownMenu key={item.name}>
+                      <DropdownMenuTrigger className={cn(
+                        'text-sm font-medium transition-colors hover:text-primary flex items-center',
+                        location.pathname === item.path ? 'text-primary' : 'text-muted-foreground'
+                      )}>
+                        <span>Resources</span>
+                        <ChevronDown className="ml-1 h-4 w-4" />
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="bg-background/95 backdrop-blur-md border w-56">
+                        <DropdownMenuItem asChild>
+                          <Link
+                            to="/resources?tab=humanities-u"
+                            className={cn(
+                              'w-full cursor-pointer',
+                              location.pathname === '/resources' && location.search.includes('tab=humanities-u') ? 'text-primary' : ''
+                            )}
+                          >
+                            Humanities Last Chance U
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link
+                            to="/resources?tab=general"
+                            className={cn(
+                              'w-full cursor-pointer',
+                              location.pathname === '/resources' && location.search.includes('tab=general') ? 'text-primary' : ''
+                            )}
+                          >
+                            Other Resources
+                          </Link>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  );
+                }
+                
+                // Regular navigation items
+                return (
+                  <Link
+                    key={item.name}
+                    to={item.path}
+                    className={cn(
+                      'text-sm font-medium transition-colors hover:text-primary',
+                      location.pathname === item.path 
+                        ? 'text-primary' 
+                        : 'text-muted-foreground'
+                    )}
+                    aria-current={location.pathname === item.path ? 'page' : undefined}
+                  >
+                    {item.name}
+                  </Link>
+                );
+              })}
               
               {/* More Pages Dropdown */}
               <DropdownMenu>
