@@ -1,7 +1,8 @@
 
 import { useState } from 'react';
 import { Canvas as FabricCanvas, Object as FabricObject } from 'fabric';
-import { createCropRect, applyCropToImage, loadImageOntoCanvas } from '../imageEditUtils';
+import { createCropRect, applyCropToImage } from './cropUtils';
+import { loadImageOntoCanvas } from './imageLoading';
 
 export const useCrop = (canvas: FabricCanvas | null, image: string) => {
   const [isCropping, setIsCropping] = useState(false);

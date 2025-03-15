@@ -1,7 +1,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { Canvas, Image } from 'fabric';
-import { loadImageOntoCanvas } from '../imageEditUtils';
+import { loadImageOntoCanvas } from './imageLoading';
 
 export const useCanvas = (
   canvasRef: React.RefObject<HTMLCanvasElement>,

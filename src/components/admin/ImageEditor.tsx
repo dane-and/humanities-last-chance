@@ -1,7 +1,7 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { getCanvasImageData, preloadImage } from '@/lib/utils/imageEditUtils';
+import { getCanvasImageData, preloadImage } from '@/lib/utils/imageEditor';
 import { Loader2 } from 'lucide-react';
 
 // Import our custom hooks
