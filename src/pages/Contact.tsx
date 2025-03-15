@@ -14,13 +14,13 @@ const Contact = () => {
       
       <main className="flex-grow">
         {/* Hero Image Section - positioned below navigation */}
-        <div className="w-full h-[60vh] md:h-[70vh] lg:h-[80vh] relative mt-20">
+        <div className="w-full h-[60vh] md:h-[70vh] lg:h-[80vh] flex justify-center items-center bg-gray-100 relative mt-20">
           <img 
-            src="/lovable-uploads/0edb0db7-3698-466a-a3be-f83c7cee7f0a.png" 
-            alt="Veronese's Wedding Feast at Cana" 
-            className="w-full h-full object-cover object-center"
+            src="/lovable-uploads/61672558-c535-4182-8698-9d4b7633e005.png" 
+            alt="Medieval scribe writing in a book" 
+            className="h-full object-contain object-center"
           />
-          <div className="absolute inset-0 bg-black/10 backdrop-blur-[0.5px]"></div>
+          <div className="absolute inset-0 bg-black/5 backdrop-blur-[0.5px]"></div>
         </div>
         
         <section className="py-8 md:py-10">
