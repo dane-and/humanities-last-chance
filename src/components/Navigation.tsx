@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, ChevronDown } from 'lucide-react';
@@ -73,11 +72,11 @@ const Navigation = () => {
             />
             <Link 
               to="/" 
-              className="font-serif text-lg md:text-2xl font-bold tracking-tighter transition-colors hover:text-primary/90"
+              className="font-serif text-lg md:text-2xl font-bold tracking-tighter transition-colors hover:text-primary/90 flex items-center"
               aria-label="Humanities Last Chance - Return to homepage"
             >
               <span className="hidden sm:inline">{CONTENT_CONFIG.SITE_NAME}</span>
-              <span className="sm:hidden">HLC</span>
+              <span className="sm:hidden flex items-center">HLC</span>
             </Link>
           </div>
           
