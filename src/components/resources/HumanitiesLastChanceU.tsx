@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { ExternalLink, Play, Headphones } from 'lucide-react';
@@ -168,9 +167,9 @@ const HumanitiesLastChanceU: React.FC = () => {
         </p>
       </div>
 
-      {/* Featured Lectures Carousel */}
+      {/* Featured Courses Carousel */}
       <div className="mb-12">
-        <h3 className="text-xl font-semibold mb-4">Featured Lectures</h3>
+        <h3 className="text-xl font-semibold mb-4">Featured Courses</h3>
         <Carousel 
           className="w-full" 
           opts={{
