@@ -38,7 +38,7 @@ const Resources = () => {
       <Navigation />
       
       <main className="flex-grow">
-        <section className="pt-32 pb-8 md:pt-36 md:pb-12">
+        <section className="pt-20 pb-8 md:pt-36 md:pb-12">
           <div className="container mx-auto px-4 lg:px-8 max-w-6xl">
             <Tabs 
               defaultValue={getTabFromURL()} 
@@ -46,7 +46,7 @@ const Resources = () => {
               onValueChange={handleTabChange}
               className="w-full"
             >
-              <TabsList className="mb-8 w-full justify-start">
+              <TabsList className="mb-6 w-full justify-start">
                 <TabsTrigger value="humanities-u">Humanities Last Chance U</TabsTrigger>
                 <TabsTrigger value="general">Other Resources</TabsTrigger>
               </TabsList>
