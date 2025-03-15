@@ -15,14 +15,13 @@ const Contact = () => {
       
       <main className="flex-grow">
         {/* Hero Image Section - positioned below navigation */}
-        <div className="w-full h-[60vh] md:h-[70vh] lg:h-[80vh] relative mt-20">
+        <div className="w-full h-[50vh] md:h-[50vh] lg:h-[50vh] relative mt-20">
           <CaptionedImage 
             src="/lovable-uploads/61672558-c535-4182-8698-9d4b7633e005.png" 
             alt="Medieval scribe writing in a book" 
             caption="Medieval manuscript illustration depicting a scribe at work"
             imageClassName="w-full h-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-black/10 backdrop-blur-[0.5px]"></div>
         </div>
         
         <section className="py-8 md:py-10">
