@@ -24,15 +24,13 @@ jobs:
       - name: Build project
         run: npm run build
         env:
-          # Add base URL configuration for GitHub Pages
+          # Use correct base URL for GitHub Pages
           VITE_BASE_URL: ''
           
       # Ensure CNAME file is in the dist directory
       - name: Setup CNAME
         run: |
-          if [ ! -f dist/CNAME ]; then
-            echo "humanitieslast.com" > dist/CNAME
-          fi
+          echo "humanitieslast.com" > dist/CNAME
 
       - name: Copy index.html to 404.html
         run: cp dist/index.html dist/404.html
@@ -49,5 +47,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
-          cname: humanitieslast.com
+          # Don't specify CNAME here since we're creating the file directly
           force_orphan: true
+
