@@ -92,38 +92,47 @@ export const loadImageOntoCanvas = (
     
     img.crossOrigin = 'anonymous';
     img.onload = () => {
-      // Create a fabric image from the loaded HTML image
-      FabricImage.fromURL(imageUrl, (fabricImage) => {
-        // Scale the image to fit within the canvas
-        const canvasWidth = canvas.getWidth();
-        const canvasHeight = canvas.getHeight();
-        const imgWidth = fabricImage.width || 0;
-        const imgHeight = fabricImage.height || 0;
-        
-        // Calculate scale to fit the canvas while preserving aspect ratio
-        let scaleFactor = scale;
-        if (imgWidth > canvasWidth || imgHeight > canvasHeight) {
-          const scaleX = (canvasWidth * 0.8) / imgWidth;
-          const scaleY = (canvasHeight * 0.8) / imgHeight;
-          scaleFactor = Math.min(scaleX, scaleY);
+      // Create a fabric image using the correct FromURL pattern for Fabric.js v6
+      FabricImage.fromURL(imageUrl, {
+        crossOrigin: 'anonymous',
+        // Callback function when the image is loaded
+        onload: (fabricImage) => {
+          console.log('Fabric image loaded successfully:', fabricImage);
+          
+          // Scale the image to fit within the canvas
+          const canvasWidth = canvas.getWidth();
+          const canvasHeight = canvas.getHeight();
+          const imgWidth = fabricImage.width || 0;
+          const imgHeight = fabricImage.height || 0;
+          
+          console.log('Canvas dimensions:', canvasWidth, canvasHeight);
+          console.log('Image dimensions:', imgWidth, imgHeight);
+          
+          // Calculate scale to fit the canvas while preserving aspect ratio
+          let scaleFactor = scale;
+          if (imgWidth > canvasWidth || imgHeight > canvasHeight) {
+            const scaleX = (canvasWidth * 0.8) / imgWidth;
+            const scaleY = (canvasHeight * 0.8) / imgHeight;
+            scaleFactor = Math.min(scaleX, scaleY);
+          }
+          
+          fabricImage.scale(scaleFactor);
+          
+          // Center the image on the canvas
+          fabricImage.set({
+            left: (canvasWidth - fabricImage.getScaledWidth()) / 2,
+            top: (canvasHeight - fabricImage.getScaledHeight()) / 2,
+            selectable: true,
+            centeredScaling: true,
+          });
+          
+          canvas.add(fabricImage);
+          canvas.setActiveObject(fabricImage);
+          canvas.renderAll();
+          
+          resolve();
         }
-        
-        fabricImage.scale(scaleFactor);
-        
-        // Center the image on the canvas
-        fabricImage.set({
-          left: (canvasWidth - fabricImage.getScaledWidth()) / 2,
-          top: (canvasHeight - fabricImage.getScaledHeight()) / 2,
-          selectable: true,
-          centeredScaling: true,
-        });
-        
-        canvas.add(fabricImage);
-        canvas.setActiveObject(fabricImage);
-        canvas.renderAll();
-        
-        resolve();
-      }, { crossOrigin: 'anonymous' });
+      });
     };
     
     img.onerror = (err) => {
