@@ -1,6 +1,7 @@
 
 <?php
 require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/../utils/response_utils.php';
 
 /**
  * Get all articles
@@ -12,9 +13,7 @@ function getArticles() {
     $result = $conn->query($sql);
     
     if (!$result) {
-        header('HTTP/1.1 500 Internal Server Error');
-        echo json_encode(['error' => 'Database query failed: ' . $conn->error]);
-        exit;
+        sendErrorResponse(500, 'Database query failed: ' . $conn->error);
     }
     
     $articles = [];
@@ -62,7 +61,7 @@ function getArticles() {
         $articles[] = $article;
     }
     
-    echo json_encode($articles);
+    sendDataResponse($articles);
 }
 
 /**
@@ -78,9 +77,7 @@ function getArticle($id) {
     $result = $stmt->get_result();
     
     if ($result->num_rows === 0) {
-        header('HTTP/1.1 404 Not Found');
-        echo json_encode(['error' => 'Article not found']);
-        exit;
+        sendErrorResponse(404, 'Article not found');
     }
     
     $row = $result->fetch_assoc();
@@ -123,5 +120,5 @@ function getArticle($id) {
         'comments' => $comments
     ];
     
-    echo json_encode($article);
+    sendDataResponse($article);
 }

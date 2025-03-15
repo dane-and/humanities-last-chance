@@ -1,6 +1,7 @@
 
 <?php
 require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/../utils/response_utils.php';
 
 /**
  * Create a new article
@@ -12,16 +13,12 @@ function createArticle() {
     $data = json_decode(file_get_contents('php://input'), true);
     
     if (!$data) {
-        header('HTTP/1.1 400 Bad Request');
-        echo json_encode(['error' => 'Invalid JSON data']);
-        exit;
+        sendErrorResponse(400, 'Invalid JSON data');
     }
     
     // Validate required fields
     if (empty($data['title']) || empty($data['content'])) {
-        header('HTTP/1.1 400 Bad Request');
-        echo json_encode(['error' => 'Missing required fields (title, content)']);
-        exit;
+        sendErrorResponse(400, 'Missing required fields (title, content)');
     }
     
     // Generate ID if not provided
@@ -70,18 +67,11 @@ function createArticle() {
     );
     
     if (!$stmt->execute()) {
-        header('HTTP/1.1 500 Internal Server Error');
-        echo json_encode(['error' => 'Failed to create article: ' . $stmt->error]);
-        exit;
+        sendErrorResponse(500, 'Failed to create article: ' . $stmt->error);
     }
     
     // Return success with the created article
-    header('HTTP/1.1 201 Created');
-    echo json_encode([
-        'success' => true,
-        'message' => 'Article created successfully',
-        'article' => $data
-    ]);
+    sendSuccessResponse(['article' => $data], 201, 'Article created successfully');
 }
 
 /**
@@ -94,9 +84,7 @@ function updateArticle($id) {
     $data = json_decode(file_get_contents('php://input'), true);
     
     if (!$data) {
-        header('HTTP/1.1 400 Bad Request');
-        echo json_encode(['error' => 'Invalid JSON data']);
-        exit;
+        sendErrorResponse(400, 'Invalid JSON data');
     }
     
     // Check if article exists
@@ -107,9 +95,7 @@ function updateArticle($id) {
     $checkResult = $checkStmt->get_result();
     
     if ($checkResult->num_rows === 0) {
-        header('HTTP/1.1 404 Not Found');
-        echo json_encode(['error' => 'Article not found']);
-        exit;
+        sendErrorResponse(404, 'Article not found');
     }
     
     // Prepare tags for storage
@@ -148,17 +134,11 @@ function updateArticle($id) {
     );
     
     if (!$stmt->execute()) {
-        header('HTTP/1.1 500 Internal Server Error');
-        echo json_encode(['error' => 'Failed to update article: ' . $stmt->error]);
-        exit;
+        sendErrorResponse(500, 'Failed to update article: ' . $stmt->error);
     }
     
     // Return success with the updated article
-    echo json_encode([
-        'success' => true,
-        'message' => 'Article updated successfully',
-        'article' => array_merge($data, ['id' => $id])
-    ]);
+    sendSuccessResponse(['article' => array_merge($data, ['id' => $id])], 200, 'Article updated successfully');
 }
 
 /**
@@ -175,9 +155,7 @@ function deleteArticle($id) {
     $checkResult = $checkStmt->get_result();
     
     if ($checkResult->num_rows === 0) {
-        header('HTTP/1.1 404 Not Found');
-        echo json_encode(['error' => 'Article not found']);
-        exit;
+        sendErrorResponse(404, 'Article not found');
     }
     
     // Delete related comments first
@@ -192,14 +170,9 @@ function deleteArticle($id) {
     $stmt->bind_param("s", $id);
     
     if (!$stmt->execute()) {
-        header('HTTP/1.1 500 Internal Server Error');
-        echo json_encode(['error' => 'Failed to delete article: ' . $stmt->error]);
-        exit;
+        sendErrorResponse(500, 'Failed to delete article: ' . $stmt->error);
     }
     
     // Return success
-    echo json_encode([
-        'success' => true,
-        'message' => 'Article deleted successfully'
-    ]);
+    sendSuccessResponse([], 200, 'Article deleted successfully');
 }
