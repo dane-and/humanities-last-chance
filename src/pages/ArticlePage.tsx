@@ -9,7 +9,7 @@ import { ArrowLeft } from 'lucide-react';
 import ArticleComments from '@/components/ArticleComments';
 import { getArticlesFromStorage } from '@/lib/utils/storage/articleStorage';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import CaptionedImage from '@/components/CaptionedImage';
+import OptimizedImage from '@/components/OptimizedImage';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const ArticlePage: React.FC = () => {
@@ -85,12 +85,12 @@ const ArticlePage: React.FC = () => {
           {currentArticle.image && (
             <div className="mb-6 overflow-hidden rounded-lg">
               <AspectRatio ratio={21 / 9}>
-                <CaptionedImage
+                <OptimizedImage
                   src={currentArticle.image}
                   alt={currentArticle.title}
+                  className="w-full h-full object-cover"
                   caption={currentArticle.imageCaption || ''}
-                  imageClassName="w-full h-full object-cover"
-                  captionClassName="absolute bottom-0 left-0 right-0 bg-black/30 text-white p-2 text-xs"
+                  captionClassName="text-center text-sm text-muted-foreground mt-2 italic"
                 />
               </AspectRatio>
             </div>
