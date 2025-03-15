@@ -3,7 +3,6 @@ import React from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { usePages } from '@/lib/hooks/usePages';
-import Hero from '@/components/Hero';
 
 const About = () => {
   const { getPageBySlug, isLoading } = usePages();
@@ -15,7 +14,7 @@ const About = () => {
       
       <main className="flex-grow">
         {/* Hero Image Section - positioned below navigation */}
-        <div className="w-full h-[50vh] md:h-[60vh] lg:h-[70vh] relative mt-20">
+        <div className="w-full h-[60vh] md:h-[70vh] lg:h-[80vh] relative mt-20">
           <img 
             src="/lovable-uploads/6410840d-c1c9-43f2-a153-7cfe45e01e92.png" 
             alt="Turner's Venice painting" 
