@@ -32,9 +32,6 @@ jobs:
 
       - name: Build project
         run: npm run build
-        env:
-          # Set base URL for GitHub Pages
-          VITE_BASE_URL: '/'
           
       # Ensure CNAME file is in the dist directory
       - name: Setup CNAME
@@ -57,4 +54,3 @@ jobs:
           folder: dist # The folder the action should deploy
           branch: gh-pages # The branch the action should deploy to
           clean: true # Automatically remove deleted files from the deployment branch
-          token: ${{ secrets.GITHUB_TOKEN }} # Explicitly specify the token
