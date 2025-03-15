@@ -1,4 +1,7 @@
+
 import { Course, Discipline } from '@/lib/data/youtubeUniversity/types';
+import { Play, Headphones, ExternalLink } from 'lucide-react';
+import React from 'react';
 
 // Helper function to get YouTube video ID from URL
 export const getYouTubeVideoId = (url: string): string | null => {
@@ -83,16 +86,16 @@ export const getThumbnailUrl = (course: Course): string => {
 };
 
 // Function to get the appropriate icon based on course type
-export const getResourceIcon = (course: Course): React.ReactNode => {
+export const getResourceIcon = (course: Course): JSX.Element => {
   if (isYoutubeLink(course.link)) {
-    return <Play className="h-12 w-12 text-white" />;
+    return React.createElement(Play, { className: "h-12 w-12 text-white" });
   }
   
   if (hasApplePodcastLink(course)) {
-    return <Headphones className="h-12 w-12 text-white" />;
+    return React.createElement(Headphones, { className: "h-12 w-12 text-white" });
   }
   
-  return <ExternalLink className="h-12 w-12 text-white" />;
+  return React.createElement(ExternalLink, { className: "h-12 w-12 text-white" });
 };
 
 // Function to get the appropriate thumbnail link
@@ -117,5 +120,4 @@ export const findCourse = (title: string): (Course & { disciplineName: string })
   return null;
 };
 
-import { Play, Headphones, ExternalLink } from 'lucide-react';
 import { disciplines } from '@/lib/data/youtubeUniversity';
