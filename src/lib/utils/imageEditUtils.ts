@@ -82,58 +82,67 @@ export const loadImageOntoCanvas = (
   canvas: FabricCanvas, 
   imageUrl: string, 
   scale: number = 0.8
-): void => {
-  // Create an HTML image first to handle potential CORS issues
-  const img = new Image();
-  
-  img.crossOrigin = 'anonymous';
-  img.onload = () => {
-    const fabricImage = new FabricImage(img);
+): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    // Clear the canvas first
+    canvas.clear();
     
-    // Scale the image to fit within the canvas
-    const canvasWidth = canvas.getWidth();
-    const canvasHeight = canvas.getHeight();
-    const imgWidth = fabricImage.width || 0;
-    const imgHeight = fabricImage.height || 0;
+    // Create an HTML image first to handle potential CORS issues
+    const img = new Image();
     
-    // Calculate scale to fit the canvas while preserving aspect ratio
-    let scaleFactor = scale;
-    if (imgWidth > canvasWidth || imgHeight > canvasHeight) {
-      const scaleX = (canvasWidth * 0.8) / imgWidth;
-      const scaleY = (canvasHeight * 0.8) / imgHeight;
-      scaleFactor = Math.min(scaleX, scaleY);
-    }
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      // Create a fabric image from the loaded HTML image
+      FabricImage.fromURL(imageUrl, (fabricImage) => {
+        // Scale the image to fit within the canvas
+        const canvasWidth = canvas.getWidth();
+        const canvasHeight = canvas.getHeight();
+        const imgWidth = fabricImage.width || 0;
+        const imgHeight = fabricImage.height || 0;
+        
+        // Calculate scale to fit the canvas while preserving aspect ratio
+        let scaleFactor = scale;
+        if (imgWidth > canvasWidth || imgHeight > canvasHeight) {
+          const scaleX = (canvasWidth * 0.8) / imgWidth;
+          const scaleY = (canvasHeight * 0.8) / imgHeight;
+          scaleFactor = Math.min(scaleX, scaleY);
+        }
+        
+        fabricImage.scale(scaleFactor);
+        
+        // Center the image on the canvas
+        fabricImage.set({
+          left: (canvasWidth - fabricImage.getScaledWidth()) / 2,
+          top: (canvasHeight - fabricImage.getScaledHeight()) / 2,
+          selectable: true,
+          centeredScaling: true,
+        });
+        
+        canvas.add(fabricImage);
+        canvas.setActiveObject(fabricImage);
+        canvas.renderAll();
+        
+        resolve();
+      }, { crossOrigin: 'anonymous' });
+    };
     
-    fabricImage.scale(scaleFactor);
+    img.onerror = (err) => {
+      console.error('Error loading image:', err);
+      // Add a placeholder or error message to the canvas
+      const text = new Text('Image could not be loaded', {
+        left: canvas.getWidth() / 2,
+        top: canvas.getHeight() / 2,
+        originX: 'center',
+        originY: 'center',
+        fill: 'red'
+      });
+      canvas.add(text);
+      canvas.renderAll();
+      reject(err);
+    };
     
-    // Center the image on the canvas
-    fabricImage.set({
-      left: (canvasWidth - fabricImage.getScaledWidth()) / 2,
-      top: (canvasHeight - fabricImage.getScaledHeight()) / 2,
-      selectable: true,
-      centeredScaling: true,
-    });
-    
-    canvas.add(fabricImage);
-    canvas.setActiveObject(fabricImage);
-    canvas.renderAll();
-  };
-  
-  img.onerror = (err) => {
-    console.error('Error loading image:', err);
-    // Add a placeholder or error message to the canvas
-    const text = new Text('Image could not be loaded', {
-      left: canvas.getWidth() / 2,
-      top: canvas.getHeight() / 2,
-      originX: 'center',
-      originY: 'center',
-      fill: 'red'
-    });
-    canvas.add(text);
-    canvas.renderAll();
-  };
-  
-  img.src = imageUrl;
+    img.src = imageUrl;
+  });
 };
 
 /**

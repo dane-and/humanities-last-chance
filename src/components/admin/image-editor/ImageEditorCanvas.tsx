@@ -17,7 +17,7 @@ const ImageEditorCanvas: React.FC<ImageEditorCanvasProps> = ({
   onCropCancel
 }) => {
   return (
-    <div className="relative border rounded-md overflow-hidden flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+    <div className="relative border rounded-md overflow-hidden flex items-center justify-center bg-gray-50 dark:bg-gray-900 w-full h-full min-h-[400px]">
       <canvas ref={canvasRef} className="max-w-full max-h-full" />
       
       {isCropping && (

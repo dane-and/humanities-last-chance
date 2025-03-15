@@ -1,48 +1,73 @@
 
-import { useState, useEffect, RefObject } from 'react';
-import { Canvas as FabricCanvas } from 'fabric';
-import { DEFAULT_CANVAS_WIDTH, DEFAULT_CANVAS_HEIGHT, DEFAULT_CANVAS_BG } from './constants';
+import { useEffect, useState } from 'react';
+import { Canvas, Image } from 'fabric';
 import { loadImageOntoCanvas } from '../imageEditUtils';
 
 export const useCanvas = (
-  canvasRef: RefObject<HTMLCanvasElement>,
-  image: string,
+  canvasRef: React.RefObject<HTMLCanvasElement>,
+  imageUrl: string,
   isOpen: boolean
 ) => {
-  const [canvas, setCanvas] = useState<FabricCanvas | null>(null);
-  
-  // Initialize canvas when dialog opens
+  const [canvas, setCanvas] = useState<Canvas | null>(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  // Initialize the canvas when the component mounts
   useEffect(() => {
-    if (!isOpen || !canvasRef.current) return;
+    if (!canvasRef.current || !isOpen) return;
+
+    console.log('Initializing canvas...');
     
-    // Clean up any existing canvas
-    if (canvas) {
-      canvas.dispose();
-    }
+    // Set canvas dimensions to match the container
+    const canvasEl = canvasRef.current;
+    const container = canvasEl.parentElement;
     
-    // Create new canvas
-    const fabricCanvas = new FabricCanvas(canvasRef.current, {
-      width: DEFAULT_CANVAS_WIDTH,
-      height: DEFAULT_CANVAS_HEIGHT,
-      backgroundColor: DEFAULT_CANVAS_BG,
+    // Create the canvas with appropriate dimensions
+    const fabricCanvas = new Canvas(canvasEl, {
+      width: container?.clientWidth || 600,
+      height: container?.clientHeight || 400,
+      backgroundColor: '#f5f5f5',
       preserveObjectStacking: true,
     });
     
-    // Load the image onto the canvas with a proper callback
-    if (image) {
-      // Small delay to ensure canvas is fully initialized
-      setTimeout(() => {
-        loadImageOntoCanvas(fabricCanvas, image);
-      }, 100);
-    }
+    // Make the canvas responsive
+    const resizeCanvas = () => {
+      if (container) {
+        fabricCanvas.setDimensions({
+          width: container.clientWidth,
+          height: container.clientHeight,
+        });
+        fabricCanvas.renderAll();
+      }
+    };
     
+    window.addEventListener('resize', resizeCanvas);
     setCanvas(fabricCanvas);
     
+    // Clean up when the component unmounts
     return () => {
+      window.removeEventListener('resize', resizeCanvas);
       fabricCanvas.dispose();
-      setCanvas(null);
     };
-  }, [isOpen, image, canvasRef]);
+  }, [canvasRef, isOpen]);
 
-  return { canvas, setCanvas };
+  // Load the image onto the canvas when it changes
+  useEffect(() => {
+    const loadImage = async () => {
+      if (!canvas || !imageUrl) return;
+      
+      console.log('Loading image onto canvas:', imageUrl);
+      try {
+        await loadImageOntoCanvas(canvas, imageUrl);
+        setImageLoaded(true);
+      } catch (error) {
+        console.error('Failed to load image:', error);
+      }
+    };
+    
+    if (canvas && imageUrl && isOpen) {
+      loadImage();
+    }
+  }, [canvas, imageUrl, isOpen]);
+
+  return { canvas, imageLoaded };
 };

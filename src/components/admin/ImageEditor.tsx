@@ -1,5 +1,5 @@
 
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Dialog } from '@/components/ui/dialog';
 import { getCanvasImageData } from '@/lib/utils/imageEditUtils';
 
@@ -23,7 +23,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ image, onSave, isOpen, onClos
   const [tool, setTool] = React.useState<'move' | 'crop'>('move');
 
   // Use our custom hooks
-  const { canvas } = useCanvas(canvasRef, image, isOpen);
+  const { canvas, imageLoaded } = useCanvas(canvasRef, image, isOpen);
   
   const {
     zoom, setZoom,
@@ -38,6 +38,13 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ image, onSave, isOpen, onClos
     applyCrop, 
     cancelCrop
   } = useCrop(canvas, image);
+
+  // Debug image loading
+  useEffect(() => {
+    console.log('ImageEditor: Image URL =', image);
+    console.log('ImageEditor: Is canvas ready =', !!canvas);
+    console.log('ImageEditor: Image loaded =', imageLoaded);
+  }, [image, canvas, imageLoaded]);
 
   // Handle tool changes
   const handleToolChange = (newTool: 'move' | 'crop') => {
