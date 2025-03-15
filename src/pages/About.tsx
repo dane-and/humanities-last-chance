@@ -15,7 +15,7 @@ const About = () => {
       
       <main className="flex-grow">
         {/* Hero Image Section - positioned below navigation */}
-        <div className="w-full h-[50vh] md:h-[60vh] lg:h-[70vh] relative mt-16">
+        <div className="w-full h-[50vh] md:h-[60vh] lg:h-[70vh] relative mt-20">
           <img 
             src="/lovable-uploads/6410840d-c1c9-43f2-a153-7cfe45e01e92.png" 
             alt="Turner's Venice painting" 
@@ -24,7 +24,7 @@ const About = () => {
           <div className="absolute inset-0 bg-black/10 backdrop-blur-[0.5px]"></div>
         </div>
         
-        <section className="py-12 md:py-16">
+        <section className="py-8 md:py-10">
           <div className="container mx-auto px-4 lg:px-8 max-w-4xl">
             {isLoading ? (
               <div className="flex justify-center py-20">
