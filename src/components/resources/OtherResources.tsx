@@ -1,7 +1,20 @@
 
 import React from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { ExternalLink, Headphones, BookAudio, Radio, History, Mic, Library, BookOpen } from 'lucide-react';
+import { 
+  ExternalLink, 
+  Headphones, 
+  BookAudio, 
+  Radio, 
+  History, 
+  Mic, 
+  Library, 
+  BookOpen, 
+  Book, 
+  Globe,
+  Database,
+  Monitor
+} from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 interface Resource {
@@ -80,7 +93,7 @@ const resourceCategories: ResourceCategory[] = [
         name: 'Google Books',
         url: 'https://books.google.com/',
         description: 'Search and preview millions of books.',
-        icon: <BookOpen className="h-5 w-5 text-primary" />
+        icon: <Book className="h-5 w-5 text-primary" />
       },
       {
         name: 'Project Gutenberg',
@@ -92,7 +105,7 @@ const resourceCategories: ResourceCategory[] = [
         name: 'Internet Archive',
         url: 'https://archive.org/',
         description: 'A vast collection of books, documents, and historical texts.',
-        icon: <Library className="h-5 w-5 text-primary" />
+        icon: <Database className="h-5 w-5 text-primary" />
       },
       {
         name: 'HathiTrust Digital Library',
@@ -122,19 +135,19 @@ const resourceCategories: ResourceCategory[] = [
         name: 'Stanford Encyclopedia of Philosophy',
         url: 'https://plato.stanford.edu/',
         description: 'Scholarly philosophy reference.',
-        icon: <BookOpen className="h-5 w-5 text-primary" />
+        icon: <Book className="h-5 w-5 text-primary" />
       },
       {
         name: 'Oxford English Dictionary',
         url: 'https://www.oed.com/',
         description: 'The definitive English dictionary (subscription-based).',
-        icon: <BookOpen className="h-5 w-5 text-primary" />
+        icon: <Book className="h-5 w-5 text-primary" />
       },
       {
         name: 'Encyclopedia Britannica',
         url: 'https://www.britannica.com/',
         description: 'General knowledge reference.',
-        icon: <BookOpen className="h-5 w-5 text-primary" />
+        icon: <Globe className="h-5 w-5 text-primary" />
       }
     ]
   },
@@ -146,13 +159,13 @@ const resourceCategories: ResourceCategory[] = [
         name: 'Google Scholar',
         url: 'https://scholar.google.com/',
         description: 'Search academic papers and citations.',
-        icon: <BookOpen className="h-5 w-5 text-primary" />
+        icon: <Database className="h-5 w-5 text-primary" />
       },
       {
         name: 'DOAJ (Directory of Open Access Journals)',
         url: 'https://doaj.org/',
         description: 'Freely accessible scholarly articles.',
-        icon: <Library className="h-5 w-5 text-primary" />
+        icon: <BookOpen className="h-5 w-5 text-primary" />
       },
       {
         name: 'JSTOR Open Content',
@@ -164,7 +177,7 @@ const resourceCategories: ResourceCategory[] = [
         name: 'CORE',
         url: 'https://core.ac.uk/',
         description: 'Repository of open-access research papers.',
-        icon: <Library className="h-5 w-5 text-primary" />
+        icon: <Monitor className="h-5 w-5 text-primary" />
       }
     ]
   }
