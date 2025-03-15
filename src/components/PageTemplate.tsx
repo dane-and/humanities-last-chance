@@ -7,7 +7,7 @@ import CaptionedImage from '@/components/CaptionedImage';
 
 interface PageTemplateProps {
   slug: string;
-  heroImage: {
+  heroImage?: {
     src: string;
     alt: string;
     caption: string;
@@ -23,15 +23,17 @@ const PageTemplate: React.FC<PageTemplateProps> = ({ slug, heroImage }) => {
       <Navigation />
       
       <main className="flex-grow">
-        {/* Hero Image Section - positioned below navigation */}
-        <div className="w-full h-auto relative">
-          <CaptionedImage 
-            src={heroImage.src} 
-            alt={heroImage.alt} 
-            caption={heroImage.caption}
-            imageClassName="w-full h-full object-cover object-center"
-          />
-        </div>
+        {/* Hero Image Section - only render if heroImage is provided */}
+        {heroImage && (
+          <div className="w-full h-auto relative">
+            <CaptionedImage 
+              src={heroImage.src} 
+              alt={heroImage.alt} 
+              caption={heroImage.caption}
+              imageClassName="w-full h-full object-cover object-center"
+            />
+          </div>
+        )}
         
         <section className="py-8 md:py-10">
           <div className="container mx-auto px-4 lg:px-8 max-w-4xl">
