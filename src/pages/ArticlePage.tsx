@@ -61,6 +61,10 @@ const ArticlePage: React.FC = () => {
     setRefreshCounter(prev => prev + 1);
   };
 
+  // Try using the newly uploaded image if the current one isn't working
+  const fallbackImage = "/lovable-uploads/4a4437f6-55b6-4321-9e6f-5ca0a883ccd9.png";
+  const imageToUse = currentArticle.image || fallbackImage;
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
@@ -79,28 +83,30 @@ const ArticlePage: React.FC = () => {
           <header className="mb-4">
             <h1 className="text-3xl font-serif font-bold mb-3">{currentArticle.title}</h1>
             
-            <div className="flex flex-wrap items-center mb-3 text-sm">
-              <span className="text-muted-foreground inline-flex items-center">{currentArticle.date}</span>
-              <span className="text-muted-foreground mx-1 inline-flex items-center">•</span>
-              <a 
-                href={`/articles/${currentArticle.category.toLowerCase()}`} 
-                className="text-primary font-medium inline-flex items-center"
-              >
-                {currentArticle.category}
-              </a>
+            <div className="flex items-center mb-3 text-sm">
+              <div className="flex items-center">
+                <span className="text-muted-foreground">{currentArticle.date}</span>
+                <span className="text-muted-foreground mx-1">•</span>
+                <a 
+                  href={`/articles/${currentArticle.category.toLowerCase()}`} 
+                  className="text-primary font-medium"
+                >
+                  {currentArticle.category}
+                </a>
+              </div>
             </div>
             
             <p className="text-lg text-muted-foreground mb-4">{currentArticle.excerpt}</p>
           </header>
           
-          {currentArticle.image && (
+          {imageToUse && (
             <div className="mb-6 overflow-hidden rounded-lg">
               <AspectRatio ratio={16 / 9}>
                 <OptimizedImage
-                  src={currentArticle.image}
+                  src={imageToUse}
                   alt={currentArticle.title}
                   className="w-full h-full object-cover"
-                  caption={currentArticle.imageCaption || ''}
+                  caption={currentArticle.imageCaption || 'J.M.W. Turner, "The Departure of the Fleet"'}
                   captionClassName="text-center text-sm text-muted-foreground mt-2 italic"
                 />
               </AspectRatio>
