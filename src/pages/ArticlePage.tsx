@@ -83,17 +83,16 @@ const ArticlePage: React.FC = () => {
           <header className="mb-4">
             <h1 className="text-3xl font-serif font-bold mb-3">{currentArticle.title}</h1>
             
-            <div className="flex items-center mb-3 text-sm">
-              <div className="flex items-center">
-                <span className="text-muted-foreground">{currentArticle.date}</span>
-                <span className="text-muted-foreground mx-1">•</span>
-                <a 
-                  href={`/articles/${currentArticle.category.toLowerCase()}`} 
-                  className="text-primary font-medium"
-                >
-                  {currentArticle.category}
-                </a>
-              </div>
+            {/* Fixed alignment for mobile */}
+            <div className="flex items-center flex-wrap gap-2 mb-3 text-sm">
+              <span className="text-muted-foreground">{currentArticle.date}</span>
+              <span className="text-muted-foreground">•</span>
+              <a 
+                href={`/articles/${currentArticle.category.toLowerCase()}`} 
+                className="text-primary font-medium"
+              >
+                {currentArticle.category}
+              </a>
             </div>
             
             <p className="text-lg text-muted-foreground mb-4">{currentArticle.excerpt}</p>
