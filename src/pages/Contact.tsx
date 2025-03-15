@@ -2,6 +2,8 @@
 import React from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import ContactForm from '@/components/ContactForm';
+import { Twitter } from 'lucide-react';
 
 const Contact = () => {
   return (
@@ -33,6 +35,8 @@ const Contact = () => {
               <h2 className="text-2xl font-bold mt-8 mb-4">Get in Touch</h2>
               <p>Email: <a href="mailto:dane.anderson@humanitieslastchance.org">dane.anderson@humanitieslastchance.org</a></p>
               
+              <ContactForm />
+              
               <h2 className="text-2xl font-bold mt-8 mb-4">Submissions & Collaborations</h2>
               <p>We're always looking to feature diverse perspectives on the humanities:</p>
               <ul>
@@ -43,7 +47,10 @@ const Contact = () => {
               </ul>
               
               <h2 className="text-2xl font-bold mt-8 mb-4">Connect on Social Media</h2>
-              <p>X: <a href="https://twitter.com/humanitieslc" target="_blank" rel="noopener noreferrer">@humanitieslc</a></p>
+              <p className="flex items-center gap-2">
+                <Twitter size={18} className="text-primary" /> 
+                <a href="https://twitter.com/humanitieslc" target="_blank" rel="noopener noreferrer">@humanitieslc</a>
+              </p>
             </div>
           </div>
         </section>
