@@ -1,12 +1,13 @@
-
 import React from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, Headphones, BookAudio, Radio, History, Mic, Library, BookOpen } from 'lucide-react';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 interface Resource {
   name: string;
   url: string;
   description?: string;
+  icon?: React.ReactNode;
 }
 
 interface ResourceCategory {
@@ -23,42 +24,50 @@ const resourceCategories: ResourceCategory[] = [
       {
         name: 'Librivox',
         url: 'https://librivox.org/',
-        description: 'Free public domain audiobooks.'
+        description: 'Free public domain audiobooks.',
+        icon: <BookAudio className="h-5 w-5 text-primary" />
       },
       {
         name: 'Natural Reader',
         url: 'https://www.naturalreaders.com/',
-        description: 'Text-to-speech tool.'
+        description: 'Text-to-speech tool.',
+        icon: <Headphones className="h-5 w-5 text-primary" />
       },
       {
         name: 'Speech Central',
         url: 'https://speechcentral.net/',
-        description: 'Listen to written content.'
+        description: 'Listen to written content.',
+        icon: <Radio className="h-5 w-5 text-primary" />
       },
       {
         name: 'C-SPAN Book TV Video Archive',
         url: 'https://www.c-span.org/bookTv/',
-        description: 'Author talks and historical discussions.'
+        description: 'Author talks and historical discussions.',
+        icon: <BookOpen className="h-5 w-5 text-primary" />
       },
       {
         name: 'In Our Time (BBC)',
         url: 'https://podcasts.apple.com/us/podcast/in-our-time/id73330895',
-        description: 'Scholarly discussions on history and philosophy.'
+        description: 'Scholarly discussions on history and philosophy.',
+        icon: <Mic className="h-5 w-5 text-primary" />
       },
       {
         name: 'The Rest is History',
         url: 'https://podcasts.apple.com/us/podcast/the-rest-is-history/id1537788786',
-        description: 'Engaging historical storytelling.'
+        description: 'Engaging historical storytelling.',
+        icon: <History className="h-5 w-5 text-primary" />
       },
       {
         name: 'Conversations with Tyler',
         url: 'https://podcasts.apple.com/us/podcast/conversations-with-tyler/id983795625',
-        description: 'Brilliant interviews, occasionally but not always with humanities scholars.'
+        description: 'Brilliant interviews, occasionally but not always with humanities scholars.',
+        icon: <Mic className="h-5 w-5 text-primary" />
       },
       {
         name: 'Open Culture Free Audiobooks',
         url: 'https://www.openculture.com/freeaudiobooks',
-        description: 'A curated selection of public-domain audiobooks.'
+        description: 'A curated selection of public-domain audiobooks.',
+        icon: <Library className="h-5 w-5 text-primary" />
       }
     ]
   },
@@ -169,19 +178,22 @@ const OtherResources: React.FC = () => {
               <div className="grid gap-4 pt-2">
                 {category.resources.map((resource, index) => (
                   <div key={index} className="group bg-card rounded-lg p-4 border transition-colors hover:bg-muted/50">
-                    <div className="flex flex-col space-y-1">
-                      <a
-                        href={resource.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center text-lg font-medium text-primary hover:underline"
-                      >
-                        {resource.name}
-                        <ExternalLink className="ml-1 h-4 w-4" />
-                      </a>
-                      {resource.description && (
-                        <p className="text-sm text-muted-foreground">{resource.description}</p>
-                      )}
+                    <div className="flex items-start space-x-3">
+                      {resource.icon}
+                      <div className="flex-1 space-y-1">
+                        <a
+                          href={resource.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center text-lg font-medium text-primary hover:underline"
+                        >
+                          {resource.name}
+                          <ExternalLink className="ml-1 h-4 w-4" />
+                        </a>
+                        {resource.description && (
+                          <p className="text-sm text-muted-foreground">{resource.description}</p>
+                        )}
+                      </div>
                     </div>
                   </div>
                 ))}
