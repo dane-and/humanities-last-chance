@@ -18,7 +18,7 @@ const Contact = () => {
           <img 
             src="/lovable-uploads/61672558-c535-4182-8698-9d4b7633e005.png" 
             alt="Medieval scribe writing in a book" 
-            className="h-[85%] md:h-[90%] lg:h-[95%] object-contain object-center z-10"
+            className="h-[106%] md:h-[112%] lg:h-[119%] object-contain object-center z-10"
           />
         </div>
         
