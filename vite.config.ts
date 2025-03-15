@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => {
       host: "::",
       port: 8080,
     },
-    // Simplify base URL configuration to avoid env loading issues
+    // Set base URL to root for all environments
     base: '/',
     plugins: [
       react(),
