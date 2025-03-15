@@ -26,9 +26,11 @@ const BlogSection: React.FC<BlogSectionProps> = ({
   // Update blog posts with the latest from storage (including comments)
   useEffect(() => {
     const articles = getArticlesFromStorage();
-    const blogArticles = articles.filter(article => 
-      article.category.toLowerCase() === 'blog'
-    );
+    const blogArticles = articles
+      .filter(article => article.category.toLowerCase() === 'blog')
+      // Sort articles by date (newest first)
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    
     if (blogArticles.length > 0) {
       setBlogPosts(blogArticles);
     }
@@ -73,19 +75,6 @@ const BlogSection: React.FC<BlogSectionProps> = ({
               </Link>
             </h2>
             
-            {post.image && (
-              <div className="mb-6">
-                <AspectRatio ratio={21 / 9} className="overflow-hidden rounded-lg">
-                  <img
-                    src={post.image}
-                    alt={post.title}
-                    className="w-full h-full object-cover"
-                    loading={index < 2 ? "eager" : "lazy"}
-                  />
-                </AspectRatio>
-              </div>
-            )}
-            
             <div className="flex flex-wrap items-center gap-x-3 text-sm text-muted-foreground mb-4">
               <span>{post.date}</span>
               <span aria-hidden="true">•</span>
@@ -110,9 +99,28 @@ const BlogSection: React.FC<BlogSectionProps> = ({
               )}
             </div>
             
-            <div className="text-muted-foreground">
-              {post.content}
-            </div>
+            {post.image && (
+              <div className="mb-6">
+                <AspectRatio ratio={21 / 9} className="overflow-hidden rounded-lg">
+                  <img
+                    src={post.image}
+                    alt={post.title}
+                    className="w-full h-full object-cover"
+                    loading={index < 2 ? "eager" : "lazy"}
+                  />
+                </AspectRatio>
+                {post.imageCaption && (
+                  <p className="text-sm text-gray-500 mt-2 text-center italic">
+                    {post.imageCaption}
+                  </p>
+                )}
+              </div>
+            )}
+            
+            <div 
+              className="text-muted-foreground"
+              dangerouslySetInnerHTML={{ __html: post.content }}
+            />
             
             {post.tags && post.tags.length > 0 && (
               <div className="mt-6">

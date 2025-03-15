@@ -27,7 +27,10 @@ export const getArticlesByCategory = (category: string, count?: number, articleL
   const articles = articleList.length ? articleList : getArticlesFromStorage();
   const filtered = articles.filter(
     article => article.category.toLowerCase() === category.toLowerCase()
-  );
+  )
+  // Sort by date (newest first)
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  
   return count ? filtered.slice(0, count) : filtered;
 };
 
@@ -48,7 +51,9 @@ export const getArticlesByTag = (tag: string, count?: number, articleList: Artic
   
   const filtered = articles.filter(article => 
     article.tags && article.tags.some(t => t.toLowerCase() === normalizedTag)
-  );
+  )
+  // Sort by date (newest first)
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   
   return count ? filtered.slice(0, count) : filtered;
 };

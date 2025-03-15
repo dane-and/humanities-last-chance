@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getArticleBySlug } from '@/lib/articles';
@@ -66,14 +67,14 @@ const ArticlePage: React.FC = () => {
           </Button>
           
           <header className="mb-8">
-            <div className="flex items-center gap-3 mb-2 text-sm">
+            <h1 className="text-4xl font-serif font-bold mb-4">{currentArticle.title}</h1>
+            
+            <div className="flex items-center gap-3 mb-6 text-sm">
               <a href={`/articles/${currentArticle.category.toLowerCase()}`} className="text-primary font-medium">
                 {currentArticle.category}
               </a>
               <span className="text-muted-foreground">{currentArticle.date}</span>
             </div>
-            
-            <h1 className="text-4xl font-serif font-bold mb-4">{currentArticle.title}</h1>
             
             <p className="text-lg text-muted-foreground mb-6">{currentArticle.excerpt}</p>
           </header>

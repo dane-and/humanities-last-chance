@@ -38,23 +38,15 @@ const ArticleCard: React.FC<ArticleCardProps> = React.memo(({
         className
       )}
     >
-      <div className={cn('relative', isCompact ? 'h-auto' : 'h-auto')}>
-        <AspectRatio ratio={21 / 9} className="overflow-hidden">
-          <Link to={`/article/${slug}`} aria-label={title} className="block w-full h-full">
-            <img
-              src={image}
-              alt={title}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              loading="lazy"
-              width={640}
-              height={274}
-            />
-          </Link>
-        </AspectRatio>
-      </div>
-      
       <div className={cn('flex flex-col flex-grow', isCompact ? 'p-4' : 'p-5')}>
-        <div className="flex items-center gap-x-3 mb-2">
+        <h3 className={cn(
+          "font-serif font-medium mb-2 transition-colors group-hover:text-primary/80 line-clamp-2",
+          isCompact ? "text-base" : "text-xl"
+        )}>
+          <Link to={`/article/${slug}`}>{title}</Link>
+        </h3>
+        
+        <div className="flex items-center gap-x-3 mb-3">
           <Link
             to={`/articles/${category.toLowerCase()}`}
             className={cn(
@@ -72,18 +64,28 @@ const ArticleCard: React.FC<ArticleCardProps> = React.memo(({
             {date}
           </span>
         </div>
-        
-        <h3 className={cn(
-          "font-serif font-medium mb-2 transition-colors group-hover:text-primary/80 line-clamp-2",
-          isCompact ? "text-base" : "text-xl"
-        )}>
-          <Link to={`/article/${slug}`}>{title}</Link>
-        </h3>
-        
-        {!isCompact && excerpt && (
-          <p className="text-muted-foreground text-sm mb-3 line-clamp-2">{excerpt}</p>
-        )}
       </div>
+      
+      <div className={cn('relative', isCompact ? 'h-auto' : 'h-auto')}>
+        <AspectRatio ratio={21 / 9} className="overflow-hidden">
+          <Link to={`/article/${slug}`} aria-label={title} className="block w-full h-full">
+            <img
+              src={image}
+              alt={title}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+              width={640}
+              height={274}
+            />
+          </Link>
+        </AspectRatio>
+      </div>
+      
+      {!isCompact && excerpt && (
+        <div className="p-5 pt-3">
+          <p className="text-muted-foreground text-sm mb-0 line-clamp-2">{excerpt}</p>
+        </div>
+      )}
     </article>
   );
 });

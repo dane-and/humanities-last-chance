@@ -14,9 +14,11 @@ const ArticlesBlog: React.FC = () => {
   // Update articles with the latest from storage (including comments)
   useEffect(() => {
     const storedArticles = getArticlesFromStorage();
-    const blogArticles = storedArticles.filter(article => 
-      article.category.toLowerCase() === 'blog'
-    );
+    const blogArticles = storedArticles
+      .filter(article => article.category.toLowerCase() === 'blog')
+      // Sort articles by date (newest first)
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      
     if (blogArticles.length > 0) {
       setArticles(blogArticles);
     }
