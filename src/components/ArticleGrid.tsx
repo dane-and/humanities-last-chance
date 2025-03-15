@@ -1,18 +1,7 @@
-
 import React from 'react';
 import ArticleCard from './ArticleCard';
 import { cn } from '@/lib/utils';
-
-interface Article {
-  id: string;
-  title: string;
-  excerpt?: string;
-  category: string;
-  author: string;
-  date: string;
-  image: string;
-  slug: string;
-}
+import { Article } from '@/lib/types/article';
 
 interface ArticleGridProps {
   articles: Article[];

@@ -4,7 +4,8 @@ import { useSearchParams } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import ArticleGrid from '@/components/ArticleGrid';
-import { useArticles, Article } from '@/lib/articles';
+import { useArticles } from '@/lib/hooks/useArticles';
+import { Article } from '@/lib/types/article';
 
 const SearchPage: React.FC = () => {
   const [searchParams] = useSearchParams();

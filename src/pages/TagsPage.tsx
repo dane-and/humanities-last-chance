@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import ArticleGrid from '@/components/ArticleGrid';
 import { getArticlesByTag } from '@/lib/queries/articleQueries';
 import { useArticles } from '@/lib/hooks/useArticles';
+import { Article } from '@/lib/types/article';
 
 const TagsPage: React.FC = () => {
   const { tag } = useParams<{ tag: string }>();

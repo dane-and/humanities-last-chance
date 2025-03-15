@@ -4,11 +4,12 @@ import { Link } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import ArticleGrid from '@/components/ArticleGrid';
-import { getArticlesByCategory } from '@/lib/articles';
+import { getArticlesByCategory } from '@/lib/queries/articleQueries';
 import { getArticlesFromStorage } from '@/lib/utils/storageUtils';
+import { Article } from '@/lib/types/article';
 
 const ArticlesBlog: React.FC = () => {
-  const [articles, setArticles] = useState(getArticlesByCategory('blog'));
+  const [articles, setArticles] = useState<Article[]>(getArticlesByCategory('blog'));
 
   // Update articles with the latest from storage (including comments)
   useEffect(() => {

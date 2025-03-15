@@ -4,10 +4,11 @@ import { Link } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import ArticleGrid from '@/components/ArticleGrid';
-import { getArticlesByCategory, Article } from '@/lib/articles';
+import { getArticlesByCategory } from '@/lib/queries/articleQueries';
+import { Article } from '@/lib/types/article';
 
 const ArticlesInterviews: React.FC = () => {
-  const articles = getArticlesByCategory('interview');
+  const articles: Article[] = getArticlesByCategory('interview');
 
   return (
     <div className="min-h-screen flex flex-col">
