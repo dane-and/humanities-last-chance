@@ -1,4 +1,5 @@
 
 import { categoriesData } from './categoriesData';
 
-export const resourceCategories = categoriesData;
+export { categoriesData };
+export default categoriesData;
