@@ -15,7 +15,7 @@ const About = () => {
       
       <main className="flex-grow">
         {/* Hero Image Section - positioned below navigation */}
-        <div className="w-full h-[50vh] md:h-[50vh] lg:h-[50vh] relative mt-20">
+        <div className="w-full h-[30vh] md:h-[35vh] lg:h-[40vh] relative mt-20">
           <CaptionedImage 
             src="/lovable-uploads/6410840d-c1c9-43f2-a153-7cfe45e01e92.png" 
             alt="Turner's Venice painting" 
