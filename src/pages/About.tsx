@@ -3,6 +3,7 @@ import React from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { usePages } from '@/lib/hooks/usePages';
+import CaptionedImage from '@/components/CaptionedImage';
 
 const About = () => {
   const { getPageBySlug, isLoading } = usePages();
@@ -15,10 +16,11 @@ const About = () => {
       <main className="flex-grow">
         {/* Hero Image Section - positioned below navigation */}
         <div className="w-full h-[60vh] md:h-[70vh] lg:h-[80vh] relative mt-20">
-          <img 
+          <CaptionedImage 
             src="/lovable-uploads/6410840d-c1c9-43f2-a153-7cfe45e01e92.png" 
             alt="Turner's Venice painting" 
-            className="w-full h-full object-cover object-center"
+            caption="J.M.W. Turner's depiction of Venice, ca. 1840"
+            imageClassName="w-full h-full object-cover object-center"
           />
           <div className="absolute inset-0 bg-black/10 backdrop-blur-[0.5px]"></div>
         </div>

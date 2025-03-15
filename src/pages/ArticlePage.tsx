@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getArticleBySlug } from '@/lib/articles';
@@ -9,6 +8,7 @@ import { ArrowLeft } from 'lucide-react';
 import ArticleComments from '@/components/ArticleComments';
 import { getArticlesFromStorage } from '@/lib/utils/storageUtils';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import CaptionedImage from '@/components/CaptionedImage';
 
 const ArticlePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -80,14 +80,12 @@ const ArticlePage: React.FC = () => {
           
           <div className="mb-10 overflow-hidden rounded-lg">
             <AspectRatio ratio={21 / 9}>
-              <img
+              <CaptionedImage
                 src={currentArticle.image}
                 alt={currentArticle.title}
-                className="w-full h-full object-cover"
-                width={1200}
-                height={514}
-                loading="eager"
-                fetchPriority="high"
+                caption={currentArticle.imageCaption || `Image for "${currentArticle.title}"`}
+                imageClassName="w-full h-full object-cover"
+                captionClassName="absolute bottom-0 left-0 right-0 bg-black/30 text-white p-2 text-xs"
               />
             </AspectRatio>
           </div>

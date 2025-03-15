@@ -17,6 +17,7 @@ export interface Article {
   date: string;
   category: 'Blog' | 'Interview' | 'Review' | 'Resource';
   image: string;
+  imageCaption?: string;
   excerpt: string;
   content: string;
   featured?: boolean;
@@ -34,6 +35,7 @@ export const defaultArticles: Article[] = [
     date: '',
     category: 'Blog',
     image: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3',
+    imageCaption: 'Computer code on screen',
     excerpt: '',
     content: '',
     featured: true,
@@ -47,6 +49,7 @@ export const defaultArticles: Article[] = [
     date: '',
     category: 'Interview',
     image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3',
+    imageCaption: 'Interview session in progress',
     excerpt: '',
     content: '',
     featured: true,
@@ -60,6 +63,7 @@ export const defaultArticles: Article[] = [
     date: '',
     category: 'Review',
     image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-4.0.3',
+    imageCaption: 'Laptop with code',
     excerpt: '',
     content: '',
     featured: false,
