@@ -7,6 +7,7 @@ import { ChevronLeft, ChevronRight, MessageCircle } from 'lucide-react';
 import TagList from '@/components/TagList';
 import { getArticlesFromStorage } from '@/lib/utils/storage/articleStorage';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import OptimizedImage from '@/components/OptimizedImage';
 
 interface BlogSectionProps {
   currentPage: number;
@@ -70,21 +71,21 @@ const BlogSection: React.FC<BlogSectionProps> = ({
               </Link>
             </h2>
             
-            <div className="flex flex-wrap items-center gap-x-1 text-sm text-muted-foreground mb-4">
-              <span>{post.date}</span>
-              <span aria-hidden="true">•</span>
+            <div className="block text-sm text-muted-foreground mb-4">
+              <span className="inline-block">{post.date}</span>
+              <span className="inline-block mx-1" aria-hidden="true">•</span>
               <Link 
                 to={`/articles/${post.category.toLowerCase()}`}
-                className="hover:text-primary"
+                className="inline-block hover:text-primary"
               >
                 {post.category}
               </Link>
               {post.comments && post.comments.length > 0 && (
                 <>
-                  <span aria-hidden="true">•</span>
+                  <span className="inline-block mx-1" aria-hidden="true">•</span>
                   <Link 
                     to={`/article/${post.slug}`}
-                    className="flex items-center hover:text-primary"
+                    className="inline-block flex items-center hover:text-primary"
                     aria-label={`${post.comments.length} comment${post.comments.length !== 1 ? 's' : ''}`}
                   >
                     <MessageCircle className="h-4 w-4 mr-1" aria-hidden="true" />
@@ -97,18 +98,13 @@ const BlogSection: React.FC<BlogSectionProps> = ({
             {post.image && (
               <div className="mb-6">
                 <AspectRatio ratio={21 / 9} className="overflow-hidden rounded-lg">
-                  <img
+                  <OptimizedImage
                     src={post.image}
                     alt={post.title}
                     className="w-full h-full object-cover"
-                    loading={index < 2 ? "eager" : "lazy"}
+                    caption={post.imageCaption}
                   />
                 </AspectRatio>
-                {post.imageCaption && (
-                  <p className="text-sm text-gray-500 mt-2 text-center italic">
-                    {post.imageCaption}
-                  </p>
-                )}
               </div>
             )}
             

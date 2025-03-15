@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getArticleBySlug } from '@/lib/articles';
@@ -53,9 +52,6 @@ const ArticlePage: React.FC = () => {
     setRefreshCounter(prev => prev + 1);
   };
 
-  // Fallback image if needed
-  const fallbackImage = "/lovable-uploads/4a4437f6-55b6-4321-9e6f-5ca0a883ccd9.png";
-  
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
@@ -74,13 +70,12 @@ const ArticlePage: React.FC = () => {
           <header className="mb-4">
             <h1 className="text-3xl font-serif font-bold mb-3">{currentArticle.title}</h1>
             
-            {/* Meta information with inline elements */}
-            <div className="mb-3">
-              <span className="text-muted-foreground text-sm">{currentArticle.date}</span>
-              <span className="text-muted-foreground mx-2 text-sm">•</span>
+            <div className="mb-3 block">
+              <span className="text-muted-foreground text-sm inline-block">{currentArticle.date}</span>
+              <span className="text-muted-foreground mx-2 text-sm inline-block">•</span>
               <a 
                 href={`/articles/${currentArticle.category.toLowerCase()}`} 
-                className="text-primary font-medium text-sm"
+                className="text-primary font-medium text-sm inline-block"
               >
                 {currentArticle.category}
               </a>
