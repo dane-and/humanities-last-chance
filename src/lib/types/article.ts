@@ -29,15 +29,14 @@ export interface Article {
 export const defaultArticles: Article[] = [
   {
     id: '1',
-    title: 'Latest Links and Commentary',
-    slug: 'latest-links-and-commentary',
+    title: 'Saturday Assorted Links',
+    slug: 'saturday-assorted-links',
     date: 'March 15, 2025',
     category: 'Blog',
     image: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3',
-    imageCaption: 'The Humanities at a crossroads',
     excerpt: 'A roundup of interesting articles and commentary on the humanities.',
     content: '<ol><li><a href="https://www.chronicle.com/article/students-are-missing-the-point-of-college" rel="noopener noreferrer" target="_blank">What\'s the point of college?</a> My experience with students jives with the argument here. (Beware paywall.)</li><li>Even people who didn\'t like the protests at Columbia shouldn\'t like this. To this non-lawyer, the legal grounds seem thin. I seem to recall a saying about two wrongs...?</li><li><a href="https://www.nytimes.com/2025/03/12/magazine/university-discrimination-ethics.html" rel="noopener noreferrer" target="_blank">The Ethicist</a> on telling your friend her fiction sucks. What he doesn\'t ask is, Why are you friends with such a bad writer?</li><li>Daniel Kahneman\'s<a href="https://www.wsj.com/arts-culture/books/daniel-kahneman-assisted-suicide-9fb16124?mod=arts-culture_lead_pos2" rel="noopener noreferrer" target="_blank"> assisted suicide</a> and the question of its rationality.</li><li><a href="https://www.chronicle.com/article/the-online-overhaul" rel="noopener noreferrer" target="_blank">Virtual classes aren\'t going anywhere</a>. Online lectures are fine and could be great. Ideally, though, they shouldn\'t get rid of classroom time but create time for more engaging, interactive, and seminar-style activities. (Beware paywall.)</li></ol><p><br></p>',
     featured: true,
-    tags: ['Commentary', 'Education', 'Ethics']
+    tags: []
   }
 ];

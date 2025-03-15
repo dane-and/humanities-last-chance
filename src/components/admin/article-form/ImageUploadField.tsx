@@ -3,6 +3,7 @@ import React, { useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { X, Upload, Image as ImageIcon, Edit2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Input } from '@/components/ui/input';
 
 interface ImageUploadFieldProps {
   image: string;
@@ -17,6 +18,7 @@ const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
 }) => {
   const { toast } = useToast();
   const [isDragging, setIsDragging] = useState(false);
+  const [caption, setCaption] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -146,6 +148,17 @@ const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
           onChange={handleFileInputChange}
         />
       </div>
+      
+      <div className="mt-4">
+        <label className="text-sm font-medium">Image Caption (optional)</label>
+        <Input 
+          placeholder="Add a caption for the image"
+          value={caption}
+          onChange={(e) => setCaption(e.target.value)}
+          className="mt-1"
+        />
+      </div>
+      
       <p className="text-xs text-muted-foreground">
         Max size: 5MB. Recommended dimensions: 1200x800px.
       </p>

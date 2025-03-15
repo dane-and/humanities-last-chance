@@ -67,36 +67,38 @@ const ArticlePage: React.FC = () => {
           </Button>
           
           <header className="mb-8">
-            <h1 className="text-4xl font-serif font-bold mb-4">{currentArticle.title}</h1>
+            <h1 className="text-3xl font-serif font-bold mb-4">{currentArticle.title}</h1>
             
-            <div className="flex items-center gap-3 mb-6 text-sm">
+            <div className="flex items-center gap-1 mb-6 text-sm">
               <a href={`/articles/${currentArticle.category.toLowerCase()}`} className="text-primary font-medium">
                 {currentArticle.category}
               </a>
-              <span className="text-muted-foreground">{currentArticle.date}</span>
+              <span className="text-muted-foreground">• {currentArticle.date}</span>
             </div>
             
             <p className="text-lg text-muted-foreground mb-6">{currentArticle.excerpt}</p>
           </header>
           
-          <div className="mb-10 overflow-hidden rounded-lg">
-            <AspectRatio ratio={21 / 9}>
-              <CaptionedImage
-                src={currentArticle.image}
-                alt={currentArticle.title}
-                caption={currentArticle.imageCaption || `Image for "${currentArticle.title}"`}
-                imageClassName="w-full h-full object-cover"
-                captionClassName="absolute bottom-0 left-0 right-0 bg-black/30 text-white p-2 text-xs"
-              />
-            </AspectRatio>
-          </div>
+          {currentArticle.image && (
+            <div className="mb-10 overflow-hidden rounded-lg">
+              <AspectRatio ratio={21 / 9}>
+                <CaptionedImage
+                  src={currentArticle.image}
+                  alt={currentArticle.title}
+                  caption={currentArticle.imageCaption || ''}
+                  imageClassName="w-full h-full object-cover"
+                  captionClassName="absolute bottom-0 left-0 right-0 bg-black/30 text-white p-2 text-xs"
+                />
+              </AspectRatio>
+            </div>
+          )}
           
           <article className="prose prose-slate max-w-none">
             <div dangerouslySetInnerHTML={{ __html: currentArticle.content }} />
           </article>
           
           {currentArticle.tags && currentArticle.tags.length > 0 && (
-            <div className="mt-10 pt-6 border-t">
+            <div className="mt-4 pt-4 border-t">
               <h3 className="text-lg font-medium mb-3">Tags</h3>
               <div className="flex flex-wrap gap-2">
                 {currentArticle.tags.map(tag => (

@@ -60,7 +60,7 @@ const BlogSection: React.FC<BlogSectionProps> = ({
             className="prose prose-lg max-w-none fade-up"
             style={{ animationDelay: `${index * 0.1}s` }}
           >
-            <h2 className="font-serif text-2xl md:text-3xl font-bold mb-2">
+            <h2 className="font-serif text-xl md:text-2xl font-bold mb-2">
               <Link 
                 to={`/article/${post.slug}`} 
                 className="hover:text-primary transition-colors no-underline"
@@ -70,7 +70,7 @@ const BlogSection: React.FC<BlogSectionProps> = ({
               </Link>
             </h2>
             
-            <div className="flex flex-wrap items-center gap-x-3 text-sm text-muted-foreground mb-4">
+            <div className="flex flex-wrap items-center gap-x-1 text-sm text-muted-foreground mb-4">
               <span>{post.date}</span>
               <span aria-hidden="true">•</span>
               <Link 
@@ -118,7 +118,7 @@ const BlogSection: React.FC<BlogSectionProps> = ({
             />
             
             {post.tags && post.tags.length > 0 && (
-              <div className="mt-6">
+              <div className="mt-2">
                 <TagList tags={post.tags} />
               </div>
             )}

@@ -38,7 +38,8 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
     author: selectedArticle?.author || '',
     date: selectedArticle?.date || new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
     category: selectedArticle?.category || 'Blog',
-    image: selectedArticle?.image || 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3',
+    image: selectedArticle?.image || '',
+    imageCaption: selectedArticle?.imageCaption || '',
     excerpt: selectedArticle?.excerpt || '',
     content: selectedArticle?.content || '',
     featured: selectedArticle?.featured || false,
@@ -55,7 +56,8 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
         author: selectedArticle.author || '',
         date: selectedArticle.date || new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
         category: selectedArticle.category || 'Blog',
-        image: selectedArticle.image || 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3',
+        image: selectedArticle.image || '',
+        imageCaption: selectedArticle.imageCaption || '',
         excerpt: selectedArticle.excerpt || '',
         content: selectedArticle.content || '',
         featured: selectedArticle.featured || false,
@@ -70,7 +72,8 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
         author: '',
         date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
         category: 'Blog',
-        image: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3',
+        image: '',
+        imageCaption: '',
         excerpt: '',
         content: '',
         featured: false,
@@ -106,6 +109,10 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
 
   const handleImageChange = (imageData: string) => {
     setArticleFormData(prev => ({ ...prev, image: imageData }));
+  };
+
+  const handleImageCaptionChange = (caption: string) => {
+    setArticleFormData(prev => ({ ...prev, imageCaption: caption }));
   };
 
   const handleSaveEditedImage = (editedImage: string) => {
