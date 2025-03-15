@@ -12,8 +12,18 @@ const Contact = () => {
     <div className="page-transition min-h-screen flex flex-col">
       <Navigation />
       
-      <main className="flex-grow pt-20 md:pt-24">
-        <section className="py-12 md:py-16">
+      <main className="flex-grow">
+        {/* Hero Image Section - positioned below navigation */}
+        <div className="w-full h-[60vh] md:h-[70vh] lg:h-[80vh] relative mt-20">
+          <img 
+            src="/lovable-uploads/0edb0db7-3698-466a-a3be-f83c7cee7f0a.png" 
+            alt="Veronese's Wedding Feast at Cana" 
+            className="w-full h-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-black/10 backdrop-blur-[0.5px]"></div>
+        </div>
+        
+        <section className="py-8 md:py-10">
           <div className="container mx-auto px-4 lg:px-8 max-w-4xl">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold mb-8">Contact Us</h1>
             
