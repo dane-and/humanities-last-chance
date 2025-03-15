@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
   },
   // Dynamically set base URL from environment variable or default to '/'
-  base: mode === 'production' ? (process.env.VITE_BASE_URL || '/') : '/',
+  base: mode === 'production' ? (import.meta.env.VITE_BASE_URL || '/') : '/',
   plugins: [
     react(),
     mode === 'development' &&
