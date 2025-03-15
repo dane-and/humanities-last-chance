@@ -118,12 +118,6 @@ export const categoriesData: ResourceCategory[] = [
         url: 'https://www.oed.com/',
         description: 'The definitive English dictionary (subscription-based).',
         icon: React.createElement(Book, { className: "h-5 w-5 text-primary" })
-      },
-      {
-        name: 'Encyclopedia Britannica',
-        url: 'https://www.britannica.com/',
-        description: 'General knowledge reference.',
-        icon: React.createElement(Globe, { className: "h-5 w-5 text-primary" })
       }
     ]
   },
