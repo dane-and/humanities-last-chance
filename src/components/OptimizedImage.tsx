@@ -19,9 +19,24 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   const [imageLoaded, setImageLoaded] = useState(false);
   const [error, setError] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
-  const [imageUrl, setImageUrl] = useState('');
   
-  // When the src changes, update the imageUrl
+  // Define a guaranteed fallback image that we know exists
+  const fallbackImage = "/lovable-uploads/4a4437f6-55b6-4321-9e6f-5ca0a883ccd9.png";
+  
+  // Determine which image URL to use
+  const imageUrl = error && retryCount >= 2 ? fallbackImage : src;
+  
+  // When error occurs or retry is triggered
+  const retryLoading = () => {
+    if (retryCount < 3) {
+      console.log(`Retrying image load (attempt ${retryCount + 1})`);
+      setRetryCount(prev => prev + 1);
+      setError(false);
+      setImageLoaded(false);
+    }
+  };
+
+  // Reset states when source changes
   useEffect(() => {
     if (!src) {
       console.error("Image source is empty or undefined");
@@ -29,67 +44,51 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       return;
     }
     
-    console.log(`Setting up image with source: ${src}`);
-    
-    // Check if src is a relative path that needs the public folder prefix
-    if (src.startsWith('/')) {
-      console.log(`Processing relative path: ${src}`);
-      setImageUrl(src);
-    } else {
-      setImageUrl(src);
-    }
-    
-    // Reset states when src changes
+    console.log(`New image source: ${src}`);
     setImageLoaded(false);
     setError(false);
+    setRetryCount(0);
   }, [src]);
-  
-  // Force the image to reload if it fails to load
-  const retryLoading = () => {
-    if (retryCount < 3) {
-      console.log(`Retrying image load for ${imageUrl} (attempt ${retryCount + 1})`);
-      setRetryCount(prev => prev + 1);
-      setError(false);
-      setImageLoaded(false);
-    }
-  };
 
-  // Use a direct fallback image for situations where the primary image fails to load
-  const fallbackImage = "/lovable-uploads/4a4437f6-55b6-4321-9e6f-5ca0a883ccd9.png";
-  
-  // Try to use the fallback if we've failed twice already
-  const actualImageUrl = retryCount >= 2 && error ? fallbackImage : imageUrl;
-
+  // Handle image loading with cache prevention
   useEffect(() => {
-    if (!actualImageUrl) return;
+    if (!imageUrl) return;
     
-    console.log(`Attempting to load image: ${actualImageUrl} (attempt ${retryCount + 1})`);
+    const timestamp = new Date().getTime();
+    const nonce = Math.random().toString(36).substring(2, 10);
+    const cacheBuster = `?v=${timestamp}-${nonce}-${retryCount}`;
+    const fullUrl = `${imageUrl}${cacheBuster}`;
     
-    // Preload image
+    console.log(`Loading image: ${fullUrl}`);
+    
     const img = new Image();
-    
-    // Add a unique timestamp to prevent caching issues
-    const cacheBuster = `?v=${retryCount}-${new Date().getTime()}`;
-    img.src = `${actualImageUrl}${cacheBuster}`;
+    img.src = fullUrl;
     
     img.onload = () => {
-      console.log(`Image loaded successfully: ${actualImageUrl}`);
+      console.log(`✅ Image loaded successfully: ${imageUrl}`);
       setImageLoaded(true);
+      setError(false);
     };
     
     img.onerror = (e) => {
-      console.error(`Error loading image: ${actualImageUrl}`, e);
+      console.error(`❌ Error loading image: ${imageUrl}`, e);
       setError(true);
+      
+      // Automatically try the fallback on the last retry
+      if (retryCount >= 2 && imageUrl !== fallbackImage) {
+        console.log("Switching to fallback image");
+      }
     };
     
     return () => {
       img.onload = null;
       img.onerror = null;
     };
-  }, [actualImageUrl, retryCount]);
+  }, [imageUrl, retryCount]);
 
   return (
     <figure className="relative">
+      {/* Loading spinner */}
       {!imageLoaded && !error && (
         <div className={`${className} bg-gray-200 animate-pulse`} 
              style={{ aspectRatio: '16/9' }}>
@@ -102,31 +101,35 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
         </div>
       )}
       
+      {/* Error state */}
       {error && (
         <div className={`${className} bg-gray-100 flex flex-col items-center justify-center`} 
              style={{ aspectRatio: '16/9' }}>
           <p className="text-gray-500 mb-2">Image could not be loaded</p>
-          <p className="text-xs text-gray-400 mb-2">{actualImageUrl || 'No image URL provided'}</p>
           <button 
             onClick={retryLoading}
             className="px-3 py-1 bg-gray-200 hover:bg-gray-300 text-sm rounded"
             disabled={retryCount >= 3}
           >
-            Retry
+            {retryCount >= 3 ? "Max retries reached" : "Retry"}
           </button>
         </div>
       )}
       
-      <img
-        src={`${actualImageUrl}?v=${retryCount}-${new Date().getTime()}`}
-        alt={alt}
-        className={`${className} ${imageLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
-        style={{ display: error ? 'none' : 'block' }}
-        loading="eager"
-        onLoad={() => setImageLoaded(true)}
-        onError={() => setError(true)}
-      />
+      {/* Actual image */}
+      {imageUrl && (
+        <img
+          src={`${imageUrl}?v=${new Date().getTime()}-${retryCount}`}
+          alt={alt}
+          className={`${className} ${imageLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
+          style={{ display: error ? 'none' : 'block' }}
+          loading="eager"
+          onLoad={() => setImageLoaded(true)}
+          onError={() => setError(true)}
+        />
+      )}
       
+      {/* Caption (only shown when image is loaded) */}
       {caption && imageLoaded && (
         <figcaption className={`text-center text-sm text-muted-foreground mt-2 italic ${captionClassName}`}>
           {caption}

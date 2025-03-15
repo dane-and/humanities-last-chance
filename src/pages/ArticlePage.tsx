@@ -83,10 +83,10 @@ const ArticlePage: React.FC = () => {
           <header className="mb-4">
             <h1 className="text-3xl font-serif font-bold mb-3">{currentArticle.title}</h1>
             
-            {/* Fixed alignment for mobile */}
-            <div className="flex items-center flex-wrap gap-2 mb-3 text-sm">
+            {/* Fixed meta information layout - using display:inline elements instead of flex */}
+            <div className="mb-3 text-sm">
               <span className="text-muted-foreground">{currentArticle.date}</span>
-              <span className="text-muted-foreground">•</span>
+              <span className="text-muted-foreground mx-2">•</span>
               <a 
                 href={`/articles/${currentArticle.category.toLowerCase()}`} 
                 className="text-primary font-medium"
