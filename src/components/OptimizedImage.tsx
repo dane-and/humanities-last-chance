@@ -18,23 +18,41 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
 }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [error, setError] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
+  
+  // Force the image to reload if it fails to load
+  const retryLoading = () => {
+    if (retryCount < 3) {
+      console.log(`Retrying image load for ${src} (attempt ${retryCount + 1})`);
+      setRetryCount(prev => prev + 1);
+      setError(false);
+      setImageLoaded(false);
+    }
+  };
 
   useEffect(() => {
     // Reset states when src changes
     setImageLoaded(false);
     setError(false);
+    setRetryCount(0);
     
     // Preload image
     const img = new Image();
     img.src = src;
-    img.onload = () => setImageLoaded(true);
-    img.onerror = () => setError(true);
+    img.onload = () => {
+      console.log(`Image loaded successfully: ${src}`);
+      setImageLoaded(true);
+    };
+    img.onerror = () => {
+      console.error(`Error loading image: ${src}`);
+      setError(true);
+    };
     
     return () => {
       img.onload = null;
       img.onerror = null;
     };
-  }, [src]);
+  }, [src, retryCount]);
 
   return (
     <figure className="relative">
@@ -51,20 +69,30 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       )}
       
       {error && (
-        <div className={`${className} bg-gray-100 flex items-center justify-center`} 
+        <div className={`${className} bg-gray-100 flex flex-col items-center justify-center`} 
              style={{ aspectRatio: '16/9' }}>
-          <p className="text-gray-500">Image could not be loaded</p>
+          <p className="text-gray-500 mb-2">Image could not be loaded</p>
+          <button 
+            onClick={retryLoading}
+            className="px-3 py-1 bg-gray-200 hover:bg-gray-300 text-sm rounded"
+            disabled={retryCount >= 3}
+          >
+            Retry
+          </button>
         </div>
       )}
       
       <img
-        src={src}
+        src={`${src}?v=${retryCount}`} // Add cache-busting parameter
         alt={alt}
         className={`${className} ${imageLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
         style={{ display: error ? 'none' : 'block' }}
+        loading="eager" // Force eager loading instead of lazy loading
+        onLoad={() => setImageLoaded(true)}
+        onError={() => setError(true)}
       />
       
-      {caption && (
+      {caption && imageLoaded && (
         <figcaption className={`text-center text-sm text-muted-foreground mt-2 italic ${captionClassName}`}>
           {caption}
         </figcaption>

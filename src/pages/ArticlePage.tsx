@@ -57,7 +57,7 @@ const ArticlePage: React.FC = () => {
     <div className="min-h-screen flex flex-col">
       <Navigation />
       
-      <main className="flex-grow pt-20 pb-16">
+      <main className="flex-grow pt-16 pb-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <Button 
             variant="ghost" 
@@ -68,23 +68,26 @@ const ArticlePage: React.FC = () => {
             Back
           </Button>
           
-          <header className="mb-2">
+          <header className="mb-4">
             <h1 className="text-3xl font-serif font-bold mb-3">{currentArticle.title}</h1>
             
-            <div className="flex flex-row items-center gap-1 mb-1 text-sm">
-              <span className="text-muted-foreground">{currentArticle.date}</span>
-              <span className="text-muted-foreground">•</span>
-              <a href={`/articles/${currentArticle.category.toLowerCase()}`} className="text-primary font-medium">
+            <div className="flex items-center mb-3 text-sm">
+              <span className="text-muted-foreground inline-flex items-center">{currentArticle.date}</span>
+              <span className="text-muted-foreground mx-1 inline-flex items-center">•</span>
+              <a 
+                href={`/articles/${currentArticle.category.toLowerCase()}`} 
+                className="text-primary font-medium inline-flex items-center"
+              >
                 {currentArticle.category}
               </a>
             </div>
             
-            <p className="text-lg text-muted-fore mb-2">{currentArticle.excerpt}</p>
+            <p className="text-lg text-muted-foreground mb-4">{currentArticle.excerpt}</p>
           </header>
           
           {currentArticle.image && (
             <div className="mb-6 overflow-hidden rounded-lg">
-              <AspectRatio ratio={21 / 9}>
+              <AspectRatio ratio={16 / 9}>
                 <OptimizedImage
                   src={currentArticle.image}
                   alt={currentArticle.title}
