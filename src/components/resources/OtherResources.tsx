@@ -2,7 +2,7 @@
 import React from 'react';
 import { Accordion } from '@/components/ui/accordion';
 import ResourceCategory from './ResourceCategory';
-import { resourceCategories } from './categories';
+import categoriesData from './categories';
 
 const OtherResources: React.FC = () => {
   return (
@@ -17,7 +17,7 @@ const OtherResources: React.FC = () => {
       </div>
       
       <Accordion type="multiple" className="w-full">
-        {resourceCategories.map((category) => (
+        {categoriesData.map((category) => (
           <ResourceCategory key={category.id} category={category} />
         ))}
       </Accordion>
