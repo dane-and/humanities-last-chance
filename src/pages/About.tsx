@@ -14,14 +14,14 @@ const About = () => {
       <Navigation />
       
       <main className="flex-grow">
-        {/* Hero Image Section */}
-        <div className="w-full h-[50vh] md:h-[60vh] lg:h-[70vh] overflow-hidden relative">
+        {/* Hero Image Section - positioned below navigation */}
+        <div className="w-full h-[50vh] md:h-[60vh] lg:h-[70vh] relative mt-16">
           <img 
-            src="/lovable-uploads/a5d22cf7-d3be-41c9-a983-d3c178add6ef.png" 
-            alt="Caravaggio's Narcissus painting" 
+            src="/lovable-uploads/6410840d-c1c9-43f2-a153-7cfe45e01e92.png" 
+            alt="Turner's Venice painting" 
             className="w-full h-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-black/30 backdrop-blur-[1px]"></div>
+          <div className="absolute inset-0 bg-black/10 backdrop-blur-[0.5px]"></div>
         </div>
         
         <section className="py-12 md:py-16">
