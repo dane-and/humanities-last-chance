@@ -28,8 +28,13 @@ export const useCanvas = (
       preserveObjectStacking: true,
     });
     
-    // Load the image onto the canvas
-    loadImageOntoCanvas(fabricCanvas, image);
+    // Load the image onto the canvas with a proper callback
+    if (image) {
+      // Small delay to ensure canvas is fully initialized
+      setTimeout(() => {
+        loadImageOntoCanvas(fabricCanvas, image);
+      }, 100);
+    }
     
     setCanvas(fabricCanvas);
     

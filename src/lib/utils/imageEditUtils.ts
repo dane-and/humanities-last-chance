@@ -83,30 +83,57 @@ export const loadImageOntoCanvas = (
   imageUrl: string, 
   scale: number = 0.8
 ): void => {
-  // Use the correct Fabric.js v6 API format for loading images
-  FabricImage.fromURL(imageUrl).then(img => {
+  // Create an HTML image first to handle potential CORS issues
+  const img = new Image();
+  
+  img.crossOrigin = 'anonymous';
+  img.onload = () => {
+    const fabricImage = new FabricImage(img);
+    
     // Scale the image to fit within the canvas
-    img.scale(scale);
-    img.set({
+    const canvasWidth = canvas.getWidth();
+    const canvasHeight = canvas.getHeight();
+    const imgWidth = fabricImage.width || 0;
+    const imgHeight = fabricImage.height || 0;
+    
+    // Calculate scale to fit the canvas while preserving aspect ratio
+    let scaleFactor = scale;
+    if (imgWidth > canvasWidth || imgHeight > canvasHeight) {
+      const scaleX = (canvasWidth * 0.8) / imgWidth;
+      const scaleY = (canvasHeight * 0.8) / imgHeight;
+      scaleFactor = Math.min(scaleX, scaleY);
+    }
+    
+    fabricImage.scale(scaleFactor);
+    
+    // Center the image on the canvas
+    fabricImage.set({
+      left: (canvasWidth - fabricImage.getScaledWidth()) / 2,
+      top: (canvasHeight - fabricImage.getScaledHeight()) / 2,
       selectable: true,
       centeredScaling: true,
     });
     
-    // Center the image on the canvas
-    const canvasWidth = canvas.getWidth();
-    const canvasHeight = canvas.getHeight();
-    const imgWidth = img.getScaledWidth();
-    const imgHeight = img.getScaledHeight();
-    
-    img.set({
-      left: (canvasWidth - imgWidth) / 2,
-      top: (canvasHeight - imgHeight) / 2
-    });
-    
-    canvas.add(img);
-    canvas.setActiveObject(img);
+    canvas.add(fabricImage);
+    canvas.setActiveObject(fabricImage);
     canvas.renderAll();
-  });
+  };
+  
+  img.onerror = (err) => {
+    console.error('Error loading image:', err);
+    // Add a placeholder or error message to the canvas
+    const text = new fabric.Text('Image could not be loaded', {
+      left: canvas.getWidth() / 2,
+      top: canvas.getHeight() / 2,
+      originX: 'center',
+      originY: 'center',
+      fill: 'red'
+    });
+    canvas.add(text);
+    canvas.renderAll();
+  };
+  
+  img.src = imageUrl;
 };
 
 /**

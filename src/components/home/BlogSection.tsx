@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ArticleCardWithTags from '@/components/ArticleCardWithTags';
@@ -54,7 +55,7 @@ const BlogSection: React.FC<BlogSectionProps> = ({
   
   return (
     <div className="space-y-12">
-      <div className="space-y-16">
+      <div className="space-y-14">
         {currentPosts.map((post, index) => (
           <article 
             key={post.id} 
@@ -71,7 +72,7 @@ const BlogSection: React.FC<BlogSectionProps> = ({
               </Link>
             </h2>
             
-            <div className="block text-sm text-muted-foreground mb-4">
+            <div className="block text-sm text-muted-foreground mb-3">
               <span className="inline-block">{post.date}</span>
               <span className="inline-block mx-1" aria-hidden="true">•</span>
               <Link 
@@ -96,7 +97,7 @@ const BlogSection: React.FC<BlogSectionProps> = ({
             </div>
             
             {post.image && (
-              <div className="mb-6">
+              <div className="mb-5">
                 <AspectRatio ratio={21 / 9} className="overflow-hidden rounded-lg">
                   <OptimizedImage
                     src={post.image}
