@@ -42,8 +42,8 @@ const Contact = () => {
                 <li><strong>Resource Recommendations:</strong> Help us expand our "Humanities Last Chance U" collection.</li>
               </ul>
               
-              <h2 className="text-2xl font-bold mt-8 mb-2">Connect on Social Media</h2>
-              <p className="flex items-center gap-2 mt-1">
+              <h2 className="text-2xl font-bold mt-8 mb-0">Connect on Social Media</h2>
+              <p className="flex items-center gap-2 mt-0">
                 <img 
                   src="/lovable-uploads/b14d35fd-37cf-4977-a7c2-76a8d49e6a84.png" 
                   alt="X logo" 
