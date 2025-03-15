@@ -1,13 +1,14 @@
 import React from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { ExternalLink, Headphones, BookAudio, Radio, History, Mic, Library, BookOpen } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 interface Resource {
   name: string;
   url: string;
   description?: string;
-  icon?: React.ReactNode;
+  logoType: 'image' | 'icon';
+  logo: React.ReactNode | string;
 }
 
 interface ResourceCategory {
@@ -15,6 +16,8 @@ interface ResourceCategory {
   name: string;
   resources: Resource[];
 }
+
+import { Headphones, BookAudio, Radio, History, Mic, Library, BookOpen } from 'lucide-react';
 
 const resourceCategories: ResourceCategory[] = [
   {
@@ -25,49 +28,57 @@ const resourceCategories: ResourceCategory[] = [
         name: 'Librivox',
         url: 'https://librivox.org/',
         description: 'Free public domain audiobooks.',
-        icon: <BookAudio className="h-5 w-5 text-primary" />
+        logoType: 'image',
+        logo: '/lovable-uploads/8e120c24-c2b7-40f7-b502-1ab605ea1d08.png'
       },
       {
         name: 'Natural Reader',
         url: 'https://www.naturalreaders.com/',
         description: 'Text-to-speech tool.',
-        icon: <Headphones className="h-5 w-5 text-primary" />
+        logoType: 'image',
+        logo: '/lovable-uploads/31fa2b9f-a5cc-48ed-93f8-e63b0896d41f.png'
       },
       {
         name: 'Speech Central',
         url: 'https://speechcentral.net/',
         description: 'Listen to written content.',
-        icon: <Radio className="h-5 w-5 text-primary" />
+        logoType: 'icon',
+        logo: <Radio className="h-5 w-5 text-primary" />
       },
       {
         name: 'C-SPAN Book TV Video Archive',
         url: 'https://www.c-span.org/bookTv/',
         description: 'Author talks and historical discussions.',
-        icon: <BookOpen className="h-5 w-5 text-primary" />
+        logoType: 'icon',
+        logo: <BookOpen className="h-5 w-5 text-primary" />
       },
       {
         name: 'In Our Time (BBC)',
         url: 'https://podcasts.apple.com/us/podcast/in-our-time/id73330895',
         description: 'Scholarly discussions on history and philosophy.',
-        icon: <Mic className="h-5 w-5 text-primary" />
+        logoType: 'icon',
+        logo: <Mic className="h-5 w-5 text-primary" />
       },
       {
         name: 'The Rest is History',
         url: 'https://podcasts.apple.com/us/podcast/the-rest-is-history/id1537788786',
         description: 'Engaging historical storytelling.',
-        icon: <History className="h-5 w-5 text-primary" />
+        logoType: 'icon',
+        logo: <History className="h-5 w-5 text-primary" />
       },
       {
         name: 'Conversations with Tyler',
         url: 'https://podcasts.apple.com/us/podcast/conversations-with-tyler/id983795625',
         description: 'Brilliant interviews, occasionally but not always with humanities scholars.',
-        icon: <Mic className="h-5 w-5 text-primary" />
+        logoType: 'icon',
+        logo: <Mic className="h-5 w-5 text-primary" />
       },
       {
         name: 'Open Culture Free Audiobooks',
         url: 'https://www.openculture.com/freeaudiobooks',
         description: 'A curated selection of public-domain audiobooks.',
-        icon: <Library className="h-5 w-5 text-primary" />
+        logoType: 'icon',
+        logo: <Library className="h-5 w-5 text-primary" />
       }
     ]
   },
@@ -179,7 +190,15 @@ const OtherResources: React.FC = () => {
                 {category.resources.map((resource, index) => (
                   <div key={index} className="group bg-card rounded-lg p-4 border transition-colors hover:bg-muted/50">
                     <div className="flex items-start space-x-3">
-                      {resource.icon}
+                      {resource.logoType === 'image' ? (
+                        <img 
+                          src={resource.logo as string} 
+                          alt={`${resource.name} logo`}
+                          className="h-7 w-7 object-contain"
+                        />
+                      ) : (
+                        resource.logo
+                      )}
                       <div className="flex-1 space-y-1">
                         <a
                           href={resource.url}
