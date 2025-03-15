@@ -1,7 +1,7 @@
-
 import React from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import OptimizedImage from '@/components/OptimizedImage';
 
 const Contact = () => {
   return (
@@ -13,14 +13,12 @@ const Contact = () => {
         {/* Centered Image Container - positioned above the content */}
         <div className="flex justify-center mx-auto max-w-3xl px-4 pb-6">
           <div className="w-full">
-            <img
+            <OptimizedImage
               src="/lovable-uploads/f26a3192-be99-49a7-ba1e-de7b29518b47.png"
               alt="Scholar writing in manuscript"
               className="mx-auto rounded-md shadow-md"
+              caption="A medieval scholar at work"
             />
-            <p className="text-center text-sm text-muted-foreground mt-2 italic">
-              A medieval scholar at work
-            </p>
           </div>
         </div>
         

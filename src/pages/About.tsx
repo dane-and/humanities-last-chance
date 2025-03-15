@@ -1,7 +1,7 @@
-
 import React from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import OptimizedImage from '@/components/OptimizedImage';
 
 const About = () => {
   return (
@@ -13,14 +13,12 @@ const About = () => {
         {/* Centered Image Container - positioned above the content */}
         <div className="flex justify-center mx-auto max-w-3xl px-4 pb-6">
           <div className="w-full">
-            <img
+            <OptimizedImage
               src="/lovable-uploads/579d21dc-2855-4f28-8b61-34b44b735095.png"
               alt="Venice cityscape painting by Turner"
               className="mx-auto rounded-md shadow-md"
+              caption="The Dogana and Santa Maria della Salute, Venice by J.M.W. Turner"
             />
-            <p className="text-center text-sm text-muted-foreground mt-2 italic">
-              The Dogana and Santa Maria della Salute, Venice by J.M.W. Turner
-            </p>
           </div>
         </div>
         
