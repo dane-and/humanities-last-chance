@@ -29,7 +29,7 @@ export const loadImageOntoCanvas = async (
 
   // Create Fabric image object
   return new Promise((resolve, reject) => {
-    // In Fabric.js v6, we need to use the Promise-based API correctly
+    // In Fabric.js v6, we use the Promise-based API
     FabricImage.fromURL(imageUrl, {
       crossOrigin: 'anonymous',
     }).then(fabricImg => {
