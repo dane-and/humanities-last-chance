@@ -59,6 +59,7 @@ export const applyCropToImage = (
   
   if (tempContext) {
     const htmlImage = new window.Image();
+    htmlImage.crossOrigin = 'anonymous';
     htmlImage.src = originalImage;
     
     htmlImage.onload = () => {
@@ -87,74 +88,116 @@ export const loadImageOntoCanvas = (
     // Clear the canvas first
     canvas.clear();
     
-    // Create an HTML image first to handle potential CORS issues
-    const img = new Image();
+    console.log('Attempting to load image:', imageUrl);
     
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      console.log('HTML Image loaded, creating Fabric image now');
+    // For data URLs, we can proceed directly
+    if (imageUrl.startsWith('data:')) {
+      console.log('Loading data URL image');
       
-      // In Fabric.js v6, fromURL takes the URL as first parameter and options object as second parameter
       FabricImage.fromURL(imageUrl, {
         crossOrigin: 'anonymous',
       }).then((fabricImage) => {
-        console.log('Fabric image loaded successfully:', fabricImage);
-        
-        // Scale the image to fit within the canvas
-        const canvasWidth = canvas.getWidth();
-        const canvasHeight = canvas.getHeight();
-        const imgWidth = fabricImage.width || 0;
-        const imgHeight = fabricImage.height || 0;
-        
-        console.log('Canvas dimensions:', canvasWidth, canvasHeight);
-        console.log('Image dimensions:', imgWidth, imgHeight);
-        
-        // Calculate scale to fit the canvas while preserving aspect ratio
-        let scaleFactor = scale;
-        if (imgWidth > canvasWidth || imgHeight > canvasHeight) {
-          const scaleX = (canvasWidth * 0.8) / imgWidth;
-          const scaleY = (canvasHeight * 0.8) / imgHeight;
-          scaleFactor = Math.min(scaleX, scaleY);
-        }
-        
-        fabricImage.scale(scaleFactor);
-        
-        // Center the image on the canvas
-        fabricImage.set({
-          left: (canvasWidth - fabricImage.getScaledWidth()) / 2,
-          top: (canvasHeight - fabricImage.getScaledHeight()) / 2,
-          selectable: true,
-          centeredScaling: true,
-        });
-        
-        canvas.add(fabricImage);
-        canvas.setActiveObject(fabricImage);
-        canvas.renderAll();
-        
-        resolve();
+        console.log('Fabric image created from data URL');
+        handleImageAfterLoad(canvas, fabricImage, scale, resolve);
       }).catch(err => {
-        console.error('Error creating Fabric image:', err);
+        console.error('Error creating Fabric image from data URL:', err);
         reject(err);
       });
-    };
-    
-    img.onerror = (err) => {
-      console.error('Error loading image:', err);
-      // Add a placeholder or error message to the canvas
-      const text = new Text('Image could not be loaded', {
-        left: canvas.getWidth() / 2,
-        top: canvas.getHeight() / 2,
-        originX: 'center',
-        originY: 'center',
-        fill: 'red'
-      });
-      canvas.add(text);
-      canvas.renderAll();
-      reject(err);
-    };
-    
-    img.src = imageUrl;
+    } else {
+      // For regular URLs, first load as an HTML image to handle CORS
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      
+      img.onload = () => {
+        console.log('HTML Image loaded, creating data URL');
+        
+        // Create a temporary canvas to convert to data URL (to avoid CORS issues)
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = img.width;
+        tempCanvas.height = img.height;
+        const ctx = tempCanvas.getContext('2d');
+        
+        if (ctx) {
+          ctx.drawImage(img, 0, 0);
+          const dataUrl = tempCanvas.toDataURL('image/png');
+          
+          FabricImage.fromURL(dataUrl, {
+            crossOrigin: 'anonymous',
+          }).then((fabricImage) => {
+            console.log('Fabric image created from URL via data URL conversion');
+            handleImageAfterLoad(canvas, fabricImage, scale, resolve);
+          }).catch(err => {
+            console.error('Error creating Fabric image from URL:', err);
+            reject(err);
+          });
+        } else {
+          reject(new Error('Could not get 2D context'));
+        }
+      };
+      
+      img.onerror = (err) => {
+        console.error('Error loading image:', err);
+        // Add a placeholder or error message to the canvas
+        const text = new Text('Image could not be loaded', {
+          left: canvas.getWidth() / 2,
+          top: canvas.getHeight() / 2,
+          originX: 'center',
+          originY: 'center',
+          fill: 'red'
+        });
+        canvas.add(text);
+        canvas.renderAll();
+        reject(err);
+      };
+      
+      console.log('Setting src for HTML Image:', imageUrl);
+      img.src = imageUrl;
+    }
   });
+};
+
+/**
+ * Helper function to handle the image after it's loaded
+ */
+const handleImageAfterLoad = (
+  canvas: FabricCanvas,
+  fabricImage: FabricImage,
+  scale: number,
+  resolve: () => void
+) => {
+  // Scale the image to fit within the canvas
+  const canvasWidth = canvas.getWidth();
+  const canvasHeight = canvas.getHeight();
+  const imgWidth = fabricImage.width || 0;
+  const imgHeight = fabricImage.height || 0;
+  
+  console.log('Canvas dimensions:', canvasWidth, canvasHeight);
+  console.log('Image dimensions:', imgWidth, imgHeight);
+  
+  // Calculate scale to fit the canvas while preserving aspect ratio
+  let scaleFactor = scale;
+  if (imgWidth > canvasWidth || imgHeight > canvasHeight) {
+    const scaleX = (canvasWidth * 0.8) / imgWidth;
+    const scaleY = (canvasHeight * 0.8) / imgHeight;
+    scaleFactor = Math.min(scaleX, scaleY);
+  }
+  
+  fabricImage.scale(scaleFactor);
+  
+  // Center the image on the canvas
+  fabricImage.set({
+    left: (canvasWidth - fabricImage.getScaledWidth()) / 2,
+    top: (canvasHeight - fabricImage.getScaledHeight()) / 2,
+    selectable: true,
+    centeredScaling: true,
+  });
+  
+  canvas.add(fabricImage);
+  canvas.setActiveObject(fabricImage);
+  canvas.renderAll();
+  
+  console.log('Image successfully added to canvas');
+  resolve();
 };
 
 /**

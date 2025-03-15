@@ -1,7 +1,8 @@
 
-import React, { useRef, useEffect } from 'react';
-import { Dialog } from '@/components/ui/dialog';
+import React, { useRef, useEffect, useState } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { getCanvasImageData } from '@/lib/utils/imageEditUtils';
+import { Loader2 } from 'lucide-react';
 
 // Import our custom hooks
 import { useCanvas } from '@/lib/utils/imageEditor/useCanvas';
@@ -20,7 +21,8 @@ interface ImageEditorProps {
 
 const ImageEditor: React.FC<ImageEditorProps> = ({ image, onSave, isOpen, onClose }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [tool, setTool] = React.useState<'move' | 'crop'>('move');
+  const [tool, setTool] = useState<'move' | 'crop'>('move');
+  const [isLoading, setIsLoading] = useState(true);
 
   // Use our custom hooks
   const { canvas, imageLoaded } = useCanvas(canvasRef, image, isOpen);
@@ -38,6 +40,13 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ image, onSave, isOpen, onClos
     applyCrop, 
     cancelCrop
   } = useCrop(canvas, image);
+
+  // Update loading state when image is loaded
+  useEffect(() => {
+    if (imageLoaded) {
+      setIsLoading(false);
+    }
+  }, [imageLoaded]);
 
   // Debug image loading
   useEffect(() => {
@@ -67,22 +76,33 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ image, onSave, isOpen, onClos
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <ImageEditorLayout
-        onClose={onClose}
-        onSave={handleSave}
-        tool={tool}
-        onToolChange={handleToolChange}
-        canvasRef={canvasRef}
-        isCropping={isCropping}
-        onCropApply={applyCrop}
-        onCropCancel={cancelCrop}
-        onZoomIn={handleZoomIn}
-        onZoomOut={handleZoomOut}
-        onRotateLeft={handleRotateLeft}
-        onRotateRight={handleRotateRight}
-        zoom={zoom}
-        onZoomChange={setZoom}
-      />
+      <DialogContent className="sm:max-w-[900px] h-[90vh] max-h-[800px] flex flex-col">
+        {isLoading ? (
+          <div className="flex-1 flex items-center justify-center">
+            <div className="flex flex-col items-center gap-2">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <p className="text-sm text-muted-foreground">Loading image editor...</p>
+            </div>
+          </div>
+        ) : (
+          <ImageEditorLayout
+            onClose={onClose}
+            onSave={handleSave}
+            tool={tool}
+            onToolChange={handleToolChange}
+            canvasRef={canvasRef}
+            isCropping={isCropping}
+            onCropApply={applyCrop}
+            onCropCancel={cancelCrop}
+            onZoomIn={handleZoomIn}
+            onZoomOut={handleZoomOut}
+            onRotateLeft={handleRotateLeft}
+            onRotateRight={handleRotateRight}
+            zoom={zoom}
+            onZoomChange={setZoom}
+          />
+        )}
+      </DialogContent>
     </Dialog>
   );
 };

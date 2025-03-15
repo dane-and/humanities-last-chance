@@ -61,10 +61,12 @@ export const useCanvas = (
         setImageLoaded(true);
       } catch (error) {
         console.error('Failed to load image:', error);
+        setImageLoaded(false);
       }
     };
     
     if (canvas && imageUrl && isOpen) {
+      console.log('Canvas is ready and image URL is provided, attempting to load image');
       loadImage();
     }
   }, [canvas, imageUrl, isOpen]);
