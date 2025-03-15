@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -142,6 +143,13 @@
   
   .img-loading:not(.img-loaded) {
     @apply opacity-0;
+  }
+
+  /* Article meta adjustments for mobile */
+  @media (max-width: 640px) {
+    .article-meta {
+      @apply flex-row items-center gap-1;
+    }
   }
 }
 

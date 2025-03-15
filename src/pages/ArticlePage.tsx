@@ -10,6 +10,7 @@ import ArticleComments from '@/components/ArticleComments';
 import { getArticlesFromStorage } from '@/lib/utils/storage/articleStorage';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import CaptionedImage from '@/components/CaptionedImage';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const ArticlePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -17,6 +18,7 @@ const ArticlePage: React.FC = () => {
   const article = getArticleBySlug(slug || '');
   const [refreshCounter, setRefreshCounter] = useState(0);
   const [currentArticle, setCurrentArticle] = useState(article);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (article) {
@@ -55,11 +57,11 @@ const ArticlePage: React.FC = () => {
     <div className="min-h-screen flex flex-col">
       <Navigation />
       
-      <main className="flex-grow pt-24 pb-16">
+      <main className="flex-grow pt-20 pb-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <Button 
             variant="ghost" 
-            className="mb-6" 
+            className="mb-4" 
             onClick={() => navigate(-1)}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -67,20 +69,21 @@ const ArticlePage: React.FC = () => {
           </Button>
           
           <header className="mb-2">
-            <h1 className="text-3xl font-serif font-bold mb-4">{currentArticle.title}</h1>
+            <h1 className="text-3xl font-serif font-bold mb-3">{currentArticle.title}</h1>
             
-            <div className="flex items-center gap-1 mb-2 text-sm">
+            <div className={`flex ${isMobile ? 'flex-row items-center' : 'items-center'} gap-1 mb-1 text-sm`}>
+              <span className="text-muted-foreground">{currentArticle.date}</span>
+              <span className="text-muted-foreground">•</span>
               <a href={`/articles/${currentArticle.category.toLowerCase()}`} className="text-primary font-medium">
                 {currentArticle.category}
               </a>
-              <span className="text-muted-foreground">• {currentArticle.date}</span>
             </div>
             
-            <p className="text-lg text-muted-fore mb-4">{currentArticle.excerpt}</p>
+            <p className="text-lg text-muted-fore mb-2">{currentArticle.excerpt}</p>
           </header>
           
           {currentArticle.image && (
-            <div className="mb-10 overflow-hidden rounded-lg">
+            <div className="mb-6 overflow-hidden rounded-lg">
               <AspectRatio ratio={21 / 9}>
                 <CaptionedImage
                   src={currentArticle.image}
