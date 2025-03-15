@@ -33,7 +33,7 @@ const FeaturedArticle: React.FC<FeaturedArticleProps> = React.memo(({
       className={cn(
         'group relative overflow-hidden transition-all bg-background border border-border/50 hover:border-border',
         layout === 'horizontal' 
-          ? 'grid grid-cols-1 md:grid-cols-2 gap-6'
+          ? 'grid grid-cols-1 md:grid-cols-2 gap-4'
           : 'flex flex-col',
         className
       )}
@@ -54,8 +54,8 @@ const FeaturedArticle: React.FC<FeaturedArticleProps> = React.memo(({
         </AspectRatio>
       </div>
       
-      <div className="flex flex-col justify-center p-6">
-        <div className="flex items-center gap-x-4 mb-4">
+      <div className="flex flex-col justify-center p-4">
+        <div className="flex items-center gap-x-4 mb-2">
           <Link
             to={`/articles/${category.toLowerCase()}`}
             className="text-xs font-medium uppercase tracking-wider text-primary"
@@ -65,11 +65,11 @@ const FeaturedArticle: React.FC<FeaturedArticleProps> = React.memo(({
           <span className="text-xs text-muted-foreground">{date}</span>
         </div>
         
-        <h2 className="font-serif text-2xl font-medium mb-3 transition-colors group-hover:text-primary/80">
+        <h2 className="font-serif text-2xl font-medium mb-2 transition-colors group-hover:text-primary/80">
           <Link to={`/article/${slug}`}>{title}</Link>
         </h2>
         
-        <p className="text-muted-foreground mb-4">{excerpt}</p>
+        <p className="text-muted-foreground mb-3">{excerpt}</p>
         
         <div className="mt-auto">
           <Link

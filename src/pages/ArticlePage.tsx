@@ -61,17 +61,17 @@ const ArticlePage: React.FC = () => {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <Button 
             variant="ghost" 
-            className="mb-2" 
+            className="mb-1" 
             onClick={() => navigate(-1)}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back
           </Button>
           
-          <header className="mb-3">
-            <h1 className="text-3xl font-serif font-bold mb-2">{currentArticle.title}</h1>
+          <header className="mb-1">
+            <h1 className="text-3xl font-serif font-bold mb-1">{currentArticle.title}</h1>
             
-            <div className="mb-2 block">
+            <div className="mb-1 block">
               <span className="text-muted-foreground text-sm inline-block">{currentArticle.date}</span>
               <span className="text-muted-foreground mx-2 text-sm inline-block">•</span>
               <a 
@@ -82,11 +82,11 @@ const ArticlePage: React.FC = () => {
               </a>
             </div>
             
-            <p className="text-lg text-muted-foreground mb-3">{currentArticle.excerpt}</p>
+            <p className="text-lg text-muted-foreground mb-2">{currentArticle.excerpt}</p>
           </header>
           
           {currentArticle.image && (
-            <div className="mb-5 overflow-hidden rounded-lg">
+            <div className="mb-4 overflow-hidden rounded-lg">
               <AspectRatio ratio={16 / 9}>
                 <OptimizedImage
                   src={currentArticle.image}
