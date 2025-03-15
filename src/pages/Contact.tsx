@@ -1,11 +1,12 @@
 
 import React from 'react';
+import Navigation from '@/components/Navigation';
 import PageTemplate from '@/components/PageTemplate';
 
 const Contact = () => {
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Navigation is included in PageTemplate */}
+      <Navigation />
       
       {/* Main content area with proper padding to avoid toolbar overlap */}
       <main className="flex-grow pt-24 md:pt-28">

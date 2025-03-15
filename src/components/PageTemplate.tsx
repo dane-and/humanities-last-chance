@@ -1,6 +1,5 @@
 
 import React from 'react';
-import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { usePages } from '@/lib/hooks/usePages';
 
@@ -14,8 +13,6 @@ const PageTemplate: React.FC<PageTemplateProps> = ({ slug }) => {
   
   return (
     <>
-      <Navigation />
-      
       <section className="py-4 md:py-6">
         <div className="container mx-auto px-4 lg:px-8 max-w-4xl">
           {isLoading ? (
