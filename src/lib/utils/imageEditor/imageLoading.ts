@@ -68,8 +68,8 @@ export const loadImageOntoCanvas = async (
         canvas.renderAll();
         
         resolve(fabricImg);
-      }, 
-      { crossOrigin: 'anonymous' }
+      },
+      { crossOrigin: 'anonymous' } as any // Type cast to fix TypeScript error
     );
   });
 };

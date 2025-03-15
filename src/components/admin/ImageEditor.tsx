@@ -1,6 +1,6 @@
 
 import React, { useRef, useEffect, useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog } from '@/components/ui/dialog';
 import { getCanvasImageData, preloadImage } from '@/lib/utils/imageEditor';
 import { Loader2 } from 'lucide-react';
 
@@ -74,39 +74,35 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ image, onSave, isOpen, onClos
     onClose();
   };
 
+  if (!isOpen) return null;
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[900px] h-[90vh] max-h-[800px] flex flex-col">
-        <DialogHeader>
-          <DialogTitle>Edit Image</DialogTitle>
-        </DialogHeader>
-        
-        {isLoading ? (
-          <div className="flex-1 flex items-center justify-center">
-            <div className="flex flex-col items-center gap-2">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              <p className="text-sm text-muted-foreground">Loading image editor...</p>
-            </div>
+      {isLoading ? (
+        <div className="flex-1 flex items-center justify-center">
+          <div className="flex flex-col items-center gap-2">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <p className="text-sm text-muted-foreground">Loading image editor...</p>
           </div>
-        ) : (
-          <ImageEditorLayout
-            onClose={onClose}
-            onSave={handleSave}
-            tool={tool}
-            onToolChange={handleToolChange}
-            canvasRef={canvasRef}
-            isCropping={isCropping}
-            onCropApply={applyCrop}
-            onCropCancel={cancelCrop}
-            onZoomIn={handleZoomIn}
-            onZoomOut={handleZoomOut}
-            onRotateLeft={handleRotateLeft}
-            onRotateRight={handleRotateRight}
-            zoom={zoom}
-            onZoomChange={setZoom}
-          />
-        )}
-      </DialogContent>
+        </div>
+      ) : (
+        <ImageEditorLayout
+          onClose={onClose}
+          onSave={handleSave}
+          tool={tool}
+          onToolChange={handleToolChange}
+          canvasRef={canvasRef}
+          isCropping={isCropping}
+          onCropApply={applyCrop}
+          onCropCancel={cancelCrop}
+          onZoomIn={handleZoomIn}
+          onZoomOut={handleZoomOut}
+          onRotateLeft={handleRotateLeft}
+          onRotateRight={handleRotateRight}
+          zoom={zoom}
+          onZoomChange={setZoom}
+        />
+      )}
     </Dialog>
   );
 };
