@@ -7,10 +7,12 @@ import { usePages } from '@/lib/hooks/usePages';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import HumanitiesLastChanceU from '@/components/resources/HumanitiesLastChanceU';
 import OtherResources from '@/components/resources/OtherResources';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const Resources = () => {
   const { getPageBySlug, isLoading } = usePages();
   const resourcesPage = getPageBySlug('resources');
+  const isMobile = useIsMobile();
   
   const location = useLocation();
   const navigate = useNavigate();
@@ -38,7 +40,7 @@ const Resources = () => {
       <Navigation />
       
       <main className="flex-grow">
-        <section className="pt-20 pb-8 md:pt-36 md:pb-12">
+        <section className={`pt-16 pb-8 md:pt-24 md:pb-12`}>
           <div className="container mx-auto px-4 lg:px-8 max-w-6xl">
             <Tabs 
               defaultValue={getTabFromURL()} 
