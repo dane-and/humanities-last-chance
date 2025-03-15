@@ -60,6 +60,20 @@ export const philosophy: Discipline = {
       ]
     },
     {
+      id: 'phil106',
+      title: 'Kant\'s Critique of Pure Reason',
+      instructor: 'Dan Robinson',
+      link: 'https://www.youtube.com/playlist?list=PLhP9EhPApKE_OdgqNgL0AJX9-gwr4tmLw',
+      platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=kVUHirBTIzE',
+      alternateLinks: [
+        {
+          platform: 'Apple Podcasts',
+          url: 'https://podcasts.apple.com/us/podcast/kants-critique-of-pure-reason/id426724549'
+        }
+      ]
+    },
+    {
       id: 'phil104',
       title: 'Kant: Critique of Pure Reason',
       instructor: 'Robert Paul Wolff',
