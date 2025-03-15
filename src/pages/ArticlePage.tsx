@@ -30,14 +30,6 @@ const ArticlePage: React.FC = () => {
     }
   }, [article, refreshCounter]);
 
-  useEffect(() => {
-    // Debugging to check article data
-    if (currentArticle) {
-      console.log("Current article:", currentArticle);
-      console.log("Image path:", currentArticle.image);
-    }
-  }, [currentArticle]);
-
   if (!currentArticle) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -61,10 +53,9 @@ const ArticlePage: React.FC = () => {
     setRefreshCounter(prev => prev + 1);
   };
 
-  // Try using the newly uploaded image if the current one isn't working
+  // Fallback image if needed
   const fallbackImage = "/lovable-uploads/4a4437f6-55b6-4321-9e6f-5ca0a883ccd9.png";
-  const imageToUse = currentArticle.image || fallbackImage;
-
+  
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
@@ -83,13 +74,13 @@ const ArticlePage: React.FC = () => {
           <header className="mb-4">
             <h1 className="text-3xl font-serif font-bold mb-3">{currentArticle.title}</h1>
             
-            {/* Fixed meta information layout - using display:inline elements instead of flex */}
-            <div className="mb-3 text-sm">
-              <span className="text-muted-foreground">{currentArticle.date}</span>
-              <span className="text-muted-foreground mx-2">•</span>
+            {/* Meta information with inline elements */}
+            <div className="mb-3">
+              <span className="text-muted-foreground text-sm">{currentArticle.date}</span>
+              <span className="text-muted-foreground mx-2 text-sm">•</span>
               <a 
                 href={`/articles/${currentArticle.category.toLowerCase()}`} 
-                className="text-primary font-medium"
+                className="text-primary font-medium text-sm"
               >
                 {currentArticle.category}
               </a>
@@ -98,15 +89,14 @@ const ArticlePage: React.FC = () => {
             <p className="text-lg text-muted-foreground mb-4">{currentArticle.excerpt}</p>
           </header>
           
-          {imageToUse && (
+          {currentArticle.image && (
             <div className="mb-6 overflow-hidden rounded-lg">
               <AspectRatio ratio={16 / 9}>
                 <OptimizedImage
-                  src={imageToUse}
+                  src={currentArticle.image}
                   alt={currentArticle.title}
                   className="w-full h-full object-cover"
                   caption={currentArticle.imageCaption || 'J.M.W. Turner, "The Departure of the Fleet"'}
-                  captionClassName="text-center text-sm text-muted-foreground mt-2 italic"
                 />
               </AspectRatio>
             </div>
