@@ -29,47 +29,52 @@ export const loadImageOntoCanvas = async (
 
   // Create Fabric image object
   return new Promise((resolve, reject) => {
-    // Use FabricImage.fromURL with proper type handling
+    // The issue is here: We need to fix the FabricImage.fromURL call
+    // In Fabric.js v6, fromURL expects options as the third parameter,
+    // not a callback as the second parameter
     FabricImage.fromURL(
       imageUrl, 
-      (fabricImg) => {
-        if (!fabricImg) {
-          reject(new Error('Failed to create Fabric image'));
-          return;
+      {
+        crossOrigin: 'anonymous',
+        // Add a callback to handle the loaded image
+        onLoad: (fabricImg) => {
+          if (!fabricImg) {
+            reject(new Error('Failed to create Fabric image'));
+            return;
+          }
+
+          // Clear the canvas
+          canvas.clear();
+
+          // Scale the image appropriately 
+          const containerWidth = canvas.getWidth();
+          const containerHeight = canvas.getHeight();
+          
+          // Calculate the max dimensions to fit in the container
+          const scale = Math.min(
+            containerWidth / fabricImg.width!, 
+            containerHeight / fabricImg.height!
+          ) * (zoomLevel / 100); // Convert to proper scale factor
+          
+          // Apply scaling
+          fabricImg.scale(scale);
+          
+          // Center the image
+          fabricImg.set({
+            left: containerWidth / 2,
+            top: containerHeight / 2,
+            originX: 'center',
+            originY: 'center',
+          });
+
+          // Add image to canvas
+          canvas.add(fabricImg);
+          canvas.setActiveObject(fabricImg);
+          canvas.renderAll();
+          
+          resolve(fabricImg);
         }
-
-        // Clear the canvas
-        canvas.clear();
-
-        // Scale the image appropriately 
-        const containerWidth = canvas.getWidth();
-        const containerHeight = canvas.getHeight();
-        
-        // Calculate the max dimensions to fit in the container
-        const scale = Math.min(
-          containerWidth / fabricImg.width!, 
-          containerHeight / fabricImg.height!
-        ) * (zoomLevel / 100); // Convert to proper scale factor
-        
-        // Apply scaling
-        fabricImg.scale(scale);
-        
-        // Center the image
-        fabricImg.set({
-          left: containerWidth / 2,
-          top: containerHeight / 2,
-          originX: 'center',
-          originY: 'center',
-        });
-
-        // Add image to canvas
-        canvas.add(fabricImg);
-        canvas.setActiveObject(fabricImg);
-        canvas.renderAll();
-        
-        resolve(fabricImg);
-      },
-      { crossOrigin: 'anonymous' } as any // Type cast to fix TypeScript error
+      }
     );
   });
 };
