@@ -49,4 +49,3 @@ jobs:
           publish_dir: ./dist
           # Don't specify CNAME here since we're creating the file directly
           force_orphan: true
-
