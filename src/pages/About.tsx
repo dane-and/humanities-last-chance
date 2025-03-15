@@ -31,7 +31,7 @@ const About = () => {
               <p>Humanities Last Chance is a free digital platform and resource dedicated to connecting curious people of all backgrounds to academic humanities scholarship. Based in Washington D.C. but reaching across the English-speaking world, our mission is to demonstrate the enduring value and relevance of the liberal arts in today's world.</p>
               
               <h2 className="text-2xl font-bold mt-8 mb-4">Why "Humanities Last Chance"?</h2>
-              <p>Our name reflects two critical realities. First, the humanities face significant challenges today—with university funding cuts and a public perception that academic humanities have turned into the R&D wing of left-wing political movements.</p>
+              <p>Our name reflects two critical realities. First, the humanities face significant challenges today—with university funding cuts and a widespread public perception that the academic humanities have become merely the R&D wing of left-wing political movements.</p>
               <p>Yet more importantly, the humanities remain what they have always been: the essential arena for inquiry into life's ultimate questions. They offer us the space to explore how we should live, what we should believe, and who we should aspire to become. In this sense, the humanities represent our "last chance" for establishing meaningful principles as we collectively shape the world around us.</p>
               
               <h2 className="text-2xl font-bold mt-8 mb-4">Our Purpose</h2>
