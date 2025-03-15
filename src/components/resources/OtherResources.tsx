@@ -1,14 +1,14 @@
+
 import React from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, Headphones, BookAudio, Radio, History, Mic, Library, BookOpen } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 interface Resource {
   name: string;
   url: string;
   description?: string;
-  logoType: 'image' | 'icon';
-  logo: React.ReactNode | string;
+  icon?: React.ReactNode;
 }
 
 interface ResourceCategory {
@@ -16,8 +16,6 @@ interface ResourceCategory {
   name: string;
   resources: Resource[];
 }
-
-import { Headphones, BookAudio, Radio, History, Mic, Library, BookOpen } from 'lucide-react';
 
 const resourceCategories: ResourceCategory[] = [
   {
@@ -28,57 +26,49 @@ const resourceCategories: ResourceCategory[] = [
         name: 'Librivox',
         url: 'https://librivox.org/',
         description: 'Free public domain audiobooks.',
-        logoType: 'image',
-        logo: '/lovable-uploads/8e120c24-c2b7-40f7-b502-1ab605ea1d08.png'
+        icon: <BookAudio className="h-5 w-5 text-primary" />
       },
       {
         name: 'Natural Reader',
         url: 'https://www.naturalreaders.com/',
         description: 'Text-to-speech tool.',
-        logoType: 'image',
-        logo: '/lovable-uploads/31fa2b9f-a5cc-48ed-93f8-e63b0896d41f.png'
+        icon: <Headphones className="h-5 w-5 text-primary" />
       },
       {
         name: 'Speech Central',
         url: 'https://speechcentral.net/',
         description: 'Listen to written content.',
-        logoType: 'icon',
-        logo: <Radio className="h-5 w-5 text-primary" />
+        icon: <Radio className="h-5 w-5 text-primary" />
       },
       {
         name: 'C-SPAN Book TV Video Archive',
         url: 'https://www.c-span.org/bookTv/',
         description: 'Author talks and historical discussions.',
-        logoType: 'icon',
-        logo: <BookOpen className="h-5 w-5 text-primary" />
+        icon: <BookOpen className="h-5 w-5 text-primary" />
       },
       {
         name: 'In Our Time (BBC)',
         url: 'https://podcasts.apple.com/us/podcast/in-our-time/id73330895',
         description: 'Scholarly discussions on history and philosophy.',
-        logoType: 'icon',
-        logo: <Mic className="h-5 w-5 text-primary" />
+        icon: <Mic className="h-5 w-5 text-primary" />
       },
       {
         name: 'The Rest is History',
         url: 'https://podcasts.apple.com/us/podcast/the-rest-is-history/id1537788786',
         description: 'Engaging historical storytelling.',
-        logoType: 'icon',
-        logo: <History className="h-5 w-5 text-primary" />
+        icon: <History className="h-5 w-5 text-primary" />
       },
       {
         name: 'Conversations with Tyler',
         url: 'https://podcasts.apple.com/us/podcast/conversations-with-tyler/id983795625',
         description: 'Brilliant interviews, occasionally but not always with humanities scholars.',
-        logoType: 'icon',
-        logo: <Mic className="h-5 w-5 text-primary" />
+        icon: <Mic className="h-5 w-5 text-primary" />
       },
       {
         name: 'Open Culture Free Audiobooks',
         url: 'https://www.openculture.com/freeaudiobooks',
         description: 'A curated selection of public-domain audiobooks.',
-        logoType: 'icon',
-        logo: <Library className="h-5 w-5 text-primary" />
+        icon: <Library className="h-5 w-5 text-primary" />
       }
     ]
   },
@@ -89,32 +79,38 @@ const resourceCategories: ResourceCategory[] = [
       {
         name: 'Google Books',
         url: 'https://books.google.com/',
-        description: 'Search and preview millions of books.'
+        description: 'Search and preview millions of books.',
+        icon: <BookOpen className="h-5 w-5 text-primary" />
       },
       {
         name: 'Project Gutenberg',
         url: 'https://www.gutenberg.org/',
-        description: 'Free public domain ebooks.'
+        description: 'Free public domain ebooks.',
+        icon: <BookOpen className="h-5 w-5 text-primary" />
       },
       {
         name: 'Internet Archive',
         url: 'https://archive.org/',
-        description: 'A vast collection of books, documents, and historical texts.'
+        description: 'A vast collection of books, documents, and historical texts.',
+        icon: <Library className="h-5 w-5 text-primary" />
       },
       {
         name: 'HathiTrust Digital Library',
         url: 'https://www.hathitrust.org/',
-        description: 'Scholarly digital library of public domain works.'
+        description: 'Scholarly digital library of public domain works.',
+        icon: <Library className="h-5 w-5 text-primary" />
       },
       {
         name: 'Perseus Digital Library',
         url: 'http://www.perseus.tufts.edu/hopper/',
-        description: 'Classical texts and translations.'
+        description: 'Classical texts and translations.',
+        icon: <BookOpen className="h-5 w-5 text-primary" />
       },
       {
         name: 'Marxists Internet Archive',
         url: 'https://www.marxists.org/',
-        description: 'Political and social theory texts.'
+        description: 'Political and social theory texts.',
+        icon: <BookOpen className="h-5 w-5 text-primary" />
       }
     ]
   },
@@ -125,17 +121,20 @@ const resourceCategories: ResourceCategory[] = [
       {
         name: 'Stanford Encyclopedia of Philosophy',
         url: 'https://plato.stanford.edu/',
-        description: 'Scholarly philosophy reference.'
+        description: 'Scholarly philosophy reference.',
+        icon: <BookOpen className="h-5 w-5 text-primary" />
       },
       {
         name: 'Oxford English Dictionary',
         url: 'https://www.oed.com/',
-        description: 'The definitive English dictionary (subscription-based).'
+        description: 'The definitive English dictionary (subscription-based).',
+        icon: <BookOpen className="h-5 w-5 text-primary" />
       },
       {
         name: 'Encyclopedia Britannica',
         url: 'https://www.britannica.com/',
-        description: 'General knowledge reference.'
+        description: 'General knowledge reference.',
+        icon: <BookOpen className="h-5 w-5 text-primary" />
       }
     ]
   },
@@ -146,22 +145,26 @@ const resourceCategories: ResourceCategory[] = [
       {
         name: 'Google Scholar',
         url: 'https://scholar.google.com/',
-        description: 'Search academic papers and citations.'
+        description: 'Search academic papers and citations.',
+        icon: <BookOpen className="h-5 w-5 text-primary" />
       },
       {
         name: 'DOAJ (Directory of Open Access Journals)',
         url: 'https://doaj.org/',
-        description: 'Freely accessible scholarly articles.'
+        description: 'Freely accessible scholarly articles.',
+        icon: <Library className="h-5 w-5 text-primary" />
       },
       {
         name: 'JSTOR Open Content',
         url: 'https://www.jstor.org/open/',
-        description: 'Free academic journal articles.'
+        description: 'Free academic journal articles.',
+        icon: <Library className="h-5 w-5 text-primary" />
       },
       {
         name: 'CORE',
         url: 'https://core.ac.uk/',
-        description: 'Repository of open-access research papers.'
+        description: 'Repository of open-access research papers.',
+        icon: <Library className="h-5 w-5 text-primary" />
       }
     ]
   }
@@ -190,15 +193,7 @@ const OtherResources: React.FC = () => {
                 {category.resources.map((resource, index) => (
                   <div key={index} className="group bg-card rounded-lg p-4 border transition-colors hover:bg-muted/50">
                     <div className="flex items-start space-x-3">
-                      {resource.logoType === 'image' ? (
-                        <img 
-                          src={resource.logo as string} 
-                          alt={`${resource.name} logo`}
-                          className="h-7 w-7 object-contain"
-                        />
-                      ) : (
-                        resource.logo
-                      )}
+                      {resource.icon}
                       <div className="flex-1 space-y-1">
                         <a
                           href={resource.url}
