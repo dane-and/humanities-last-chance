@@ -11,11 +11,12 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    # Add permissions for the GITHUB_TOKEN
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v3
+        with:
+          persist-credentials: true # Ensure credentials are persisted
 
       - uses: actions/setup-node@v3
         with:
@@ -46,9 +47,8 @@ jobs:
           ls -R dist
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}  # Using built-in token with proper permissions
-          publish_dir: ./dist
-          # Don't specify CNAME here since we're creating the file directly
-          force_orphan: true
+          folder: dist # The folder the action should deploy
+          branch: gh-pages # The branch the action should deploy to
+          clean: true # Automatically remove deleted files from the deployment branch
