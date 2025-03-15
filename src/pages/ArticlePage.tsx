@@ -30,6 +30,14 @@ const ArticlePage: React.FC = () => {
     }
   }, [article, refreshCounter]);
 
+  useEffect(() => {
+    // Debugging to check article data
+    if (currentArticle) {
+      console.log("Current article:", currentArticle);
+      console.log("Image path:", currentArticle.image);
+    }
+  }, [currentArticle]);
+
   if (!currentArticle) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -71,7 +79,7 @@ const ArticlePage: React.FC = () => {
           <header className="mb-4">
             <h1 className="text-3xl font-serif font-bold mb-3">{currentArticle.title}</h1>
             
-            <div className="flex items-center mb-3 text-sm">
+            <div className="flex flex-wrap items-center mb-3 text-sm">
               <span className="text-muted-foreground inline-flex items-center">{currentArticle.date}</span>
               <span className="text-muted-foreground mx-1 inline-flex items-center">•</span>
               <a 

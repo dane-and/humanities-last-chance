@@ -19,11 +19,24 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   const [imageLoaded, setImageLoaded] = useState(false);
   const [error, setError] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
+  const [imageUrl, setImageUrl] = useState(src);
+  
+  // When the src changes, update the imageUrl
+  useEffect(() => {
+    // Check if src is a relative path that needs the public folder prefix
+    if (src && src.startsWith('/')) {
+      console.log(`Converting relative path: ${src}`);
+      // No need to modify - Vite handles relative paths from /public correctly
+      setImageUrl(src);
+    } else {
+      setImageUrl(src);
+    }
+  }, [src]);
   
   // Force the image to reload if it fails to load
   const retryLoading = () => {
     if (retryCount < 3) {
-      console.log(`Retrying image load for ${src} (attempt ${retryCount + 1})`);
+      console.log(`Retrying image load for ${imageUrl} (attempt ${retryCount + 1})`);
       setRetryCount(prev => prev + 1);
       setError(false);
       setImageLoaded(false);
@@ -36,15 +49,25 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
     setError(false);
     setRetryCount(0);
     
+    if (!imageUrl) {
+      console.error("Image URL is empty or undefined");
+      setError(true);
+      return;
+    }
+    
+    console.log(`Attempting to load image: ${imageUrl}`);
+    
     // Preload image
     const img = new Image();
-    img.src = src;
+    img.src = `${imageUrl}?v=${retryCount}`; // Add cache-busting parameter
+    
     img.onload = () => {
-      console.log(`Image loaded successfully: ${src}`);
+      console.log(`Image loaded successfully: ${imageUrl}`);
       setImageLoaded(true);
     };
-    img.onerror = () => {
-      console.error(`Error loading image: ${src}`);
+    
+    img.onerror = (e) => {
+      console.error(`Error loading image: ${imageUrl}`, e);
       setError(true);
     };
     
@@ -52,7 +75,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       img.onload = null;
       img.onerror = null;
     };
-  }, [src, retryCount]);
+  }, [imageUrl, retryCount]);
 
   return (
     <figure className="relative">
@@ -72,6 +95,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
         <div className={`${className} bg-gray-100 flex flex-col items-center justify-center`} 
              style={{ aspectRatio: '16/9' }}>
           <p className="text-gray-500 mb-2">Image could not be loaded</p>
+          <p className="text-xs text-gray-400 mb-2">{imageUrl}</p>
           <button 
             onClick={retryLoading}
             className="px-3 py-1 bg-gray-200 hover:bg-gray-300 text-sm rounded"
@@ -83,7 +107,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       )}
       
       <img
-        src={`${src}?v=${retryCount}`} // Add cache-busting parameter
+        src={`${imageUrl}?v=${retryCount}`} // Add cache-busting parameter
         alt={alt}
         className={`${className} ${imageLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
         style={{ display: error ? 'none' : 'block' }}
