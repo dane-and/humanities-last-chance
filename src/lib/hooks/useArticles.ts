@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Article, defaultArticles } from '../types/article';
 import { fetchArticles } from '../api/articleApi';
-import { getArticlesFromStorage, saveArticlesToStorage } from '../utils/storageUtils';
+import { getArticlesFromStorage, saveArticlesToStorage } from '../utils/storage/articleStorage';
 import { API_CONFIG } from '../config';
 import { useToast } from '@/hooks/use-toast';
 

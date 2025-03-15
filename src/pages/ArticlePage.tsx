@@ -7,7 +7,7 @@ import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import ArticleComments from '@/components/ArticleComments';
-import { getArticlesFromStorage } from '@/lib/utils/storageUtils';
+import { getArticlesFromStorage } from '@/lib/utils/storage/articleStorage';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import CaptionedImage from '@/components/CaptionedImage';
 

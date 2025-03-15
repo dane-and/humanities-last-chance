@@ -4,7 +4,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Comment } from '@/lib/types/article';
 import { Button } from '@/components/ui/button';
 import { Trash } from 'lucide-react';
-import { removeCommentFromArticle } from '@/lib/utils/storageUtils';
+import { removeCommentFromArticle } from '@/lib/utils/storage/commentStorage';
 
 interface CommentModerationProps {
   articleId: string;

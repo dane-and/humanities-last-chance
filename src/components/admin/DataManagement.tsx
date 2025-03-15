@@ -1,7 +1,7 @@
 
 import React, { useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { exportArticlesData, importArticlesData } from '@/lib/utils/storageUtils';
+import { exportArticlesData, importArticlesData } from '@/lib/utils/storage/dataExportImport';
 import { toast } from 'sonner';
 import { 
   Alert, 

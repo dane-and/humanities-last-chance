@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ArticleCardWithTags from '@/components/ArticleCardWithTags';
@@ -6,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { getArticlesByCategory } from '@/lib/articles';
 import { ChevronLeft, ChevronRight, MessageCircle } from 'lucide-react';
 import TagList from '@/components/TagList';
-import { getArticlesFromStorage } from '@/lib/utils/storageUtils';
+import { getArticlesFromStorage } from '@/lib/utils/storage/articleStorage';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 interface BlogSectionProps {
@@ -23,12 +22,10 @@ const BlogSection: React.FC<BlogSectionProps> = ({
   const [blogPosts, setBlogPosts] = useState(getArticlesByCategory('blog'));
   const totalPages = Math.ceil(blogPosts.length / postsPerPage);
   
-  // Update blog posts with the latest from storage (including comments)
   useEffect(() => {
     const articles = getArticlesFromStorage();
     const blogArticles = articles
       .filter(article => article.category.toLowerCase() === 'blog')
-      // Sort articles by date (newest first)
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     
     if (blogArticles.length > 0) {
@@ -36,7 +33,6 @@ const BlogSection: React.FC<BlogSectionProps> = ({
     }
   }, []);
   
-  // Handle navigation
   const nextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
@@ -51,7 +47,6 @@ const BlogSection: React.FC<BlogSectionProps> = ({
     }
   };
   
-  // Get current posts
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = blogPosts.slice(indexOfFirstPost, indexOfLastPost);
@@ -131,7 +126,6 @@ const BlogSection: React.FC<BlogSectionProps> = ({
         ))}
       </div>
       
-      {/* Pagination Controls with updated button styles */}
       {totalPages > 1 && (
         <div className="flex justify-between items-center pt-8 mt-4">
           <Button

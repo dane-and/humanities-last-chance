@@ -1,6 +1,6 @@
 
 import { Article } from '../types/article';
-import { getArticlesFromStorage } from '../utils/storageUtils';
+import { getArticlesFromStorage } from '../utils/storage/articleStorage';
 
 /**
  * Gets featured articles

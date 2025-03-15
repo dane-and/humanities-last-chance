@@ -5,7 +5,7 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import ArticleGrid from '@/components/ArticleGrid';
 import { getArticlesByCategory } from '@/lib/queries/articleQueries';
-import { getArticlesFromStorage } from '@/lib/utils/storageUtils';
+import { getArticlesFromStorage } from '@/lib/utils/storage/articleStorage';
 import { Article, defaultArticles } from '@/lib/types/article';
 
 const ArticlesBlog: React.FC = () => {
