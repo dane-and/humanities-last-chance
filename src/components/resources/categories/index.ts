@@ -1,12 +1,4 @@
 
-import { audiobooksCategory } from './AudiobooksCategory';
-import { ebooksCategory } from './EbooksCategory';
-import { referenceCategory } from './ReferenceCategory';
-import { academicCategory } from './AcademicCategory';
+import { categoriesData } from './categoriesData';
 
-export const resourceCategories = [
-  audiobooksCategory,
-  ebooksCategory,
-  referenceCategory,
-  academicCategory
-];
+export const resourceCategories = categoriesData;
