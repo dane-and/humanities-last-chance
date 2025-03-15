@@ -66,17 +66,17 @@ const ArticlePage: React.FC = () => {
             Back
           </Button>
           
-          <header className="mb-8">
+          <header className="mb-2">
             <h1 className="text-3xl font-serif font-bold mb-4">{currentArticle.title}</h1>
             
-            <div className="flex items-center gap-1 mb-6 text-sm">
+            <div className="flex items-center gap-1 mb-2 text-sm">
               <a href={`/articles/${currentArticle.category.toLowerCase()}`} className="text-primary font-medium">
                 {currentArticle.category}
               </a>
               <span className="text-muted-foreground">• {currentArticle.date}</span>
             </div>
             
-            <p className="text-lg text-muted-foreground mb-6">{currentArticle.excerpt}</p>
+            <p className="text-lg text-muted-fore mb-4">{currentArticle.excerpt}</p>
           </header>
           
           {currentArticle.image && (
@@ -93,13 +93,12 @@ const ArticlePage: React.FC = () => {
             </div>
           )}
           
-          <article className="prose prose-slate max-w-none">
+          <article className="prose prose-slate max-w-none [&_a]:text-primary [&_a]:no-underline hover:[&_a]:text-primary/80">
             <div dangerouslySetInnerHTML={{ __html: currentArticle.content }} />
           </article>
           
           {currentArticle.tags && currentArticle.tags.length > 0 && (
-            <div className="mt-4 pt-4 border-t">
-              <h3 className="text-lg font-medium mb-3">Tags</h3>
+            <div className="mt-4 pt-2 border-t">
               <div className="flex flex-wrap gap-2">
                 {currentArticle.tags.map(tag => (
                   <a
