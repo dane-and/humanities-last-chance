@@ -71,7 +71,7 @@ const ArticlePage: React.FC = () => {
           <header className="mb-2">
             <h1 className="text-3xl font-serif font-bold mb-3">{currentArticle.title}</h1>
             
-            <div className={`flex ${isMobile ? 'flex-row items-center' : 'items-center'} gap-1 mb-1 text-sm`}>
+            <div className="flex flex-row items-center gap-1 mb-1 text-sm">
               <span className="text-muted-foreground">{currentArticle.date}</span>
               <span className="text-muted-foreground">•</span>
               <a href={`/articles/${currentArticle.category.toLowerCase()}`} className="text-primary font-medium">
