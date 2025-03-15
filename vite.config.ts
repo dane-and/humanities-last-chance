@@ -10,8 +10,8 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
-  // Set base URL correctly for GitHub Pages deployment
-  base: "/",
+  // Dynamically set base URL from environment variable or default to '/'
+  base: mode === 'production' ? (import.meta.env.VITE_BASE_URL || '/') : '/',
   plugins: [
     react(),
     mode === 'development' &&

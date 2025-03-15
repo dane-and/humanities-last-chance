@@ -8,7 +8,11 @@
 
 // Determine current environment
 const isVercel = import.meta.env.VITE_HOSTING === 'vercel';
+const isGitHubPages = import.meta.env.VITE_HOSTING === 'github';
 const isDevelopment = import.meta.env.DEV;
+
+// Base path for assets (important for GitHub Pages deployment)
+const BASE_PATH = import.meta.env.VITE_BASE_URL || '/';
 
 // API configuration
 const API_CONFIG = {
@@ -28,7 +32,7 @@ const API_CONFIG = {
     // Enable Google Sheets fallback (configured below)
     USE_GOOGLE_SHEETS_FALLBACK: isVercel,
     // Disable API calls for pure static hosting
-    STATIC_ONLY: isVercel && !import.meta.env.VITE_API_URL,
+    STATIC_ONLY: (isVercel || isGitHubPages) && !import.meta.env.VITE_API_URL,
   }
 };
 
@@ -78,4 +82,4 @@ const AUTH_CONFIG = {
   // Add other auth settings as needed
 };
 
-export { API_CONFIG, CONTENT_CONFIG, SHEETS_CONFIG, CMS_CONFIG, AUTH_CONFIG };
+export { API_CONFIG, CONTENT_CONFIG, SHEETS_CONFIG, CMS_CONFIG, AUTH_CONFIG, BASE_PATH };
