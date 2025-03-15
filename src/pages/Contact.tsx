@@ -25,8 +25,6 @@ const Contact = () => {
         
         <section className="py-8 md:py-10">
           <div className="container mx-auto px-4 lg:px-8 max-w-4xl">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold mb-8">Contact Us</h1>
-            
             {isLoading ? (
               <div className="flex justify-center py-20">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
