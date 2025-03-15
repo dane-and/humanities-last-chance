@@ -226,10 +226,10 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
   const handleArticleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!articleFormData.title || !articleFormData.content || !articleFormData.author) {
+    if (!articleFormData.title || !articleFormData.content) {
       toast({
         title: 'Error',
-        description: 'Please fill in all required fields (title, author, content)',
+        description: 'Please fill in all required fields (title, content)',
         variant: 'destructive',
       });
       return;
@@ -314,12 +314,12 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           </div>
           
           <div className="space-y-2">
-            <label className="text-sm font-medium">Author</label>
+            <label className="text-sm font-medium">Author (optional)</label>
             <Input 
               name="author"
               value={articleFormData.author}
               onChange={handleArticleInputChange}
-              placeholder="Author name"
+              placeholder="Author name (optional)"
             />
           </div>
           
@@ -526,3 +526,4 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
 };
 
 export default ArticleForm;
+

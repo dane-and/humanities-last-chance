@@ -136,9 +136,9 @@ function createArticle() {
     }
     
     // Validate required fields
-    if (empty($data['title']) || empty($data['content']) || empty($data['author'])) {
+    if (empty($data['title']) || empty($data['content'])) {
         header('HTTP/1.1 400 Bad Request');
-        echo json_encode(['error' => 'Missing required fields (title, content, author)']);
+        echo json_encode(['error' => 'Missing required fields (title, content)']);
         exit;
     }
     
@@ -155,6 +155,11 @@ function createArticle() {
     // Set default date if not provided
     if (empty($data['date'])) {
         $data['date'] = date('F j, Y');
+    }
+    
+    // Set empty author if not provided
+    if (!isset($data['author'])) {
+        $data['author'] = '';
     }
     
     // Prepare tags for storage

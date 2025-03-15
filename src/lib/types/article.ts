@@ -13,7 +13,7 @@ export interface Article {
   id: string;
   title: string;
   slug: string;
-  author: string;
+  author?: string; // Made optional with ?
   date: string;
   category: 'Blog' | 'Interview' | 'Review' | 'Resource';
   image: string;
