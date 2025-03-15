@@ -1,5 +1,5 @@
 
-import { Canvas, Image as FabricImage, Point } from 'fabric';
+import { Canvas, Image as FabricImage, Point, Text } from 'fabric';
 import { getImageFromCache, preloadImage } from './imageCache';
 import { DEFAULT_ZOOM } from './constants';
 
@@ -46,7 +46,7 @@ export const loadImageOntoCanvas = async (
       const scale = Math.min(
         containerWidth / fabricImg.width!, 
         containerHeight / fabricImg.height!
-      ) * zoomLevel;
+      ) * (zoomLevel / 100); // Convert to proper scale factor
       
       // Apply scaling
       fabricImg.scale(scale);
@@ -77,7 +77,7 @@ export const addTextToImage = (
   text: string, 
   position: Point = new Point(10, 10)
 ): void => {
-  const textObj = new fabric.Text(text, {
+  const textObj = new Text(text, {
     left: position.x,
     top: position.y,
     fontSize: 20,
