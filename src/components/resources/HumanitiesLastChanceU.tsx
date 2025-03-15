@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { ExternalLink, Play, Headphones } from 'lucide-react';
@@ -164,7 +163,7 @@ const HumanitiesLastChanceU: React.FC = () => {
           Humanities Last Chance U
         </h2>
         <p>
-          Our curated collection of high-quality courses available for free on YouTube, organized by academic discipline. Most entries include links to course sites where you can find reading lists and other supplemental material relevant to the course.
+          Our curated collection of high-quality courses available for free on YouTube, organized by academic discipline. Most entries include links to course sites where you can find reading lists and other supplemental material relevant to the courses.
         </p>
       </div>
 
@@ -350,4 +349,3 @@ const HumanitiesLastChanceU: React.FC = () => {
 };
 
 export default HumanitiesLastChanceU;
-
