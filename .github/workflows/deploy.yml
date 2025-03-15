@@ -11,6 +11,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    # Add permissions for the GITHUB_TOKEN
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
 
@@ -45,7 +48,7 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # Using built-in token with proper permissions
           publish_dir: ./dist
           # Don't specify CNAME here since we're creating the file directly
           force_orphan: true
