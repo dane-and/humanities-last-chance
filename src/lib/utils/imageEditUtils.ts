@@ -1,5 +1,5 @@
 
-import { Canvas as FabricCanvas, Image as FabricImage, Rect, Object as FabricObject } from 'fabric';
+import { Canvas as FabricCanvas, Image as FabricImage, Rect, Object as FabricObject, Text } from 'fabric';
 
 /**
  * Creates a crop rectangle on the canvas
@@ -122,7 +122,7 @@ export const loadImageOntoCanvas = (
   img.onerror = (err) => {
     console.error('Error loading image:', err);
     // Add a placeholder or error message to the canvas
-    const text = new fabric.Text('Image could not be loaded', {
+    const text = new Text('Image could not be loaded', {
       left: canvas.getWidth() / 2,
       top: canvas.getHeight() / 2,
       originX: 'center',
