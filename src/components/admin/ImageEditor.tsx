@@ -1,7 +1,7 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { getCanvasImageData } from '@/lib/utils/imageEditUtils';
+import { getCanvasImageData, preloadImage } from '@/lib/utils/imageEditUtils';
 import { Loader2 } from 'lucide-react';
 
 // Import our custom hooks
@@ -23,6 +23,13 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ image, onSave, isOpen, onClos
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [tool, setTool] = useState<'move' | 'crop'>('move');
   const [isLoading, setIsLoading] = useState(true);
+
+  // Preload the image when component mounts or image changes
+  useEffect(() => {
+    if (image && isOpen) {
+      preloadImage(image).catch(err => console.error('Failed to preload image:', err));
+    }
+  }, [image, isOpen]);
 
   // Use our custom hooks
   const { canvas, imageLoaded } = useCanvas(canvasRef, image, isOpen);
@@ -48,13 +55,6 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ image, onSave, isOpen, onClos
     }
   }, [imageLoaded]);
 
-  // Debug image loading
-  useEffect(() => {
-    console.log('ImageEditor: Image URL =', image);
-    console.log('ImageEditor: Is canvas ready =', !!canvas);
-    console.log('ImageEditor: Image loaded =', imageLoaded);
-  }, [image, canvas, imageLoaded]);
-
   // Handle tool changes
   const handleToolChange = (newTool: 'move' | 'crop') => {
     setTool(newTool);
@@ -77,6 +77,10 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ image, onSave, isOpen, onClos
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[900px] h-[90vh] max-h-[800px] flex flex-col">
+        <DialogHeader>
+          <DialogTitle>Edit Image</DialogTitle>
+        </DialogHeader>
+        
         {isLoading ? (
           <div className="flex-1 flex items-center justify-center">
             <div className="flex flex-col items-center gap-2">
