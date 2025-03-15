@@ -6,7 +6,7 @@ import Footer from '@/components/Footer';
 import ArticleGrid from '@/components/ArticleGrid';
 import { getArticlesByCategory } from '@/lib/queries/articleQueries';
 import { getArticlesFromStorage } from '@/lib/utils/storageUtils';
-import { Article } from '@/lib/types/article';
+import { Article, defaultArticles } from '@/lib/types/article';
 
 const ArticlesBlog: React.FC = () => {
   const [articles, setArticles] = useState<Article[]>(getArticlesByCategory('blog'));
@@ -14,14 +14,20 @@ const ArticlesBlog: React.FC = () => {
   // Update articles with the latest from storage (including comments)
   useEffect(() => {
     const storedArticles = getArticlesFromStorage();
-    const blogArticles = storedArticles
+    
+    let blogArticles = storedArticles
       .filter(article => article.category.toLowerCase() === 'blog')
       // Sort articles by date (newest first)
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
       
-    if (blogArticles.length > 0) {
-      setArticles(blogArticles);
+    // If no stored articles, use the default article
+    if (blogArticles.length === 0 && defaultArticles.length > 0) {
+      blogArticles = defaultArticles
+        .filter(article => article.category.toLowerCase() === 'blog')
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     }
+    
+    setArticles(blogArticles);
   }, []);
 
   return (

@@ -20,7 +20,7 @@ const ArticlesReviews: React.FC = () => {
           
           {articles.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-xl text-muted-foreground">No reviews available yet.</p>
+              <p className="text-xl text-muted-foreground">There are not yet any reviews to see, but there will be soon.</p>
             </div>
           ) : (
             <ArticleGrid articles={articles} columns={3} />
