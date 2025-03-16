@@ -28,7 +28,7 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
         <label className="text-sm font-medium">Title</label>
         <Input 
           name="title"
-          value={title}
+          value={title || ''}
           onChange={onInputChange}
           placeholder="Article title"
         />
@@ -38,7 +38,7 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
         <label className="text-sm font-medium">Slug</label>
         <Input 
           name="slug"
-          value={slug}
+          value={slug || ''}
           onChange={onInputChange}
           placeholder="url-friendly-slug (optional)"
         />
@@ -48,7 +48,7 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
         <label className="text-sm font-medium">Author (optional)</label>
         <Input 
           name="author"
-          value={author}
+          value={author || ''}
           onChange={onInputChange}
           placeholder="Author name (optional)"
         />
@@ -58,7 +58,7 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
         <label className="text-sm font-medium">Date</label>
         <Input 
           name="date"
-          value={date}
+          value={date || ''}
           onChange={onInputChange}
           placeholder="Month DD, YYYY"
         />
@@ -67,7 +67,7 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
       <div className="space-y-2">
         <label className="text-sm font-medium">Category</label>
         <Select 
-          value={category} 
+          value={category || 'Blog'} 
           onValueChange={(value) => onSelectChange('category', value)}
         >
           <SelectTrigger>

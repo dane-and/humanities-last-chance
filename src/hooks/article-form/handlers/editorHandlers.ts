@@ -10,6 +10,10 @@ export const createEditorHandlers = (
 ) => {
   // Handle rich text editor change
   const handleEditorChange = (content: string) => {
+    if (content === undefined || content === null) {
+      content = '';
+    }
+    
     setFormData({
       ...formData,
       content

@@ -16,12 +16,12 @@ export const handleArticleCreateOrUpdate = async (
   onNewArticle: () => void
 ): Promise<void> => {
   // Validate form
-  if (!formData.title.trim()) {
+  if (!formData.title?.trim()) {
     toast.error("Title is required");
     return;
   }
   
-  if (!formData.content.trim()) {
+  if (!formData.content?.trim()) {
     toast.error("Content is required");
     return;
   }
@@ -35,57 +35,85 @@ export const handleArticleCreateOrUpdate = async (
   
   try {
     let updatedList: Article[];
+    const toastId = toast.loading(selectedArticle ? "Updating article..." : "Creating article...");
     
-    if (selectedArticle) {
-      // Update existing article
-      toast.loading("Updating article...");
-      
-      try {
+    try {
+      if (selectedArticle) {
+        // Update existing article
         // Try to update on the server first
         await updateArticle(formData.id, articleWithTags);
-      } catch (error) {
-        console.warn('Server update failed, falling back to local update only');
-      }
-      
-      // Update local list regardless of server success/failure
-      updatedList = articleList.map(article => 
-        article.id === formData.id ? articleWithTags : article
-      );
-      
-      toast.success("Article updated successfully");
-    } else {
-      // Create new article
-      toast.loading("Creating article...");
-      
-      const newArticle: Article = {
-        ...articleWithTags,
-        id: crypto.randomUUID(),
-        comments: []
-      };
-      
-      try {
+        
+        // Update local list
+        updatedList = articleList.map(article => 
+          article.id === formData.id ? articleWithTags : article
+        );
+        
+        toast.success("Article updated successfully", {
+          id: toastId
+        });
+      } else {
+        // Create new article
+        const newArticle: Article = {
+          ...articleWithTags,
+          id: crypto.randomUUID(),
+          comments: []
+        };
+        
         // Try to create on the server first
         await createArticle(newArticle);
-      } catch (error) {
-        console.warn('Server create failed, falling back to local create only');
+        
+        // Add to local list
+        updatedList = [...articleList, newArticle];
+        
+        toast.success("Article created successfully", {
+          id: toastId
+        });
+        onNewArticle();
       }
       
-      // Add to local list regardless of server success/failure
-      updatedList = [...articleList, newArticle];
+      // Update the article list in the component state
+      onArticleListUpdate(updatedList);
       
-      toast.success("Article created successfully");
-      onNewArticle();
+      // Save changes to local storage to ensure they're visible immediately
+      await saveArticlesToStorage(updatedList);
+      
+      // Dispatch custom event for other components to know data has changed
+      window.dispatchEvent(new CustomEvent('articlesUpdated'));
+    } catch (serverError) {
+      console.warn('Server operation failed, falling back to local update only', serverError);
+      
+      if (selectedArticle) {
+        // Local update fallback for existing article
+        updatedList = articleList.map(article => 
+          article.id === formData.id ? articleWithTags : article
+        );
+        
+        toast.error("Server update failed. Changes saved locally only.", {
+          id: toastId,
+          duration: 4000
+        });
+      } else {
+        // Local creation fallback for new article
+        const newArticle: Article = {
+          ...articleWithTags,
+          id: crypto.randomUUID(),
+          comments: []
+        };
+        
+        updatedList = [...articleList, newArticle];
+        
+        toast.error("Server create failed. Article saved locally only.", {
+          id: toastId,
+          duration: 4000
+        });
+        onNewArticle();
+      }
+      
+      // Still update locally
+      onArticleListUpdate(updatedList);
+      await saveArticlesToStorage(updatedList);
+      window.dispatchEvent(new CustomEvent('articlesUpdated'));
     }
-    
-    // Update the article list in the component state
-    onArticleListUpdate(updatedList);
-    
-    // Save changes to local storage to ensure they're visible immediately
-    await saveArticlesToStorage(updatedList);
-    
-    // Dispatch custom event for other components to know data has changed
-    const event = new CustomEvent('articlesUpdated');
-    window.dispatchEvent(event);
   } catch (error) {
     console.error('Error saving article:', error);
     toast.error("Error saving article. Please try again.");
