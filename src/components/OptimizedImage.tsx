@@ -16,6 +16,11 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   caption,
   captionClassName = ''
 }) => {
+  // If src is empty, don't render anything
+  if (!src || src.trim() === '') {
+    return null;
+  }
+  
   const [imageLoaded, setImageLoaded] = useState(false);
   const [error, setError] = useState(false);
   

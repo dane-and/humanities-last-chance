@@ -96,20 +96,6 @@ const BlogSection: React.FC<BlogSectionProps> = ({
               )}
             </div>
             
-            {/* Only render image if it exists and is not empty */}
-            {post.image && post.image.trim() !== '' && (
-              <div className="my-4">
-                <AspectRatio ratio={21 / 9} className="overflow-hidden rounded-lg">
-                  <OptimizedImage
-                    src={post.image}
-                    alt={post.title}
-                    className="w-full h-full object-cover object-top"
-                    caption={post.imageCaption}
-                  />
-                </AspectRatio>
-              </div>
-            )}
-            
             <div 
               className="text-muted-foreground"
               dangerouslySetInnerHTML={{ __html: post.content }}
