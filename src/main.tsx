@@ -14,6 +14,14 @@ if (linkEl) {
   }
 }
 
+// Force refresh for all favicon-related links
+document.querySelectorAll("link[rel='icon'], link[rel='apple-touch-icon'], link[rel='manifest']").forEach(link => {
+  const href = link.getAttribute('href');
+  if (href) {
+    link.setAttribute('href', href + '&t=' + new Date().getTime());
+  }
+});
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />
