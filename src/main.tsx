@@ -33,7 +33,8 @@ const forceReload = () => {
     const favicon16 = document.createElement('link');
     favicon16.rel = 'icon';
     favicon16.type = 'image/png';
-    favicon16.sizes = '16x16';
+    // Use setAttribute instead of direct assignment for read-only properties
+    favicon16.setAttribute('sizes', '16x16');
     favicon16.href = `/site-favicon-16x16.png?${version}&t=${timestamp}`;
     document.head.appendChild(favicon16);
   }
@@ -42,7 +43,8 @@ const forceReload = () => {
     const favicon32 = document.createElement('link');
     favicon32.rel = 'icon';
     favicon32.type = 'image/png';
-    favicon32.sizes = '32x32';
+    // Use setAttribute instead of direct assignment for read-only properties
+    favicon32.setAttribute('sizes', '32x32');
     favicon32.href = `/site-favicon-32x32.png?${version}&t=${timestamp}`;
     document.head.appendChild(favicon32);
   }
