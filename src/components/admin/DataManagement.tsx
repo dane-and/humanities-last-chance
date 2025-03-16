@@ -1,7 +1,6 @@
 
 import React, { useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { exportArticlesData, importArticlesData } from '@/lib/utils/storage/dataExportImport';
 import { toast } from 'sonner';
 import { 
   Alert, 
@@ -18,6 +17,24 @@ const DataManagement: React.FC<DataManagementProps> = ({ onDataImported }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [importing, setImporting] = useState(false);
   
+  const handleExport = () => {
+    try {
+      const articles = localStorage.getItem('hlc-articles') || '[]';
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(articles);
+      const downloadAnchorNode = document.createElement('a');
+      downloadAnchorNode.setAttribute("href", dataStr);
+      downloadAnchorNode.setAttribute("download", `humanities-last-chance-articles-${new Date().toISOString().slice(0,10)}.json`);
+      document.body.appendChild(downloadAnchorNode);
+      downloadAnchorNode.click();
+      downloadAnchorNode.remove();
+      
+      toast.success("Articles exported successfully");
+    } catch (error) {
+      console.error('Error exporting articles:', error);
+      toast.error("Failed to export articles");
+    }
+  };
+  
   const handleImport = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -28,11 +45,14 @@ const DataManagement: React.FC<DataManagementProps> = ({ onDataImported }) => {
     reader.onload = (e) => {
       try {
         const jsonData = e.target?.result as string;
-        if (importArticlesData(jsonData)) {
+        const articles = JSON.parse(jsonData);
+        
+        if (Array.isArray(articles)) {
+          localStorage.setItem('hlc-articles', jsonData);
           toast.success('Articles imported successfully');
           onDataImported();
         } else {
-          toast.error('Failed to import articles');
+          throw new Error('Invalid data format');
         }
       } catch (error) {
         toast.error('Invalid file format');
@@ -69,7 +89,7 @@ const DataManagement: React.FC<DataManagementProps> = ({ onDataImported }) => {
       <div className="flex flex-col sm:flex-row gap-2">
         <Button 
           variant="outline" 
-          onClick={exportArticlesData}
+          onClick={handleExport}
           className="flex gap-2"
         >
           <Download className="h-4 w-4" />

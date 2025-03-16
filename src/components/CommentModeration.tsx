@@ -1,10 +1,9 @@
 
 import React from 'react';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 import { Comment } from '@/lib/types/article';
 import { Button } from '@/components/ui/button';
 import { Trash } from 'lucide-react';
-import { removeCommentFromArticle } from '@/lib/utils/storage/commentStorage';
 
 interface CommentModerationProps {
   articleId: string;
@@ -17,24 +16,40 @@ const CommentModeration: React.FC<CommentModerationProps> = ({
   comments,
   onCommentRemoved
 }) => {
-  const { toast } = useToast();
-
   const handleRemoveComment = (commentId: string) => {
     if (confirm('Are you sure you want to remove this comment?')) {
-      const success = removeCommentFromArticle(articleId, commentId);
-      
-      if (success) {
-        toast({
-          title: "Success",
-          description: "Comment removed successfully",
-        });
+      try {
+        // Remove comment using localStorage
+        const savedArticles = localStorage.getItem('hlc-articles');
+        if (!savedArticles) {
+          throw new Error('Articles not found in storage');
+        }
+        
+        const articles = JSON.parse(savedArticles);
+        const articleIndex = articles.findIndex((article: any) => article.id === articleId);
+        
+        if (articleIndex === -1) {
+          throw new Error('Article not found');
+        }
+        
+        const article = articles[articleIndex];
+        
+        if (!article.comments) {
+          throw new Error('No comments found for this article');
+        }
+        
+        // Filter out the comment to be removed
+        article.comments = article.comments.filter((comment: any) => comment.id !== commentId);
+        articles[articleIndex] = article;
+        
+        // Save updated articles
+        localStorage.setItem('hlc-articles', JSON.stringify(articles));
+        
+        toast.success("Comment removed successfully");
         onCommentRemoved();
-      } else {
-        toast({
-          title: "Error",
-          description: "Failed to remove comment. Please try again.",
-          variant: "destructive",
-        });
+      } catch (error) {
+        console.error('Error removing comment:', error);
+        toast.error("Failed to remove comment. Please try again.");
       }
     }
   };

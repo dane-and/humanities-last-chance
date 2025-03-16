@@ -1,22 +1,7 @@
 
 import { useState, useEffect } from 'react';
-import { Article } from '@/lib/types/article';
-import { useToast } from '@/hooks/use-toast';
-
-export interface ArticleFormState {
-  id: string;
-  title: string;
-  slug: string;
-  author: string;
-  date: string;
-  category: string;
-  image: string;
-  imageCaption: string;
-  excerpt: string;
-  content: string;
-  featured: boolean;
-  tags: string[];
-}
+import { Article } from '../lib/types/article';
+import { toast } from 'sonner';
 
 export const useArticleForm = (
   articleList: Article[],
@@ -24,163 +9,169 @@ export const useArticleForm = (
   onArticleListUpdate: (updatedList: Article[]) => void,
   onNewArticle: () => void
 ) => {
-  const { toast } = useToast();
-  const [selectedTags, setSelectedTags] = useState<string[]>(selectedArticle?.tags || []);
+  // Default form state
+  const defaultFormState = {
+    id: '',
+    title: '',
+    slug: '',
+    author: '',
+    date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+    category: 'Blog',
+    image: '',
+    excerpt: '',
+    content: '',
+    featured: false,
+    comments: []
+  };
+
+  // Form state
+  const [formData, setFormData] = useState<Article>(defaultFormState);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [isImageEditorOpen, setIsImageEditorOpen] = useState(false);
-  
-  const [formData, setFormData] = useState<ArticleFormState>({
-    id: selectedArticle?.id || '',
-    title: selectedArticle?.title || '',
-    slug: selectedArticle?.slug || '',
-    author: selectedArticle?.author || '',
-    date: selectedArticle?.date || new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
-    category: selectedArticle?.category || 'Blog',
-    image: selectedArticle?.image || '',
-    imageCaption: selectedArticle?.imageCaption || '',
-    excerpt: selectedArticle?.excerpt || '',
-    content: selectedArticle?.content || '',
-    featured: selectedArticle?.featured || false,
-    tags: selectedArticle?.tags || []
-  });
-  
-  // Reset form data when selected article changes
+
+  // Set form data when selected article changes
   useEffect(() => {
     if (selectedArticle) {
-      setFormData({
-        id: selectedArticle.id || '',
-        title: selectedArticle.title || '',
-        slug: selectedArticle.slug || '',
-        author: selectedArticle.author || '',
-        date: selectedArticle.date || new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
-        category: selectedArticle.category || 'Blog',
-        image: selectedArticle.image || '',
-        imageCaption: selectedArticle.imageCaption || '',
-        excerpt: selectedArticle.excerpt || '',
-        content: selectedArticle.content || '',
-        featured: selectedArticle.featured || false,
-        tags: selectedArticle.tags || []
-      });
+      setFormData(selectedArticle);
       setSelectedTags(selectedArticle.tags || []);
     } else {
-      setFormData({
-        id: '',
-        title: '',
-        slug: '',
-        author: '',
-        date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
-        category: 'Blog',
-        image: '',
-        imageCaption: '',
-        excerpt: '',
-        content: '',
-        featured: false,
-        tags: []
-      });
+      setFormData(defaultFormState);
       setSelectedTags([]);
     }
   }, [selectedArticle]);
 
-  // Event handlers
+  // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    
+    // If changing title and there's no custom slug yet, auto-generate one
+    if (name === 'title' && (!formData.slug || formData.slug === generateSlug(formData.title))) {
+      setFormData({
+        ...formData,
+        title: value,
+        slug: generateSlug(value)
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value
+      });
+    }
   };
 
+  // Handle rich text editor change
   const handleEditorChange = (content: string) => {
-    setFormData(prev => ({ ...prev, content }));
-  };
-
-  const handleSelectChange = (name: string, value: string) => {
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = e.target;
-    setFormData(prev => ({ ...prev, [name]: checked }));
-  };
-
-  const handleTagsChange = (newTags: string[]) => {
-    setSelectedTags(newTags);
-    setFormData(prev => ({ ...prev, tags: newTags }));
-  };
-
-  const handleImageChange = (imageData: string) => {
-    setFormData(prev => ({ ...prev, image: imageData }));
-  };
-
-  const handleImageCaptionChange = (caption: string) => {
-    setFormData(prev => ({ ...prev, imageCaption: caption }));
-  };
-
-  const handleSaveEditedImage = (editedImage: string) => {
-    setFormData(prev => ({ ...prev, image: editedImage }));
-    setIsImageEditorOpen(false);
-    toast({
-      title: 'Success',
-      description: 'Image edited successfully.',
+    setFormData({
+      ...formData,
+      content
     });
   };
 
+  // Handle select change
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  // Handle checkbox change
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: checked
+    });
+  };
+
+  // Handle tags change
+  const handleTagsChange = (tags: string[]) => {
+    setSelectedTags(tags);
+    setFormData({
+      ...formData,
+      tags
+    });
+  };
+
+  // Handle image change
+  const handleImageChange = (url: string) => {
+    setFormData({
+      ...formData,
+      image: url
+    });
+  };
+  
+  // Handle save edited image
+  const handleSaveEditedImage = (editedImage: string) => {
+    setFormData({
+      ...formData,
+      image: editedImage
+    });
+  };
+
+  // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.title || !formData.content) {
-      toast({
-        title: 'Error',
-        description: 'Please fill in all required fields (title, content)',
-        variant: 'destructive',
-      });
+    // Validate form
+    if (!formData.title.trim()) {
+      toast.error("Title is required");
       return;
     }
     
-    if (!formData.slug) {
-      formData.slug = formData.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+    if (!formData.content.trim()) {
+      toast.error("Content is required");
+      return;
     }
     
-    if (!formData.id) {
-      formData.id = Math.random().toString(36).substring(2, 15);
-    }
+    let updatedList: Article[];
     
-    let updatedList;
     if (selectedArticle) {
+      // Update existing article
       updatedList = articleList.map(article => 
-        article.id === formData.id ? { ...formData as Article } : article
+        article.id === formData.id ? { ...formData, tags: selectedTags } : article
       );
-      toast({
-        title: 'Success',
-        description: 'Article updated successfully',
-      });
+      toast.success("Article updated successfully");
     } else {
-      updatedList = [...articleList, formData as Article];
-      toast({
-        title: 'Success',
-        description: 'New article created successfully',
-      });
+      // Create new article
+      const newArticle: Article = {
+        ...formData,
+        id: crypto.randomUUID(),
+        tags: selectedTags,
+        comments: []
+      };
+      
+      updatedList = [...articleList, newArticle];
+      toast.success("Article created successfully");
+      onNewArticle();
     }
     
     onArticleListUpdate(updatedList);
-    localStorage.setItem('hlc-admin-articles', JSON.stringify(updatedList));
-    
-    if (!selectedArticle) {
-      onNewArticle();
-    }
+    localStorage.setItem('hlc-articles', JSON.stringify(updatedList));
   };
 
+  // Handle article deletion
   const handleDelete = () => {
     if (!selectedArticle) return;
     
-    if (confirm('Are you sure you want to delete this article?')) {
+    if (window.confirm(`Are you sure you want to delete "${selectedArticle.title}"?`)) {
       const updatedList = articleList.filter(article => article.id !== selectedArticle.id);
       onArticleListUpdate(updatedList);
-      localStorage.setItem('hlc-admin-articles', JSON.stringify(updatedList));
-      
+      localStorage.setItem('hlc-articles', JSON.stringify(updatedList));
       onNewArticle();
-      
-      toast({
-        title: 'Success',
-        description: 'Article deleted successfully',
-      });
+      toast.success("Article deleted successfully");
     }
+  };
+
+  // Helper function to generate slug from title
+  const generateSlug = (title: string): string => {
+    return title
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, '') // Remove special characters
+      .replace(/\s+/g, '-') // Replace spaces with hyphens
+      .replace(/-+/g, '-') // Replace multiple hyphens with a single one
+      .trim();
   };
 
   return {
@@ -194,7 +185,6 @@ export const useArticleForm = (
     handleCheckboxChange,
     handleTagsChange,
     handleImageChange,
-    handleImageCaptionChange,
     handleSaveEditedImage,
     handleSubmit,
     handleDelete

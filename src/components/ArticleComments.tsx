@@ -1,12 +1,11 @@
 
 import React, { useState } from 'react';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 import { Comment } from '@/lib/types/article';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { ThumbsUp, ThumbsDown } from 'lucide-react';
-import { addComment, updateCommentVote } from '@/lib/api/commentApi';
 
 interface ArticleCommentsProps {
   articleId: string;
@@ -19,76 +18,124 @@ const ArticleComments: React.FC<ArticleCommentsProps> = ({
   comments,
   onCommentAdded
 }) => {
-  const { toast } = useToast();
   const [name, setName] = useState('');
   const [content, setContent] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!name.trim()) {
-      toast({
-        title: "Error",
-        description: "Please enter your name",
-        variant: "destructive",
-      });
+      toast.error("Please enter your name");
       return;
     }
     
     if (!content.trim()) {
-      toast({
-        title: "Error",
-        description: "Please enter a comment",
-        variant: "destructive",
-      });
+      toast.error("Please enter a comment");
       return;
     }
     
     setSubmitting(true);
     
     try {
-      await addComment(articleId, name.trim(), content.trim());
+      // Add comment using localStorage
+      const savedArticles = localStorage.getItem('hlc-articles');
+      if (!savedArticles) {
+        throw new Error('Articles not found in storage');
+      }
       
-      toast({
-        title: "Success",
-        description: "Your comment has been added",
-      });
+      const articles = JSON.parse(savedArticles);
+      const articleIndex = articles.findIndex((article: any) => article.id === articleId);
+      
+      if (articleIndex === -1) {
+        throw new Error('Article not found');
+      }
+      
+      const article = articles[articleIndex];
+      
+      if (!article.comments) {
+        article.comments = [];
+      }
+      
+      // Create new comment
+      const newComment: Comment = {
+        id: crypto.randomUUID(),
+        articleId,
+        name: name.trim(),
+        content: content.trim(),
+        date: new Date().toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        }),
+        likes: 0,
+        dislikes: 0
+      };
+      
+      article.comments.push(newComment);
+      articles[articleIndex] = article;
+      
+      // Save updated articles
+      localStorage.setItem('hlc-articles', JSON.stringify(articles));
+      
+      toast.success("Your comment has been added");
       
       setName('');
       setContent('');
       onCommentAdded();
     } catch (error) {
       console.error('Error adding comment:', error);
-      
-      toast({
-        title: "Error",
-        description: "Failed to add your comment. Please try again later.",
-        variant: "destructive",
-      });
+      toast.error("Failed to add your comment. Please try again later.");
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handleVote = async (commentId: string, voteType: 'like' | 'dislike') => {
+  const handleVote = (commentId: string, voteType: 'like' | 'dislike') => {
     try {
-      await updateCommentVote(commentId, voteType);
+      // Update vote using localStorage
+      const savedArticles = localStorage.getItem('hlc-articles');
+      if (!savedArticles) {
+        throw new Error('Articles not found in storage');
+      }
       
-      toast({
-        title: "Success",
-        description: `You ${voteType}d this comment`,
-      });
+      const articles = JSON.parse(savedArticles);
+      const articleIndex = articles.findIndex((article: any) => article.id === articleId);
+      
+      if (articleIndex === -1) {
+        throw new Error('Article not found');
+      }
+      
+      const article = articles[articleIndex];
+      
+      if (!article.comments) {
+        throw new Error('No comments found for this article');
+      }
+      
+      const commentIndex = article.comments.findIndex((comment: any) => comment.id === commentId);
+      
+      if (commentIndex === -1) {
+        throw new Error('Comment not found');
+      }
+      
+      // Update vote count
+      if (voteType === 'like') {
+        article.comments[commentIndex].likes += 1;
+      } else {
+        article.comments[commentIndex].dislikes += 1;
+      }
+      
+      articles[articleIndex] = article;
+      
+      // Save updated articles
+      localStorage.setItem('hlc-articles', JSON.stringify(articles));
+      
+      toast.success(`You ${voteType}d this comment`);
       
       onCommentAdded(); // Refresh comments
     } catch (error) {
       console.error('Error updating vote:', error);
-      
-      toast({
-        title: "Error",
-        description: "Failed to update vote. Please try again later.",
-        variant: "destructive",
-      });
+      toast.error("Failed to update vote. Please try again later.");
     }
   };
 

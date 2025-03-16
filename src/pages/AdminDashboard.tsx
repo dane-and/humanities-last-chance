@@ -3,9 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { articles, Article } from '@/lib/articles';
-import { Page, getPagesFromStorage } from '@/lib/types/page';
-import { useToast } from '@/hooks/use-toast';
+import { articles as defaultArticles, Article } from '@/lib/articles';
+import { Page, getPagesFromStorage, savePagesToStorage } from '@/lib/types/page';
+import { toast } from 'sonner';
 
 // Admin components
 import AdminHeader from '@/components/admin/AdminHeader';
@@ -18,7 +18,6 @@ import DataManagement from '@/components/admin/DataManagement';
 const AdminDashboard: React.FC = () => {
   const { isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
-  const { toast } = useToast();
   
   // Articles state
   const [articleList, setArticleList] = useState<Article[]>([]);
@@ -30,12 +29,18 @@ const AdminDashboard: React.FC = () => {
 
   const loadData = () => {
     // Load articles from localStorage or use default
-    const savedArticles = localStorage.getItem('hlc-admin-articles');
+    const savedArticles = localStorage.getItem('hlc-articles');
     if (savedArticles) {
-      setArticleList(JSON.parse(savedArticles));
+      try {
+        setArticleList(JSON.parse(savedArticles));
+      } catch (e) {
+        console.error('Failed to parse articles from localStorage', e);
+        setArticleList(defaultArticles);
+        localStorage.setItem('hlc-articles', JSON.stringify(defaultArticles));
+      }
     } else {
-      setArticleList(articles);
-      localStorage.setItem('hlc-admin-articles', JSON.stringify(articles));
+      setArticleList(defaultArticles);
+      localStorage.setItem('hlc-articles', JSON.stringify(defaultArticles));
     }
     
     // Load pages
@@ -46,6 +51,7 @@ const AdminDashboard: React.FC = () => {
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/admin');
+      return;
     }
     
     loadData();
@@ -79,19 +85,33 @@ const AdminDashboard: React.FC = () => {
   };
   
   const handleDeleteArticle = (id: string) => {
-    const updatedList = articleList.filter(article => article.id !== id);
-    setArticleList(updatedList);
-    localStorage.setItem('hlc-admin-articles', JSON.stringify(updatedList));
-    
-    // If the deleted article was selected, clear the selection
-    if (selectedArticle && selectedArticle.id === id) {
-      setSelectedArticle(null);
+    if (window.confirm('Are you sure you want to delete this article?')) {
+      const updatedList = articleList.filter(article => article.id !== id);
+      setArticleList(updatedList);
+      localStorage.setItem('hlc-articles', JSON.stringify(updatedList));
+      
+      // If the deleted article was selected, clear the selection
+      if (selectedArticle && selectedArticle.id === id) {
+        setSelectedArticle(null);
+      }
+      
+      toast.success("Article deleted successfully");
     }
-    
-    toast({
-      title: "Article Deleted",
-      description: "The article has been successfully deleted.",
-    });
+  };
+  
+  const handleDeletePage = (id: string) => {
+    if (window.confirm('Are you sure you want to delete this page?')) {
+      const updatedList = pageList.filter(page => page.id !== id);
+      setPageList(updatedList);
+      savePagesToStorage(updatedList);
+      
+      // If the deleted page was selected, clear the selection
+      if (selectedPage && selectedPage.id === id) {
+        setSelectedPage(null);
+      }
+      
+      toast.success("Page deleted successfully");
+    }
   };
 
   return (
@@ -134,6 +154,7 @@ const AdminDashboard: React.FC = () => {
               selectedPage={selectedPage}
               onPageSelect={handlePageSelect}
               onNewPage={handleNewPage}
+              onDeletePage={handleDeletePage}
             />
             
             <PageForm 
