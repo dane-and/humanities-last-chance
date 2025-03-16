@@ -12,7 +12,7 @@ const PageTemplate: React.FC<PageTemplateProps> = ({ slug }) => {
   const { getPageBySlug, isLoading } = usePages();
   const pageContent = getPageBySlug(slug);
   
-  // Enhanced sanitization to prevent XSS
+  // Enhanced sanitization to prevent XSS attacks, specifically the onloadstart vulnerability
   const sanitizedContent = pageContent ? sanitizeHtml(pageContent.content, {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 'p', 'br', 'ul', 'ol', 'li']),
     allowedAttributes: {

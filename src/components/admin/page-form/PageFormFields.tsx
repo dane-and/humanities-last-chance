@@ -3,6 +3,7 @@ import React from 'react';
 import { Input } from '@/components/ui/input';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import sanitizeHtml from 'sanitize-html';
 
 interface PageFormFieldsProps {
   title: string;
@@ -40,6 +41,29 @@ const PageFormFields: React.FC<PageFormFieldsProps> = ({
     'link', 'image'
   ];
 
+  // Enhanced sanitization to specifically prevent the onloadstart vulnerability
+  const handleEditorContentChange = (content: string) => {
+    const sanitized = sanitizeHtml(content, {
+      allowedTags: sanitizeHtml.defaults.allowedTags.concat(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 'p', 'br', 'ul', 'ol', 'li', 'strong', 'em', 'blockquote', 'pre', 'code']),
+      allowedAttributes: {
+        ...sanitizeHtml.defaults.allowedAttributes,
+        'img': ['src', 'alt', 'title', 'width', 'height', 'class'],
+        'a': ['href', 'name', 'target', 'rel', 'class'],
+      },
+      // Specifically disallow all event handlers
+      disallowedTagsMode: 'discard',
+      allowedStyles: {
+        '*': {
+          'color': [/^#(0x)?[0-9a-f]+$/i, /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/],
+          'text-align': [/^left$/, /^right$/, /^center$/, /^justify$/],
+          'font-size': [/^\d+(?:px|em|%)$/]
+        }
+      }
+    });
+    
+    onEditorChange(sanitized);
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div className="space-y-2">
@@ -70,7 +94,7 @@ const PageFormFields: React.FC<PageFormFieldsProps> = ({
           <ReactQuill 
             theme="snow"
             value={content}
-            onChange={onEditorChange}
+            onChange={handleEditorContentChange}
             modules={modules}
             formats={formats}
             placeholder="Write your page content here..."

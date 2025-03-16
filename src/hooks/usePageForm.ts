@@ -52,18 +52,17 @@ export const usePageForm = (
     }
   };
 
-  // Handle rich text editor change with sanitization
+  // Handle rich text editor change with enhanced sanitization
   const handleEditorChange = (content: string) => {
-    // Sanitize HTML content before saving
+    // Enhanced sanitization to specifically prevent the onloadstart vulnerability
     const sanitizedContent = sanitizeHtml(content, {
       allowedTags: sanitizeHtml.defaults.allowedTags.concat(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 'p', 'br', 'ul', 'ol', 'li', 'strong', 'em', 'blockquote', 'pre', 'code']),
       allowedAttributes: {
         ...sanitizeHtml.defaults.allowedAttributes,
         'img': ['src', 'alt', 'title', 'width', 'height', 'class'],
-        // Explicitly exclude dangerous attributes
-        '*': ['class', 'id', 'style']
+        'a': ['href', 'name', 'target', 'rel', 'class'],
       },
-      // Specifically disallow all event handlers
+      // Explicitly disallow all event handlers including onloadstart
       disallowedTagsMode: 'discard',
       allowedStyles: {
         '*': {
@@ -95,6 +94,24 @@ export const usePageForm = (
       return;
     }
     
+    // Apply one more round of sanitization before saving
+    const sanitizedContent = sanitizeHtml(formData.content, {
+      allowedTags: sanitizeHtml.defaults.allowedTags.concat(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 'p', 'br', 'ul', 'ol', 'li', 'strong', 'em', 'blockquote', 'pre', 'code']),
+      allowedAttributes: {
+        ...sanitizeHtml.defaults.allowedAttributes,
+        'img': ['src', 'alt', 'title', 'width', 'height', 'class'],
+        'a': ['href', 'name', 'target', 'rel', 'class'],
+      },
+      disallowedTagsMode: 'discard',
+      allowedStyles: {
+        '*': {
+          'color': [/^#(0x)?[0-9a-f]+$/i, /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/],
+          'text-align': [/^left$/, /^right$/, /^center$/, /^justify$/],
+          'font-size': [/^\d+(?:px|em|%)$/]
+        }
+      }
+    });
+    
     const currentDate = new Date().toLocaleDateString('en-US', { 
       year: 'numeric', 
       month: 'long', 
@@ -108,6 +125,7 @@ export const usePageForm = (
       updatedList = pageList.map(page => 
         page.id === formData.id ? { 
           ...formData, 
+          content: sanitizedContent,
           lastUpdated: currentDate,
           // For system pages, only allow content updates
           title: page.isSystem ? page.title : formData.title,
@@ -119,6 +137,7 @@ export const usePageForm = (
       // Create new page
       const newPage: Page = {
         ...formData,
+        content: sanitizedContent,
         id: `page_${crypto.randomUUID()}`,
         lastUpdated: currentDate,
         isSystem: false // New pages are never system pages

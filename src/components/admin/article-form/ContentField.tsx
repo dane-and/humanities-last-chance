@@ -37,17 +37,16 @@ const ContentField: React.FC<ContentFieldProps> = ({
     'link', 'image'
   ];
 
-  // Sanitize content before passing to the editor's onChange handler
+  // Enhanced sanitization to specifically prevent the onloadstart vulnerability
   const handleContentChange = (content: string) => {
     const sanitized = sanitizeHtml(content, {
       allowedTags: sanitizeHtml.defaults.allowedTags.concat(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 'p', 'br', 'ul', 'ol', 'li', 'strong', 'em', 'blockquote', 'pre', 'code']),
       allowedAttributes: {
         ...sanitizeHtml.defaults.allowedAttributes,
         'img': ['src', 'alt', 'title', 'width', 'height', 'class'],
-        // Explicitly exclude dangerous attributes
-        '*': ['class', 'id', 'style']
+        'a': ['href', 'name', 'target', 'rel', 'class'],
       },
-      // Specifically disallow all event handlers
+      // Specifically disallow all event handlers, including onloadstart
       disallowedTagsMode: 'discard',
       allowedStyles: {
         '*': {
