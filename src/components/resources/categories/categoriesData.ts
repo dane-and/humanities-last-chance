@@ -2,11 +2,41 @@
 import React from 'react';
 import { 
   Book, BookOpen, Globe, Database, Library, Monitor, 
-  BookAudio, Headphones, Radio, History, Mic 
+  BookAudio, Headphones, Radio, History, Mic, Bookmark
 } from 'lucide-react';
 import { ResourceCategory } from '../types';
 
 export const categoriesData: ResourceCategory[] = [
+  {
+    id: 'websites',
+    name: 'Websites & Blogs',
+    resources: [
+      {
+        name: 'Arts and Letters Daily',
+        url: 'https://www.aldaily.com/',
+        description: 'Curated links to intellectual news, essays, and reviews.',
+        icon: React.createElement(Globe, { className: "h-5 w-5 text-primary" })
+      },
+      {
+        name: 'Five Books',
+        url: 'https://fivebooks.com/',
+        description: 'Expert recommendations of the best books on given topics.',
+        icon: React.createElement(Bookmark, { className: "h-5 w-5 text-primary" })
+      },
+      {
+        name: 'The Common Reader',
+        url: 'https://www.commonreader.co.uk/',
+        description: 'Literary reviews and cultural commentary.',
+        icon: React.createElement(BookOpen, { className: "h-5 w-5 text-primary" })
+      },
+      {
+        name: 'Marginal Revolution',
+        url: 'https://marginalrevolution.com/',
+        description: 'Economics blog with wide-ranging intellectual interests.',
+        icon: React.createElement(Globe, { className: "h-5 w-5 text-primary" })
+      }
+    ]
+  },
   {
     id: 'audiobooks',
     name: 'Audiobooks & Podcasts',
