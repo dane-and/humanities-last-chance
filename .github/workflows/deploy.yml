@@ -26,7 +26,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build project
         run: npm run build
@@ -55,4 +55,3 @@ jobs:
           folder: dist # The folder the action should deploy
           branch: gh-pages # The branch the action should deploy to
           clean: true # Automatically remove deleted files from the deployment branch
-          token: ${{ secrets.GITHUB_TOKEN }} # Explicitly specify the token

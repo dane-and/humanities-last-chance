@@ -1,3 +1,3 @@
 
-// Re-export from the new structure for backward compatibility
+// Re-export from the image-upload directory
 export { default } from './image-upload/ImageUploadField';

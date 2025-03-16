@@ -1,10 +1,10 @@
 
-import { useState } from 'react';
-import { useArticleFormState } from './formState';
+import { useState, useEffect } from 'react';
 import { useArticleFormHandlers } from './formHandlers';
 import { useArticleFormSubmission } from './formSubmission';
 import { ArticleFormProps } from './types';
 import { Article } from '../../lib/types/article';
+import { defaultFormState } from './formState';
 
 export const useArticleForm = (
   articleList: ArticleFormProps['articleList'],
@@ -19,14 +19,25 @@ export const useArticleForm = (
     onNewArticle
   };
 
-  // Use state hooks
-  const { formData: initialFormData, selectedTags: initialTags, isImageEditorOpen: initialEditorState } = 
-    useArticleFormState({ selectedArticle });
+  // Initialize form data
+  const [formData, setFormData] = useState<Article>(
+    selectedArticle ? selectedArticle : defaultFormState
+  );
+  const [selectedTags, setSelectedTags] = useState<string[]>(
+    selectedArticle?.tags || []
+  );
+  const [isImageEditorOpen, setIsImageEditorOpen] = useState<boolean>(false);
   
-  // Create state hooks here to avoid the circular dependency issue
-  const [formData, setFormData] = useState<Article>(initialFormData);
-  const [selectedTags, setSelectedTags] = useState<string[]>(initialTags);
-  const [isImageEditorOpen, setIsImageEditorOpen] = useState<boolean>(initialEditorState);
+  // Update form when selected article changes
+  useEffect(() => {
+    if (selectedArticle) {
+      setFormData(selectedArticle);
+      setSelectedTags(selectedArticle.tags || []);
+    } else {
+      setFormData(defaultFormState);
+      setSelectedTags([]);
+    }
+  }, [selectedArticle]);
 
   // Get form handlers
   const handlers = useArticleFormHandlers(

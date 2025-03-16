@@ -1,9 +1,8 @@
 
 import { useState, useRef } from 'react';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 
 export const useImageUpload = (onImageChange: (image: string) => void) => {
-  const { toast } = useToast();
   const [isDragging, setIsDragging] = useState(false);
   const [caption, setCaption] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -39,20 +38,12 @@ export const useImageUpload = (onImageChange: (image: string) => void) => {
 
   const handleImageUpload = (file: File) => {
     if (!file.type.startsWith('image/')) {
-      toast({
-        title: 'Error',
-        description: 'The file must be an image.',
-        variant: 'destructive',
-      });
+      toast.error('The file must be an image.');
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      toast({
-        title: 'Error',
-        description: 'Image size should be less than 5MB.',
-        variant: 'destructive',
-      });
+      toast.error('Image size should be less than 5MB.');
       return;
     }
 
@@ -60,18 +51,11 @@ export const useImageUpload = (onImageChange: (image: string) => void) => {
     reader.onload = (e) => {
       if (e.target?.result) {
         onImageChange(e.target.result as string);
-        toast({
-          title: 'Success',
-          description: 'Image uploaded successfully.',
-        });
+        toast.success('Image uploaded successfully.');
       }
     };
     reader.onerror = () => {
-      toast({
-        title: 'Error',
-        description: 'Failed to read image file.',
-        variant: 'destructive',
-      });
+      toast.error('Failed to read image file.');
     };
     reader.readAsDataURL(file);
   };
