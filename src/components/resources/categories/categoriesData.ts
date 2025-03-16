@@ -80,7 +80,7 @@ export const categoriesData: ResourceCategory[] = [
       {
         name: 'Conversations with Tyler',
         url: 'https://podcasts.apple.com/us/podcast/conversations-with-tyler/id983795625',
-        description: 'Brilliant interviews, occasionally but not always with humanities scholars.',
+        description: 'Simply the best interviews, occasionally with humanities scholars.',
         icon: React.createElement(Mic, { className: "h-5 w-5 text-primary" })
       },
       {
