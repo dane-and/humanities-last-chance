@@ -46,7 +46,7 @@ const ArticleCard: React.FC<ArticleCardProps> = React.memo(({
           <Link to={`/article/${slug}`}>{title}</Link>
         </h3>
         
-        <div className="flex items-center gap-x-3 mb-3">
+        <div className="flex items-center gap-x-3 mb-1">
           <Link
             to={`/articles/${category.toLowerCase()}`}
             className={cn(
@@ -72,7 +72,7 @@ const ArticleCard: React.FC<ArticleCardProps> = React.memo(({
             <img
               src={image}
               alt={title}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
               loading="lazy"
               width={640}
               height={274}

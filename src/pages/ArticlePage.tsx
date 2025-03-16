@@ -91,14 +91,14 @@ const ArticlePage: React.FC = () => {
                 <OptimizedImage
                   src={currentArticle.image}
                   alt={currentArticle.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover object-top"
                   caption={currentArticle.imageCaption || 'J.M.W. Turner, "The Departure of the Fleet"'}
                 />
               </AspectRatio>
             </div>
           )}
           
-          <article className="prose prose-slate max-w-none [&_a]:text-primary [&_a]:no-underline hover:[&_a]:text-primary/80">
+          <article className="prose prose-slate max-w-none [&_a]:text-[#0EA5E9] [&_a]:no-underline hover:[&_a]:text-[#0EA5E9]/80">
             <div dangerouslySetInnerHTML={{ __html: currentArticle.content }} />
           </article>
           

@@ -32,7 +32,7 @@ const ArticleCardWithTags: React.FC<ArticleCardWithTagsProps> = React.memo(({
               <img
                 src={article.image}
                 alt={article.title}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                 loading="lazy"
                 width={640}
                 height={274}

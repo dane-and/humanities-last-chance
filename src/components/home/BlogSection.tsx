@@ -72,7 +72,7 @@ const BlogSection: React.FC<BlogSectionProps> = ({
               </Link>
             </h2>
             
-            <div className="block text-sm text-muted-foreground mb-3">
+            <div className="block text-sm text-muted-foreground mb-1">
               <span className="inline-block">{post.date}</span>
               <span className="inline-block mx-1" aria-hidden="true">•</span>
               <Link 
@@ -102,7 +102,7 @@ const BlogSection: React.FC<BlogSectionProps> = ({
                   <OptimizedImage
                     src={post.image}
                     alt={post.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-top"
                     caption={post.imageCaption}
                   />
                 </AspectRatio>
