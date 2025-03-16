@@ -1,12 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { Page } from '@/lib/types/page';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import { savePagesToStorage } from '@/lib/types/page';
+import { 
+  PageFormHeader, 
+  PageFormFields, 
+  PageFormActions 
+} from './page-form';
 
 interface PageFormProps {
   pageList: Page[];
@@ -28,7 +29,9 @@ const PageForm: React.FC<PageFormProps> = ({
     title: selectedPage?.title || '',
     slug: selectedPage?.slug || '',
     content: selectedPage?.content || '',
-    lastUpdated: selectedPage?.lastUpdated || new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+    lastUpdated: selectedPage?.lastUpdated || new Date().toLocaleDateString('en-US', { 
+      year: 'numeric', month: 'long', day: 'numeric' 
+    }),
     isSystem: selectedPage?.isSystem || false
   });
 
@@ -50,30 +53,13 @@ const PageForm: React.FC<PageFormProps> = ({
         title: '',
         slug: '',
         content: '',
-        lastUpdated: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+        lastUpdated: new Date().toLocaleDateString('en-US', { 
+          year: 'numeric', month: 'long', day: 'numeric' 
+        }),
         isSystem: false
       });
     }
   }, [selectedPage]);
-
-  const modules = {
-    toolbar: [
-      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      ['blockquote', 'code-block'],
-      ['link', 'image'],
-      ['clean']
-    ],
-  };
-  
-  const formats = [
-    'header',
-    'bold', 'italic', 'underline', 'strike',
-    'list', 'bullet',
-    'blockquote', 'code-block',
-    'link', 'image'
-  ];
 
   const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -99,7 +85,9 @@ const PageForm: React.FC<PageFormProps> = ({
     
     // Generate slug if empty
     if (!pageFormData.slug) {
-      pageFormData.slug = pageFormData.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+      pageFormData.slug = pageFormData.title.toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^a-z0-9-]/g, '');
     }
     
     // Update current date
@@ -159,60 +147,22 @@ const PageForm: React.FC<PageFormProps> = ({
 
   return (
     <div className="md:col-span-3 bg-background p-6 rounded-lg border">
-      <h2 className="text-xl font-bold mb-4">
-        {selectedPage ? `Edit Page: ${selectedPage.title}` : 'New Page'}
-      </h2>
+      <PageFormHeader selectedPage={selectedPage} />
       
       <form onSubmit={handlePageSubmit} className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Title</label>
-            <Input 
-              name="title"
-              value={pageFormData.title}
-              onChange={handlePageInputChange}
-              placeholder="Page title"
-              disabled={pageFormData.isSystem}
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Slug</label>
-            <Input 
-              name="slug"
-              value={pageFormData.slug}
-              onChange={handlePageInputChange}
-              placeholder="url-friendly-slug"
-              disabled={pageFormData.isSystem}
-            />
-          </div>
-          
-          <div className="space-y-2 md:col-span-2">
-            <label className="text-sm font-medium">Content</label>
-            <div className="border border-input rounded-md overflow-hidden">
-              <ReactQuill 
-                theme="snow"
-                value={pageFormData.content}
-                onChange={handlePageEditorChange}
-                modules={modules}
-                formats={formats}
-                placeholder="Write your page content here..."
-                className="min-h-[400px] bg-background"
-              />
-            </div>
-          </div>
-        </div>
+        <PageFormFields 
+          title={pageFormData.title}
+          slug={pageFormData.slug}
+          content={pageFormData.content}
+          isSystemPage={pageFormData.isSystem}
+          onInputChange={handlePageInputChange}
+          onEditorChange={handlePageEditorChange}
+        />
         
-        <div className="flex gap-4 justify-end">
-          {selectedPage && !selectedPage.isSystem && (
-            <Button type="button" variant="destructive" onClick={handlePageDelete}>
-              Delete
-            </Button>
-          )}
-          <Button type="submit">
-            {selectedPage ? 'Update' : 'Create'} Page
-          </Button>
-        </div>
+        <PageFormActions 
+          selectedPage={selectedPage}
+          onDelete={handlePageDelete}
+        />
       </form>
     </div>
   );
