@@ -1,4 +1,3 @@
-
 import React, { useRef, useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
@@ -34,17 +33,14 @@ const DataManagement: React.FC<DataManagementProps> = ({ onDataImported }) => {
   const [daysSinceBackup, setDaysSinceBackup] = useState<number | null>(null);
   
   useEffect(() => {
-    // Check when the last backup was performed
     const days = getDaysSinceLastBackup();
     setDaysSinceBackup(days);
     
-    // Process any scheduled articles that need to be published
     processScheduledArticles();
     
-    // Set up interval to check for scheduled articles periodically
     const intervalId = setInterval(() => {
       processScheduledArticles();
-    }, 60000); // Check every minute
+    }, 60000);
     
     return () => clearInterval(intervalId);
   }, []);
@@ -52,8 +48,8 @@ const DataManagement: React.FC<DataManagementProps> = ({ onDataImported }) => {
   const handleExport = (includeAll = false) => {
     try {
       exportArticlesData(includeAll);
-      recordBackupPerformed(); // Record that a backup was performed
-      setDaysSinceBackup(0); // Reset the backup days counter
+      recordBackupPerformed();
+      setDaysSinceBackup(0);
       toast.success("Articles exported successfully");
     } catch (error) {
       console.error('Error exporting articles:', error);
@@ -84,7 +80,6 @@ const DataManagement: React.FC<DataManagementProps> = ({ onDataImported }) => {
         console.error(error);
       } finally {
         setImporting(false);
-        // Reset the file input
         if (fileInputRef.current) {
           fileInputRef.current.value = '';
         }
@@ -99,16 +94,12 @@ const DataManagement: React.FC<DataManagementProps> = ({ onDataImported }) => {
     reader.readAsText(file);
   };
   
-  // Function to connect to cloud services
   const handleCloudConnect = (service: 'dropbox' | 'gdrive') => {
     toast.info(`${service === 'dropbox' ? 'Dropbox' : 'Google Drive'} integration coming soon!`);
     
-    // In a real implementation, we would redirect to OAuth flow
-    // For now, just simulate a successful connection
     localStorage.setItem(`hlc-${service}-connected`, 'true');
   };
   
-  // Function to backup to cloud
   const handleCloudBackup = async (service: 'dropbox' | 'gdrive') => {
     try {
       const success = await exportArticlesToCloud(service);
@@ -140,7 +131,7 @@ const DataManagement: React.FC<DataManagementProps> = ({ onDataImported }) => {
         
         <TabsContent value="backup">
           {daysSinceBackup !== null && daysSinceBackup > 7 && (
-            <Alert variant="warning" className="bg-yellow-50 text-yellow-800 border-yellow-200 mb-4">
+            <Alert className="bg-yellow-50 text-yellow-800 border-yellow-200 mb-4">
               <Calendar className="h-4 w-4" />
               <AlertTitle>Backup Reminder</AlertTitle>
               <AlertDescription>

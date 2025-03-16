@@ -9,7 +9,7 @@ import {
   CardHeader, 
   CardTitle 
 } from '@/components/ui/card';
-import { Chart, ChartLine, ChartBar, Activity } from 'lucide-react';
+import { BarChart3, LineChart as LineChartIcon, BarChart as BarChartIcon, Activity } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 // Generate simple demo analytics data
@@ -95,7 +95,7 @@ const AnalyticsDashboard: React.FC = () => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
-              <ChartLine className="h-4 w-4 mr-2" />
+              <LineChartIcon className="h-4 w-4 mr-2" />
               Traffic Overview
             </CardTitle>
             <CardDescription>Daily views and visitors for the last 14 days</CardDescription>
@@ -119,7 +119,7 @@ const AnalyticsDashboard: React.FC = () => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
-              <ChartBar className="h-4 w-4 mr-2" />
+              <BarChart3 className="h-4 w-4 mr-2" />
               Top Articles
             </CardTitle>
             <CardDescription>Views by article</CardDescription>
