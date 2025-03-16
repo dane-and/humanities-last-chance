@@ -10,7 +10,9 @@ export const saveArticlesToStorage = async (articles: Article[]): Promise<void> 
   try {
     // Check if we're in a browser environment (for SSR compatibility)
     if (typeof window !== 'undefined' && window.localStorage) {
-      // Save to localStorage as a fallback
+      console.log('Saving articles to local storage:', articles.length);
+      
+      // Save to localStorage 
       saveToLocalStorage(STORAGE_KEY, articles);
       
       // Create a download data file to allow manual backup
@@ -29,6 +31,10 @@ export const saveArticlesToStorage = async (articles: Article[]): Promise<void> 
       // Check if reminder should be shown
       checkBackupReminder();
       
+      // Force reload of article data in relevant components
+      const reloadEvent = new CustomEvent('articlesUpdated');
+      window.dispatchEvent(reloadEvent);
+      
       // Note: Server-side saving happens elsewhere now through API calls
     }
   } catch (e) {
@@ -40,6 +46,7 @@ export const saveArticlesToStorage = async (articles: Article[]): Promise<void> 
  * Saves draft articles to local storage
  */
 export const saveDraftsToStorage = (drafts: Article[]): void => {
+  console.log('Saving drafts to storage:', drafts.length);
   saveToLocalStorage(DRAFTS_KEY, drafts);
 };
 
@@ -47,5 +54,6 @@ export const saveDraftsToStorage = (drafts: Article[]): void => {
  * Saves scheduled articles to local storage
  */
 export const saveScheduledToStorage = (scheduled: Article[]): void => {
+  console.log('Saving scheduled articles to storage:', scheduled.length);
   saveToLocalStorage(SCHEDULED_KEY, scheduled);
 };

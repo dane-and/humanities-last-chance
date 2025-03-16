@@ -24,23 +24,36 @@ const BlogSection: React.FC<BlogSectionProps> = ({
 }) => {
   const [blogPosts, setBlogPosts] = useState<Article[]>([]);
   
+  const fetchBlogPosts = () => {
+    console.log("Fetching blog posts...");
+    const articles = getArticlesFromStorage();
+    console.log("All articles:", articles);
+    
+    const blogArticles = getArticlesByCategory('blog', undefined, articles);
+    console.log("Filtered blog articles:", blogArticles);
+    
+    if (blogArticles.length > 0) {
+      setBlogPosts(blogArticles);
+    } else {
+      console.warn("No blog articles found!");
+    }
+  };
+  
   useEffect(() => {
-    const fetchBlogPosts = () => {
-      console.log("Fetching blog posts...");
-      const articles = getArticlesFromStorage();
-      console.log("All articles:", articles);
-      
-      const blogArticles = getArticlesByCategory('blog', undefined, articles);
-      console.log("Filtered blog articles:", blogArticles);
-      
-      if (blogArticles.length > 0) {
-        setBlogPosts(blogArticles);
-      } else {
-        console.warn("No blog articles found!");
-      }
+    fetchBlogPosts();
+    
+    // Add event listener for article updates
+    const handleArticlesUpdated = () => {
+      console.log('Articles updated event detected in BlogSection, reloading blog posts');
+      fetchBlogPosts();
     };
     
-    fetchBlogPosts();
+    window.addEventListener('articlesUpdated', handleArticlesUpdated);
+    
+    // Cleanup listener on unmount
+    return () => {
+      window.removeEventListener('articlesUpdated', handleArticlesUpdated);
+    };
   }, []);
   
   const totalPages = Math.ceil(blogPosts.length / postsPerPage);

@@ -9,47 +9,51 @@ export const useArticles = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  useEffect(() => {
-    const loadArticles = () => {
-      setIsLoading(true);
-      
-      try {
-        // Load articles using the common storage function
-        const loadedArticles = getArticlesFromStorage();
-        setArticles(loadedArticles);
-        setError(null);
-      } catch (err) {
-        console.error('Error loading articles:', err);
-        setError(err instanceof Error ? err : new Error('Unknown error loading articles'));
-        
-        // Use defaults on error
-        setArticles(defaultArticles);
-        toast.error("Error loading articles. Using default content.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadArticles();
-  }, []);
-
-  const refreshArticles = () => {
+  const loadArticles = () => {
     setIsLoading(true);
     
     try {
+      console.log('Loading articles from storage in useArticles hook');
+      // Load articles using the common storage function
       const loadedArticles = getArticlesFromStorage();
       setArticles(loadedArticles);
       setError(null);
     } catch (err) {
-      console.error('Error refreshing articles:', err);
-      setError(err instanceof Error ? err : new Error('Unknown error refreshing articles'));
+      console.error('Error loading articles:', err);
+      setError(err instanceof Error ? err : new Error('Unknown error loading articles'));
+      
+      // Use defaults on error
+      setArticles(defaultArticles);
+      toast.error("Error loading articles. Using default content.");
     } finally {
       setIsLoading(false);
     }
   };
 
+  useEffect(() => {
+    loadArticles();
+    
+    // Add event listener for article updates
+    const handleArticlesUpdated = () => {
+      console.log('Articles updated event detected, reloading articles');
+      loadArticles();
+    };
+    
+    window.addEventListener('articlesUpdated', handleArticlesUpdated);
+    
+    // Cleanup listener on unmount
+    return () => {
+      window.removeEventListener('articlesUpdated', handleArticlesUpdated);
+    };
+  }, []);
+
+  const refreshArticles = () => {
+    loadArticles();
+  };
+
   const updateArticles = (newArticles: Article[]) => {
     try {
+      console.log('Updating articles in useArticles hook:', newArticles.length);
       saveArticlesToStorage(newArticles);
       setArticles(newArticles);
     } catch (err) {
