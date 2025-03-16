@@ -9,6 +9,12 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    cors: {
+      // Restrict CORS in development to mitigate CVE-2023-50777
+      origin: mode === 'development' ? 'http://localhost:8080' : '*',
+      methods: ['GET', 'HEAD', 'PUT', 'POST', 'DELETE', 'PATCH'],
+      credentials: true,
+    },
   },
   // Set base URL to root for all environments
   base: '/',
