@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
 import { AuthProvider } from "./context/AuthContext";
+import { BASE_PATH } from "./lib/config";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/AdminLogin";
@@ -52,7 +53,7 @@ const App = () => {
         <AuthProvider>
           <Toaster />
           <Sonner />
-          <BrowserRouter>
+          <BrowserRouter basename={BASE_PATH}>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/admin" element={<AdminLogin />} />
