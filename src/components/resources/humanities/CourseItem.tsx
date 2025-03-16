@@ -3,7 +3,7 @@ import React from 'react';
 import { ExternalLink } from 'lucide-react';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Course } from '@/lib/data/youtubeUniversity/types';
-import { getThumbnailUrl, getThumbnailLink, getResourceIcon } from './utils';
+import { getThumbnailUrl, getThumbnailLink, getResourceIcon, isYoutubeLink } from './utils';
 
 interface CourseItemProps {
   course: Course & { disciplineName?: string };
@@ -87,7 +87,7 @@ const CourseItem: React.FC<CourseItemProps> = ({ course, featured = false }) => 
               rel="noopener noreferrer"
               className="inline-flex items-center text-sm font-medium text-primary hover:underline"
             >
-              {course.link.includes('youtube.com') || course.link.includes('youtu.be') 
+              {isYoutubeLink(course.link) 
                 ? 'Watch on YouTube' 
                 : 'View Resource'}
               <ExternalLink className="ml-1 h-3 w-3" />
