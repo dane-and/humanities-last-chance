@@ -9,18 +9,20 @@ export const useArticleForm = (
   onArticleListUpdate: (updatedList: Article[]) => void,
   onNewArticle: () => void
 ) => {
-  // Default form state
-  const defaultFormState = {
+  // Default form state with properly typed category
+  const defaultFormState: Article = {
     id: '',
     title: '',
     slug: '',
     author: '',
     date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
-    category: 'Blog',
+    category: 'Blog', // This is now correctly typed as one of the allowed values
     image: '',
+    imageCaption: '',
     excerpt: '',
     content: '',
     featured: false,
+    tags: [],
     comments: []
   };
 
@@ -67,13 +69,20 @@ export const useArticleForm = (
     });
   };
 
-  // Handle select change
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+  // Handle select change - updated to directly work with the Select component
+  const handleSelectChange = (name: string, value: string) => {
+    // For category fields, ensure the value is one of the allowed types
+    if (name === 'category') {
+      setFormData({
+        ...formData,
+        category: value as Article['category'] // Cast to the correct type
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value
+      });
+    }
   };
 
   // Handle checkbox change
