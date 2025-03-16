@@ -21,6 +21,11 @@
   }
   
   a {
-    @apply text-[#0EA5E9] transition-colors duration-200 hover:text-[#0EA5E9]/80 underline !important;
+    @apply text-[#0EA5E9] transition-colors duration-200 hover:text-[#0EA5E9]/80 !important;
+  }
+  
+  /* Apply underlines specifically to content links */
+  article a, .prose a, main p a, main li a {
+    @apply underline !important;
   }
 }
