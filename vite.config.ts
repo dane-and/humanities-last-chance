@@ -15,6 +15,13 @@ export default defineConfig(({ mode }) => ({
       methods: ['GET', 'HEAD', 'PUT', 'POST', 'DELETE', 'PATCH'],
       credentials: true,
     },
+    // Add WebSocket security by specifying allowed hosts
+    hmr: {
+      // Only allow WebSocket connections from localhost
+      host: 'localhost',
+    },
+    // Restrict which hosts can access the development server
+    allowedHosts: mode === 'development' ? ['localhost', '127.0.0.1'] : undefined,
   },
   // Set base URL to root for all environments
   base: '/',
