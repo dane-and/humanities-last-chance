@@ -2,6 +2,8 @@
 import { Article, defaultArticles } from '../../types/article';
 
 const STORAGE_KEY = 'hlc-articles';
+const LAST_BACKUP_KEY = 'hlc-last-backup-date';
+const BACKUP_REMINDER_DAYS = 7; // Remind user to backup every 7 days
 
 /**
  * Gets articles from local storage (fallback method)
@@ -50,9 +52,59 @@ export const saveArticlesToStorage = async (articles: Article[]): Promise<void> 
       });
       window.dispatchEvent(event);
       
+      // Check if reminder should be shown
+      checkBackupReminder();
+      
       // Note: Server-side saving happens elsewhere now through API calls
     }
   } catch (e) {
     console.error('Error saving to localStorage:', e);
   }
+};
+
+/**
+ * Records when a backup was performed
+ */
+export const recordBackupPerformed = () => {
+  localStorage.setItem(LAST_BACKUP_KEY, new Date().toISOString());
+};
+
+/**
+ * Checks if it's time to remind the user to create a backup
+ */
+export const checkBackupReminder = (): boolean => {
+  const lastBackup = localStorage.getItem(LAST_BACKUP_KEY);
+  
+  if (!lastBackup) {
+    return true; // No backup ever recorded
+  }
+  
+  const lastBackupDate = new Date(lastBackup);
+  const currentDate = new Date();
+  
+  // Calculate days since last backup
+  const daysSinceBackup = Math.floor(
+    (currentDate.getTime() - lastBackupDate.getTime()) / (1000 * 60 * 60 * 24)
+  );
+  
+  return daysSinceBackup >= BACKUP_REMINDER_DAYS;
+};
+
+/**
+ * Gets days since the last backup was performed
+ */
+export const getDaysSinceLastBackup = (): number | null => {
+  const lastBackup = localStorage.getItem(LAST_BACKUP_KEY);
+  
+  if (!lastBackup) {
+    return null; // No backup ever recorded
+  }
+  
+  const lastBackupDate = new Date(lastBackup);
+  const currentDate = new Date();
+  
+  // Calculate days since last backup
+  return Math.floor(
+    (currentDate.getTime() - lastBackupDate.getTime()) / (1000 * 60 * 60 * 24)
+  );
 };

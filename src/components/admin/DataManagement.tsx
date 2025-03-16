@@ -1,5 +1,5 @@
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { 
@@ -7,8 +7,14 @@ import {
   AlertDescription,
   AlertTitle 
 } from "@/components/ui/alert";
-import { Download, Upload, Info } from 'lucide-react';
-import { getArticlesFromStorage, saveArticlesToStorage } from '@/lib/utils/storage/articleStorage';
+import { Download, Upload, Info, Calendar, Cloud } from 'lucide-react';
+import { 
+  getArticlesFromStorage, 
+  saveArticlesToStorage, 
+  recordBackupPerformed,
+  getDaysSinceLastBackup 
+} from '@/lib/utils/storage/articleStorage';
+import { exportArticlesData, importArticlesData } from '@/lib/utils/storage/dataExportImport';
 
 interface DataManagementProps {
   onDataImported: () => void;
@@ -17,18 +23,19 @@ interface DataManagementProps {
 const DataManagement: React.FC<DataManagementProps> = ({ onDataImported }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [importing, setImporting] = useState(false);
+  const [daysSinceBackup, setDaysSinceBackup] = useState<number | null>(null);
+  
+  useEffect(() => {
+    // Check when the last backup was performed
+    const days = getDaysSinceLastBackup();
+    setDaysSinceBackup(days);
+  }, []);
   
   const handleExport = () => {
     try {
-      const articles = getArticlesFromStorage();
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(articles, null, 2));
-      const downloadAnchorNode = document.createElement('a');
-      downloadAnchorNode.setAttribute("href", dataStr);
-      downloadAnchorNode.setAttribute("download", `humanities-last-chance-articles-${new Date().toISOString().slice(0,10)}.json`);
-      document.body.appendChild(downloadAnchorNode);
-      downloadAnchorNode.click();
-      downloadAnchorNode.remove();
-      
+      exportArticlesData();
+      recordBackupPerformed(); // Record that a backup was performed
+      setDaysSinceBackup(0); // Reset the backup days counter
       toast.success("Articles exported successfully");
     } catch (error) {
       console.error('Error exporting articles:', error);
@@ -43,17 +50,16 @@ const DataManagement: React.FC<DataManagementProps> = ({ onDataImported }) => {
     setImporting(true);
     
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = async (e) => {
       try {
         const jsonData = e.target?.result as string;
-        const articles = JSON.parse(jsonData);
+        const success = await importArticlesData(jsonData);
         
-        if (Array.isArray(articles)) {
-          saveArticlesToStorage(articles);
+        if (success) {
           toast.success('Articles imported successfully');
           onDataImported();
         } else {
-          throw new Error('Invalid data format');
+          throw new Error('Import failed');
         }
       } catch (error) {
         toast.error('Invalid file format');
@@ -75,9 +81,25 @@ const DataManagement: React.FC<DataManagementProps> = ({ onDataImported }) => {
     reader.readAsText(file);
   };
   
+  // Function to connect to Dropbox (placeholder - would require Dropbox API integration)
+  const handleConnectToDropbox = () => {
+    toast.info("Dropbox integration coming soon! This feature will allow automatic backups.");
+    // This would be implemented with the Dropbox API
+  };
+  
   return (
     <div className="space-y-4 p-4 border rounded-lg bg-card">
       <h3 className="text-lg font-medium">Data Management</h3>
+      
+      {daysSinceBackup !== null && daysSinceBackup > 7 && (
+        <Alert variant="warning" className="bg-yellow-50 text-yellow-800 border-yellow-200">
+          <Calendar className="h-4 w-4" />
+          <AlertTitle>Backup Reminder</AlertTitle>
+          <AlertDescription>
+            It's been {daysSinceBackup} days since your last backup. Consider exporting your data now.
+          </AlertDescription>
+        </Alert>
+      )}
       
       <Alert>
         <Info className="h-4 w-4" />
@@ -105,6 +127,15 @@ const DataManagement: React.FC<DataManagementProps> = ({ onDataImported }) => {
         >
           <Upload className="h-4 w-4" />
           {importing ? 'Importing...' : 'Import Articles'}
+        </Button>
+        
+        <Button
+          variant="outline"
+          onClick={handleConnectToDropbox}
+          className="flex gap-2"
+        >
+          <Cloud className="h-4 w-4" />
+          Connect to Dropbox
         </Button>
         
         <input
