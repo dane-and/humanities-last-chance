@@ -3,6 +3,7 @@ import React from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import sanitizeHtml from 'sanitize-html';
 
 interface ContentFieldProps {
   excerpt: string;
@@ -36,6 +37,30 @@ const ContentField: React.FC<ContentFieldProps> = ({
     'link', 'image'
   ];
 
+  // Sanitize content before passing to the editor's onChange handler
+  const handleContentChange = (content: string) => {
+    const sanitized = sanitizeHtml(content, {
+      allowedTags: sanitizeHtml.defaults.allowedTags.concat(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 'p', 'br', 'ul', 'ol', 'li', 'strong', 'em', 'blockquote', 'pre', 'code']),
+      allowedAttributes: {
+        ...sanitizeHtml.defaults.allowedAttributes,
+        'img': ['src', 'alt', 'title', 'width', 'height', 'class'],
+        // Explicitly exclude dangerous attributes
+        '*': ['class', 'id', 'style']
+      },
+      // Specifically disallow all event handlers
+      disallowedTagsMode: 'discard',
+      allowedStyles: {
+        '*': {
+          'color': [/^#(0x)?[0-9a-f]+$/i, /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/],
+          'text-align': [/^left$/, /^right$/, /^center$/, /^justify$/],
+          'font-size': [/^\d+(?:px|em|%)$/]
+        }
+      }
+    });
+    
+    onContentChange(sanitized);
+  };
+
   return (
     <>
       <div className="space-y-2 md:col-span-2">
@@ -55,7 +80,7 @@ const ContentField: React.FC<ContentFieldProps> = ({
           <ReactQuill 
             theme="snow"
             value={content}
-            onChange={onContentChange}
+            onChange={handleContentChange}
             modules={modules}
             formats={formats}
             placeholder="Write your article content here..."

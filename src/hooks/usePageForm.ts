@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Page } from '../lib/types/page';
 import { savePagesToStorage } from '../lib/types/page';
 import { toast } from 'sonner';
+import sanitizeHtml from 'sanitize-html';
 
 export const usePageForm = (
   pageList: Page[],
@@ -51,11 +52,31 @@ export const usePageForm = (
     }
   };
 
-  // Handle rich text editor change
+  // Handle rich text editor change with sanitization
   const handleEditorChange = (content: string) => {
+    // Sanitize HTML content before saving
+    const sanitizedContent = sanitizeHtml(content, {
+      allowedTags: sanitizeHtml.defaults.allowedTags.concat(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 'p', 'br', 'ul', 'ol', 'li', 'strong', 'em', 'blockquote', 'pre', 'code']),
+      allowedAttributes: {
+        ...sanitizeHtml.defaults.allowedAttributes,
+        'img': ['src', 'alt', 'title', 'width', 'height', 'class'],
+        // Explicitly exclude dangerous attributes
+        '*': ['class', 'id', 'style']
+      },
+      // Specifically disallow all event handlers
+      disallowedTagsMode: 'discard',
+      allowedStyles: {
+        '*': {
+          'color': [/^#(0x)?[0-9a-f]+$/i, /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/],
+          'text-align': [/^left$/, /^right$/, /^center$/, /^justify$/],
+          'font-size': [/^\d+(?:px|em|%)$/]
+        }
+      }
+    });
+    
     setFormData({
       ...formData,
-      content
+      content: sanitizedContent
     });
   };
 

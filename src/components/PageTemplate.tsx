@@ -12,13 +12,23 @@ const PageTemplate: React.FC<PageTemplateProps> = ({ slug }) => {
   const { getPageBySlug, isLoading } = usePages();
   const pageContent = getPageBySlug(slug);
   
-  // Sanitize HTML to prevent XSS
+  // Enhanced sanitization to prevent XSS
   const sanitizedContent = pageContent ? sanitizeHtml(pageContent.content, {
-    allowedTags: sanitizeHtml.defaults.allowedTags.concat(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img']),
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 'p', 'br', 'ul', 'ol', 'li']),
     allowedAttributes: {
       ...sanitizeHtml.defaults.allowedAttributes,
       'img': ['src', 'alt', 'title', 'width', 'height', 'class'],
-      'a': ['href', 'name', 'target', 'rel', 'class']
+      'a': ['href', 'name', 'target', 'rel', 'class'],
+    },
+    // Explicitly disable all event handlers
+    disallowedTagsMode: 'discard',
+    // Allow only specific styles
+    allowedStyles: {
+      '*': {
+        'color': [/^#(0x)?[0-9a-f]+$/i, /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/],
+        'text-align': [/^left$/, /^right$/, /^center$/, /^justify$/],
+        'font-size': [/^\d+(?:px|em|%)$/]
+      }
     }
   }) : '';
   
