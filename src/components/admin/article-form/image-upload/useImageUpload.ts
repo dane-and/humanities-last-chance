@@ -1,6 +1,7 @@
 
 import { useState, useRef } from 'react';
 import { toast } from 'sonner';
+import { processArticleImage } from '@/lib/utils/imageProcessor';
 
 export const useImageUpload = (onImageChange: (image: string) => void) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -48,15 +49,33 @@ export const useImageUpload = (onImageChange: (image: string) => void) => {
     }
 
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = async (e) => {
       if (e.target?.result) {
-        onImageChange(e.target.result as string);
-        toast.success('Image uploaded successfully.');
+        try {
+          // Show loading toast
+          const loadingToast = toast.loading('Processing image...');
+          
+          // Process the image to ensure it fits the target dimensions
+          const originalImage = e.target.result as string;
+          const processedImage = await processArticleImage(originalImage);
+          
+          // Update the state with the processed image
+          onImageChange(processedImage);
+          
+          // Close loading toast and show success message
+          toast.dismiss(loadingToast);
+          toast.success('Image processed and uploaded successfully.');
+        } catch (error) {
+          console.error('Failed to process image:', error);
+          toast.error('Failed to process image. Please try again.');
+        }
       }
     };
+    
     reader.onerror = () => {
       toast.error('Failed to read image file.');
     };
+    
     reader.readAsDataURL(file);
   };
 

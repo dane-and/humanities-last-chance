@@ -6,6 +6,7 @@ import { ArrowRight } from 'lucide-react';
 import { Article } from '@/lib/articles';
 import TagList from './TagList';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import OptimizedImage from './OptimizedImage';
 
 interface ArticleCardWithTagsProps {
   article: Article;
@@ -29,11 +30,10 @@ const ArticleCardWithTags: React.FC<ArticleCardWithTagsProps> = React.memo(({
         <div className="w-full">
           <AspectRatio ratio={21 / 9}>
             <Link to={`/article/${article.slug}`} className="block w-full h-full">
-              <img
+              <OptimizedImage
                 src={article.image}
                 alt={article.title}
                 className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                loading="lazy"
                 width={640}
                 height={274}
               />

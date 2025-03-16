@@ -7,6 +7,9 @@ interface OptimizedImageProps {
   className?: string;
   caption?: string;
   captionClassName?: string;
+  width?: number;
+  height?: number;
+  priority?: boolean;
 }
 
 const OptimizedImage: React.FC<OptimizedImageProps> = ({
@@ -14,7 +17,10 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   alt,
   className = '',
   caption,
-  captionClassName = ''
+  captionClassName = '',
+  width = 1200,
+  height = 800,
+  priority = false
 }) => {
   // If src is empty, don't render anything
   if (!src || src.trim() === '') {
@@ -46,8 +52,14 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
     <figure className="relative">
       {/* Loading placeholder - only show when not loaded and no error */}
       {!imageLoaded && !error && (
-        <div className={`${className} bg-gray-200 animate-pulse`} 
-             style={{ aspectRatio: '16/9' }}>
+        <div 
+          className={`${className} bg-gray-200 animate-pulse`} 
+          style={{ 
+            aspectRatio: `${width}/${height}`,
+            width: width ? `${width}px` : '100%',
+            maxWidth: '100%'
+          }}
+        >
           <div className="absolute inset-0 flex items-center justify-center">
             <span className="text-gray-400">Loading...</span>
           </div>
@@ -58,7 +70,10 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       <img
         src={error ? fallbackImage : src}
         alt={alt}
-        className={`${className} ${imageLoaded || error ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
+        width={width}
+        height={height}
+        loading={priority ? "eager" : "lazy"}
+        className={`${className} ${imageLoaded || error ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 max-w-full h-auto`}
         onLoad={handleImageLoad}
         onError={handleImageError}
       />

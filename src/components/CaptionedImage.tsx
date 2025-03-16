@@ -1,5 +1,6 @@
 
 import React from 'react';
+import OptimizedImage from './OptimizedImage';
 
 interface CaptionedImageProps {
   src: string;
@@ -8,6 +9,8 @@ interface CaptionedImageProps {
   className?: string;
   imageClassName?: string;
   captionClassName?: string;
+  width?: number;
+  height?: number;
 }
 
 const CaptionedImage: React.FC<CaptionedImageProps> = ({
@@ -16,21 +19,24 @@ const CaptionedImage: React.FC<CaptionedImageProps> = ({
   caption,
   className,
   imageClassName,
-  captionClassName
+  captionClassName,
+  width = 1200,
+  height = 800
 }) => {
+  if (!src) return null;
+  
   return (
-    <figure className={`relative ${className || ''}`}>
-      <img 
-        src={src} 
-        alt={alt} 
-        className={imageClassName || 'w-full h-full object-cover object-center'}
+    <div className={`${className || ''}`}>
+      <OptimizedImage 
+        src={src}
+        alt={alt}
+        caption={caption}
+        className={imageClassName}
+        captionClassName={captionClassName}
+        width={width}
+        height={height}
       />
-      {caption && (
-        <figcaption className={`text-sm text-gray-500 mt-2 text-center italic ${captionClassName || ''}`}>
-          {caption}
-        </figcaption>
-      )}
-    </figure>
+    </div>
   );
 };
 
