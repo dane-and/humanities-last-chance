@@ -1,16 +1,10 @@
-
 import React, { useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { Download, Upload, Database } from 'lucide-react';
-import { 
-  recordBackupPerformed, 
-  saveArticlesToStorage 
-} from '@/lib/utils/storage/articleStorage';
-import { 
-  exportArticlesData, 
-  importArticlesData 
-} from '@/lib/utils/storage/dataExportImport';
+import { recordBackupPerformed } from '@/lib/utils/storage/backupStorage';
+import { exportArticlesData } from '@/lib/utils/storage/exportStorage';
+import { importArticlesData } from '@/lib/utils/storage/importStorage';
 
 interface LocalBackupSectionProps {
   setDaysSinceBackup: (days: number) => void;

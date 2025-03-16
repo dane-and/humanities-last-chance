@@ -3,8 +3,8 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { Cloud, Upload } from 'lucide-react';
-import { exportArticlesToCloud } from '@/lib/utils/storage/dataExportImport';
-import { recordBackupPerformed } from '@/lib/utils/storage/articleStorage';
+import { exportArticlesToCloud } from '@/lib/utils/storage/exportStorage';
+import { recordBackupPerformed } from '@/lib/utils/storage/backupStorage';
 
 interface CloudBackupSectionProps {
   setDaysSinceBackup: (days: number) => void;
