@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { useArticleFormHandlers } from './formHandlers';
+import { useArticleFormHandlers, generateSlug } from './formHandlers';
 import { useArticleFormSubmission } from './formSubmission';
 import { ArticleFormProps } from './types';
 import { Article } from '../../lib/types/article';
@@ -63,3 +63,4 @@ export const useArticleForm = (
 };
 
 export * from './types';
+export { generateSlug };
