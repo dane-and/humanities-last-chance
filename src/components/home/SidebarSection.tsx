@@ -170,10 +170,9 @@ const SidebarSection: React.FC = () => {
                 if (!course) return null;
                 
                 // Get thumbnail URL from the course
-                const thumbnailUrl = course.thumbnail || 
-                  (course.link.includes('youtube.com') || course.link.includes('youtu.be') 
-                    ? `https://img.youtube.com/vi/${course.link.split('v=')[1]?.split('&')[0] || course.link.split('/').pop()}/mqdefault.jpg`
-                    : '/placeholder.svg');
+                const thumbnailUrl = course.link.includes('youtube.com') || course.link.includes('youtu.be') 
+                  ? `https://img.youtube.com/vi/${course.link.split('v=')[1]?.split('&')[0] || course.link.split('/').pop()}/mqdefault.jpg`
+                  : '/placeholder.svg';
                 
                 return (
                   <CarouselItem key={course.id} className="basis-full">
@@ -223,3 +222,4 @@ const SidebarSection: React.FC = () => {
 };
 
 export default SidebarSection;
+
