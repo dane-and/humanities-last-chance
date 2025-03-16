@@ -1,41 +1,42 @@
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Humanities Last Chance - Magazine of Humanities Scholarship</title>
-    <meta name="description" content="A digital magazine publishing daily blog posts, interviews, and reviews about humanities scholarship." />
-    <meta name="author" content="Humanities Last Chance" />
-    <meta name="keywords" content="humanities, scholarship, academic, blog, interviews, reviews, literature, philosophy, history, arts" />
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://humanitieslastchance.org/" />
-    <meta property="og:title" content="Humanities Last Chance - Magazine of Humanities Scholarship" />
-    <meta property="og:description" content="A digital magazine publishing daily blog posts, interviews, and reviews about humanities scholarship." />
-    <meta property="og:image" content="/og-image.png" />
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://humanitieslastchance.org/" />
-    <meta property="twitter:title" content="Humanities Last Chance - Magazine of Humanities Scholarship" />
-    <meta property="twitter:description" content="A digital magazine publishing daily blog posts, interviews, and reviews about humanities scholarship." />
-    <meta property="twitter:image" content="/og-image.png" />
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="/site-favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/site-favicon-16x16.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/site-apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
-    <link rel="icon" href="/lovable-uploads/8e120c24-c2b7-40f7-b502-1ab605ea1d08.png" />
-    
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Inter:wght@300;400;500;600;700&display=swap">
+    <meta name="description" content="Humanities Last Chance - Magazine of Humanities Scholarship" />
+    <title>Humanities Last Chance</title>
+    <!-- Handle GitHub Pages routing -->
+    <script>
+      // Handle redirects for SPA on GitHub Pages
+      (function() {
+        // Check if we need to redirect
+        const redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        
+        // If we have a saved redirect path
+        if (redirect && redirect !== location.pathname) {
+          history.replaceState(null, null, redirect);
+        }
+        
+        // Check for query param redirects (from 404.html)
+        const p = new URLSearchParams(window.location.search).get('p');
+        if (p && p !== window.location.pathname) {
+          history.replaceState(null, null, p);
+          const newUrl = window.location.origin + 
+                        window.location.pathname.replace(/\/\?p=.*$/, '') + 
+                        p + 
+                        window.location.hash;
+          window.history.replaceState(null, null, newUrl);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
-    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

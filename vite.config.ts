@@ -45,5 +45,16 @@ export default defineConfig(({ mode }) => ({
         drop_console: false, // Keep console logs for debugging
       },
     },
+    // Make sure to output 404.html for GitHub Pages routing
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          // Split chunks to improve loading times
+          if (id.includes('node_modules')) {
+            return 'vendor';
+          }
+        }
+      }
+    }
   },
 }));

@@ -46,9 +46,8 @@ jobs:
       - name: Setup CNAME
         run: |
           echo "humanitieslastchance.org" > dist/CNAME
-
-      - name: Copy index.html to 404.html
-        run: cp dist/index.html dist/404.html
+          # Copy index.html to 404.html to handle client-side routing
+          cp dist/index.html dist/404.html
 
       - name: Debug build output
         run: |
