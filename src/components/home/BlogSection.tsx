@@ -3,12 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ArticleCardWithTags from '@/components/ArticleCardWithTags';
 import { Button } from '@/components/ui/button';
-import { getArticlesByCategory } from '@/lib/articles';
+import { getArticlesByCategory } from '@/lib/queries/articleQueries';
 import { ChevronLeft, ChevronRight, MessageCircle } from 'lucide-react';
 import TagList from '@/components/TagList';
 import { getArticlesFromStorage } from '@/lib/utils/storage/articleStorage';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import OptimizedImage from '@/components/OptimizedImage';
+import { Article } from '@/lib/types/article';
 
 interface BlogSectionProps {
   currentPage: number;
@@ -21,19 +22,28 @@ const BlogSection: React.FC<BlogSectionProps> = ({
   setCurrentPage,
   postsPerPage
 }) => {
-  const [blogPosts, setBlogPosts] = useState(getArticlesByCategory('blog'));
-  const totalPages = Math.ceil(blogPosts.length / postsPerPage);
+  const [blogPosts, setBlogPosts] = useState<Article[]>([]);
   
   useEffect(() => {
-    const articles = getArticlesFromStorage();
-    const blogArticles = articles
-      .filter(article => article.category.toLowerCase() === 'blog')
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    const fetchBlogPosts = () => {
+      console.log("Fetching blog posts...");
+      const articles = getArticlesFromStorage();
+      console.log("All articles:", articles);
+      
+      const blogArticles = getArticlesByCategory('blog', undefined, articles);
+      console.log("Filtered blog articles:", blogArticles);
+      
+      if (blogArticles.length > 0) {
+        setBlogPosts(blogArticles);
+      } else {
+        console.warn("No blog articles found!");
+      }
+    };
     
-    if (blogArticles.length > 0) {
-      setBlogPosts(blogArticles);
-    }
+    fetchBlogPosts();
   }, []);
+  
+  const totalPages = Math.ceil(blogPosts.length / postsPerPage);
   
   const nextPage = () => {
     if (currentPage < totalPages) {
@@ -55,6 +65,12 @@ const BlogSection: React.FC<BlogSectionProps> = ({
   
   return (
     <div className="space-y-12">
+      {blogPosts.length === 0 && (
+        <div className="text-center py-12 text-muted-foreground">
+          <p>No blog posts found. Please check your content storage.</p>
+        </div>
+      )}
+      
       <div className="space-y-14">
         {currentPosts.map((post, index) => (
           <article 

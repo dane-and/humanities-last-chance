@@ -25,8 +25,10 @@ export const getLatestArticles = (count: number = 6, articleList: Article[] = []
  */
 export const getArticlesByCategory = (category: string, count?: number, articleList: Article[] = []): Article[] => {
   const articles = articleList.length ? articleList : getArticlesFromStorage();
+  const normalizedCategory = category.toLowerCase();
+  
   const filtered = articles.filter(
-    article => article.category.toLowerCase() === category.toLowerCase()
+    article => article.category.toLowerCase() === normalizedCategory
   )
   // Sort by date (newest first)
   .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());

@@ -3,7 +3,7 @@
 export type { Article } from './types/article';
 export { defaultArticles } from './types/article';
 export { useArticles } from './hooks/useArticles';
-export { fetchArticlesFromSheet } from './api/articleApi';
+export { fetchArticles, fetchArticlesFromApi, fetchArticlesFromSheet } from './api/articleApi';
 export { 
   getFeaturedArticles,
   getLatestArticles,
@@ -11,7 +11,7 @@ export {
   getArticleBySlug,
   getArticlesByTag
 } from './queries/articleQueries';
-export { getArticlesFromStorage } from './utils/storageUtils';
+export { getArticlesFromStorage } from './utils/storage/articleStorage';
 
 // For backward compatibility
 import { defaultArticles } from './types/article';
