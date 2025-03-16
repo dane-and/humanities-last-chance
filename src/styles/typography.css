@@ -21,6 +21,6 @@
   }
   
   a {
-    @apply text-[#0EA5E9] transition-colors duration-200 hover:text-[#0EA5E9]/80 no-underline;
+    @apply text-[#0EA5E9] transition-colors duration-200 hover:text-[#0EA5E9]/80 no-underline !important;
   }
 }
