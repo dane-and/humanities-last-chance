@@ -11,7 +11,14 @@ export const getArticlesFromStorage = (): Article[] => {
     // Check if we're in a browser environment (for SSR compatibility)
     if (typeof window !== 'undefined' && window.localStorage) {
       const savedArticles = localStorage.getItem(STORAGE_KEY);
-      return savedArticles ? JSON.parse(savedArticles) : defaultArticles;
+      
+      // If no articles in storage, save default articles first
+      if (!savedArticles) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultArticles));
+        return defaultArticles;
+      }
+      
+      return JSON.parse(savedArticles);
     }
     return defaultArticles;
   } catch (e) {

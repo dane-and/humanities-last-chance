@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getArticleBySlug } from '@/lib/articles';
+import { getArticleBySlug, defaultArticles } from '@/lib/articles';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -11,24 +11,57 @@ import { getArticlesFromStorage } from '@/lib/utils/storage/articleStorage';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import OptimizedImage from '@/components/OptimizedImage';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Article } from '@/lib/types/article';
 
 const ArticlePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const article = getArticleBySlug(slug || '');
+  const [loading, setLoading] = useState(true);
+  const [currentArticle, setCurrentArticle] = useState<Article | null>(null);
   const [refreshCounter, setRefreshCounter] = useState(0);
-  const [currentArticle, setCurrentArticle] = useState(article);
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    if (article) {
+    const loadArticle = () => {
+      setLoading(true);
+      console.log(`Loading article with slug: ${slug}`);
+      
+      // First try to get from storage
       const articles = getArticlesFromStorage();
-      const updatedArticle = articles.find(a => a.slug === article.slug);
-      if (updatedArticle) {
-        setCurrentArticle(updatedArticle);
+      console.log("All articles:", articles);
+      
+      // Find by slug
+      let article = articles.find(a => a.slug === slug);
+      
+      // If not found in storage, check default articles
+      if (!article && defaultArticles.length > 0) {
+        console.log("Article not found in storage, checking defaults");
+        article = defaultArticles.find(a => a.slug === slug);
+        console.log("Found in defaults:", article);
       }
-    }
-  }, [article, refreshCounter]);
+      
+      setCurrentArticle(article || null);
+      setLoading(false);
+    };
+    
+    loadArticle();
+  }, [slug, refreshCounter]);
+
+  const handleCommentAdded = () => {
+    setRefreshCounter(prev => prev + 1);
+  };
+  
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Navigation />
+        <main className="flex-grow flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   if (!currentArticle) {
     return (
@@ -48,10 +81,6 @@ const ArticlePage: React.FC = () => {
       </div>
     );
   }
-
-  const handleCommentAdded = () => {
-    setRefreshCounter(prev => prev + 1);
-  };
 
   return (
     <div className="min-h-screen flex flex-col">
