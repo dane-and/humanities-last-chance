@@ -67,6 +67,7 @@ const ArticleCard: React.FC<ArticleCardProps> = React.memo(({
         </div>
       </div>
       
+      {/* Only render image if it exists and is not empty */}
       {hasImage && (
         <div className={cn('relative', isCompact ? 'h-auto' : 'h-auto')}>
           <AspectRatio ratio={21 / 9} className="overflow-hidden">

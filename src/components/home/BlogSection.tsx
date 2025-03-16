@@ -72,7 +72,7 @@ const BlogSection: React.FC<BlogSectionProps> = ({
               </Link>
             </h2>
             
-            <div className="block text-sm text-muted-foreground mb-1">
+            <div className="block text-sm text-muted-foreground mb-2">
               <span className="inline-block">{post.date}</span>
               <span className="inline-block mx-1" aria-hidden="true">•</span>
               <Link 
@@ -86,7 +86,7 @@ const BlogSection: React.FC<BlogSectionProps> = ({
                   <span className="inline-block mx-1" aria-hidden="true">•</span>
                   <Link 
                     to={`/article/${post.slug}`}
-                    className="inline-block flex items-center hover:text-primary"
+                    className="inline-flex items-center hover:text-primary"
                     aria-label={`${post.comments.length} comment${post.comments.length !== 1 ? 's' : ''}`}
                   >
                     <MessageCircle className="h-4 w-4 mr-1" aria-hidden="true" />
@@ -96,8 +96,9 @@ const BlogSection: React.FC<BlogSectionProps> = ({
               )}
             </div>
             
+            {/* Only render image if it exists and is not empty */}
             {post.image && post.image.trim() !== '' && (
-              <div className="mb-5">
+              <div className="my-4">
                 <AspectRatio ratio={21 / 9} className="overflow-hidden rounded-lg">
                   <OptimizedImage
                     src={post.image}
@@ -123,6 +124,7 @@ const BlogSection: React.FC<BlogSectionProps> = ({
         ))}
       </div>
       
+      {/* Pagination controls */}
       {totalPages > 1 && (
         <div className="flex justify-between items-center pt-8 mt-4">
           <Button
