@@ -1,4 +1,3 @@
-
 import { Course, Discipline } from '@/lib/data/youtubeUniversity/types';
 import { Play, Headphones, ExternalLink } from 'lucide-react';
 import React from 'react';
@@ -18,9 +17,20 @@ export const getYouTubeVideoId = (url: string): string | null => {
   return videoIdMatch ? videoIdMatch[1] : null;
 };
 
-// Determine if the course has a YouTube link
+// Safely check if a URL is from YouTube
 export const isYoutubeLink = (url: string): boolean => {
-  return url.includes('youtube.com') || url.includes('youtu.be');
+  try {
+    const parsedUrl = new URL(url);
+    // Check for official YouTube domains
+    return parsedUrl.hostname === 'youtube.com' || 
+           parsedUrl.hostname === 'www.youtube.com' || 
+           parsedUrl.hostname === 'youtu.be' ||
+           parsedUrl.hostname === 'm.youtube.com' ||
+           parsedUrl.hostname.endsWith('.youtube.com');
+  } catch {
+    // If URL parsing fails, it's not a valid URL
+    return false;
+  }
 };
 
 // Safely check if a URL is from Apple Podcasts
