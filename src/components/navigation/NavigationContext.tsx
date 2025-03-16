@@ -25,7 +25,7 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     { name: 'Resources', path: '/resources' },
   ];
   
-  // Items that will go in the dropdown
+  // Items that will go in the dropdown - removed admin links
   const dropdownItems = [
     { name: 'Blog', path: '/articles/blog' },
     { name: 'About', path: '/about' },
