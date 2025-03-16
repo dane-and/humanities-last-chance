@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
@@ -52,7 +53,7 @@ const About = () => {
               <h2 className="text-2xl font-bold mt-8 mb-4">Connect With Us</h2>
               <p>We're committed to fostering a community of curious minds. Whether you're a student, educator, or simply someone interested in exploring the humanities, we invite you to join our conversation.</p>
               <p><strong>Founder:</strong> Dane Anderson</p>
-              <p><strong>Email:</strong> dane.anderson@humanitieslastchance.org</p>
+              <p><strong>Email:</strong> <a href="mailto:dane.anderson@humanitieslastchance.org">dane.anderson@humanitieslastchance.org</a></p>
               <p><strong>Location:</strong> Washington D.C.</p>
             </div>
           </div>
