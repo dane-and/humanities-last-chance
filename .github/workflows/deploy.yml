@@ -38,7 +38,7 @@ jobs:
         run: npm run build
         env:
           # Set base URL for GitHub Pages
-          VITE_BASE_URL: '/'
+          VITE_BASE_URL: '/humanities-last-chance/'
           # Make it clear this is a GitHub Pages build
           VITE_HOSTING: 'github'
           

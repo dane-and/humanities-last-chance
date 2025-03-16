@@ -23,8 +23,8 @@ export default defineConfig(({ mode }) => ({
     // Restrict which hosts can access the development server
     allowedHosts: mode === 'development' ? ['localhost', '127.0.0.1'] : undefined,
   },
-  // Set base URL to root for all environments
-  base: '/',
+  // Dynamic base path - use the repository name for GitHub Pages, root path otherwise
+  base: process.env.GITHUB_ACTIONS ? '/humanities-last-chance/' : '/',
   plugins: [
     react(),
     mode === 'development' && componentTagger(),
