@@ -1,3 +1,4 @@
+
 import React from 'react';
 import ArticleCard from './ArticleCard';
 import { cn } from '@/lib/utils';
@@ -33,11 +34,11 @@ const ArticleGrid: React.FC<ArticleGridProps> = ({
         <ArticleCard
           key={article.id}
           title={article.title}
-          excerpt={article.excerpt}
+          excerpt="" // Remove excerpt display
           category={article.category}
-          author={article.author}
+          author={article.author || ""}
           date={article.date}
-          image={article.image}
+          image="" // Don't display images
           slug={article.slug}
           variant={variant}
         />
