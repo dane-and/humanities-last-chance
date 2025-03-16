@@ -1,4 +1,3 @@
-
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
@@ -9,7 +8,7 @@ import { Analytics } from '@vercel/analytics/react';
 const forceReload = () => {
   // Add a random query parameter to each favicon-related link
   const timestamp = new Date().getTime();
-  const version = 'v=6';
+  const version = 'v=10';
   
   document.querySelectorAll("link[rel='icon'], link[rel='apple-touch-icon'], link[rel='manifest']").forEach(link => {
     const href = link.getAttribute('href');
@@ -33,9 +32,8 @@ const forceReload = () => {
     const favicon16 = document.createElement('link');
     favicon16.rel = 'icon';
     favicon16.type = 'image/png';
-    // Use setAttribute instead of direct assignment for read-only properties
     favicon16.setAttribute('sizes', '16x16');
-    favicon16.href = `/site-favicon-16x16.png?${version}&t=${timestamp}`;
+    favicon16.href = `/favicon_io/favicon-16x16.png?${version}&t=${timestamp}`;
     document.head.appendChild(favicon16);
   }
   
@@ -43,9 +41,8 @@ const forceReload = () => {
     const favicon32 = document.createElement('link');
     favicon32.rel = 'icon';
     favicon32.type = 'image/png';
-    // Use setAttribute instead of direct assignment for read-only properties
     favicon32.setAttribute('sizes', '32x32');
-    favicon32.href = `/site-favicon-32x32.png?${version}&t=${timestamp}`;
+    favicon32.href = `/favicon_io/favicon-32x32.png?${version}&t=${timestamp}`;
     document.head.appendChild(favicon32);
   }
 };
