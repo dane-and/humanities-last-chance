@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Article } from '@/lib/types/article';
-import { useArticleForm } from '@/hooks/useArticleForm';
+import { useArticleForm } from '@/hooks/article-form';
 
 // Import components
 import {
@@ -13,6 +13,7 @@ import {
   FormActions
 } from './article-form';
 import ImageEditorIntegration from './article-form/ImageEditorIntegration';
+import MediaManager from './MediaManager';
 
 interface ArticleFormProps {
   articleList: Article[];
@@ -40,14 +41,19 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
     handleImageChange,
     handleSaveEditedImage,
     handleSubmit,
-    handleDelete
+    handleDelete,
+    handleSaveAsDraft,
+    handleSchedulePublication
   } = useArticleForm(articleList, selectedArticle, onArticleListUpdate, onNewArticle);
 
   return (
     <div className="md:col-span-3 bg-background p-6 rounded-lg border">
-      <h2 className="text-xl font-bold mb-4">
-        {selectedArticle ? `Edit Article: ${selectedArticle.title}` : 'New Article'}
-      </h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-bold">
+          {selectedArticle ? `Edit Article: ${selectedArticle.title}` : 'New Article'}
+        </h2>
+        <MediaManager />
+      </div>
       
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -88,6 +94,9 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
         <FormActions
           isEditing={!!selectedArticle}
           onDelete={handleDelete}
+          onSaveAsDraft={handleSaveAsDraft}
+          onSchedule={handleSchedulePublication}
+          formData={formData}
         />
       </form>
       

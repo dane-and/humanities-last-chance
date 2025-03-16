@@ -2,6 +2,8 @@
 import { Article, defaultArticles } from '../../types/article';
 
 const STORAGE_KEY = 'hlc-articles';
+const DRAFTS_KEY = 'hlc-drafts';
+const SCHEDULED_KEY = 'hlc-scheduled';
 const LAST_BACKUP_KEY = 'hlc-last-backup-date';
 const BACKUP_REMINDER_DAYS = 7; // Remind user to backup every 7 days
 
@@ -26,6 +28,38 @@ export const getArticlesFromStorage = (): Article[] => {
   } catch (e) {
     console.error('Error reading from localStorage:', e);
     return defaultArticles;
+  }
+};
+
+/**
+ * Gets draft articles from local storage
+ */
+export const getDraftsFromStorage = (): Article[] => {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const savedDrafts = localStorage.getItem(DRAFTS_KEY);
+      return savedDrafts ? JSON.parse(savedDrafts) : [];
+    }
+    return [];
+  } catch (e) {
+    console.error('Error reading drafts from localStorage:', e);
+    return [];
+  }
+};
+
+/**
+ * Gets scheduled articles from local storage
+ */
+export const getScheduledFromStorage = (): Article[] => {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const savedScheduled = localStorage.getItem(SCHEDULED_KEY);
+      return savedScheduled ? JSON.parse(savedScheduled) : [];
+    }
+    return [];
+  } catch (e) {
+    console.error('Error reading scheduled articles from localStorage:', e);
+    return [];
   }
 };
 
@@ -59,6 +93,32 @@ export const saveArticlesToStorage = async (articles: Article[]): Promise<void> 
     }
   } catch (e) {
     console.error('Error saving to localStorage:', e);
+  }
+};
+
+/**
+ * Saves draft articles to local storage
+ */
+export const saveDraftsToStorage = (drafts: Article[]): void => {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem(DRAFTS_KEY, JSON.stringify(drafts));
+    }
+  } catch (e) {
+    console.error('Error saving drafts to localStorage:', e);
+  }
+};
+
+/**
+ * Saves scheduled articles to local storage
+ */
+export const saveScheduledToStorage = (scheduled: Article[]): void => {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem(SCHEDULED_KEY, JSON.stringify(scheduled));
+    }
+  } catch (e) {
+    console.error('Error saving scheduled articles to localStorage:', e);
   }
 };
 
@@ -108,3 +168,46 @@ export const getDaysSinceLastBackup = (): number | null => {
     (currentDate.getTime() - lastBackupDate.getTime()) / (1000 * 60 * 60 * 24)
   );
 };
+
+/**
+ * Function to publish a scheduled article if its publish date has arrived
+ */
+export const processScheduledArticles = (): void => {
+  try {
+    const scheduled = getScheduledFromStorage();
+    const articles = getArticlesFromStorage();
+    const now = new Date();
+    
+    // Find scheduled articles that should be published
+    const toPublish = scheduled.filter(article => {
+      if (!article.scheduledDate) return false;
+      const publishDate = new Date(article.scheduledDate);
+      return publishDate <= now;
+    });
+    
+    if (toPublish.length > 0) {
+      // Remove scheduledDate field before publishing
+      const publishReady = toPublish.map(article => {
+        const { scheduledDate, ...rest } = article;
+        return rest;
+      });
+      
+      // Add to published articles
+      const updatedArticles = [...articles, ...publishReady];
+      
+      // Remove published articles from scheduled list
+      const remainingScheduled = scheduled.filter(article => {
+        if (!article.scheduledDate) return true;
+        const publishDate = new Date(article.scheduledDate);
+        return publishDate > now;
+      });
+      
+      // Save changes
+      saveArticlesToStorage(updatedArticles);
+      saveScheduledToStorage(remainingScheduled);
+    }
+  } catch (e) {
+    console.error('Error processing scheduled articles:', e);
+  }
+};
+

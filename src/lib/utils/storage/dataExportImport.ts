@@ -1,14 +1,33 @@
 
 import { Article } from '../../types/article';
-import { getArticlesFromStorage, saveArticlesToStorage, recordBackupPerformed } from './articleStorage';
+import { 
+  getArticlesFromStorage, 
+  saveArticlesToStorage, 
+  recordBackupPerformed,
+  getDraftsFromStorage,
+  saveDraftsToStorage,
+  getScheduledFromStorage,
+  saveScheduledToStorage 
+} from './articleStorage';
 
 /**
  * Export articles data as JSON file
  */
-export const exportArticlesData = (): void => {
+export const exportArticlesData = (includeAll: boolean = false): void => {
   try {
     const articles = getArticlesFromStorage();
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(articles, null, 2));
+    const drafts = includeAll ? getDraftsFromStorage() : [];
+    const scheduled = includeAll ? getScheduledFromStorage() : [];
+    
+    const exportData = {
+      published: articles,
+      drafts: drafts,
+      scheduled: scheduled,
+      exportDate: new Date().toISOString(),
+      version: "2.0"
+    };
+    
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
     const downloadAnchorNode = document.createElement('a');
     downloadAnchorNode.setAttribute("href", dataStr);
     downloadAnchorNode.setAttribute("download", `humanities-last-chance-articles-${new Date().toISOString().slice(0,10)}.json`);
@@ -29,40 +48,35 @@ export const exportArticlesData = (): void => {
 export const importArticlesData = async (jsonData: string): Promise<boolean> => {
   try {
     // First, validate the JSON data
-    const articles = JSON.parse(jsonData) as Article[];
-    if (!Array.isArray(articles)) {
+    const parsedData = JSON.parse(jsonData);
+    
+    // Handle both new and old format
+    if (parsedData.version && parsedData.published) {
+      // New format with separate published/drafts/scheduled
+      if (!Array.isArray(parsedData.published)) {
+        throw new Error('Invalid data format: published articles not an array');
+      }
+      
+      // Import articles
+      saveArticlesToStorage(parsedData.published);
+      
+      // Import drafts if present
+      if (Array.isArray(parsedData.drafts)) {
+        saveDraftsToStorage(parsedData.drafts);
+      }
+      
+      // Import scheduled if present
+      if (Array.isArray(parsedData.scheduled)) {
+        saveScheduledToStorage(parsedData.scheduled);
+      }
+    } else if (Array.isArray(parsedData)) {
+      // Old format - just published articles
+      saveArticlesToStorage(parsedData);
+    } else {
       throw new Error('Invalid data format');
     }
     
-    // Import via API if possible
-    try {
-      const API_BASE_URL = '/api';
-      
-      // Create FormData for file upload
-      const formData = new FormData();
-      const blob = new Blob([jsonData], { type: 'application/json' });
-      formData.append('dataFile', blob, 'articles-import.json');
-      
-      const response = await fetch(`${API_BASE_URL}/import.php`, {
-        method: 'POST',
-        body: formData,
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('API import failed:', errorData.error);
-        throw new Error(errorData.error);
-      }
-      
-      return true;
-    } catch (apiError) {
-      console.error('Error importing via API:', apiError);
-      
-      // Fallback to localStorage
-      console.log('Falling back to localStorage import');
-      saveArticlesToStorage(articles);
-      return true;
-    }
+    return true;
   } catch (e) {
     console.error('Error importing articles data:', e);
     return false;
@@ -84,3 +98,26 @@ export const scheduleAutomaticBackup = (intervalDays: number = 7): void => {
     }));
   }
 };
+
+/**
+ * Export articles data to cloud storage (placeholder)
+ */
+export const exportArticlesToCloud = async (service: 'dropbox' | 'gdrive'): Promise<boolean> => {
+  try {
+    // This is a placeholder function that would be implemented with the actual API
+    // For now, we'll just perform a local export
+    exportArticlesData(true);
+    
+    // And record that we did a cloud backup
+    localStorage.setItem('hlc-last-cloud-backup', JSON.stringify({
+      service,
+      timestamp: new Date().toISOString()
+    }));
+    
+    return true;
+  } catch (e) {
+    console.error(`Error exporting to ${service}:`, e);
+    return false;
+  }
+};
+
