@@ -2,14 +2,18 @@
 name: Deploy to GitHub Pages
 
 on:
-  # Run on pushes to main branch
-  push:
-    branches: [main]
-  # Allow manual triggering
+  # Only run on manual trigger
   workflow_dispatch:
+    inputs:
+      deploy_to_github:
+        description: 'Deploy to GitHub Pages'
+        required: true
+        default: 'true'
 
 jobs:
   deploy:
+    # Only run if explicitly triggered
+    if: github.event.inputs.deploy_to_github == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -18,6 +22,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          ref: main
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -57,4 +63,3 @@ jobs:
           folder: dist # The folder the action should deploy
           branch: gh-pages # The branch the action should deploy to
           clean: true # Automatically remove deleted files from the deployment branch
-
