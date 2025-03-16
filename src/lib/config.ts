@@ -7,6 +7,7 @@
  */
 
 // Determine current environment
+const isNetlify = import.meta.env.VITE_HOSTING === 'netlify';
 const isVercel = import.meta.env.VITE_HOSTING === 'vercel';
 const isGitHubPages = import.meta.env.VITE_HOSTING === 'github';
 const isDevelopment = import.meta.env.DEV;
@@ -18,7 +19,7 @@ const BASE_PATH = import.meta.env.VITE_BASE_URL || '/';
 const API_CONFIG = {
   // Base URL for API endpoints
   // In production: use environment variable or fall back to relative URL for self-hosted API
-  BASE_URL: isVercel 
+  BASE_URL: (isVercel || isNetlify)
     ? import.meta.env.VITE_API_URL || 'https://api.humanitieslastchance.org' 
     : '/api',
   
@@ -30,9 +31,9 @@ const API_CONFIG = {
     // Enable localStorage fallback for situations when API is unavailable
     USE_LOCAL_STORAGE_FALLBACK: true,
     // Enable Google Sheets fallback (configured below)
-    USE_GOOGLE_SHEETS_FALLBACK: isVercel,
+    USE_GOOGLE_SHEETS_FALLBACK: (isVercel || isNetlify),
     // Disable API calls for pure static hosting
-    STATIC_ONLY: (isVercel || isGitHubPages) && !import.meta.env.VITE_API_URL,
+    STATIC_ONLY: (isVercel || isNetlify || isGitHubPages) && !import.meta.env.VITE_API_URL,
   }
 };
 
@@ -72,11 +73,11 @@ const CMS_CONFIG = {
 
 // Authentication configuration
 const AUTH_CONFIG = {
-  // Admin credentials - for Vercel, use environment variables
-  ADMIN_USERNAME: isVercel
+  // Admin credentials - for hosted environments, use environment variables
+  ADMIN_USERNAME: (isVercel || isNetlify)
     ? import.meta.env.VITE_ADMIN_USERNAME || 'daneanderson10'
     : 'daneanderson10',
-  ADMIN_PASSWORD: isVercel
+  ADMIN_PASSWORD: (isVercel || isNetlify)
     ? import.meta.env.VITE_ADMIN_PASSWORD || 'uR5!9xB#k2Pz@Lm$'
     : 'uR5!9xB#k2Pz@Lm$',
   // Add other auth settings as needed
