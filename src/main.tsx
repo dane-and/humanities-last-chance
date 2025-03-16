@@ -18,7 +18,10 @@ if (linkEl) {
 document.querySelectorAll("link[rel='icon'], link[rel='apple-touch-icon'], link[rel='manifest']").forEach(link => {
   const href = link.getAttribute('href');
   if (href) {
-    link.setAttribute('href', href + '&t=' + new Date().getTime());
+    // Create new URL without any existing query parameters
+    const url = href.split('?')[0];
+    // Add timestamp to force cache refresh
+    link.setAttribute('href', url + '?v=4&t=' + new Date().getTime());
   }
 });
 
