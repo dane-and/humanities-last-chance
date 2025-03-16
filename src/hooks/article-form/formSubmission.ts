@@ -145,11 +145,11 @@ export const useArticleFormSubmission = (
       // Check if we're updating an existing draft
       const existingDraftIndex = drafts.findIndex(draft => draft.id === formData.id);
       
-      const draftArticle = {
+      const draftArticle: Article = {
         ...formData,
         tags: selectedTags,
         isDraft: true,
-        status: 'draft',
+        status: 'draft' as const, // Use const assertion to ensure literal type
         lastModified: new Date().toISOString()
       };
       
@@ -199,11 +199,11 @@ export const useArticleFormSubmission = (
       const scheduled = getScheduledFromStorage();
       let updatedScheduled: Article[];
       
-      const scheduledArticle = {
+      const scheduledArticle: Article = {
         ...formData,
         tags: selectedTags,
         scheduledDate: publishDate.toISOString(),
-        status: 'scheduled',
+        status: 'scheduled' as const, // Use const assertion to ensure literal type
         lastModified: new Date().toISOString()
       };
       
