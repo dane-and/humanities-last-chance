@@ -33,6 +33,8 @@ jobs:
         env:
           # Set base URL for GitHub Pages
           VITE_BASE_URL: '/'
+          # Make it clear this is a GitHub Pages build
+          VITE_HOSTING: 'github'
           
       # Ensure CNAME file is in the dist directory
       - name: Setup CNAME
@@ -55,3 +57,4 @@ jobs:
           folder: dist # The folder the action should deploy
           branch: gh-pages # The branch the action should deploy to
           clean: true # Automatically remove deleted files from the deployment branch
+
