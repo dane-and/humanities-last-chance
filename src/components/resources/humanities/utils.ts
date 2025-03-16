@@ -13,7 +13,7 @@ export const getYouTubeVideoId = (url: string): string | null => {
     return playlistIdMatch ? playlistIdMatch[1] : null;
   }
   
-  // Handle regular video URLs
+  // Regular video URLs
   const videoIdMatch = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
   return videoIdMatch ? videoIdMatch[1] : null;
 };
@@ -23,11 +23,24 @@ export const isYoutubeLink = (url: string): boolean => {
   return url.includes('youtube.com') || url.includes('youtu.be');
 };
 
+// Safely check if a URL is from Apple Podcasts
+export const isApplePodcastsUrl = (url: string): boolean => {
+  try {
+    const parsedUrl = new URL(url);
+    // Check for official Apple Podcasts domains
+    return parsedUrl.hostname === 'podcasts.apple.com' || 
+           parsedUrl.hostname.endsWith('.podcasts.apple.com');
+  } catch {
+    // If URL parsing fails, it's not a valid URL
+    return false;
+  }
+};
+
 // Determine if the course has an Apple Podcast link
 export const hasApplePodcastLink = (course: Course): boolean => {
   return course.alternateLinks?.some(link => 
     link.platform.toLowerCase().includes('apple') && 
-    link.url.includes('podcasts.apple.com')
+    isApplePodcastsUrl(link.url)
   );
 };
 
@@ -37,7 +50,7 @@ export const getApplePodcastLink = (course: Course): string | null => {
   
   const podcastLink = course.alternateLinks.find(link => 
     link.platform.toLowerCase().includes('apple') && 
-    link.url.includes('podcasts.apple.com')
+    isApplePodcastsUrl(link.url)
   );
   
   return podcastLink ? podcastLink.url : null;
