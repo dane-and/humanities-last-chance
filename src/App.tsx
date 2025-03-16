@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -36,14 +35,12 @@ const App = () => {
   // Update the title and meta description based on the current route
   useEffect(() => {
     // Set default title and description
-    document.title = "Humanities Last Chance - Magazine of Humanities Scholarship";
+    document.title = "Humanities Last Chance";
     
-    // You can add more sophisticated meta tag handling here
+    // Update meta description to match title for consistent link previews
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
-      metaDescription.setAttribute("content", 
-        "A digital magazine publishing daily blog posts, interviews, and reviews about humanities scholarship."
-      );
+      metaDescription.setAttribute("content", "Humanities Last Chance");
     }
   }, []);
 
