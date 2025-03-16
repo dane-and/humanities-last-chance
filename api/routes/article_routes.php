@@ -1,6 +1,5 @@
 
 <?php
-require_once __DIR__ . '/../handlers/article_handlers.php';
 require_once __DIR__ . '/../handlers/article/index.php';
 require_once __DIR__ . '/../utils/response_utils.php';
 

@@ -22,8 +22,18 @@ This directory contains the PHP backend API for the Humanities Last Chance websi
 - `pages.php` - CRUD operations for static pages
 - `import.php` - Data import functionality
 
+## Architecture
+
+The API is organized using a modular structure:
+- `/handlers/` - Contains business logic for each resource type
+  - `/article/` - Article CRUD operations
+  - `/page/` - Page CRUD operations
+- `/routes/` - Request routing logic
+- `/utils/` - Utility functions
+
 ## Security Notes
 
 - Update the CORS headers in `config.php` to restrict access to your domain only
 - Consider adding authentication to protect admin operations
 - Keep your database credentials secure
+
