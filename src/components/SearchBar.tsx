@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { useArticles } from '@/lib/articles';
 import { cn } from '@/lib/utils';
-
+import sanitizeHtml from 'sanitize-html';
 interface SearchBarProps {
   className?: string;
 }
@@ -126,7 +126,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ className }) => {
                   >
                     <div className="font-medium truncate">{article.title}</div>
                     <div className="text-xs text-muted-foreground truncate">
-                      {article.excerpt || article.content.replace(/<[^>]*>/g, '').substring(0, 60)}...
+                      {article.excerpt || sanitizeHtml(article.content, { allowedTags: [], allowedAttributes: {} }).substring(0, 60)}...
                     </div>
                   </li>
                 ))}
