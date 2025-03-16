@@ -85,14 +85,14 @@ const ArticlePage: React.FC = () => {
             <p className="text-lg text-muted-foreground mb-2">{currentArticle.excerpt}</p>
           </header>
           
-          {currentArticle.image && (
+          {currentArticle.image && currentArticle.image.trim() !== '' && (
             <div className="mb-4 overflow-hidden rounded-lg">
               <AspectRatio ratio={16 / 9}>
                 <OptimizedImage
                   src={currentArticle.image}
                   alt={currentArticle.title}
                   className="w-full h-full object-cover object-top"
-                  caption={currentArticle.imageCaption || 'J.M.W. Turner, "The Departure of the Fleet"'}
+                  caption={currentArticle.imageCaption || ''}
                 />
               </AspectRatio>
             </div>

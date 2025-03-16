@@ -29,6 +29,7 @@ const ArticleCard: React.FC<ArticleCardProps> = React.memo(({
   className,
 }) => {
   const isCompact = variant === 'compact';
+  const hasImage = image && image.trim() !== '';
   
   return (
     <article
@@ -66,20 +67,22 @@ const ArticleCard: React.FC<ArticleCardProps> = React.memo(({
         </div>
       </div>
       
-      <div className={cn('relative', isCompact ? 'h-auto' : 'h-auto')}>
-        <AspectRatio ratio={21 / 9} className="overflow-hidden">
-          <Link to={`/article/${slug}`} aria-label={title} className="block w-full h-full">
-            <img
-              src={image}
-              alt={title}
-              className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-              loading="lazy"
-              width={640}
-              height={274}
-            />
-          </Link>
-        </AspectRatio>
-      </div>
+      {hasImage && (
+        <div className={cn('relative', isCompact ? 'h-auto' : 'h-auto')}>
+          <AspectRatio ratio={21 / 9} className="overflow-hidden">
+            <Link to={`/article/${slug}`} aria-label={title} className="block w-full h-full">
+              <img
+                src={image}
+                alt={title}
+                className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+                width={640}
+                height={274}
+              />
+            </Link>
+          </AspectRatio>
+        </div>
+      )}
       
       {!isCompact && excerpt && (
         <div className="p-5 pt-3">

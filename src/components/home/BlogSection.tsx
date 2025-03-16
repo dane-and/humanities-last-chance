@@ -96,7 +96,7 @@ const BlogSection: React.FC<BlogSectionProps> = ({
               )}
             </div>
             
-            {post.image && (
+            {post.image && post.image.trim() !== '' && (
               <div className="mb-5">
                 <AspectRatio ratio={21 / 9} className="overflow-hidden rounded-lg">
                   <OptimizedImage
