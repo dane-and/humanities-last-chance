@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Article, defaultArticles } from '../types/article';
 import { toast } from 'sonner';
+import { getArticlesFromStorage, saveArticlesToStorage } from '../utils/storage/articleStorage';
 
 export const useArticles = () => {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -13,16 +14,9 @@ export const useArticles = () => {
       setIsLoading(true);
       
       try {
-        // Load from localStorage
-        const savedArticles = localStorage.getItem('hlc-articles');
-        if (savedArticles) {
-          const parsedArticles = JSON.parse(savedArticles);
-          setArticles(parsedArticles);
-        } else {
-          // If no articles in storage, use defaults
-          setArticles(defaultArticles);
-          localStorage.setItem('hlc-articles', JSON.stringify(defaultArticles));
-        }
+        // Load articles using the common storage function
+        const loadedArticles = getArticlesFromStorage();
+        setArticles(loadedArticles);
         setError(null);
       } catch (err) {
         console.error('Error loading articles:', err);
@@ -43,11 +37,8 @@ export const useArticles = () => {
     setIsLoading(true);
     
     try {
-      const savedArticles = localStorage.getItem('hlc-articles');
-      if (savedArticles) {
-        const parsedArticles = JSON.parse(savedArticles);
-        setArticles(parsedArticles);
-      }
+      const loadedArticles = getArticlesFromStorage();
+      setArticles(loadedArticles);
       setError(null);
     } catch (err) {
       console.error('Error refreshing articles:', err);
@@ -57,5 +48,15 @@ export const useArticles = () => {
     }
   };
 
-  return { articles, isLoading, error, refreshArticles };
+  const updateArticles = (newArticles: Article[]) => {
+    try {
+      saveArticlesToStorage(newArticles);
+      setArticles(newArticles);
+    } catch (err) {
+      console.error('Error updating articles:', err);
+      toast.error("Failed to update articles");
+    }
+  };
+
+  return { articles, isLoading, error, refreshArticles, updateArticles };
 };

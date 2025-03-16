@@ -2,6 +2,7 @@
 import { toast } from 'sonner';
 import { Article } from '../../lib/types/article';
 import { ArticleFormProps } from './types';
+import { saveArticlesToStorage } from '../../lib/utils/storage/articleStorage';
 
 export const useArticleFormSubmission = (
   formData: Article,
@@ -46,7 +47,7 @@ export const useArticleFormSubmission = (
     }
     
     onArticleListUpdate(updatedList);
-    localStorage.setItem('hlc-articles', JSON.stringify(updatedList));
+    saveArticlesToStorage(updatedList);
   };
 
   // Handle article deletion
@@ -56,7 +57,7 @@ export const useArticleFormSubmission = (
     if (window.confirm(`Are you sure you want to delete "${selectedArticle.title}"?`)) {
       const updatedList = articleList.filter(article => article.id !== selectedArticle.id);
       onArticleListUpdate(updatedList);
-      localStorage.setItem('hlc-articles', JSON.stringify(updatedList));
+      saveArticlesToStorage(updatedList);
       onNewArticle();
       toast.success("Article deleted successfully");
     }

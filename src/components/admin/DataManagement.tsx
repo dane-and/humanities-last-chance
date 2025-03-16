@@ -8,6 +8,7 @@ import {
   AlertTitle 
 } from "@/components/ui/alert";
 import { Download, Upload, Info } from 'lucide-react';
+import { getArticlesFromStorage, saveArticlesToStorage } from '@/lib/utils/storage/articleStorage';
 
 interface DataManagementProps {
   onDataImported: () => void;
@@ -19,8 +20,8 @@ const DataManagement: React.FC<DataManagementProps> = ({ onDataImported }) => {
   
   const handleExport = () => {
     try {
-      const articles = localStorage.getItem('hlc-articles') || '[]';
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(articles);
+      const articles = getArticlesFromStorage();
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(articles, null, 2));
       const downloadAnchorNode = document.createElement('a');
       downloadAnchorNode.setAttribute("href", dataStr);
       downloadAnchorNode.setAttribute("download", `humanities-last-chance-articles-${new Date().toISOString().slice(0,10)}.json`);
@@ -48,7 +49,7 @@ const DataManagement: React.FC<DataManagementProps> = ({ onDataImported }) => {
         const articles = JSON.parse(jsonData);
         
         if (Array.isArray(articles)) {
-          localStorage.setItem('hlc-articles', jsonData);
+          saveArticlesToStorage(articles);
           toast.success('Articles imported successfully');
           onDataImported();
         } else {

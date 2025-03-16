@@ -1,7 +1,7 @@
 
 import { Article, defaultArticles } from '../../types/article';
 
-const STORAGE_KEY = 'hlc-admin-articles';
+const STORAGE_KEY = 'hlc-articles';
 
 /**
  * Gets articles from local storage (fallback method)
