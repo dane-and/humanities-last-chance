@@ -45,7 +45,7 @@ jobs:
       # Ensure CNAME file is in the dist directory
       - name: Setup CNAME
         run: |
-          echo "humanitieslast.com" > dist/CNAME
+          echo "humanitieslastchance.org" > dist/CNAME
 
       - name: Copy index.html to 404.html
         run: cp dist/index.html dist/404.html

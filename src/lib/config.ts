@@ -19,7 +19,7 @@ const API_CONFIG = {
   // Base URL for API endpoints
   // In production: use environment variable or fall back to relative URL for self-hosted API
   BASE_URL: isVercel 
-    ? import.meta.env.VITE_API_URL || 'https://api.humanitieslast.com' 
+    ? import.meta.env.VITE_API_URL || 'https://api.humanitieslastchance.org' 
     : '/api',
   
   // Timeout in milliseconds for API requests

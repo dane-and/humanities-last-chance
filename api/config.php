@@ -25,8 +25,8 @@ header('Content-Type: application/json');
 
 // Production-safe CORS headers
 $allowedOrigins = [
-    'https://www.humanitieslast.com', 
-    'https://humanitieslast.com'
+    'https://www.humanitieslastchance.org', 
+    'https://humanitieslastchance.org'
 ];
 
 // For development, you can uncomment this line
