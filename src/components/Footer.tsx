@@ -29,7 +29,7 @@ const Footer: React.FC = () => {
               <h3 className="text-lg font-semibold text-gray-800">Humanities Last Chance</h3>
             </div>
             <p className="text-sm text-gray-600 mt-3">
-              A free online resource publishing, blog posts, interviews, and reviews about humanities scholarship.
+              A free online resource publishing blog posts, interviews, and reviews about humanities scholarship.
             </p>
             <div className="mt-4 flex items-center">
               <a 
