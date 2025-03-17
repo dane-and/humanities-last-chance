@@ -1,3 +1,9 @@
 
 /* Main stylesheet that imports all other stylesheets */
 @import './styles/index.css';
+
+/* Critical footer styles that should not be removed */
+.site-footer {
+  display: block !important;
+  visibility: visible !important;
+}

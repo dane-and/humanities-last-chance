@@ -3,6 +3,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ExternalLink } from 'lucide-react';
 
+// Create a constant flag to prevent accidental deletion of this component
+// This can be checked by other components or build processes
+export const FOOTER_COMPONENT_REQUIRED = true;
+
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
   
@@ -14,9 +18,9 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-gray-100 py-8 mt-16">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
           {/* Column 1: Logo, Description and X link */}
-          <div className="col-span-1 md:col-span-1">
+          <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2">
               <img 
                 src="/lovable-uploads/71dce2e5-1d5f-4477-89d1-7e18ea84e7f2.png" 
@@ -39,7 +43,7 @@ const Footer: React.FC = () => {
                 className="text-gray-600 hover:text-gray-900 transition-colors flex items-center"
               >
                 <img 
-                  src="/lovable-uploads/752042b5-0122-418d-9aa4-11d2ba60a7ba.png" 
+                  src="/lovable-uploads/f9c1d914-1205-4196-ac9c-9ebe238e7d01.png" 
                   alt="X logo" 
                   className="h-5 w-auto mr-2"
                   width="20"
@@ -69,9 +73,9 @@ const Footer: React.FC = () => {
             </ul>
           </div>
           
-          {/* Column 3: Second link column (with removed heading) */}
-          <div className="col-span-1">
-            <ul className="space-y-2 mt-10">
+          {/* Column 3: Second link column (without heading) */}
+          <div className="col-span-1 mt-0 md:mt-10">
+            <ul className="space-y-2">
               <li>
                 <Link to="/resources" className="text-sm text-gray-600 hover:text-gray-900">Resources</Link>
               </li>
@@ -102,5 +106,8 @@ const Footer: React.FC = () => {
     </footer>
   );
 };
+
+// Add a static property to indicate this component is required
+Footer.displayName = 'FooterRequired';
 
 export default Footer;
