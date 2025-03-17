@@ -2,7 +2,7 @@
 import React from 'react';
 import { Accordion } from '@/components/ui/accordion';
 import ResourceCategory from './ResourceCategory';
-import categoriesData from './categories';
+import { categoriesData } from './categories/categoriesData';
 
 const OtherResources: React.FC = () => {
   return (

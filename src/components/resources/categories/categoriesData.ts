@@ -34,6 +34,12 @@ export const categoriesData: ResourceCategory[] = [
         url: 'https://marginalrevolution.com/',
         description: 'Economics blog with wide-ranging intellectual interests.',
         icon: React.createElement(Globe, { className: "h-5 w-5 text-primary" })
+      },
+      {
+        name: 'The Cosmos Institute',
+        url: 'https://cosmosinstitute.substack.com/',
+        description: 'Substack exploring the relationships between philosophy and AI.',
+        icon: React.createElement(Globe, { className: "h-5 w-5 text-primary" })
       }
     ]
   },
