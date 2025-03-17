@@ -9,6 +9,8 @@ import { saveArticlesToStorage } from '../../utils/storage/articleStorage';
  */
 export const createArticle = async (article: Omit<Article, 'id'>): Promise<Article> => {
   try {
+    console.log('Creating article with data:', article);
+    
     const response = await fetchWithTimeout(
       getApiUrl('articles.php'),
       {
@@ -21,6 +23,7 @@ export const createArticle = async (article: Omit<Article, 'id'>): Promise<Artic
     );
     
     const data = await response.json();
+    console.log('Server response for create:', data);
     
     // Also update local storage for immediate access
     const allArticles = getArticlesFromStorage();
@@ -43,21 +46,48 @@ export const updateArticle = async (id: string, article: Partial<Article>): Prom
     console.log('Updating article with ID:', id);
     console.log('Article data to update:', JSON.stringify(article, null, 2));
     
-    // Fix: Use a properly formatted endpoint for the update
-    // articles.php is the main endpoint, and we'll add the id as a query parameter instead
+    // Ensure the endpoint URL is correctly formatted
+    const endpoint = `articles.php?id=${encodeURIComponent(id)}`;
+    console.log('Using API endpoint:', getApiUrl(endpoint));
+    
+    // Create a complete copy of the article to send to the server
+    const articleToUpdate = {
+      ...article,
+      id // Ensure the ID is included in the payload
+    };
+    
     const response = await fetchWithTimeout(
-      getApiUrl('articles.php?id=' + id),
+      getApiUrl(endpoint),
       {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(article),
+        body: JSON.stringify(articleToUpdate),
       }
     );
     
-    const data = await response.json();
-    console.log('Server response for update:', data);
+    const responseText = await response.text();
+    console.log('Raw server response for update:', responseText);
+    
+    // Try to parse the response as JSON
+    let data;
+    try {
+      data = JSON.parse(responseText);
+      console.log('Parsed server response for update:', data);
+    } catch (parseError) {
+      console.error('Failed to parse server response as JSON:', parseError);
+      throw new Error(`Server returned invalid JSON: ${responseText}`);
+    }
+    
+    // Check if the response contains the expected data structure
+    if (!data.article && !data.success) {
+      console.error('Unexpected server response format:', data);
+      throw new Error('Unexpected server response format');
+    }
+    
+    // Get the updated article from the response
+    const updatedArticle = data.article || articleToUpdate;
     
     // Also update local storage for immediate access
     const allArticles = getArticlesFromStorage();
@@ -67,7 +97,7 @@ export const updateArticle = async (id: string, article: Partial<Article>): Prom
     saveArticlesToStorage(updatedArticles);
     
     console.log('Article updated successfully, saved to storage');
-    return data.article;
+    return updatedArticle;
   } catch (error) {
     console.error('Error updating article:', error);
     
@@ -92,13 +122,19 @@ export const updateArticle = async (id: string, article: Partial<Article>): Prom
  */
 export const deleteArticle = async (id: string): Promise<void> => {
   try {
-    // Fix: Use the same consistent query parameter format
+    console.log('Deleting article with ID:', id);
+    
+    // Use consistent query parameter format
+    const endpoint = `articles.php?id=${encodeURIComponent(id)}`;
+    
     await fetchWithTimeout(
-      getApiUrl(`articles.php?id=${id}`),
+      getApiUrl(endpoint),
       {
         method: 'DELETE',
       }
     );
+    
+    console.log('Article deleted successfully from server');
     
     // Also delete from local storage
     const allArticles = getArticlesFromStorage();
@@ -113,6 +149,7 @@ export const deleteArticle = async (id: string): Promise<void> => {
       const allArticles = getArticlesFromStorage();
       const filteredArticles = allArticles.filter(article => article.id !== id);
       saveArticlesToStorage(filteredArticles);
+      console.log('Article deleted from local storage despite API failure');
     } catch (storageError) {
       console.error('Failed to update local storage:', storageError);
     }

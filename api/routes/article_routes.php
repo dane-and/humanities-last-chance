@@ -12,10 +12,13 @@ require_once __DIR__ . '/../utils/response_utils.php';
  */
 function routeArticleRequest($method, $articleId = null) {
     try {
-        // Use query parameter ID if not provided explicitly
+        // Ensure we always have the article ID if provided in the query string
         if (!$articleId && isset($_GET['id'])) {
             $articleId = $_GET['id'];
         }
+        
+        // Debug log to trace request information
+        error_log("Article request: Method=$method, ID=$articleId, Query string=" . http_build_query($_GET));
         
         switch ($method) {
             case 'GET':
@@ -35,6 +38,9 @@ function routeArticleRequest($method, $articleId = null) {
                     sendErrorResponse(400, 'Article ID is required for update operations');
                     return;
                 }
+                // Log the payload for debugging
+                $rawData = file_get_contents('php://input');
+                error_log("UPDATE request body: $rawData");
                 updateArticle($articleId);
                 break;
                 
@@ -51,6 +57,7 @@ function routeArticleRequest($method, $articleId = null) {
                 break;
         }
     } catch (Exception $e) {
+        error_log("Article API Exception: " . $e->getMessage());
         sendErrorResponse(500, 'Server error: ' . $e->getMessage());
     }
 }

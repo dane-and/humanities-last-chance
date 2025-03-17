@@ -18,6 +18,7 @@ function updateArticle($id) {
     if (!$data) {
         error_log("Invalid JSON data received: $rawData");
         sendErrorResponse(400, 'Invalid JSON data');
+        return;
     }
     
     // Check if article exists
@@ -28,7 +29,7 @@ function updateArticle($id) {
     $checkResult = $checkStmt->get_result();
     
     if ($checkResult->num_rows === 0) {
-        // For development purposes, we'll create it if it doesn't exist
+        // Article doesn't exist, create it instead
         error_log("Article not found with ID: $id, creating new entry");
         createArticleFallback($id, $data);
         return;
@@ -36,6 +37,17 @@ function updateArticle($id) {
     
     // Prepare tags for storage
     $tags = isset($data['tags']) && is_array($data['tags']) ? implode(',', $data['tags']) : '';
+    
+    // Ensure all required fields have values or defaults
+    $title = isset($data['title']) ? $data['title'] : '';
+    $slug = isset($data['slug']) ? $data['slug'] : '';
+    $author = isset($data['author']) ? $data['author'] : '';
+    $date = isset($data['date']) ? $data['date'] : date('Y-m-d');
+    $category = isset($data['category']) ? $data['category'] : 'Blog';
+    $image = isset($data['image']) ? $data['image'] : '';
+    $excerpt = isset($data['excerpt']) ? $data['excerpt'] : '';
+    $content = isset($data['content']) ? $data['content'] : '';
+    $featured = isset($data['featured']) && $data['featured'] ? 1 : 0;
     
     // Update article in database
     $sql = "UPDATE articles SET 
@@ -52,18 +64,17 @@ function updateArticle($id) {
             WHERE id = ?";
     
     $stmt = $conn->prepare($sql);
-    $featured = isset($data['featured']) && $data['featured'] ? 1 : 0;
     
     $stmt->bind_param(
         "ssssssssis", 
-        $data['title'], 
-        $data['slug'], 
-        $data['author'], 
-        $data['date'], 
-        $data['category'], 
-        $data['image'], 
-        $data['excerpt'], 
-        $data['content'], 
+        $title, 
+        $slug, 
+        $author, 
+        $date, 
+        $category, 
+        $image, 
+        $excerpt, 
+        $content, 
         $featured,
         $tags,
         $id
@@ -72,11 +83,14 @@ function updateArticle($id) {
     if (!$stmt->execute()) {
         error_log("Failed to update article: " . $stmt->error);
         sendErrorResponse(500, 'Failed to update article: ' . $stmt->error);
+        return;
     }
     
     error_log("Article updated successfully: $id");
+    
     // Return success with the updated article
-    sendSuccessResponse(['article' => array_merge($data, ['id' => $id])], 200, 'Article updated successfully');
+    $responseData = array_merge($data, ['id' => $id]);
+    sendSuccessResponse(['article' => $responseData], 200, 'Article updated successfully');
 }
 
 /**
@@ -88,24 +102,34 @@ function createArticleFallback($id, $data) {
     // Prepare tags for storage
     $tags = isset($data['tags']) && is_array($data['tags']) ? implode(',', $data['tags']) : '';
     
+    // Ensure all required fields have values or defaults
+    $title = isset($data['title']) ? $data['title'] : '';
+    $slug = isset($data['slug']) ? $data['slug'] : '';
+    $author = isset($data['author']) ? $data['author'] : '';
+    $date = isset($data['date']) ? $data['date'] : date('Y-m-d');
+    $category = isset($data['category']) ? $data['category'] : 'Blog';
+    $image = isset($data['image']) ? $data['image'] : '';
+    $excerpt = isset($data['excerpt']) ? $data['excerpt'] : '';
+    $content = isset($data['content']) ? $data['content'] : '';
+    $featured = isset($data['featured']) && $data['featured'] ? 1 : 0;
+    
     // Insert article into database
     $sql = "INSERT INTO articles (id, title, slug, author, date, category, image, excerpt, content, featured, tags) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
     $stmt = $conn->prepare($sql);
-    $featured = isset($data['featured']) && $data['featured'] ? 1 : 0;
     
     $stmt->bind_param(
         "ssssssssis", 
         $id, 
-        $data['title'], 
-        $data['slug'], 
-        $data['author'], 
-        $data['date'], 
-        $data['category'], 
-        $data['image'], 
-        $data['excerpt'], 
-        $data['content'], 
+        $title, 
+        $slug, 
+        $author, 
+        $date, 
+        $category, 
+        $image, 
+        $excerpt, 
+        $content, 
         $featured,
         $tags
     );
@@ -113,10 +137,13 @@ function createArticleFallback($id, $data) {
     if (!$stmt->execute()) {
         error_log("Failed to create fallback article: " . $stmt->error);
         sendErrorResponse(500, 'Failed to create article: ' . $stmt->error);
+        return;
     }
     
     error_log("Article created as fallback: $id");
+    
     // Return success with the created article
-    sendSuccessResponse(['article' => array_merge($data, ['id' => $id])], 201, 'Article created successfully');
+    $responseData = array_merge($data, ['id' => $id]);
+    sendSuccessResponse(['article' => $responseData], 201, 'Article created successfully');
 }
 ?>

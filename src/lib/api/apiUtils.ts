@@ -1,6 +1,11 @@
 
 import { API_CONFIG, SHEETS_CONFIG } from '../config';
 
+// Simple rate limiter to prevent too many API calls in short succession
+const pendingRequests = new Map<string, Promise<any>>();
+const requestCooldowns = new Map<string, number>();
+const MIN_REQUEST_INTERVAL = 500; // ms between identical requests
+
 /**
  * Creates a fetch request with timeout functionality
  */
@@ -12,6 +17,25 @@ export const fetchWithTimeout = async (
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
   
+  // Generate a cache key based on URL and method
+  const cacheKey = `${options.method || 'GET'}-${url}`;
+  
+  // Check if this exact request is already in progress
+  if (pendingRequests.has(cacheKey)) {
+    console.log(`Request to ${url} already in progress, reusing promise`);
+    return pendingRequests.get(cacheKey) as Promise<Response>;
+  }
+  
+  // Check if we need to throttle identical requests
+  const lastRequestTime = requestCooldowns.get(cacheKey) || 0;
+  const timeSinceLastRequest = Date.now() - lastRequestTime;
+  
+  if (timeSinceLastRequest < MIN_REQUEST_INTERVAL) {
+    const delay = MIN_REQUEST_INTERVAL - timeSinceLastRequest;
+    console.log(`Rate limiting request to ${url}, delaying by ${delay}ms`);
+    await new Promise(resolve => setTimeout(resolve, delay));
+  }
+  
   try {
     // Enhanced request logging
     const method = options.method || 'GET';
@@ -22,47 +46,63 @@ export const fetchWithTimeout = async (
       console.log(`Request payload: ${options.body}`);
     }
     
-    const start = Date.now();
-    const response = await fetch(url, {
-      ...options,
-      signal: controller.signal
-    });
-    
-    const responseTime = Date.now() - start;
-    console.log(`API Response: ${response.status} (${responseTime}ms)`);
-    
-    clearTimeout(timeoutId);
-    
-    if (!response.ok) {
-      let errorMessage = `API request failed with status ${response.status}`;
-      let errorData = null;
-      
+    // Create the request promise
+    const requestPromise = (async () => {
       try {
-        // Try to get detailed error message from response
-        const textResponse = await response.text();
-        console.log('Error response text:', textResponse);
+        const start = Date.now();
+        const response = await fetch(url, {
+          ...options,
+          signal: controller.signal
+        });
         
-        try {
-          // Try to parse as JSON
-          errorData = JSON.parse(textResponse);
-          errorMessage = errorData.error || errorMessage;
-        } catch (parseError) {
-          // If JSON parsing fails, use text response as error message
-          errorMessage = textResponse || errorMessage;
-          console.error('Failed to parse error response as JSON:', parseError);
+        const responseTime = Date.now() - start;
+        console.log(`API Response: ${response.status} (${responseTime}ms)`);
+        
+        if (!response.ok) {
+          let errorMessage = `API request failed with status ${response.status}`;
+          let errorData = null;
+          
+          try {
+            // Try to get detailed error message from response
+            const textResponse = await response.text();
+            console.log('Error response text:', textResponse);
+            
+            try {
+              // Try to parse as JSON
+              errorData = JSON.parse(textResponse);
+              errorMessage = errorData.error || errorMessage;
+            } catch (parseError) {
+              // If JSON parsing fails, use text response as error message
+              errorMessage = textResponse || errorMessage;
+              console.error('Failed to parse error response as JSON:', parseError);
+            }
+          } catch (e) {
+            // If reading text fails, use default error message
+            console.error('Failed to read error response:', e);
+          }
+          
+          console.error('API Error:', errorMessage);
+          throw new Error(errorMessage);
         }
-      } catch (e) {
-        // If reading text fails, use default error message
-        console.error('Failed to read error response:', e);
+        
+        return response;
+      } finally {
+        // Remove from pending requests when done
+        pendingRequests.delete(cacheKey);
+        // Update the cooldown time
+        requestCooldowns.set(cacheKey, Date.now());
       }
-      
-      console.error('API Error:', errorMessage);
-      throw new Error(errorMessage);
-    }
+    })();
     
+    // Store the request promise
+    pendingRequests.set(cacheKey, requestPromise);
+    
+    const response = await requestPromise;
+    clearTimeout(timeoutId);
     return response;
   } catch (error) {
     clearTimeout(timeoutId);
+    pendingRequests.delete(cacheKey);
     
     if (error instanceof DOMException && error.name === 'AbortError') {
       console.error('API Timeout: Request exceeded timeout limit');
