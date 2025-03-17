@@ -18,6 +18,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Resources from "./pages/Resources";
 import ArticlePage from "./pages/ArticlePage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 // Create ArticleCategory pages
 import ArticlesBlog from "./pages/articles/ArticlesBlog";
@@ -79,10 +80,14 @@ const App = () => {
             <BrowserRouter basename={BASE_PATH}>
               <Routes>
                 <Route path="/" element={<Index />} />
-                {/* Admin routes - temporarily bypassing authentication */}
+                {/* Admin routes - with authentication */}
                 <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
                 <Route path="/admin/login" element={<AdminLogin />} />
-                <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                <Route path="/admin/dashboard" element={
+                  <ProtectedRoute>
+                    <AdminDashboard />
+                  </ProtectedRoute>
+                } />
                 <Route path="/search" element={<SearchPage />} />
                 <Route path="/tag/:tag" element={<TagsPage />} />
                 <Route path="/about" element={<About />} />
