@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Article } from '@/lib/types/article';
 import { toast } from 'sonner';
@@ -92,8 +92,8 @@ const ArticleManagement: React.FC<ArticleManagementProps> = ({
     }
   };
 
-  // Return the correct article list based on active tab
-  const getActiveArticleList = () => {
+  // Use useMemo to prevent unnecessary re-calculations
+  const activeArticleList = useMemo(() => {
     switch (activeArticleTab) {
       case 'drafts':
         return draftList;
@@ -103,7 +103,7 @@ const ArticleManagement: React.FC<ArticleManagementProps> = ({
       default:
         return articleList;
     }
-  };
+  }, [activeArticleTab, articleList, draftList, scheduledList]);
   
   // Handle article list updates based on active tab
   const handleArticleListUpdate = (updatedList: Article[]) => {
@@ -134,7 +134,7 @@ const ArticleManagement: React.FC<ArticleManagementProps> = ({
       
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <ArticleList 
-          articleList={getActiveArticleList()} 
+          articleList={activeArticleList}
           selectedArticle={selectedArticle} 
           onArticleSelect={handleArticleSelect}
           onNewArticle={handleNewArticle}
@@ -142,7 +142,7 @@ const ArticleManagement: React.FC<ArticleManagementProps> = ({
         />
         
         <ArticleForm 
-          articleList={getActiveArticleList()}
+          articleList={activeArticleList}
           selectedArticle={selectedArticle}
           onArticleListUpdate={handleArticleListUpdate}
           onNewArticle={handleNewArticle}

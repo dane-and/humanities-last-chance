@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Article } from '@/lib/types/article';
 import { Page, getPagesFromStorage } from '@/lib/types/page';
 import { toast } from 'sonner';
@@ -23,7 +23,7 @@ export const useContentData = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  const loadData = () => {
+  const loadData = useCallback(() => {
     console.log('Loading content data from storage');
     setIsLoading(true);
     setError(null);
@@ -56,15 +56,24 @@ export const useContentData = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
+    // Only run once on initial mount
     loadData();
     
     // Set up interval to process scheduled articles
     const intervalId = setInterval(() => {
-      processScheduledArticles();
-      loadData(); // Reload data after processing
+      try {
+        processScheduledArticles();
+        // Only reload data if something was processed
+        const newScheduled = getScheduledFromStorage();
+        if (newScheduled.length !== scheduledList.length) {
+          loadData();
+        }
+      } catch (err) {
+        console.error('Error processing scheduled articles:', err);
+      }
     }, 60000); // Check every minute
     
     // Set up event listeners for content updates
@@ -86,7 +95,7 @@ export const useContentData = () => {
       window.removeEventListener('articlesUpdated', handleArticlesUpdated);
       window.removeEventListener('draftsUpdated', handleDraftsUpdated);
     };
-  }, []);
+  }, [loadData]);
 
   return {
     articleList,
