@@ -56,6 +56,11 @@ const BlogSection: React.FC<BlogSectionProps> = ({
     };
   }, []);
   
+  // For debugging
+  useEffect(() => {
+    console.log("BlogSection mounted/updated with", blogPosts.length, "posts");
+  }, [blogPosts]);
+  
   const totalPages = Math.ceil(blogPosts.length / postsPerPage);
   
   const nextPage = () => {

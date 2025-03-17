@@ -11,9 +11,13 @@ import { toast } from 'sonner';
  */
 export const publishDraft = (draftId: string): boolean => {
   try {
+    console.log(`Publishing draft with ID: ${draftId}`);
+    
     // Get current drafts and articles
     const drafts = getDraftsFromStorage();
     const articles = getArticlesFromStorage();
+    
+    console.log(`Found ${drafts.length} drafts and ${articles.length} articles`);
     
     // Find the draft by ID
     const draftIndex = drafts.findIndex(draft => draft.id === draftId);
@@ -25,6 +29,7 @@ export const publishDraft = (draftId: string): boolean => {
     
     // Get the draft to publish
     const draftToPublish = {...drafts[draftIndex]};
+    console.log('Draft to publish:', draftToPublish);
     
     // Remove the draft-specific properties
     const { isDraft, status, ...publishReady } = draftToPublish;
@@ -41,6 +46,7 @@ export const publishDraft = (draftId: string): boolean => {
     
     // Add to published articles
     articles.push(publishReady);
+    console.log('Updated articles list:', articles);
     
     // Remove from drafts
     drafts.splice(draftIndex, 1);
@@ -67,8 +73,11 @@ export const publishDraft = (draftId: string): boolean => {
  */
 export const publishDraftByTitle = (title: string): boolean => {
   try {
+    console.log(`Looking for draft with title: "${title}"`);
+    
     // Get current drafts
     const drafts = getDraftsFromStorage();
+    console.log('Available drafts:', drafts);
     
     // Find draft with matching title (case insensitive)
     const draft = drafts.find(
@@ -79,6 +88,8 @@ export const publishDraftByTitle = (title: string): boolean => {
       console.error(`Draft with title "${title}" not found`);
       return false;
     }
+    
+    console.log(`Found draft with title "${title}" and ID ${draft.id}`);
     
     // Publish the found draft
     return publishDraft(draft.id);
