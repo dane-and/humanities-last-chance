@@ -40,9 +40,15 @@ export const createArticle = async (article: Omit<Article, 'id'>): Promise<Artic
  */
 export const updateArticle = async (id: string, article: Partial<Article>): Promise<Article> => {
   try {
-    console.log('Updating article with ID:', id, article);
+    console.log('Updating article with ID:', id);
+    console.log('Article data to update:', JSON.stringify(article, null, 2));
+    
+    // Ensure the endpoint is correctly formatted
+    const endpoint = `articles.php/${id}`;
+    console.log('Using endpoint:', endpoint);
+    
     const response = await fetchWithTimeout(
-      getApiUrl(`articles.php/${id}`),
+      getApiUrl(endpoint),
       {
         method: 'PUT',
         headers: {
@@ -53,6 +59,7 @@ export const updateArticle = async (id: string, article: Partial<Article>): Prom
     );
     
     const data = await response.json();
+    console.log('Server response for update:', data);
     
     // Also update local storage for immediate access
     const allArticles = getArticlesFromStorage();
@@ -65,7 +72,6 @@ export const updateArticle = async (id: string, article: Partial<Article>): Prom
     return data.article;
   } catch (error) {
     console.error('Error updating article:', error);
-    toast.error("Failed to update article on the server. Changes saved locally.");
     
     // Still update local storage even if the API fails
     try {
@@ -102,7 +108,6 @@ export const deleteArticle = async (id: string): Promise<void> => {
     
   } catch (error) {
     console.error('Error deleting article:', error);
-    toast.error("Failed to delete article on the server. Article removed locally.");
     
     // Still update local storage even if the API fails
     try {

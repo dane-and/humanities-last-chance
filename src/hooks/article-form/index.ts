@@ -33,7 +33,16 @@ export const useArticleForm = (
     console.log('Selected article changed:', selectedArticle);
     if (selectedArticle) {
       // Create a fresh copy to avoid reference issues
-      const articleCopy = {...selectedArticle};
+      // Force all properties to be defined with defaults for any missing properties
+      const articleCopy = {
+        ...defaultFormState,
+        ...selectedArticle,
+        title: selectedArticle.title || '',
+        slug: selectedArticle.slug || '',
+        author: selectedArticle.author || '',
+        category: selectedArticle.category || 'Blog',
+        content: selectedArticle.content || ''
+      };
       console.log('Setting form data to:', articleCopy);
       setFormData(articleCopy);
       setSelectedTags(selectedArticle.tags || []);

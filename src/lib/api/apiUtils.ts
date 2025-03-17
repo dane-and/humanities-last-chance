@@ -14,7 +14,7 @@ export const fetchWithTimeout = async (
   
   try {
     console.log(`API Request: ${options.method || 'GET'} ${url}`, 
-      options.body ? 'with payload' : 'without payload');
+      options.body ? `with payload: ${options.body}` : 'without payload');
     
     const start = Date.now();
     const response = await fetch(url, {
@@ -34,6 +34,7 @@ export const fetchWithTimeout = async (
         errorMessage = errorData.error || errorMessage;
       } catch (e) {
         // If JSON parsing fails, use default error message
+        console.error('Failed to parse error response:', e);
       }
       console.error('API Error:', errorMessage);
       throw new Error(errorMessage);
@@ -56,7 +57,9 @@ export const fetchWithTimeout = async (
  * Builds the API endpoint URL
  */
 export const getApiUrl = (endpoint: string): string => {
-  const url = `${API_CONFIG.BASE_URL}/${endpoint}`;
+  // Ensure endpoint doesn't have leading slash to avoid double slashes
+  const normalizedEndpoint = endpoint.startsWith('/') ? endpoint.substring(1) : endpoint;
+  const url = `${API_CONFIG.BASE_URL}/${normalizedEndpoint}`;
   console.log('Generated API URL:', url);
   return url;
 };

@@ -13,7 +13,7 @@ export const createEditorHandlers = (
     // Ensure content is never undefined or null
     const safeContent = content || '';
     
-    console.log('Editor content changed:', safeContent.substring(0, 50) + '...');
+    console.log('Editor content changed, length:', safeContent.length);
     
     // Create a new formData object to ensure reactivity
     setFormData({
