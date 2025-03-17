@@ -43,7 +43,7 @@ const Footer: React.FC = () => {
                 className="text-gray-600 hover:text-gray-900 transition-colors flex items-center"
               >
                 <img 
-                  src="/lovable-uploads/f9c1d914-1205-4196-ac9c-9ebe238e7d01.png" 
+                  src="/lovable-uploads/02e16988-f0b5-425b-b7e3-6eb9444b7f05.png" 
                   alt="X logo" 
                   className="h-5 w-auto mr-2"
                   width="20"
@@ -74,7 +74,8 @@ const Footer: React.FC = () => {
           </div>
           
           {/* Column 3: Second link column (without heading) */}
-          <div className="col-span-1 mt-0 md:mt-10">
+          <div className="col-span-1">
+            <div className="h-10 mb-4 hidden xs:block"></div>
             <ul className="space-y-2">
               <li>
                 <Link to="/resources" className="text-sm text-gray-600 hover:text-gray-900">Resources</Link>
