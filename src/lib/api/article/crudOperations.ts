@@ -44,11 +44,12 @@ export const createArticle = async (article: Omit<Article, 'id'>): Promise<Artic
 export const updateArticle = async (id: string, article: Partial<Article>): Promise<Article> => {
   try {
     console.log('Updating article with ID:', id);
-    console.log('Article data to update:', JSON.stringify(article, null, 2));
+    console.log('Article data to update:', article);
     
-    // Ensure the endpoint URL is correctly formatted
+    // Ensure the endpoint URL is correctly formatted with query parameters
     const endpoint = `articles.php?id=${encodeURIComponent(id)}`;
-    console.log('Using API endpoint:', getApiUrl(endpoint));
+    const apiUrl = getApiUrl(endpoint);
+    console.log('Using API endpoint:', apiUrl);
     
     // Create a complete copy of the article to send to the server
     const articleToUpdate = {
@@ -56,17 +57,33 @@ export const updateArticle = async (id: string, article: Partial<Article>): Prom
       id // Ensure the ID is included in the payload
     };
     
+    // Log the full request details
+    const requestBody = JSON.stringify(articleToUpdate);
+    console.log('Request payload:', requestBody);
+    
+    // Start the update attempt timer for better UX feedback
+    const startTime = Date.now();
+    
+    // Perform the update request with extra debug details
     const response = await fetchWithTimeout(
-      getApiUrl(endpoint),
+      apiUrl,
       {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+          'Cache-Control': 'no-cache',
         },
-        body: JSON.stringify(articleToUpdate),
-      }
+        body: requestBody,
+      },
+      10000 // Increase timeout to 10 seconds for slow connections
     );
     
+    // Log the response status and timing
+    const requestTime = Date.now() - startTime;
+    console.log(`Server responded in ${requestTime}ms with status:`, response.status);
+    
+    // Get the raw response text first for debugging
     const responseText = await response.text();
     console.log('Raw server response for update:', responseText);
     

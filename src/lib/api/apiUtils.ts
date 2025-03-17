@@ -37,7 +37,7 @@ export const fetchWithTimeout = async (
   }
   
   try {
-    // Enhanced request logging
+    // Enhanced request logging with full details
     const method = options.method || 'GET';
     const hasPayload = !!options.body;
     
@@ -46,17 +46,39 @@ export const fetchWithTimeout = async (
       console.log(`Request payload: ${options.body}`);
     }
     
-    // Create the request promise
+    // Add some basic request headers if not already set
+    const enhancedOptions = { ...options };
+    if (!enhancedOptions.headers) {
+      enhancedOptions.headers = {};
+    }
+    
+    // Add some useful headers for debugging and cors
+    if (method === 'PUT' || method === 'POST') {
+      if (!enhancedOptions.headers['Content-Type']) {
+        enhancedOptions.headers['Content-Type'] = 'application/json';
+      }
+    }
+    
+    // Create the request promise with detailed logging
     const requestPromise = (async () => {
       try {
         const start = Date.now();
+        console.log(`Sending ${method} request to ${url} at ${new Date().toISOString()}`);
+        
         const response = await fetch(url, {
-          ...options,
+          ...enhancedOptions,
           signal: controller.signal
         });
         
         const responseTime = Date.now() - start;
-        console.log(`API Response: ${response.status} (${responseTime}ms)`);
+        console.log(`API Response received: ${response.status} (${responseTime}ms)`);
+        
+        // Log response headers for debugging
+        const responseHeaders: Record<string, string> = {};
+        response.headers.forEach((value, key) => {
+          responseHeaders[key] = value;
+        });
+        console.log('Response headers:', responseHeaders);
         
         if (!response.ok) {
           let errorMessage = `API request failed with status ${response.status}`;
@@ -71,6 +93,7 @@ export const fetchWithTimeout = async (
               // Try to parse as JSON
               errorData = JSON.parse(textResponse);
               errorMessage = errorData.error || errorMessage;
+              console.error('API Error response (parsed):', errorData);
             } catch (parseError) {
               // If JSON parsing fails, use text response as error message
               errorMessage = textResponse || errorMessage;
@@ -119,7 +142,10 @@ export const fetchWithTimeout = async (
 export const getApiUrl = (endpoint: string): string => {
   // Ensure endpoint doesn't have leading slash to avoid double slashes
   const normalizedEndpoint = endpoint.startsWith('/') ? endpoint.substring(1) : endpoint;
+  
+  // Use the base URL from configuration
   const url = `${API_CONFIG.BASE_URL}/${normalizedEndpoint}`;
+  
   console.log('Generated API URL:', url);
   return url;
 };

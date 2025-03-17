@@ -11,19 +11,29 @@ function updateArticle($id) {
     
     // Get JSON data from request body
     $rawData = file_get_contents('php://input');
-    error_log("Received update request for article ID: $id with data: $rawData");
+    error_log("Received update request for article ID: $id with data length: " . strlen($rawData));
     
     $data = json_decode($rawData, true);
     
     if (!$data) {
-        error_log("Invalid JSON data received: $rawData");
-        sendErrorResponse(400, 'Invalid JSON data');
+        $jsonError = json_last_error_msg();
+        error_log("Invalid JSON data received for article ID $id: $rawData (Error: $jsonError)");
+        sendErrorResponse(400, "Invalid JSON data: $jsonError");
         return;
     }
+    
+    error_log("Processing update for article ID: $id with title: " . ($data['title'] ?? 'Unknown'));
     
     // Check if article exists
     $checkSql = "SELECT id FROM articles WHERE id = ?";
     $checkStmt = $conn->prepare($checkSql);
+    
+    if (!$checkStmt) {
+        error_log("Prepare statement failed: " . $conn->error);
+        sendErrorResponse(500, 'Database error: ' . $conn->error);
+        return;
+    }
+    
     $checkStmt->bind_param("s", $id);
     $checkStmt->execute();
     $checkResult = $checkStmt->get_result();
@@ -49,7 +59,7 @@ function updateArticle($id) {
     $content = isset($data['content']) ? $data['content'] : '';
     $featured = isset($data['featured']) && $data['featured'] ? 1 : 0;
     
-    // Update article in database
+    // Update article in database with more careful error handling
     $sql = "UPDATE articles SET 
             title = ?, 
             slug = ?, 
@@ -64,6 +74,12 @@ function updateArticle($id) {
             WHERE id = ?";
     
     $stmt = $conn->prepare($sql);
+    
+    if (!$stmt) {
+        error_log("Prepare statement failed: " . $conn->error);
+        sendErrorResponse(500, 'Database error: ' . $conn->error);
+        return;
+    }
     
     $stmt->bind_param(
         "ssssssssis", 
@@ -90,7 +106,7 @@ function updateArticle($id) {
     
     // Return success with the updated article
     $responseData = array_merge($data, ['id' => $id]);
-    sendSuccessResponse(['article' => $responseData], 200, 'Article updated successfully');
+    sendSuccessResponse(['article' => $responseData, 'success' => true], 200, 'Article updated successfully');
 }
 
 /**
@@ -113,14 +129,20 @@ function createArticleFallback($id, $data) {
     $content = isset($data['content']) ? $data['content'] : '';
     $featured = isset($data['featured']) && $data['featured'] ? 1 : 0;
     
-    // Insert article into database
+    // Insert article into database with more careful error handling
     $sql = "INSERT INTO articles (id, title, slug, author, date, category, image, excerpt, content, featured, tags) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
     $stmt = $conn->prepare($sql);
     
+    if (!$stmt) {
+        error_log("Prepare statement failed: " . $conn->error);
+        sendErrorResponse(500, 'Database error: ' . $conn->error);
+        return;
+    }
+    
     $stmt->bind_param(
-        "ssssssssis", 
+        "sssssssssis", 
         $id, 
         $title, 
         $slug, 
@@ -144,6 +166,6 @@ function createArticleFallback($id, $data) {
     
     // Return success with the created article
     $responseData = array_merge($data, ['id' => $id]);
-    sendSuccessResponse(['article' => $responseData], 201, 'Article created successfully');
+    sendSuccessResponse(['article' => $responseData, 'success' => true], 201, 'Article created successfully');
 }
 ?>

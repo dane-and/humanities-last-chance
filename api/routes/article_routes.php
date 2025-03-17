@@ -17,8 +17,8 @@ function routeArticleRequest($method, $articleId = null) {
             $articleId = $_GET['id'];
         }
         
-        // Debug log to trace request information
-        error_log("Article request: Method=$method, ID=$articleId, Query string=" . http_build_query($_GET));
+        // Enhanced debug log to trace request information
+        error_log("Article request: Method=$method, ID=$articleId, Remote IP=" . $_SERVER['REMOTE_ADDR']);
         
         switch ($method) {
             case 'GET':
@@ -38,9 +38,24 @@ function routeArticleRequest($method, $articleId = null) {
                     sendErrorResponse(400, 'Article ID is required for update operations');
                     return;
                 }
-                // Log the payload for debugging
+                
+                // Log request headers for debugging CORS issues
+                $headers = getallheaders();
+                error_log("UPDATE request headers: " . json_encode($headers));
+                
+                // Log payload with better formatting for debugging
                 $rawData = file_get_contents('php://input');
-                error_log("UPDATE request body: $rawData");
+                error_log("UPDATE request raw body: $rawData");
+                
+                // Try to parse JSON to check for valid format
+                $jsonData = json_decode($rawData, true);
+                if ($jsonData === null && json_last_error() !== JSON_ERROR_NONE) {
+                    error_log("JSON parse error: " . json_last_error_msg());
+                    sendErrorResponse(400, 'Invalid JSON payload: ' . json_last_error_msg());
+                    return;
+                }
+                
+                error_log("JSON parsed correctly, proceeding with update");
                 updateArticle($articleId);
                 break;
                 
@@ -57,7 +72,7 @@ function routeArticleRequest($method, $articleId = null) {
                 break;
         }
     } catch (Exception $e) {
-        error_log("Article API Exception: " . $e->getMessage());
+        error_log("Article API Exception: " . $e->getMessage() . " - Stack trace: " . $e->getTraceAsString());
         sendErrorResponse(500, 'Server error: ' . $e->getMessage());
     }
 }
