@@ -54,50 +54,54 @@ const Footer: React.FC = () => {
             </div>
           </div>
           
-          {/* Column 2: First link column */}
-          <div className="col-span-1">
-            <h4 className="text-md font-semibold text-gray-800 mb-4">Quick Links</h4>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/" className="text-sm text-gray-600 hover:text-gray-900">Home</Link>
-              </li>
-              <li>
-                <Link to="/articles/blog" className="text-sm text-gray-600 hover:text-gray-900">Blog</Link>
-              </li>
-              <li>
-                <Link to="/articles/interviews" className="text-sm text-gray-600 hover:text-gray-900">Interviews</Link>
-              </li>
-              <li>
-                <Link to="/articles/reviews" className="text-sm text-gray-600 hover:text-gray-900">Reviews</Link>
-              </li>
-            </ul>
-          </div>
-          
-          {/* Column 3: Second link column (with invisible spacing to align with first column) */}
-          <div className="col-span-1">
-            {/* This creates space equal to the heading in the first column */}
-            <div className="invisible h-[33px] mb-4">Quick Links</div>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/resources" className="text-sm text-gray-600 hover:text-gray-900">Resources</Link>
-              </li>
-              <li>
-                <Link to="/about" className="text-sm text-gray-600 hover:text-gray-900">About</Link>
-              </li>
-              <li>
-                <Link to="/contact" className="text-sm text-gray-600 hover:text-gray-900">Contact</Link>
-              </li>
-              <li>
-                <Link 
-                  to="/admin" 
-                  className="text-sm text-gray-600 hover:text-gray-900 flex items-center"
-                  onClick={handleAdminLinkClick}
-                >
-                  Admin
-                  <ExternalLink size={14} className="ml-1" />
-                </Link>
-              </li>
-            </ul>
+          {/* Links Section - using a container to ensure proper alignment */}
+          <div className="col-span-2 md:col-span-2">
+            <div className="grid grid-cols-2 gap-8">
+              {/* Column 2: First link column */}
+              <div>
+                <h4 className="text-md font-semibold text-gray-800 mb-4">Quick Links</h4>
+                <ul className="space-y-2">
+                  <li>
+                    <Link to="/" className="text-sm text-gray-600 hover:text-gray-900">Home</Link>
+                  </li>
+                  <li>
+                    <Link to="/articles/blog" className="text-sm text-gray-600 hover:text-gray-900">Blog</Link>
+                  </li>
+                  <li>
+                    <Link to="/articles/interviews" className="text-sm text-gray-600 hover:text-gray-900">Interviews</Link>
+                  </li>
+                  <li>
+                    <Link to="/articles/reviews" className="text-sm text-gray-600 hover:text-gray-900">Reviews</Link>
+                  </li>
+                </ul>
+              </div>
+              
+              {/* Column 3: Second link column */}
+              <div>
+                <h4 className="text-md font-semibold text-gray-800 mb-4 opacity-0">Quick Links</h4>
+                <ul className="space-y-2">
+                  <li>
+                    <Link to="/resources" className="text-sm text-gray-600 hover:text-gray-900">Resources</Link>
+                  </li>
+                  <li>
+                    <Link to="/about" className="text-sm text-gray-600 hover:text-gray-900">About</Link>
+                  </li>
+                  <li>
+                    <Link to="/contact" className="text-sm text-gray-600 hover:text-gray-900">Contact</Link>
+                  </li>
+                  <li>
+                    <Link 
+                      to="/admin" 
+                      className="text-sm text-gray-600 hover:text-gray-900 flex items-center"
+                      onClick={handleAdminLinkClick}
+                    >
+                      Admin
+                      <ExternalLink size={14} className="ml-1" />
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
         
