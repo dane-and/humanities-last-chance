@@ -10,7 +10,7 @@ export const createEditorHandlers = (
 ) => {
   // Handle rich text editor change
   const handleEditorChange = (content: string) => {
-    // Ensure content is never undefined or null
+    // Ensure content is never undefined or null and preserve line breaks
     const safeContent = content || '';
     
     console.log('Editor content changed, length:', safeContent.length);

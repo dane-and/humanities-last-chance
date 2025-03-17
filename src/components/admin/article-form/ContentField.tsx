@@ -27,6 +27,17 @@ const ContentField: React.FC<ContentFieldProps> = ({
       ['link', 'image'],
       ['clean']
     ],
+    keyboard: {
+      bindings: {
+        enter: {
+          key: 13,
+          handler: function() {
+            // Use default handling for enter key
+            return true;
+          }
+        }
+      }
+    }
   };
   
   const formats = [
@@ -39,12 +50,15 @@ const ContentField: React.FC<ContentFieldProps> = ({
 
   // Enhanced sanitization to specifically prevent the onloadstart vulnerability
   const handleContentChange = (content: string) => {
+    // Preserve line breaks by ensuring they're not removed in sanitization
     const sanitized = sanitizeHtml(content, {
       allowedTags: sanitizeHtml.defaults.allowedTags.concat(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 'p', 'br', 'ul', 'ol', 'li', 'strong', 'em', 'blockquote', 'pre', 'code']),
       allowedAttributes: {
         ...sanitizeHtml.defaults.allowedAttributes,
         'img': ['src', 'alt', 'title', 'width', 'height', 'class'],
         'a': ['href', 'name', 'target', 'rel', 'class'],
+        'p': ['style', 'class'],
+        'div': ['style', 'class'],
       },
       // Specifically disallow all event handlers, including onloadstart
       disallowedTagsMode: 'discard',
@@ -84,6 +98,7 @@ const ContentField: React.FC<ContentFieldProps> = ({
             formats={formats}
             placeholder="Write your article content here..."
             className="min-h-[300px] bg-background"
+            preserveWhitespace={true}
           />
         </div>
       </div>
