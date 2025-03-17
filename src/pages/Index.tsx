@@ -1,28 +1,15 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import BlogSection from '@/components/home/BlogSection';
 import SidebarSection from '@/components/home/SidebarSection';
 import { useArticles } from '@/lib/articles';
-import { createHamletArticleDirectly } from '@/scripts/publishHamletDraft';
 
 const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 5;
   const { articles, isLoading, refreshArticles } = useArticles();
-  
-  // Try to create the Hamlet article if needed
-  useEffect(() => {
-    // Check if this is the first load
-    const hamletPublished = localStorage.getItem('hamlet-article-published');
-    if (!hamletPublished) {
-      console.log('First load detected, creating Hamlet article directly');
-      // Only run this once
-      createHamletArticleDirectly();
-      localStorage.setItem('hamlet-article-published', 'true');
-    }
-  }, []);
   
   return (
     <div className="page-transition min-h-screen flex flex-col">

@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Article } from '@/lib/types/article';
@@ -27,29 +26,6 @@ const ArticleManagement: React.FC<ArticleManagementProps> = ({
 }) => {
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const [activeArticleTab, setActiveArticleTab] = useState('published');
-
-  // Look for and publish the Hamlet draft automatically on component mount
-  useEffect(() => {
-    // Only run this once on initial load
-    const published = localStorage.getItem('published-hamlet-draft');
-    if (!published && draftList.length > 0) {
-      const hamletDraftExists = draftList.some(
-        draft => draft.title.toLowerCase() === 'should hamlet take prozac'
-      );
-      
-      if (hamletDraftExists) {
-        const success = publishDraftByTitle('Should Hamlet Take Prozac');
-        if (success) {
-          toast.success('"Should Hamlet Take Prozac" has been published!');
-          localStorage.setItem('published-hamlet-draft', 'true');
-          // Force a reload of the component
-          setTimeout(() => {
-            window.location.reload();
-          }, 1500);
-        }
-      }
-    }
-  }, [draftList]);
 
   const handleArticleSelect = (id: string) => {
     // Look in the appropriate list based on the active tab
