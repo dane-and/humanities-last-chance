@@ -1,11 +1,13 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { AUTH_CONFIG } from '@/lib/config';
+import { toast } from 'sonner';
 
 interface AuthContextType {
   isAuthenticated: boolean;
   login: (username: string, password: string) => boolean;
   logout: () => void;
+  authLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -20,19 +22,32 @@ export const useAuth = () => {
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [authLoading, setAuthLoading] = useState<boolean>(true);
   
   // Check if user is already authenticated on mount
   useEffect(() => {
-    // Debug log to verify context initialization
-    console.log('AuthProvider initialized');
+    const checkAuth = () => {
+      console.log('AuthProvider: checking authentication state');
+      setAuthLoading(true);
+      
+      try {
+        const auth = localStorage.getItem('admin-auth');
+        if (auth === 'true') {
+          console.log('AuthProvider: Found existing auth in localStorage, setting authenticated state');
+          setIsAuthenticated(true);
+        } else {
+          console.log('AuthProvider: No auth found in localStorage, user is not authenticated');
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error('AuthProvider: Error checking authentication', error);
+        setIsAuthenticated(false);
+      } finally {
+        setAuthLoading(false);
+      }
+    };
     
-    const auth = localStorage.getItem('admin-auth');
-    if (auth === 'true') {
-      console.log('Found existing auth in localStorage, setting authenticated state');
-      setIsAuthenticated(true);
-    } else {
-      console.log('No auth found in localStorage, user is not authenticated');
-    }
+    checkAuth();
   }, []);
 
   const login = (username: string, password: string): boolean => {
@@ -41,27 +56,42 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Check username and password against config values
     if (username === AUTH_CONFIG.ADMIN_USERNAME && password === AUTH_CONFIG.ADMIN_PASSWORD) {
       console.log('Login successful');
-      setIsAuthenticated(true);
-      localStorage.setItem('admin-auth', 'true');
-      return true;
+      
+      try {
+        localStorage.setItem('admin-auth', 'true');
+        setIsAuthenticated(true);
+        toast.success('Successfully logged in as admin');
+        return true;
+      } catch (error) {
+        console.error('Failed to set auth in localStorage:', error);
+        toast.error('Login succeeded but failed to save session');
+        return false;
+      }
     }
+    
     console.log('Login failed: invalid credentials');
     return false;
   };
 
   const logout = () => {
     console.log('Logging out');
-    setIsAuthenticated(false);
-    localStorage.removeItem('admin-auth');
+    try {
+      localStorage.removeItem('admin-auth');
+      setIsAuthenticated(false);
+      toast.success('Successfully logged out');
+    } catch (error) {
+      console.error('Error during logout:', error);
+      toast.error('Failed to complete logout');
+    }
   };
 
   // Debug log to show current authentication state on any changes
   useEffect(() => {
-    console.log('Authentication state changed:', { isAuthenticated });
-  }, [isAuthenticated]);
+    console.log('Authentication state changed:', { isAuthenticated, authLoading });
+  }, [isAuthenticated, authLoading]);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, authLoading }}>
       {children}
     </AuthContext.Provider>
   );

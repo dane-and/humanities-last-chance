@@ -4,57 +4,79 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 import { AUTH_CONFIG } from '@/lib/config';
+import { Loader2 } from 'lucide-react';
 
 const AdminLogin: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const { isAuthenticated, login } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+  const { isAuthenticated, authLoading, login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const { toast } = useToast();
   
   // Get the intended destination from location state, or default to dashboard
-  const from = location.state?.from?.pathname || '/admin/dashboard';
+  const from = location.state?.from || '/admin/dashboard';
 
   useEffect(() => {
-    // Check if user is already authenticated on mount
-    if (isAuthenticated) {
-      console.log('Already authenticated, redirecting to', from);
-      navigate(from);
-    } else {
-      console.log('Admin login page rendered, not authenticated');
-      
-      // Debug info about the default credentials for development
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Development mode - default credentials:', { 
-          username: AUTH_CONFIG.ADMIN_USERNAME, 
-          password: 'Use the password from AUTH_CONFIG'
-        });
+    console.log('AdminLogin: Rendered with auth state:', { isAuthenticated, authLoading });
+    console.log('AdminLogin: Redirect destination after login:', from);
+    
+    // Wait for auth to finish loading before checking
+    if (!authLoading) {
+      if (isAuthenticated) {
+        console.log('AdminLogin: Already authenticated, redirecting to', from);
+        navigate(from);
+      } else {
+        console.log('AdminLogin: Not authenticated, showing login form');
+        
+        // Debug info about the default credentials for development
+        if (process.env.NODE_ENV === 'development') {
+          console.log('Development mode - default credentials:', { 
+            username: AUTH_CONFIG.ADMIN_USERNAME, 
+            password: 'Use the password from AUTH_CONFIG'
+          });
+        }
       }
     }
-  }, [isAuthenticated, navigate, from]);
+  }, [isAuthenticated, authLoading, navigate, from]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Login attempt with:', { username });
     
-    if (login(username, password)) {
-      toast({
-        title: 'Success',
-        description: 'You have been logged in.',
-        variant: 'default',
-      });
-      navigate(from);
-    } else {
-      toast({
-        title: 'Error',
-        description: 'Invalid username or password. Please try again.',
-        variant: 'destructive',
-      });
+    setIsLoading(true);
+    
+    try {
+      if (login(username, password)) {
+        toast.success('Login successful');
+        console.log('AdminLogin: Login successful, navigating to', from);
+        navigate(from);
+      } else {
+        toast.error('Invalid username or password. Please try again.');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      toast.error('An error occurred during login. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  // Show loading indicator while checking authentication
+  if (authLoading) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center p-4 bg-muted/40">
+        <div className="w-full max-w-md space-y-6 bg-background p-8 rounded-lg shadow-lg border border-border">
+          <div className="flex flex-col items-center justify-center gap-2">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <p>Checking authentication status...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center p-4 bg-muted/40">
@@ -74,6 +96,7 @@ const AdminLogin: React.FC = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="w-full"
+              disabled={isLoading}
               required
             />
           </div>
@@ -87,12 +110,20 @@ const AdminLogin: React.FC = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full"
+              disabled={isLoading}
               required
             />
           </div>
           
-          <Button type="submit" className="w-full">
-            Login
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Logging in...
+              </>
+            ) : (
+              'Login'
+            )}
           </Button>
         </form>
         

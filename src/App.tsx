@@ -24,11 +24,15 @@ import ArticlesInterviews from "./pages/articles/ArticlesInterviews";
 import ArticlesReviews from "./pages/articles/ArticlesReviews";
 import ProtectedRoute from "./components/ProtectedRoute";
 
+// Query client with better error handling
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 5 * 60 * 1000, // 5 minutes
       retry: 1,
+      onError: (error) => {
+        console.error('Query error:', error);
+      }
     },
   },
 });
@@ -75,7 +79,7 @@ const App = () => {
               <Route path="/articles/reviews" element={<ArticlesReviews />} />
               {/* Individual article route */}
               <Route path="/article/:slug" element={<ArticlePage />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              {/* Catch-all route for 404 */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

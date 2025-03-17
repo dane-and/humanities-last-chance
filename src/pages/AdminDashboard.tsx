@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Loader2 } from 'lucide-react';
 
 // Custom hooks
 import { useContentData } from '@/hooks/useContentData';
@@ -14,7 +15,7 @@ import ArticleManagement from '@/components/admin/dashboard/ArticleManagement';
 import PageManagement from '@/components/admin/dashboard/PageManagement';
 
 const AdminDashboard: React.FC = () => {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, authLoading, logout } = useAuth();
   const navigate = useNavigate();
   
   // Get content data using our custom hook
@@ -27,25 +28,36 @@ const AdminDashboard: React.FC = () => {
     setDraftList,
     setScheduledList,
     setPageList,
-    loadData
+    loadData,
+    isLoading: contentLoading
   } = useContentData();
 
   useEffect(() => {
-    console.log('AdminDashboard rendered, authentication status:', { isAuthenticated });
+    console.log('AdminDashboard rendered, authentication status:', { isAuthenticated, authLoading });
     
-    if (!isAuthenticated) {
+    if (!authLoading && !isAuthenticated) {
       console.log('Not authenticated in dashboard, redirecting to login');
       navigate('/admin');
-    } else {
+    } else if (!authLoading && isAuthenticated) {
       console.log('User is authenticated, dashboard access granted');
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, authLoading, navigate]);
 
   const handleLogout = () => {
     console.log('Logout requested from dashboard');
     logout();
     navigate('/admin');
   };
+
+  // If still checking auth or not authenticated, show loading
+  if (authLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <span className="ml-2">Verifying access...</span>
+      </div>
+    );
+  }
 
   // If not authenticated, don't render anything to avoid flash of content
   if (!isAuthenticated) {
@@ -62,32 +74,39 @@ const AdminDashboard: React.FC = () => {
           <DataManagement onDataImported={loadData} />
         </div>
         
-        <Tabs defaultValue="articles">
-          <TabsList className="mb-6">
-            <TabsTrigger value="articles">Articles</TabsTrigger>
-            <TabsTrigger value="pages">Pages</TabsTrigger>
-          </TabsList>
-          
-          {/* Articles Tab */}
-          <TabsContent value="articles">
-            <ArticleManagement
-              articleList={articleList}
-              draftList={draftList}
-              scheduledList={scheduledList}
-              setArticleList={setArticleList}
-              setDraftList={setDraftList}
-              setScheduledList={setScheduledList}
-            />
-          </TabsContent>
-          
-          {/* Pages Tab */}
-          <TabsContent value="pages">
-            <PageManagement 
-              pageList={pageList}
-              setPageList={setPageList}
-            />
-          </TabsContent>
-        </Tabs>
+        {contentLoading ? (
+          <div className="flex items-center justify-center p-12">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <span className="ml-2">Loading content data...</span>
+          </div>
+        ) : (
+          <Tabs defaultValue="articles">
+            <TabsList className="mb-6">
+              <TabsTrigger value="articles">Articles</TabsTrigger>
+              <TabsTrigger value="pages">Pages</TabsTrigger>
+            </TabsList>
+            
+            {/* Articles Tab */}
+            <TabsContent value="articles">
+              <ArticleManagement
+                articleList={articleList}
+                draftList={draftList}
+                scheduledList={scheduledList}
+                setArticleList={setArticleList}
+                setDraftList={setDraftList}
+                setScheduledList={setScheduledList}
+              />
+            </TabsContent>
+            
+            {/* Pages Tab */}
+            <TabsContent value="pages">
+              <PageManagement 
+                pageList={pageList}
+                setPageList={setPageList}
+              />
+            </TabsContent>
+          </Tabs>
+        )}
       </main>
     </div>
   );
