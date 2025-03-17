@@ -13,13 +13,16 @@ export const createEditorHandlers = (
     // Ensure content is never undefined or null and preserve line breaks
     const safeContent = content || '';
     
-    console.log('Editor content changed, length:', safeContent.length);
-    
-    // Create a new formData object to ensure reactivity
-    setFormData({
-      ...formData,
-      content: safeContent
-    });
+    // Only update if content has actually changed to prevent infinite loops
+    if (formData.content !== safeContent) {
+      console.log('Editor content changed, length:', safeContent.length);
+      
+      // Create a new formData object to ensure reactivity
+      setFormData({
+        ...formData,
+        content: safeContent
+      });
+    }
   };
 
   return {

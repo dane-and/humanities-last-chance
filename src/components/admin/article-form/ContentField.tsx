@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -48,10 +48,13 @@ const ContentField: React.FC<ContentFieldProps> = ({
     'link', 'image'
   ];
 
-  // Enhanced sanitization to specifically prevent the onloadstart vulnerability
-  const handleContentChange = (content: string) => {
+  // Memoize the content change handler to prevent unnecessary re-renders
+  const handleContentChange = useCallback((value: string) => {
+    // Skip if value hasn't changed
+    if (value === content) return;
+    
     // Preserve line breaks by ensuring they're not removed in sanitization
-    const sanitized = sanitizeHtml(content, {
+    const sanitized = sanitizeHtml(value, {
       allowedTags: sanitizeHtml.defaults.allowedTags.concat(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 'p', 'br', 'ul', 'ol', 'li', 'strong', 'em', 'blockquote', 'pre', 'code']),
       allowedAttributes: {
         ...sanitizeHtml.defaults.allowedAttributes,
@@ -72,7 +75,7 @@ const ContentField: React.FC<ContentFieldProps> = ({
     });
     
     onContentChange(sanitized);
-  };
+  }, [content, onContentChange]);
 
   return (
     <>
@@ -106,4 +109,4 @@ const ContentField: React.FC<ContentFieldProps> = ({
   );
 };
 
-export default ContentField;
+export default React.memo(ContentField);

@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useArticleFormHandlers, generateSlug } from './formHandlers';
 import { useArticleFormSubmission } from './formSubmission';
 import { ArticleFormProps } from './types';
@@ -28,6 +28,17 @@ export const useArticleForm = (
   );
   const [isImageEditorOpen, setIsImageEditorOpen] = useState<boolean>(false);
   
+  // Memoized set form data function to prevent unnecessary rerenders
+  const setFormDataMemoized = useCallback((data: Article) => {
+    setFormData(prevData => {
+      // Skip update if nothing has changed
+      if (JSON.stringify(prevData) === JSON.stringify(data)) {
+        return prevData;
+      }
+      return data;
+    });
+  }, []);
+  
   // Update form when selected article changes
   useEffect(() => {
     console.log('Selected article changed:', selectedArticle);
@@ -55,7 +66,7 @@ export const useArticleForm = (
   // Get form handlers
   const handlers = useArticleFormHandlers(
     formData,
-    setFormData,
+    setFormDataMemoized,
     selectedTags,
     setSelectedTags,
     setIsImageEditorOpen,
