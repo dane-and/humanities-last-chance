@@ -39,7 +39,7 @@ const Footer: React.FC = () => {
                 className="text-gray-600 hover:text-gray-900 transition-colors flex items-center"
               >
                 <img 
-                  src="/lovable-uploads/214bddb7-cc92-48d9-b1e0-6f8e4303987c.png" 
+                  src="/lovable-uploads/752042b5-0122-418d-9aa4-11d2ba60a7ba.png" 
                   alt="X logo" 
                   className="h-5 w-auto mr-2"
                   width="20"
@@ -69,10 +69,9 @@ const Footer: React.FC = () => {
             </ul>
           </div>
           
-          {/* Column 3: Second link column */}
+          {/* Column 3: Second link column (with removed heading) */}
           <div className="col-span-1">
-            <h4 className="text-md font-semibold text-gray-800 mb-4">More Links</h4>
-            <ul className="space-y-2">
+            <ul className="space-y-2 mt-10">
               <li>
                 <Link to="/resources" className="text-sm text-gray-600 hover:text-gray-900">Resources</Link>
               </li>
