@@ -2,6 +2,7 @@
 import { publishDraftByTitle } from '../lib/utils/storage/publishDraftStorage';
 import { toast } from 'sonner';
 import { getArticlesFromStorage, saveArticlesToStorage } from '../lib/utils/storage/articleStorage';
+import { Article } from '../lib/types/article';
 
 /**
  * Script to publish the "Should Hamlet Take Prozac" draft
@@ -36,12 +37,12 @@ export const publishHamletDraft = () => {
       console.error('Article was not properly added to storage despite success flag');
       
       // Fallback: create a minimal version of the article directly
-      const hamletArticle = {
+      const hamletArticle: Article = {
         id: crypto.randomUUID(),
         title: 'Should Hamlet Take Prozac',
         slug: 'should-hamlet-take-prozac',
         date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
-        category: 'Blog',
+        category: 'Blog', // Now explicitly typed as 'Blog' which is a valid category
         image: '',
         excerpt: 'Exploring mental health in Shakespearean context',
         content: '<p>This article explores whether modern psychiatric medication could have helped Hamlet with his existential crisis.</p>',
@@ -75,12 +76,12 @@ export const publishHamletDraft = () => {
     toast.error('Could not find draft "Should Hamlet Take Prozac"');
     
     // Fallback: create a minimal version of the article directly
-    const hamletArticle = {
+    const hamletArticle: Article = {
       id: crypto.randomUUID(),
       title: 'Should Hamlet Take Prozac',
       slug: 'should-hamlet-take-prozac',
       date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
-      category: 'Blog',
+      category: 'Blog', // Now explicitly typed as 'Blog' which is a valid category
       image: '',
       excerpt: 'Exploring mental health in Shakespearean context',
       content: '<p>This article explores whether modern psychiatric medication could have helped Hamlet with his existential crisis.</p>',
@@ -132,12 +133,12 @@ export const createHamletArticleDirectly = () => {
   }
   
   // Create new article
-  const hamletArticle = {
+  const hamletArticle: Article = {
     id: crypto.randomUUID(),
     title: 'Should Hamlet Take Prozac',
     slug: 'should-hamlet-take-prozac',
     date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
-    category: 'Blog',
+    category: 'Blog', // Now explicitly typed as 'Blog' which is a valid category
     image: '',
     excerpt: 'Exploring mental health in Shakespearean context',
     content: '<p>This article explores whether modern psychiatric medication could have helped Hamlet with his existential crisis.</p><p>Shakespeare\'s tragic hero exhibits many symptoms that today might be diagnosed as clinical depression. His famous "To be or not to be" soliloquy reads almost like a case study in suicidal ideation.</p><p>But would medication have helped? Or is Hamlet\'s suffering existential rather than chemical? This article explores the intersection of Renaissance melancholy and modern psychopharmacology.</p>',
