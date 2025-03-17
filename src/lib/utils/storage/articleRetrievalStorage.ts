@@ -6,14 +6,18 @@ import { STORAGE_KEY, DRAFTS_KEY, SCHEDULED_KEY, getFromLocalStorage } from './a
  * Gets articles from local storage (fallback method)
  */
 export const getArticlesFromStorage = (): Article[] => {
-  return getFromLocalStorage<Article[]>(STORAGE_KEY, defaultArticles);
+  const articles = getFromLocalStorage<Article[]>(STORAGE_KEY, defaultArticles);
+  console.log(`Retrieved ${articles.length} articles from storage`);
+  return articles;
 };
 
 /**
  * Gets draft articles from local storage
  */
 export const getDraftsFromStorage = (): Article[] => {
-  return getFromLocalStorage<Article[]>(DRAFTS_KEY, []);
+  const drafts = getFromLocalStorage<Article[]>(DRAFTS_KEY, []);
+  console.log(`Retrieved ${drafts.length} drafts from storage`);
+  return drafts;
 };
 
 /**
@@ -21,4 +25,14 @@ export const getDraftsFromStorage = (): Article[] => {
  */
 export const getScheduledFromStorage = (): Article[] => {
   return getFromLocalStorage<Article[]>(SCHEDULED_KEY, []);
+};
+
+/**
+ * Gets article by title (case insensitive)
+ */
+export const getArticleByTitle = (title: string, articleList: Article[] = []): Article | undefined => {
+  const articles = articleList.length ? articleList : getArticlesFromStorage();
+  return articles.find(article => 
+    article.title.toLowerCase() === title.toLowerCase()
+  );
 };

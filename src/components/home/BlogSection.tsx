@@ -29,6 +29,12 @@ const BlogSection: React.FC<BlogSectionProps> = ({
     const articles = getArticlesFromStorage();
     console.log("All articles:", articles);
     
+    if (!articles || articles.length === 0) {
+      console.warn("No articles found in storage!");
+      setBlogPosts([]);
+      return;
+    }
+    
     const blogArticles = getArticlesByCategory('blog', undefined, articles);
     console.log("Filtered blog articles:", blogArticles);
     
@@ -36,29 +42,44 @@ const BlogSection: React.FC<BlogSectionProps> = ({
       setBlogPosts(blogArticles);
     } else {
       console.warn("No blog articles found!");
+      
+      // Check if there are any articles with case-insensitive 'blog' category
+      const caseInsensitiveBlogArticles = articles.filter(
+        article => article.category.toLowerCase() === 'blog'
+      );
+      
+      if (caseInsensitiveBlogArticles.length > 0) {
+        console.log("Found articles with case-insensitive 'blog' category:", caseInsensitiveBlogArticles);
+        setBlogPosts(caseInsensitiveBlogArticles);
+      } else {
+        setBlogPosts([]);
+      }
     }
   };
   
   useEffect(() => {
     fetchBlogPosts();
     
-    // Add event listener for article updates
-    const handleArticlesUpdated = () => {
-      console.log('Articles updated event detected in BlogSection, reloading blog posts');
+    // Add event listener for article updates with a more specific name for debugging
+    const handleArticlesUpdatedEvent = () => {
+      console.log('articlesUpdated event detected in BlogSection, reloading blog posts');
       fetchBlogPosts();
     };
     
-    window.addEventListener('articlesUpdated', handleArticlesUpdated);
+    window.addEventListener('articlesUpdated', handleArticlesUpdatedEvent);
     
     // Cleanup listener on unmount
     return () => {
-      window.removeEventListener('articlesUpdated', handleArticlesUpdated);
+      window.removeEventListener('articlesUpdated', handleArticlesUpdatedEvent);
     };
   }, []);
   
   // For debugging
   useEffect(() => {
     console.log("BlogSection mounted/updated with", blogPosts.length, "posts");
+    if (blogPosts.length > 0) {
+      console.log("Blog posts:", blogPosts);
+    }
   }, [blogPosts]);
   
   const totalPages = Math.ceil(blogPosts.length / postsPerPage);

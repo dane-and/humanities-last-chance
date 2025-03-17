@@ -55,6 +55,8 @@ export const publishDraft = (draftId: string): boolean => {
     saveArticlesToStorage(articles);
     saveDraftsToStorage(drafts);
     
+    console.log(`Published draft "${publishReady.title}" successfully`);
+    
     // Dispatch events to notify other components
     window.dispatchEvent(new CustomEvent('articlesUpdated'));
     window.dispatchEvent(new CustomEvent('draftsUpdated'));
@@ -90,6 +92,18 @@ export const publishDraftByTitle = (title: string): boolean => {
     }
     
     console.log(`Found draft with title "${title}" and ID ${draft.id}`);
+    
+    // First check if an article with this title already exists
+    const articles = getArticlesFromStorage();
+    const articleExists = articles.some(
+      article => article.title.toLowerCase() === title.toLowerCase()
+    );
+    
+    if (articleExists) {
+      console.warn(`Article with title "${title}" already exists in published articles`);
+      toast.warning(`Article "${title}" is already published`);
+      return false;
+    }
     
     // Publish the found draft
     return publishDraft(draft.id);
