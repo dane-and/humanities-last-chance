@@ -2,7 +2,9 @@
 import React from 'react';
 import { Article } from '@/lib/types/article';
 import { Button } from '@/components/ui/button';
-import { Trash2 } from 'lucide-react';
+import { Trash2, Send } from 'lucide-react';
+import { publishDraft } from '@/lib/utils/storage/publishDraftStorage';
+import { toast } from 'sonner';
 
 interface ArticleListProps {
   articleList: Article[];
@@ -19,6 +21,23 @@ const ArticleList: React.FC<ArticleListProps> = ({
   onNewArticle,
   onDeleteArticle
 }) => {
+  // Check if we're viewing drafts based on the articles
+  const isDraftsTab = articleList.length > 0 && 
+    (articleList[0].isDraft || articleList[0].status === 'draft');
+
+  const handlePublishDraft = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    if (window.confirm('Are you sure you want to publish this draft?')) {
+      const success = publishDraft(id);
+      if (success) {
+        toast.success('Draft published successfully');
+      } else {
+        toast.error('Failed to publish draft');
+      }
+    }
+  };
+  
   return (
     <div className="md:col-span-1 bg-background p-4 rounded-lg border">
       <div className="flex justify-between items-center mb-4">
@@ -39,19 +58,34 @@ const ArticleList: React.FC<ArticleListProps> = ({
               <div className="font-medium truncate">{article.title}</div>
               <div className="text-xs text-muted-foreground">{article.date}</div>
             </div>
-            <Button 
-              variant="ghost" 
-              size="icon"
-              className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
-              onClick={(e) => {
-                e.stopPropagation();
-                if (window.confirm(`Are you sure you want to delete "${article.title}"?`)) {
-                  onDeleteArticle(article.id);
-                }
-              }}
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
+            <div className="flex">
+              {/* Show publish button only for drafts */}
+              {isDraftsTab && (
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50"
+                  onClick={(e) => handlePublishDraft(article.id, e)}
+                  title="Publish draft"
+                >
+                  <Send className="h-4 w-4" />
+                </Button>
+              )}
+              <Button 
+                variant="ghost" 
+                size="icon"
+                className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (window.confirm(`Are you sure you want to delete "${article.title}"?`)) {
+                    onDeleteArticle(article.id);
+                  }
+                }}
+                title="Delete article"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
         ))}
       </div>

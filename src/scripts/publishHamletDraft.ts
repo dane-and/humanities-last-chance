@@ -1,7 +1,6 @@
 
 import { publishDraftByTitle } from '../lib/utils/storage/publishDraftStorage';
 import { toast } from 'sonner';
-import { Article } from '../lib/types/article';
 
 /**
  * Script to publish the "Should Hamlet Take Prozac" draft
