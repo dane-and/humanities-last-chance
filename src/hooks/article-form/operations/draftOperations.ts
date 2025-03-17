@@ -2,6 +2,7 @@
 import { toast } from 'sonner';
 import { Article } from '../../../lib/types/article';
 import { getDraftsFromStorage, saveDraftsToStorage } from '../../../lib/utils/storage/articleStorage';
+import { publishDraft } from '../../../lib/utils/storage/publishDraftStorage';
 
 /**
  * Handle saving article as draft - only triggered by the Save Draft button
@@ -58,5 +59,32 @@ export const handleSaveAsDraft = async (
   } catch (error) {
     console.error('Error saving draft:', error);
     toast.error("Error saving draft. Please try again.");
+  }
+};
+
+/**
+ * Handle publishing a draft article
+ */
+export const handlePublishDraft = async (
+  formData: Article,
+  selectedTags: string[],
+  onNewArticle: () => void
+): Promise<void> => {
+  // First save any unsaved changes
+  await handleSaveAsDraft(formData, selectedTags, () => {});
+  
+  try {
+    // Attempt to publish the draft
+    const success = publishDraft(formData.id);
+    
+    if (success) {
+      toast.success("Article published successfully");
+      onNewArticle();
+    } else {
+      toast.error("Error publishing article");
+    }
+  } catch (error) {
+    console.error('Error publishing draft:', error);
+    toast.error("Error publishing article. Please try again.");
   }
 };

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Save, Trash2, Calendar, Eye } from 'lucide-react';
+import { Save, Trash2, Calendar, Eye, Send } from 'lucide-react';
 import ArticlePreview from '@/components/admin/ArticlePreview';
 import SchedulePublishDialog from '@/components/admin/SchedulePublishDialog';
 import { Article } from '@/lib/types/article';
@@ -11,6 +11,8 @@ interface FormActionsProps {
   onDelete: () => void;
   onSaveAsDraft: () => void;
   onSchedule: (date: Date) => void;
+  onPublish?: () => void;
+  isDraft?: boolean;
   formData: Article;
 }
 
@@ -19,6 +21,8 @@ const FormActions: React.FC<FormActionsProps> = ({
   onDelete,
   onSaveAsDraft,
   onSchedule,
+  onPublish,
+  isDraft,
   formData,
 }) => {
   return (
@@ -34,6 +38,18 @@ const FormActions: React.FC<FormActionsProps> = ({
         <Save className="h-4 w-4" />
         Save as Draft
       </Button>
+      
+      {isDraft && onPublish && (
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onPublish}
+          className="flex gap-2"
+        >
+          <Send className="h-4 w-4" />
+          Publish Now
+        </Button>
+      )}
       
       <SchedulePublishDialog 
         onSchedule={onSchedule}

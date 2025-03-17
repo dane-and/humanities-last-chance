@@ -3,7 +3,7 @@ import { Article } from '../../lib/types/article';
 import { ArticleFormProps } from './types';
 import { handleArticleCreateOrUpdate } from './operations/createUpdateOperations';
 import { handleArticleDelete } from './operations/deleteOperations';
-import { handleSaveAsDraft as saveAsDraft } from './operations/draftOperations';
+import { handleSaveAsDraft, handlePublishDraft } from './operations/draftOperations';
 import { handleSchedulePublication as schedulePublication } from './operations/scheduledOperations';
 
 /**
@@ -39,7 +39,12 @@ export const useArticleFormSubmission = (
   
   // Handle saving as draft - explicitly triggered by button click only
   const handleSaveAsDraft = async () => {
-    await saveAsDraft(formData, selectedTags, onNewArticle);
+    await handleSaveAsDraft(formData, selectedTags, onNewArticle);
+  };
+  
+  // Handle publishing draft article
+  const handlePublishDraft = async () => {
+    await handlePublishDraft(formData, selectedTags, onNewArticle);
   };
   
   // Handle schedule publication
@@ -51,6 +56,7 @@ export const useArticleFormSubmission = (
     handleSubmit,
     handleDelete,
     handleSaveAsDraft,
-    handleSchedulePublication
+    handleSchedulePublication,
+    handlePublishDraft
   };
 };

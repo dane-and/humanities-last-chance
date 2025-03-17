@@ -43,8 +43,12 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
     handleSubmit,
     handleDelete,
     handleSaveAsDraft,
-    handleSchedulePublication
+    handleSchedulePublication,
+    handlePublishDraft
   } = useArticleForm(articleList, selectedArticle, onArticleListUpdate, onNewArticle);
+
+  // Determine if the current article is a draft
+  const isDraft = selectedArticle?.isDraft || selectedArticle?.status === 'draft';
 
   return (
     <div className="md:col-span-3 bg-background p-6 rounded-lg border">
@@ -96,6 +100,8 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           onDelete={handleDelete}
           onSaveAsDraft={handleSaveAsDraft}
           onSchedule={handleSchedulePublication}
+          onPublish={handlePublishDraft}
+          isDraft={isDraft}
           formData={formData}
         />
       </form>
