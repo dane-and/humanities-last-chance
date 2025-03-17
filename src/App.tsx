@@ -62,7 +62,9 @@ const App = () => {
           <BrowserRouter basename={BASE_PATH}>
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/admin" element={<AdminLogin />} />
+              {/* Admin routes */}
+              <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
+              <Route path="/admin/login" element={<AdminLogin />} />
               <Route 
                 path="/admin/dashboard" 
                 element={

@@ -91,7 +91,7 @@ const Footer: React.FC = () => {
                   </li>
                   <li>
                     <Link 
-                      to="/admin" 
+                      to="/admin/login" 
                       className="text-sm text-gray-600 hover:text-gray-900 flex items-center"
                       onClick={handleAdminLinkClick}
                     >
