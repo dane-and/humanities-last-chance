@@ -26,12 +26,17 @@ export const handleArticleCreateOrUpdate = async (
     return;
   }
   
+  // Make a deep copy of the formData to avoid reference issues
+  const articleToSave = JSON.parse(JSON.stringify(formData));
+  
   // Prepare updated article with selected tags
   const articleWithTags = {
-    ...formData,
+    ...articleToSave,
     tags: selectedTags,
     lastModified: new Date().toISOString()
   };
+  
+  console.log('Saving article:', articleWithTags);
   
   try {
     let updatedList: Article[];
@@ -40,12 +45,19 @@ export const handleArticleCreateOrUpdate = async (
     try {
       if (selectedArticle) {
         // Update existing article
+        // Ensure the ID is set correctly
+        if (!articleWithTags.id) {
+          articleWithTags.id = selectedArticle.id;
+        }
+        
+        console.log('Updating article with ID:', articleWithTags.id);
+        
         // Try to update on the server first
-        await updateArticle(formData.id, articleWithTags);
+        await updateArticle(articleWithTags.id, articleWithTags);
         
         // Update local list
         updatedList = articleList.map(article => 
-          article.id === formData.id ? articleWithTags : article
+          article.id === articleWithTags.id ? articleWithTags : article
         );
         
         toast.success("Article updated successfully", {
@@ -80,12 +92,12 @@ export const handleArticleCreateOrUpdate = async (
       // Dispatch custom event for other components to know data has changed
       window.dispatchEvent(new CustomEvent('articlesUpdated'));
     } catch (serverError) {
-      console.warn('Server operation failed, falling back to local update only', serverError);
+      console.error('Server operation failed, details:', serverError);
       
       if (selectedArticle) {
         // Local update fallback for existing article
         updatedList = articleList.map(article => 
-          article.id === formData.id ? articleWithTags : article
+          article.id === articleWithTags.id ? articleWithTags : article
         );
         
         toast.error("Server update failed. Changes saved locally only.", {

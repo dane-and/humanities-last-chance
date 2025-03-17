@@ -21,7 +21,7 @@ export const useArticleForm = (
 
   // Initialize form data
   const [formData, setFormData] = useState<Article>(
-    selectedArticle ? selectedArticle : defaultFormState
+    selectedArticle ? {...selectedArticle} : {...defaultFormState}
   );
   const [selectedTags, setSelectedTags] = useState<string[]>(
     selectedArticle?.tags || []
@@ -30,11 +30,15 @@ export const useArticleForm = (
   
   // Update form when selected article changes
   useEffect(() => {
+    console.log('Selected article changed:', selectedArticle);
     if (selectedArticle) {
-      setFormData(selectedArticle);
+      // Create a fresh copy to avoid reference issues
+      const articleCopy = {...selectedArticle};
+      console.log('Setting form data to:', articleCopy);
+      setFormData(articleCopy);
       setSelectedTags(selectedArticle.tags || []);
     } else {
-      setFormData(defaultFormState);
+      setFormData({...defaultFormState});
       setSelectedTags([]);
     }
   }, [selectedArticle]);

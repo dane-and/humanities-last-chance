@@ -22,6 +22,9 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
   onInputChange,
   onSelectChange,
 }) => {
+  // Log the incoming props to debug
+  console.log('BasicInfoFields props:', { title, slug, author, date, category });
+  
   return (
     <>
       <div className="space-y-2">

@@ -13,23 +13,41 @@ export const fetchWithTimeout = async (
   const timeoutId = setTimeout(() => controller.abort(), timeout);
   
   try {
+    console.log(`API Request: ${options.method || 'GET'} ${url}`, 
+      options.body ? 'with payload' : 'without payload');
+    
+    const start = Date.now();
     const response = await fetch(url, {
       ...options,
       signal: controller.signal
     });
     
+    const responseTime = Date.now() - start;
+    console.log(`API Response: ${response.status} (${responseTime}ms)`);
+    
     clearTimeout(timeoutId);
     
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || `API request failed with status ${response.status}`);
+      let errorMessage = `API request failed with status ${response.status}`;
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.error || errorMessage;
+      } catch (e) {
+        // If JSON parsing fails, use default error message
+      }
+      console.error('API Error:', errorMessage);
+      throw new Error(errorMessage);
     }
     
     return response;
   } catch (error) {
+    clearTimeout(timeoutId);
+    
     if (error instanceof DOMException && error.name === 'AbortError') {
+      console.error('API Timeout: Request exceeded timeout limit');
       throw new Error('Request timeout: API server is not responding');
     }
+    console.error('API Error:', error);
     throw error;
   }
 };
@@ -38,7 +56,9 @@ export const fetchWithTimeout = async (
  * Builds the API endpoint URL
  */
 export const getApiUrl = (endpoint: string): string => {
-  return `${API_CONFIG.BASE_URL}/${endpoint}`;
+  const url = `${API_CONFIG.BASE_URL}/${endpoint}`;
+  console.log('Generated API URL:', url);
+  return url;
 };
 
 /**
