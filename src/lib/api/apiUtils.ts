@@ -6,13 +6,18 @@ const pendingRequests = new Map<string, Promise<any>>();
 const requestCooldowns = new Map<string, number>();
 const MIN_REQUEST_INTERVAL = 500; // ms between identical requests
 
+// Added retry mechanism for failed requests
+const MAX_RETRIES = 2;
+const RETRY_DELAY = 1000; // ms
+
 /**
- * Creates a fetch request with timeout functionality
+ * Creates a fetch request with timeout and retry functionality
  */
 export const fetchWithTimeout = async (
   url: string, 
   options: RequestInit = {}, 
-  timeout: number = API_CONFIG.TIMEOUT
+  timeout: number = API_CONFIG.TIMEOUT,
+  retryCount: number = 0
 ): Promise<Response> => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
@@ -57,6 +62,9 @@ export const fetchWithTimeout = async (
       if (!enhancedOptions.headers['Content-Type']) {
         enhancedOptions.headers['Content-Type'] = 'application/json';
       }
+      
+      // Add additional headers that might help with CORS
+      enhancedOptions.headers['X-Requested-With'] = 'XMLHttpRequest';
     }
     
     // Create the request promise with detailed logging
@@ -105,6 +113,20 @@ export const fetchWithTimeout = async (
           }
           
           console.error('API Error:', errorMessage);
+          
+          // Check if we should retry the request
+          if (retryCount < MAX_RETRIES && response.status >= 500) {
+            console.log(`Retrying request (${retryCount + 1}/${MAX_RETRIES}) after server error...`);
+            clearTimeout(timeoutId);
+            pendingRequests.delete(cacheKey);
+            
+            // Wait before retry
+            await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+            
+            // Retry with incremented counter
+            return fetchWithTimeout(url, options, timeout, retryCount + 1);
+          }
+          
           throw new Error(errorMessage);
         }
         
@@ -129,6 +151,18 @@ export const fetchWithTimeout = async (
     
     if (error instanceof DOMException && error.name === 'AbortError') {
       console.error('API Timeout: Request exceeded timeout limit');
+      
+      // Try again if we haven't reached max retries
+      if (retryCount < MAX_RETRIES) {
+        console.log(`Retrying request (${retryCount + 1}/${MAX_RETRIES}) after timeout...`);
+        
+        // Wait before retry
+        await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+        
+        // Retry with incremented counter
+        return fetchWithTimeout(url, options, timeout * 1.5, retryCount + 1); // Increase timeout for retry
+      }
+      
       throw new Error('Request timeout: API server is not responding');
     }
     console.error('API Error:', error);

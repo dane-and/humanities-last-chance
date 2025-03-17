@@ -13,12 +13,27 @@ function updateArticle($id) {
     $rawData = file_get_contents('php://input');
     error_log("Received update request for article ID: $id with data length: " . strlen($rawData));
     
+    // More detailed debugging
+    error_log("Raw data for article update: " . $rawData);
+    
     $data = json_decode($rawData, true);
     
     if (!$data) {
         $jsonError = json_last_error_msg();
         error_log("Invalid JSON data received for article ID $id: $rawData (Error: $jsonError)");
         sendErrorResponse(400, "Invalid JSON data: $jsonError");
+        return;
+    }
+    
+    // Ensure ID is properly set
+    if (!$id && isset($data['id'])) {
+        $id = $data['id'];
+        error_log("Using ID from payload: $id");
+    }
+    
+    if (!$id) {
+        error_log("No article ID provided for update");
+        sendErrorResponse(400, "Article ID is required");
         return;
     }
     
@@ -35,7 +50,13 @@ function updateArticle($id) {
     }
     
     $checkStmt->bind_param("s", $id);
-    $checkStmt->execute();
+    
+    if (!$checkStmt->execute()) {
+        error_log("Check execution failed: " . $checkStmt->error);
+        sendErrorResponse(500, 'Database error: ' . $checkStmt->error);
+        return;
+    }
+    
     $checkResult = $checkStmt->get_result();
     
     if ($checkResult->num_rows === 0) {
@@ -58,6 +79,9 @@ function updateArticle($id) {
     $excerpt = isset($data['excerpt']) ? $data['excerpt'] : '';
     $content = isset($data['content']) ? $data['content'] : '';
     $featured = isset($data['featured']) && $data['featured'] ? 1 : 0;
+    
+    // Log update values for debugging
+    error_log("Updating article $id with: title=$title, slug=$slug, featured=$featured");
     
     // Update article in database with more careful error handling
     $sql = "UPDATE articles SET 

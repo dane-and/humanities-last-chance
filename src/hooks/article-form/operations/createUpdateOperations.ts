@@ -41,6 +41,7 @@ export const handleArticleCreateOrUpdate = async (
   try {
     let updatedList: Article[];
     const toastId = toast.loading(selectedArticle ? "Updating article..." : "Creating article...");
+    let serverSuccess = false;
     
     try {
       if (selectedArticle) {
@@ -53,17 +54,13 @@ export const handleArticleCreateOrUpdate = async (
         console.log('Updating article with ID:', articleWithTags.id);
         
         // Try to update on the server first
-        const result = await updateArticle(articleWithTags.id, articleWithTags);
-        console.log('Update result:', result);
+        await updateArticle(articleWithTags.id, articleWithTags);
+        serverSuccess = true;
         
         // Update local list
         updatedList = articleList.map(article => 
           article.id === articleWithTags.id ? articleWithTags : article
         );
-        
-        toast.success("Article updated successfully", {
-          id: toastId
-        });
       } else {
         // Create new article
         const newArticle: Article = {
@@ -74,24 +71,18 @@ export const handleArticleCreateOrUpdate = async (
         
         // Try to create on the server first
         await createArticle(newArticle);
+        serverSuccess = true;
         
         // Add to local list
         updatedList = [...articleList, newArticle];
-        
-        toast.success("Article created successfully", {
-          id: toastId
-        });
         onNewArticle();
       }
       
-      // Update the article list in the component state
-      onArticleListUpdate(updatedList);
-      
-      // Save changes to local storage to ensure they're visible immediately
-      await saveArticlesToStorage(updatedList);
-      
-      // Dispatch custom event for other components to know data has changed
-      window.dispatchEvent(new CustomEvent('articlesUpdated'));
+      if (serverSuccess) {
+        toast.success(selectedArticle ? "Article updated successfully" : "Article created successfully", {
+          id: toastId
+        });
+      }
     } catch (serverError) {
       console.error('Server operation failed, details:', serverError);
       
@@ -103,7 +94,7 @@ export const handleArticleCreateOrUpdate = async (
         
         toast.error("Server update failed. Changes saved locally only.", {
           id: toastId,
-          duration: 4000
+          duration: 5000
         });
       } else {
         // Local creation fallback for new article
@@ -117,16 +108,17 @@ export const handleArticleCreateOrUpdate = async (
         
         toast.error("Server create failed. Article saved locally only.", {
           id: toastId,
-          duration: 4000
+          duration: 5000
         });
         onNewArticle();
       }
-      
-      // Still update locally
-      onArticleListUpdate(updatedList);
-      await saveArticlesToStorage(updatedList);
-      window.dispatchEvent(new CustomEvent('articlesUpdated'));
     }
+      
+    // Always update locally
+    onArticleListUpdate(updatedList);
+    await saveArticlesToStorage(updatedList);
+    window.dispatchEvent(new CustomEvent('articlesUpdated'));
+      
   } catch (error) {
     console.error('Error saving article:', error);
     toast.error("Error saving article. Please try again.");

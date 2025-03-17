@@ -20,6 +20,23 @@ function routeArticleRequest($method, $articleId = null) {
         // Enhanced debug log to trace request information
         error_log("Article request: Method=$method, ID=$articleId, Remote IP=" . $_SERVER['REMOTE_ADDR']);
         
+        // Log all query parameters for debugging
+        error_log("All query parameters: " . json_encode($_GET));
+        
+        if ($method === 'PUT' || $method === 'POST') {
+            // Log the incoming payload for debugging
+            $rawData = file_get_contents('php://input');
+            error_log("Raw request body: " . $rawData);
+            
+            // Check if it's valid JSON
+            $jsonData = json_decode($rawData, true);
+            if ($jsonData === null && json_last_error() !== JSON_ERROR_NONE) {
+                error_log("Invalid JSON received: " . json_last_error_msg());
+            } else {
+                error_log("JSON parsed successfully: " . json_encode($jsonData));
+            }
+        }
+        
         switch ($method) {
             case 'GET':
                 if ($articleId) {
@@ -35,27 +52,22 @@ function routeArticleRequest($method, $articleId = null) {
                 
             case 'PUT':
                 if (!$articleId) {
-                    sendErrorResponse(400, 'Article ID is required for update operations');
-                    return;
+                    // Extract ID from body if not in query parameter
+                    $rawData = file_get_contents('php://input');
+                    $jsonData = json_decode($rawData, true);
+                    if ($jsonData && isset($jsonData['id'])) {
+                        $articleId = $jsonData['id'];
+                        error_log("Article ID extracted from request body: $articleId");
+                    } else {
+                        sendErrorResponse(400, 'Article ID is required for update operations');
+                        return;
+                    }
                 }
                 
                 // Log request headers for debugging CORS issues
                 $headers = getallheaders();
                 error_log("UPDATE request headers: " . json_encode($headers));
                 
-                // Log payload with better formatting for debugging
-                $rawData = file_get_contents('php://input');
-                error_log("UPDATE request raw body: $rawData");
-                
-                // Try to parse JSON to check for valid format
-                $jsonData = json_decode($rawData, true);
-                if ($jsonData === null && json_last_error() !== JSON_ERROR_NONE) {
-                    error_log("JSON parse error: " . json_last_error_msg());
-                    sendErrorResponse(400, 'Invalid JSON payload: ' . json_last_error_msg());
-                    return;
-                }
-                
-                error_log("JSON parsed correctly, proceeding with update");
                 updateArticle($articleId);
                 break;
                 

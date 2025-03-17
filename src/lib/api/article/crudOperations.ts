@@ -22,8 +22,20 @@ export const createArticle = async (article: Omit<Article, 'id'>): Promise<Artic
       }
     );
     
-    const data = await response.json();
-    console.log('Server response for create:', data);
+    // Get the raw text first for debugging
+    const responseText = await response.text();
+    console.log('Raw server response for create:', responseText);
+    
+    // Try to parse as JSON
+    let data;
+    try {
+      data = JSON.parse(responseText);
+    } catch (parseError) {
+      console.error('Failed to parse server response as JSON:', parseError);
+      throw new Error(`Server returned invalid JSON: ${responseText}`);
+    }
+    
+    console.log('Server response for create (parsed):', data);
     
     // Also update local storage for immediate access
     const allArticles = getArticlesFromStorage();
@@ -64,57 +76,62 @@ export const updateArticle = async (id: string, article: Partial<Article>): Prom
     // Start the update attempt timer for better UX feedback
     const startTime = Date.now();
     
-    // Perform the update request with extra debug details
-    const response = await fetchWithTimeout(
-      apiUrl,
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest',
-          'Cache-Control': 'no-cache',
-        },
-        body: requestBody,
-      },
-      10000 // Increase timeout to 10 seconds for slow connections
-    );
-    
-    // Log the response status and timing
-    const requestTime = Date.now() - startTime;
-    console.log(`Server responded in ${requestTime}ms with status:`, response.status);
-    
-    // Get the raw response text first for debugging
-    const responseText = await response.text();
-    console.log('Raw server response for update:', responseText);
-    
-    // Try to parse the response as JSON
-    let data;
     try {
-      data = JSON.parse(responseText);
-      console.log('Parsed server response for update:', data);
-    } catch (parseError) {
-      console.error('Failed to parse server response as JSON:', parseError);
-      throw new Error(`Server returned invalid JSON: ${responseText}`);
+      // Perform the update request with extra debug details
+      const response = await fetchWithTimeout(
+        apiUrl,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Cache-Control': 'no-cache',
+          },
+          body: requestBody,
+        },
+        10000 // Increase timeout to 10 seconds for slow connections
+      );
+      
+      // Log the response status and timing
+      const requestTime = Date.now() - startTime;
+      console.log(`Server responded in ${requestTime}ms with status:`, response.status);
+      
+      // Get the raw response text first for debugging
+      const responseText = await response.text();
+      console.log('Raw server response for update:', responseText);
+      
+      // Try to parse the response as JSON
+      let data;
+      try {
+        data = JSON.parse(responseText);
+        console.log('Parsed server response for update:', data);
+      } catch (parseError) {
+        console.error('Failed to parse server response as JSON:', parseError);
+        throw new Error(`Server returned invalid JSON: ${responseText}`);
+      }
+      
+      // Check if the response contains the expected data structure
+      if (!data.article && !data.success) {
+        console.error('Unexpected server response format:', data);
+        throw new Error('Unexpected server response format');
+      }
+      
+      // Get the updated article from the response
+      const updatedArticle = data.article || articleToUpdate;
+      
+      // Also update local storage for immediate access
+      const allArticles = getArticlesFromStorage();
+      const updatedArticles = allArticles.map(existingArticle => 
+        existingArticle.id === id ? { ...existingArticle, ...article } : existingArticle
+      );
+      saveArticlesToStorage(updatedArticles);
+      
+      console.log('Article updated successfully, saved to storage');
+      return updatedArticle;
+    } catch (apiError) {
+      console.error('API request failed:', apiError);
+      throw apiError;
     }
-    
-    // Check if the response contains the expected data structure
-    if (!data.article && !data.success) {
-      console.error('Unexpected server response format:', data);
-      throw new Error('Unexpected server response format');
-    }
-    
-    // Get the updated article from the response
-    const updatedArticle = data.article || articleToUpdate;
-    
-    // Also update local storage for immediate access
-    const allArticles = getArticlesFromStorage();
-    const updatedArticles = allArticles.map(existingArticle => 
-      existingArticle.id === id ? { ...existingArticle, ...article } : existingArticle
-    );
-    saveArticlesToStorage(updatedArticles);
-    
-    console.log('Article updated successfully, saved to storage');
-    return updatedArticle;
   } catch (error) {
     console.error('Error updating article:', error);
     
