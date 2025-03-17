@@ -24,14 +24,17 @@ import ArticlesInterviews from "./pages/articles/ArticlesInterviews";
 import ArticlesReviews from "./pages/articles/ArticlesReviews";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-// Query client with better error handling
+// Query client with better error handling - updated to use the correct API
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 5 * 60 * 1000, // 5 minutes
       retry: 1,
-      onError: (error) => {
-        console.error('Query error:', error);
+      // Using the newer way to handle errors in @tanstack/react-query v5+
+      meta: {
+        onError: (error: Error) => {
+          console.error('Query error:', error);
+        }
       }
     },
   },
