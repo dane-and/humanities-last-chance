@@ -13,8 +13,14 @@ export const fetchWithTimeout = async (
   const timeoutId = setTimeout(() => controller.abort(), timeout);
   
   try {
-    console.log(`API Request: ${options.method || 'GET'} ${url}`, 
-      options.body ? `with payload: ${options.body}` : 'without payload');
+    // Enhanced request logging
+    const method = options.method || 'GET';
+    const hasPayload = !!options.body;
+    
+    console.log(`API Request: ${method} ${url}`);
+    if (hasPayload) {
+      console.log(`Request payload: ${options.body}`);
+    }
     
     const start = Date.now();
     const response = await fetch(url, {
@@ -29,13 +35,27 @@ export const fetchWithTimeout = async (
     
     if (!response.ok) {
       let errorMessage = `API request failed with status ${response.status}`;
+      let errorData = null;
+      
       try {
-        const errorData = await response.json();
-        errorMessage = errorData.error || errorMessage;
+        // Try to get detailed error message from response
+        const textResponse = await response.text();
+        console.log('Error response text:', textResponse);
+        
+        try {
+          // Try to parse as JSON
+          errorData = JSON.parse(textResponse);
+          errorMessage = errorData.error || errorMessage;
+        } catch (parseError) {
+          // If JSON parsing fails, use text response as error message
+          errorMessage = textResponse || errorMessage;
+          console.error('Failed to parse error response as JSON:', parseError);
+        }
       } catch (e) {
-        // If JSON parsing fails, use default error message
-        console.error('Failed to parse error response:', e);
+        // If reading text fails, use default error message
+        console.error('Failed to read error response:', e);
       }
+      
       console.error('API Error:', errorMessage);
       throw new Error(errorMessage);
     }

@@ -43,12 +43,10 @@ export const updateArticle = async (id: string, article: Partial<Article>): Prom
     console.log('Updating article with ID:', id);
     console.log('Article data to update:', JSON.stringify(article, null, 2));
     
-    // Ensure the endpoint is correctly formatted
-    const endpoint = `articles.php/${id}`;
-    console.log('Using endpoint:', endpoint);
-    
+    // Fix: Use a properly formatted endpoint for the update
+    // articles.php is the main endpoint, and we'll add the id as a query parameter instead
     const response = await fetchWithTimeout(
-      getApiUrl(endpoint),
+      getApiUrl('articles.php?id=' + id),
       {
         method: 'PUT',
         headers: {
@@ -94,8 +92,9 @@ export const updateArticle = async (id: string, article: Partial<Article>): Prom
  */
 export const deleteArticle = async (id: string): Promise<void> => {
   try {
+    // Fix: Use the same consistent query parameter format
     await fetchWithTimeout(
-      getApiUrl(`articles.php/${id}`),
+      getApiUrl(`articles.php?id=${id}`),
       {
         method: 'DELETE',
       }

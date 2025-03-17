@@ -53,7 +53,8 @@ export const handleArticleCreateOrUpdate = async (
         console.log('Updating article with ID:', articleWithTags.id);
         
         // Try to update on the server first
-        await updateArticle(articleWithTags.id, articleWithTags);
+        const result = await updateArticle(articleWithTags.id, articleWithTags);
+        console.log('Update result:', result);
         
         // Update local list
         updatedList = articleList.map(article => 

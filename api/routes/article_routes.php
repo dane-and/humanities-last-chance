@@ -12,6 +12,11 @@ require_once __DIR__ . '/../utils/response_utils.php';
  */
 function routeArticleRequest($method, $articleId = null) {
     try {
+        // Use query parameter ID if not provided explicitly
+        if (!$articleId && isset($_GET['id'])) {
+            $articleId = $_GET['id'];
+        }
+        
         switch ($method) {
             case 'GET':
                 if ($articleId) {
