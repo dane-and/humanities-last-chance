@@ -10,19 +10,21 @@ export const createEditorHandlers = (
 ) => {
   // Handle rich text editor change
   const handleEditorChange = (content: string) => {
-    // Ensure content is never undefined or null and preserve line breaks
+    // Skip if the content is exactly the same (prevents infinite loops)
+    if (formData.content === content) {
+      return;
+    }
+    
+    // Ensure content is never undefined or null
     const safeContent = content || '';
     
-    // Only update if content has actually changed to prevent infinite loops
-    if (formData.content !== safeContent) {
-      console.log('Editor content changed, length:', safeContent.length);
-      
-      // Create a new formData object to ensure reactivity
-      setFormData({
-        ...formData,
-        content: safeContent
-      });
-    }
+    console.log('Editor content changed, length:', safeContent.length);
+    
+    // Create a new formData object to ensure reactivity
+    setFormData({
+      ...formData,
+      content: safeContent
+    });
   };
 
   return {

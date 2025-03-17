@@ -27,17 +27,6 @@ const ContentField: React.FC<ContentFieldProps> = ({
       ['link', 'image'],
       ['clean']
     ],
-    keyboard: {
-      bindings: {
-        enter: {
-          key: 13,
-          handler: function() {
-            // Use default handling for enter key
-            return true;
-          }
-        }
-      }
-    }
   };
   
   const formats = [
@@ -50,10 +39,7 @@ const ContentField: React.FC<ContentFieldProps> = ({
 
   // Memoize the content change handler to prevent unnecessary re-renders
   const handleContentChange = useCallback((value: string) => {
-    // Skip if value hasn't changed
-    if (value === content) return;
-    
-    // Preserve line breaks by ensuring they're not removed in sanitization
+    // Sanitize the HTML content
     const sanitized = sanitizeHtml(value, {
       allowedTags: sanitizeHtml.defaults.allowedTags.concat(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 'p', 'br', 'ul', 'ol', 'li', 'strong', 'em', 'blockquote', 'pre', 'code']),
       allowedAttributes: {
@@ -63,7 +49,6 @@ const ContentField: React.FC<ContentFieldProps> = ({
         'p': ['style', 'class'],
         'div': ['style', 'class'],
       },
-      // Specifically disallow all event handlers, including onloadstart
       disallowedTagsMode: 'discard',
       allowedStyles: {
         '*': {
@@ -75,7 +60,7 @@ const ContentField: React.FC<ContentFieldProps> = ({
     });
     
     onContentChange(sanitized);
-  }, [content, onContentChange]);
+  }, [onContentChange]);
 
   return (
     <>
@@ -92,7 +77,7 @@ const ContentField: React.FC<ContentFieldProps> = ({
       
       <div className="space-y-2 md:col-span-2">
         <label className="text-sm font-medium">Content</label>
-        <div className="border border-input rounded-md overflow-hidden">
+        <div className="border border-input rounded-md overflow-hidden" style={{ minHeight: '300px' }}>
           <ReactQuill 
             theme="snow"
             value={content}
@@ -100,7 +85,7 @@ const ContentField: React.FC<ContentFieldProps> = ({
             modules={modules}
             formats={formats}
             placeholder="Write your article content here..."
-            className="min-h-[300px] bg-background"
+            className="bg-background h-full"
             preserveWhitespace={true}
           />
         </div>
