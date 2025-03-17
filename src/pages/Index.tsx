@@ -30,7 +30,7 @@ const Index = () => {
                   variant="outline"
                   className="mr-2"
                 >
-                  Publish "Should Hamlet Take Prozac" Draft
+                  Publish "Should Hamlet Take Prozac?" Draft
                 </Button>
                 <Button 
                   onClick={refreshArticles}

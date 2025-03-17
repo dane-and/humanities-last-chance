@@ -3,24 +3,24 @@ import { publishDraftByTitle } from '../lib/utils/storage/publishDraftStorage';
 import { toast } from 'sonner';
 
 /**
- * Script to publish the "Should Hamlet Take Prozac" draft
+ * Script to publish the "Should Hamlet Take Prozac?" draft
  */
 export const publishHamletDraft = () => {
-  console.log('Attempting to publish "Should Hamlet Take Prozac" draft...');
+  console.log('Attempting to publish "Should Hamlet Take Prozac?" draft...');
   
-  const success = publishDraftByTitle('Should Hamlet Take Prozac');
+  const success = publishDraftByTitle('Should Hamlet Take Prozac?');
   
   if (success) {
-    console.log('Successfully published "Should Hamlet Take Prozac" draft');
-    toast.success('"Should Hamlet Take Prozac" has been published successfully');
+    console.log('Successfully published "Should Hamlet Take Prozac?" draft');
+    toast.success('"Should Hamlet Take Prozac?" has been published successfully');
     
     // Dispatch the articlesUpdated event to refresh UI components
     window.dispatchEvent(new CustomEvent('articlesUpdated'));
     
     return true;
   } else {
-    console.error('Could not find draft "Should Hamlet Take Prozac"');
-    toast.error('Could not find draft "Should Hamlet Take Prozac"');
+    console.error('Could not find draft "Should Hamlet Take Prozac?"');
+    toast.error('Could not find draft "Should Hamlet Take Prozac?"');
     return false;
   }
 };
