@@ -54,7 +54,7 @@ const Footer: React.FC = () => {
             </div>
           </div>
           
-          {/* Column 2: First link column */}
+          {/* Column 2 & 3: Links properly aligned */}
           <div className="col-span-1">
             <h4 className="text-md font-semibold text-gray-800 mb-4">Quick Links</h4>
             <ul className="space-y-2">
@@ -73,9 +73,10 @@ const Footer: React.FC = () => {
             </ul>
           </div>
           
-          {/* Column 3: Second link column (without heading) */}
+          {/* Column 3: Second link column properly aligned with first column's links */}
           <div className="col-span-1">
-            <div className="h-10 mb-4 hidden xs:block"></div>
+            {/* Empty heading space to align links properly */}
+            <div className="h-10 mb-4"></div>
             <ul className="space-y-2">
               <li>
                 <Link to="/resources" className="text-sm text-gray-600 hover:text-gray-900">Resources</Link>
