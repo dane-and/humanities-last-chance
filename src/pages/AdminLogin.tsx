@@ -1,27 +1,40 @@
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
+import { AUTH_CONFIG } from '@/lib/config';
 
 const AdminLogin: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const { isAuthenticated, login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
+  
+  // Get the intended destination from location state, or default to dashboard
+  const from = location.state?.from?.pathname || '/admin/dashboard';
 
   useEffect(() => {
     // Check if user is already authenticated on mount
     if (isAuthenticated) {
-      navigate('/admin/dashboard');
+      console.log('Already authenticated, redirecting to', from);
+      navigate(from);
+    } else {
+      console.log('Admin login page rendered, not authenticated');
+      
+      // Debug info about the default credentials for development
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Development mode - default credentials:', { 
+          username: AUTH_CONFIG.ADMIN_USERNAME, 
+          password: 'Use the password from AUTH_CONFIG'
+        });
+      }
     }
-    
-    // Debug log to verify component rendering
-    console.log('Admin login page rendered');
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate, from]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,7 +46,7 @@ const AdminLogin: React.FC = () => {
         description: 'You have been logged in.',
         variant: 'default',
       });
-      navigate('/admin/dashboard');
+      navigate(from);
     } else {
       toast({
         title: 'Error',

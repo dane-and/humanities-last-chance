@@ -31,15 +31,27 @@ const AdminDashboard: React.FC = () => {
   } = useContentData();
 
   useEffect(() => {
+    console.log('AdminDashboard rendered, authentication status:', { isAuthenticated });
+    
     if (!isAuthenticated) {
+      console.log('Not authenticated in dashboard, redirecting to login');
       navigate('/admin');
+    } else {
+      console.log('User is authenticated, dashboard access granted');
     }
   }, [isAuthenticated, navigate]);
 
   const handleLogout = () => {
+    console.log('Logout requested from dashboard');
     logout();
     navigate('/admin');
   };
+
+  // If not authenticated, don't render anything to avoid flash of content
+  if (!isAuthenticated) {
+    console.log('Preventing dashboard render - not authenticated');
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-muted/40">

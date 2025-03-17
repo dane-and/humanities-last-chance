@@ -1,8 +1,9 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { AuthProvider } from "./context/AuthContext";
 import { BASE_PATH } from "./lib/config";
@@ -21,6 +22,7 @@ import ArticlePage from "./pages/ArticlePage";
 import ArticlesBlog from "./pages/articles/ArticlesBlog";
 import ArticlesInterviews from "./pages/articles/ArticlesInterviews";
 import ArticlesReviews from "./pages/articles/ArticlesReviews";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -54,7 +56,14 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/admin" element={<AdminLogin />} />
-              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+              <Route 
+                path="/admin/dashboard" 
+                element={
+                  <ProtectedRoute>
+                    <AdminDashboard />
+                  </ProtectedRoute>
+                } 
+              />
               <Route path="/search" element={<SearchPage />} />
               <Route path="/tag/:tag" element={<TagsPage />} />
               <Route path="/about" element={<About />} />

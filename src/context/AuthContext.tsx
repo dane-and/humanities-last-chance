@@ -28,8 +28,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     
     const auth = localStorage.getItem('admin-auth');
     if (auth === 'true') {
-      console.log('Found existing auth in localStorage');
+      console.log('Found existing auth in localStorage, setting authenticated state');
       setIsAuthenticated(true);
+    } else {
+      console.log('No auth found in localStorage, user is not authenticated');
     }
   }, []);
 
@@ -52,6 +54,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsAuthenticated(false);
     localStorage.removeItem('admin-auth');
   };
+
+  // Debug log to show current authentication state on any changes
+  useEffect(() => {
+    console.log('Authentication state changed:', { isAuthenticated });
+  }, [isAuthenticated]);
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
