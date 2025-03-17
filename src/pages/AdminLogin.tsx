@@ -14,13 +14,18 @@ const AdminLogin: React.FC = () => {
   const { toast } = useToast();
 
   useEffect(() => {
+    // Check if user is already authenticated on mount
     if (isAuthenticated) {
       navigate('/admin/dashboard');
     }
+    
+    // Debug log to verify component rendering
+    console.log('Admin login page rendered');
   }, [isAuthenticated, navigate]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Login attempt with:', { username });
     
     if (login(username, password)) {
       toast({

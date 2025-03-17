@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -84,6 +85,7 @@ const Footer = () => {
                     </Link>
                   </li>
                   <li>
+                    {/* Important: Use Link instead of anchor tag to avoid full page reload */}
                     <Link to="/admin" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                       Admin
                     </Link>
