@@ -1,9 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Loader2 } from 'lucide-react';
 
 // Custom hooks
 import { useContentData } from '@/hooks/useContentData';
@@ -15,9 +12,6 @@ import ArticleManagement from '@/components/admin/dashboard/ArticleManagement';
 import PageManagement from '@/components/admin/dashboard/PageManagement';
 
 const AdminDashboard: React.FC = () => {
-  const { isAuthenticated, authLoading, logout } = useAuth();
-  const navigate = useNavigate();
-  
   // Get content data using our custom hook
   const { 
     articleList, 
@@ -33,37 +27,13 @@ const AdminDashboard: React.FC = () => {
   } = useContentData();
 
   useEffect(() => {
-    console.log('AdminDashboard rendered, authentication status:', { isAuthenticated, authLoading });
-    
-    if (!authLoading && !isAuthenticated) {
-      console.log('Not authenticated in dashboard, redirecting to login');
-      navigate('/admin');
-    } else if (!authLoading && isAuthenticated) {
-      console.log('User is authenticated, dashboard access granted');
-    }
-  }, [isAuthenticated, authLoading, navigate]);
+    console.log('AdminDashboard rendered, authentication bypassed temporarily');
+  }, []);
 
   const handleLogout = () => {
-    console.log('Logout requested from dashboard');
-    logout();
-    navigate('/admin');
+    console.log('Logout requested from dashboard, but currently bypassed');
+    // No actual logout functionality for now
   };
-
-  // If still checking auth or not authenticated, show loading
-  if (authLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <span className="ml-2">Verifying access...</span>
-      </div>
-    );
-  }
-
-  // If not authenticated, don't render anything to avoid flash of content
-  if (!isAuthenticated) {
-    console.log('Preventing dashboard render - not authenticated');
-    return null;
-  }
 
   return (
     <div className="min-h-screen bg-muted/40">
@@ -76,7 +46,7 @@ const AdminDashboard: React.FC = () => {
         
         {contentLoading ? (
           <div className="flex items-center justify-center p-12">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <div className="h-8 w-8 animate-spin text-primary">Loading...</div>
             <span className="ml-2">Loading content data...</span>
           </div>
         ) : (

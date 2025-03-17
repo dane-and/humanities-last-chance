@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -62,17 +61,10 @@ const App = () => {
           <BrowserRouter basename={BASE_PATH}>
             <Routes>
               <Route path="/" element={<Index />} />
-              {/* Admin routes */}
+              {/* Admin routes - temporarily bypassing authentication */}
               <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
               <Route path="/admin/login" element={<AdminLogin />} />
-              <Route 
-                path="/admin/dashboard" 
-                element={
-                  <ProtectedRoute>
-                    <AdminDashboard />
-                  </ProtectedRoute>
-                } 
-              />
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
               <Route path="/search" element={<SearchPage />} />
               <Route path="/tag/:tag" element={<TagsPage />} />
               <Route path="/about" element={<About />} />
