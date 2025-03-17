@@ -37,7 +37,7 @@ export const useArticleFormSubmission = (
     );
   };
   
-  // Handle saving as draft
+  // Handle saving as draft - explicitly triggered by button click only
   const handleSaveAsDraft = async () => {
     await saveAsDraft(formData, selectedTags, onNewArticle);
   };

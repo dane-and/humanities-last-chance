@@ -4,7 +4,7 @@ import { Article } from '../../../lib/types/article';
 import { getDraftsFromStorage, saveDraftsToStorage } from '../../../lib/utils/storage/articleStorage';
 
 /**
- * Handle saving article as draft
+ * Handle saving article as draft - only triggered by the Save Draft button
  */
 export const handleSaveAsDraft = async (
   formData: Article,
