@@ -62,7 +62,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       {/* Loading placeholder - only show when not loaded and no error */}
       {!imageLoaded && !error && (
         <div 
-          className={`${className} bg-gray-200 animate-pulse`} 
+          className={`${className} animate-pulse`} 
           style={{ 
             aspectRatio: `${width}/${height}`,
             width: '100%',

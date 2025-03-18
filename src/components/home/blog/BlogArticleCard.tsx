@@ -61,12 +61,12 @@ const BlogArticleCard: React.FC<BlogArticleCardProps> = ({ post, index, fullCont
       {/* Always show the image if available */}
       {post.image && post.image.trim() !== '' && (
         <div className="mb-3 overflow-hidden rounded-md">
-          <AspectRatio ratio={16/9} className="bg-muted">
+          <AspectRatio ratio={16/9}>
             {fullContent ? (
               <OptimizedImage
                 src={post.image}
                 alt={post.title}
-                className="transition-transform duration-500"
+                className="transition-transform duration-500 object-cover"
                 width={1200}
                 height={675}
                 priority={index < 2}
@@ -76,7 +76,7 @@ const BlogArticleCard: React.FC<BlogArticleCardProps> = ({ post, index, fullCont
                 <OptimizedImage
                   src={post.image}
                   alt={post.title}
-                  className="transition-transform duration-500 hover:scale-105"
+                  className="transition-transform duration-500 hover:scale-105 object-cover"
                   width={1200}
                   height={675}
                   priority={index < 2}

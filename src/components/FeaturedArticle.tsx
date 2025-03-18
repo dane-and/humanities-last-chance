@@ -49,13 +49,13 @@ const FeaturedArticle: React.FC<FeaturedArticleProps> = React.memo(({
               <OptimizedImage
                 src={image}
                 alt={title}
-                className="w-full h-full"
+                className="w-full h-full object-cover"
                 width={1200}
                 height={570}
                 priority={true}
               />
             ) : (
-              <div className="w-full h-full bg-muted flex items-center justify-center text-muted-foreground">
+              <div className="w-full h-full flex items-center justify-center text-muted-foreground">
                 <span>No image</span>
               </div>
             )}
