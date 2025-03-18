@@ -56,16 +56,6 @@ const BlogArticleCard: React.FC<BlogArticleCardProps> = ({
           >
             {post.category}
           </Link>
-          
-          <span className="inline-block mx-1" aria-hidden="true">•</span>
-          <Link 
-            to={`/article/${post.slug}#comments`}
-            className="inline-flex items-center hover:text-primary"
-            aria-label={`${commentCount} comment${commentCount !== 1 ? 's' : ''}`}
-          >
-            <MessageCircle className="h-3 w-3 mr-1" />
-            {commentCount} comment{commentCount !== 1 ? 's' : ''}
-          </Link>
         </div>
         
         {/* Always show the image if available */}
@@ -112,7 +102,15 @@ const BlogArticleCard: React.FC<BlogArticleCardProps> = ({
         )}
         
         {!fullContent && (
-          <div className="mb-2">
+          <div className="flex items-center justify-between mb-2">
+            <Link 
+              to={`/article/${post.slug}#comments`}
+              className="text-muted-foreground hover:text-primary text-sm inline-flex items-center transition-colors"
+            >
+              <MessageCircle className="h-3 w-3 mr-1" />
+              {commentCount} {commentCount === 1 ? 'comment' : 'comments'}
+            </Link>
+            
             <Link 
               to={`/article/${post.slug}`}
               className="inline-block px-4 py-2 text-sm font-medium text-primary border border-primary/20 rounded-md hover:bg-primary/10 transition-colors"

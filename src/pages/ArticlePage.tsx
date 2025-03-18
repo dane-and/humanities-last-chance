@@ -12,6 +12,8 @@ import ArticleHeader from '@/components/article/ArticleHeader';
 import ArticleImage from '@/components/article/ArticleImage';
 import ArticleContent from '@/components/article/ArticleContent';
 import ArticleTags from '@/components/article/ArticleTags';
+import { MessageCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const ArticlePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -86,6 +88,8 @@ const ArticlePage: React.FC = () => {
     return <ArticleNotFound onGoBack={handleGoBack} />;
   }
 
+  const commentCount = currentArticle.comments?.length || 0;
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
@@ -106,6 +110,17 @@ const ArticlePage: React.FC = () => {
           <ArticleContent content={currentArticle.content} />
           
           <ArticleTags tags={currentArticle.tags || []} />
+          
+          {/* Comments link at the bottom of article content */}
+          <div className="mb-4 mt-8">
+            <Link 
+              to="#comments" 
+              className="text-muted-foreground hover:text-primary text-sm inline-flex items-center transition-colors"
+            >
+              <MessageCircle className="h-4 w-4 mr-1" />
+              {commentCount} {commentCount === 1 ? 'comment' : 'comments'}
+            </Link>
+          </div>
           
           <ArticleComments 
             articleId={currentArticle.id} 
