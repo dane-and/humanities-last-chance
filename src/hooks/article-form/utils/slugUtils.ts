@@ -15,6 +15,9 @@ export const generateSlug = (title: string): string => {
     .replace(/^-|-$/g, ''); // Remove leading and trailing hyphens
 };
 
+// Adding this alias for backward compatibility
+export const generateSlugFromTitle = generateSlug;
+
 /**
  * Check if a slug is valid
  * @param slug The slug to validate

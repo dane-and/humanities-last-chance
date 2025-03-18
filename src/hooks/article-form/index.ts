@@ -21,7 +21,7 @@ export const useArticleForm = (
 
   // Initialize form data
   const [formData, setFormData] = useState<Article>(
-    selectedArticle ? {...selectedArticle} : {...defaultFormState}
+    selectedArticle ? {...selectedArticle} : {...defaultFormState()}
   );
   const [selectedTags, setSelectedTags] = useState<string[]>(
     selectedArticle?.tags || []
@@ -46,7 +46,7 @@ export const useArticleForm = (
       // Create a fresh copy to avoid reference issues
       // Force all properties to be defined with defaults for any missing properties
       const articleCopy = {
-        ...defaultFormState,
+        ...defaultFormState(),
         ...selectedArticle,
         title: selectedArticle.title || '',
         slug: selectedArticle.slug || '',
@@ -58,7 +58,7 @@ export const useArticleForm = (
       setFormData(articleCopy);
       setSelectedTags(selectedArticle.tags || []);
     } else {
-      setFormData({...defaultFormState});
+      setFormData({...defaultFormState()});
       setSelectedTags([]);
     }
   }, [selectedArticle]);

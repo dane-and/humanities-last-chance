@@ -5,6 +5,32 @@ import { ArticleFormProps } from './types';
 import { generateSlugFromTitle } from './utils/slugUtils';
 
 /**
+ * Default state for a new article form
+ */
+export const defaultFormState = (): Article => {
+  const today = new Date().toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+  
+  return {
+    id: '',
+    title: '',
+    slug: '',
+    author: '',
+    date: today,
+    category: 'Blog',
+    image: '',
+    excerpt: '',
+    content: '',
+    featured: false,
+    comments: [],
+    tags: []
+  };
+};
+
+/**
  * Custom hook for managing article form state
  */
 export const useArticleFormState = ({
@@ -17,26 +43,7 @@ export const useArticleFormState = ({
       return { ...selectedArticle };
     }
     
-    const today = new Date().toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-    
-    return {
-      id: '',
-      title: '',
-      slug: '',
-      author: '',
-      date: today,
-      category: 'Blog',
-      image: '',
-      excerpt: '',
-      content: '',
-      featured: false,
-      comments: [],
-      tags: []
-    };
+    return defaultFormState();
   };
   
   const [formData, setFormData] = useState<Article>(initializeFormData());
