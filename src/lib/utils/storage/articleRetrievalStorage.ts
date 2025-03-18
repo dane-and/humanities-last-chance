@@ -36,3 +36,13 @@ export const getArticleByTitle = (title: string, articleList: Article[] = []): A
     article.title.toLowerCase() === title.toLowerCase()
   );
 };
+
+/**
+ * Gets draft by title (case insensitive)
+ */
+export const getDraftByTitle = (title: string): Article | undefined => {
+  const drafts = getDraftsFromStorage();
+  return drafts.find(draft => 
+    draft.title.toLowerCase() === title.toLowerCase()
+  );
+};

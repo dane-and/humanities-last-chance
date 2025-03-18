@@ -1,77 +1,65 @@
 
-import { Article } from '../../types/article';
-import { getDraftsFromStorage, getArticlesFromStorage } from './articleRetrievalStorage';
-import { saveArticlesToStorage, saveDraftsToStorage } from './articleSaveStorage';
 import { toast } from 'sonner';
+import { Article } from '../../types/article';
+import { getDraftsFromStorage, saveDraftsToStorage } from '../storage/articleStorage';
+import { getArticlesFromStorage, saveArticlesToStorage } from '../storage/articleStorage';
 
 /**
- * Publish a draft article by moving it from drafts to published articles
- * @param draftId ID of the draft to publish
- * @returns boolean indicating success or failure
+ * Publishes a draft by ID
+ * This moves a draft from the drafts storage to the published articles storage
  */
-export const publishDraft = (draftId: string): boolean => {
+export const publishDraft = (id: string): boolean => {
   try {
-    console.log(`Publishing draft with ID: ${draftId}`);
+    console.log(`Publishing draft with ID: ${id}`);
     
     // Get current drafts and articles
     const drafts = getDraftsFromStorage();
     const articles = getArticlesFromStorage();
     
-    console.log(`Found ${drafts.length} drafts and ${articles.length} articles`);
+    // Find the draft to publish
+    const draftToPublish = drafts.find(draft => draft.id === id);
     
-    // Find the draft by ID
-    const draftIndex = drafts.findIndex(draft => draft.id === draftId);
-    
-    if (draftIndex === -1) {
-      console.error(`Draft with ID ${draftId} not found`);
+    if (!draftToPublish) {
+      console.error(`No draft found with ID: ${id}`);
       return false;
     }
     
-    // Get the draft to publish
-    const draftToPublish = {...drafts[draftIndex]};
-    console.log('Draft to publish:', draftToPublish);
+    console.log(`Found draft to publish:`, draftToPublish);
     
-    // Remove the draft-specific properties
-    const { isDraft, status, ...publishReady } = draftToPublish;
-    
-    // Set the publication date to now if not already set
-    if (!publishReady.date) {
-      const now = new Date();
-      publishReady.date = now.toLocaleDateString('en-US', { 
+    // Convert draft to published article
+    const publishedArticle: Article = {
+      ...draftToPublish,
+      isDraft: false,
+      status: 'published',
+      date: new Date().toLocaleDateString('en-US', { 
         year: 'numeric', 
         month: 'long', 
         day: 'numeric' 
-      });
-    }
+      })
+    };
     
     // Add to published articles
-    articles.push(publishReady);
-    console.log('Updated articles list:', articles);
+    articles.push(publishedArticle);
     
     // Remove from drafts
-    drafts.splice(draftIndex, 1);
+    const updatedDrafts = drafts.filter(draft => draft.id !== id);
     
-    // Save both lists
+    // Save both updated collections
     saveArticlesToStorage(articles);
-    saveDraftsToStorage(drafts);
+    saveDraftsToStorage(updatedDrafts);
     
-    console.log(`Published draft "${publishReady.title}" successfully`);
-    
-    // Dispatch events to notify other components
-    window.dispatchEvent(new CustomEvent('articlesUpdated'));
-    window.dispatchEvent(new CustomEvent('draftsUpdated'));
+    console.log(`Draft published successfully. ${updatedDrafts.length} drafts remaining, ${articles.length} articles total.`);
     
     return true;
   } catch (error) {
-    console.error('Error publishing draft:', error);
+    console.error("Error publishing draft:", error);
     return false;
   }
 };
 
 /**
- * Publish a draft by title (searches for matching draft)
- * @param title Title of the draft to publish
- * @returns boolean indicating success or failure
+ * Publishes a draft by title (case insensitive search)
+ * This is useful for programmatic publishing of specific drafts
  */
 export const publishDraftByTitle = (title: string): boolean => {
   try {
@@ -79,36 +67,23 @@ export const publishDraftByTitle = (title: string): boolean => {
     
     // Get current drafts
     const drafts = getDraftsFromStorage();
-    console.log('Available drafts:', drafts);
     
-    // Find draft with matching title (case insensitive)
-    const draft = drafts.find(
-      d => d.title.toLowerCase() === title.toLowerCase()
+    // Find the draft to publish (case insensitive)
+    const draftToPublish = drafts.find(
+      draft => draft.title.toLowerCase() === title.toLowerCase()
     );
     
-    if (!draft) {
-      console.error(`Draft with title "${title}" not found`);
+    if (!draftToPublish) {
+      console.error(`No draft found with title: "${title}"`);
       return false;
     }
     
-    console.log(`Found draft with title "${title}" and ID ${draft.id}`);
+    console.log(`Found draft with title "${title}" (ID: ${draftToPublish.id})`);
     
-    // First check if an article with this title already exists
-    const articles = getArticlesFromStorage();
-    const articleExists = articles.some(
-      article => article.title.toLowerCase() === title.toLowerCase()
-    );
-    
-    if (articleExists) {
-      console.warn(`Article with title "${title}" already exists in published articles`);
-      toast.warning(`Article "${title}" is already published`);
-      return false;
-    }
-    
-    // Publish the found draft
-    return publishDraft(draft.id);
+    // Publish the draft using the ID
+    return publishDraft(draftToPublish.id);
   } catch (error) {
-    console.error('Error publishing draft by title:', error);
+    console.error(`Error publishing draft with title "${title}":`, error);
     return false;
   }
 };

@@ -25,15 +25,28 @@ const ArticleList: React.FC<ArticleListProps> = ({
   const isDraftsTab = articleList.length > 0 && 
     (articleList[0].isDraft || articleList[0].status === 'draft');
 
-  const handlePublishDraft = (id: string, e: React.MouseEvent) => {
+  const handlePublishDraft = (id: string, title: string, e: React.MouseEvent) => {
     e.stopPropagation();
     
-    if (window.confirm('Are you sure you want to publish this draft?')) {
-      const success = publishDraft(id);
-      if (success) {
-        toast.success('Draft published successfully');
-      } else {
-        toast.error('Failed to publish draft');
+    console.log(`Attempting to publish draft: "${title}" (ID: ${id})`);
+    
+    if (window.confirm(`Are you sure you want to publish "${title}"?`)) {
+      try {
+        const success = publishDraft(id);
+        
+        if (success) {
+          console.log(`Successfully published draft: "${title}"`);
+          toast.success(`"${title}" has been published successfully`);
+          
+          // Dispatch the articlesUpdated event to refresh UI components
+          window.dispatchEvent(new CustomEvent('articlesUpdated'));
+        } else {
+          console.error(`Failed to publish draft: "${title}"`);
+          toast.error(`Failed to publish "${title}". Please try again.`);
+        }
+      } catch (error) {
+        console.error(`Error publishing draft "${title}":`, error);
+        toast.error(`An error occurred while publishing "${title}". Please try again.`);
       }
     }
   };
@@ -65,7 +78,7 @@ const ArticleList: React.FC<ArticleListProps> = ({
                   variant="ghost" 
                   size="icon"
                   className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50"
-                  onClick={(e) => handlePublishDraft(article.id, e)}
+                  onClick={(e) => handlePublishDraft(article.id, article.title, e)}
                   title="Publish draft"
                 >
                   <Send className="h-4 w-4" />
