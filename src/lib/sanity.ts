@@ -1,7 +1,6 @@
-
 import { createClient } from '@sanity/client';
 import imageUrlBuilder from '@sanity/image-url';
-import { PortableText as PortableTextComponent } from '@portabletext/react';
+import { PortableText as SanityPortableText } from '@portabletext/react';
 
 export const sanityClient = createClient({
   projectId: 'nzyg33ca',  // Using your provided Sanity project ID
@@ -18,7 +17,7 @@ export function urlFor(source: any) {
 }
 
 // Create a reusable PortableText component
-export const PortableText = (props: any) => <PortableTextComponent {...props} />;
+export const PortableText = SanityPortableText;
 
 export async function fetchBlogPosts() {
   try {
