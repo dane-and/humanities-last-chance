@@ -1,32 +1,34 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import { Article } from '@/lib/types/article';
-import { getArticlesByCategory } from '@/lib/queries/articleQueries';
-import { getArticlesFromStorage } from '@/lib/utils/storage/articleStorage';
 import { toast } from 'sonner';
-
-// Empty pre-baked articles - removing all pre-configured content
-const preBakedArticles: Article[] = [];
+import { fetchBlogPosts } from '@/lib/sanity';
 
 export const useBlogPosts = () => {
   const [blogPosts, setBlogPosts] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 
-  const fetchBlogPosts = useCallback(() => {
-    console.log("Fetching blog posts...");
+  const fetchPosts = useCallback(async () => {
+    console.log("Fetching blog posts from Sanity...");
     setIsLoading(true);
     setError(null);
     
     try {
-      // Empty blog posts everywhere
-      setBlogPosts([]);
+      // Placeholder for Sanity integration
+      // When Sanity is connected, this will return real data
+      // For now, return empty array to show placeholders
+      const posts = await fetchBlogPosts();
+      
+      // Convert Sanity posts format to our Article type
+      // This is a temporary mapping that will need adjustment based on actual Sanity schema
+      const formattedPosts: Article[] = [];
+      
+      // Keep empty for now - when Sanity is connected, this will populate with actual data
+      setBlogPosts(formattedPosts);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error fetching blog posts';
       console.error('Error fetching blog posts:', errorMessage);
       setError(err instanceof Error ? err : new Error(errorMessage));
-      
-      // Return empty array on error as well
       setBlogPosts([]);
     } finally {
       setIsLoading(false);
@@ -34,21 +36,8 @@ export const useBlogPosts = () => {
   }, []);
   
   useEffect(() => {
-    fetchBlogPosts();
-    
-    // Add event listener for article updates with a specific name for debugging
-    const handleArticlesUpdatedEvent = () => {
-      console.log('articlesUpdated event detected in useBlogPosts, refreshing posts');
-      fetchBlogPosts();
-    };
-    
-    window.addEventListener('articlesUpdated', handleArticlesUpdatedEvent);
-    
-    // Cleanup listener on unmount
-    return () => {
-      window.removeEventListener('articlesUpdated', handleArticlesUpdatedEvent);
-    };
-  }, [fetchBlogPosts]);
+    fetchPosts();
+  }, [fetchPosts]);
   
-  return { blogPosts, isLoading, error, fetchBlogPosts };
+  return { blogPosts, isLoading, error, fetchBlogPosts: fetchPosts };
 };

@@ -1,17 +1,15 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getArticleBySlug, defaultArticles } from '@/lib/articles';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import ArticleComments from '@/components/ArticleComments';
-import { getArticlesFromStorage } from '@/lib/utils/storage/articleStorage';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import OptimizedImage from '@/components/OptimizedImage';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Article } from '@/lib/types/article';
+import { fetchArticleBySlug } from '@/lib/sanity';
 
 const ArticlePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -22,26 +20,22 @@ const ArticlePage: React.FC = () => {
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    const loadArticle = () => {
+    const loadArticle = async () => {
+      if (!slug) return;
+      
       setLoading(true);
-      console.log(`Loading article with slug: ${slug}`);
+      console.log(`Loading article with slug: ${slug} from Sanity`);
       
-      // First try to get from storage
-      const articles = getArticlesFromStorage();
-      console.log("All articles:", articles);
-      
-      // Find by slug
-      let article = articles.find(a => a.slug === slug);
-      
-      // If not found in storage, check default articles
-      if (!article && defaultArticles.length > 0) {
-        console.log("Article not found in storage, checking defaults");
-        article = defaultArticles.find(a => a.slug === slug);
-        console.log("Found in defaults:", article);
+      try {
+        // This will eventually fetch from Sanity
+        // For now, return null as placeholder
+        const article = null;
+        setCurrentArticle(article);
+      } catch (error) {
+        console.error("Error loading article:", error);
+      } finally {
+        setLoading(false);
       }
-      
-      setCurrentArticle(article || null);
-      setLoading(false);
     };
     
     loadArticle();
@@ -75,6 +69,7 @@ const ArticlePage: React.FC = () => {
           <div className="text-center">
             <h1 className="text-3xl font-bold mb-4">Article Not Found</h1>
             <p className="mb-6">The article you're looking for doesn't exist or has been removed.</p>
+            <p className="text-muted-foreground mb-6">Content will appear here once connected to Sanity CMS.</p>
             <Button onClick={handleGoBack}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Go Back

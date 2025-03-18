@@ -4,50 +4,29 @@ import { Link } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import ArticleGrid from '@/components/ArticleGrid';
-import { getArticlesByCategory } from '@/lib/queries/articleQueries';
-import { getArticlesFromStorage } from '@/lib/utils/storage/articleStorage';
-import { Article, defaultArticles } from '@/lib/types/article';
+import { Article } from '@/lib/types/article';
+import { fetchArticlesByCategory } from '@/lib/sanity';
 
 const ArticlesBlog: React.FC = () => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Update articles with the latest from storage (including comments)
+  // Update articles with the latest from Sanity
   useEffect(() => {
-    const loadArticles = () => {
+    const loadArticles = async () => {
       setLoading(true);
-      console.log("Loading blog articles...");
+      console.log("Loading blog articles from Sanity...");
       
-      // Return empty array when in Lovable preview
-      if (window.location.hostname === 'localhost' || 
-          window.location.hostname.includes('lovable')) {
-        console.log("Preview environment detected, returning empty article array");
-        setArticles([]);
+      try {
+        // This will eventually fetch from Sanity
+        // For now, return empty array as placeholder
+        const blogArticles: Article[] = [];
+        setArticles(blogArticles);
+      } catch (error) {
+        console.error("Error loading articles:", error);
+      } finally {
         setLoading(false);
-        return;
       }
-      
-      // Get articles from storage
-      const storedArticles = getArticlesFromStorage();
-      console.log("Loaded articles from storage:", storedArticles);
-      
-      let blogArticles = storedArticles
-        .filter(article => article.category.toLowerCase() === 'blog')
-        // Sort articles by date (newest first)
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-        
-      // If no stored articles found for the blog category, use defaults
-      if (blogArticles.length === 0) {
-        console.log("No blog articles found in storage, checking defaults");
-        blogArticles = defaultArticles
-          .filter(article => article.category.toLowerCase() === 'blog')
-          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-          
-        console.log("Default blog articles:", blogArticles);
-      }
-      
-      setArticles(blogArticles);
-      setLoading(false);
     };
     
     loadArticles();
@@ -68,6 +47,7 @@ const ArticlesBlog: React.FC = () => {
           ) : articles.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-xl text-muted-foreground">No blog posts available yet.</p>
+              <p className="text-muted-foreground mt-2">Content will appear here once connected to Sanity CMS.</p>
             </div>
           ) : (
             <ArticleGrid articles={articles} columns={3} />
