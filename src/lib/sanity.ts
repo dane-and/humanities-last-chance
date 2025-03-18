@@ -2,10 +2,10 @@
 import { createClient } from '@sanity/client';
 
 export const sanityClient = createClient({
-  projectId: 'your_project_id',  // Replace with your Sanity project ID
-  dataset: 'production',  // Or use the dataset you created
-  useCdn: true,  // Enables fast caching for better performance
-  apiVersion: '2023-05-03'  // Using a more recent API version
+  projectId: 'uftdylp6',  // Using the provided Sanity project ID
+  dataset: 'production',
+  useCdn: true,
+  apiVersion: '2023-05-03'
 });
 
 export async function fetchBlogPosts() {
