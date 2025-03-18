@@ -25,14 +25,28 @@ export const getLatestArticles = (count: number = 6, articleList: Article[] = []
  */
 export const getArticlesByCategory = (category: string, count?: number, articleList: Article[] = []): Article[] => {
   const articles = articleList.length ? articleList : getArticlesFromStorage();
+  
+  // Log the incoming category search parameter
+  console.log(`Searching for articles with category "${category}"`);
+  
+  // For URL matching purposes only, use case-insensitive comparison 
+  // but preserve the original category case in the returned articles
   const normalizedCategory = category.toLowerCase();
   
-  // Filter by category (case-insensitive match)
-  const filtered = articles.filter(
-    article => article.category.toLowerCase() === normalizedCategory
-  )
+  // Filter by category (case-insensitive match for filtering only)
+  const filtered = articles.filter(article => {
+    // Log what we're comparing
+    console.log(`Comparing search category "${normalizedCategory}" with article category "${article.category.toLowerCase()}"`);
+    return article.category.toLowerCase() === normalizedCategory;
+  })
   // Sort by date (newest first)
   .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  
+  // Log the results
+  console.log(`Found ${filtered.length} articles for category "${category}"`);
+  filtered.forEach(article => {
+    console.log(`- Article "${article.title}" has category "${article.category}"`);
+  });
   
   return count ? filtered.slice(0, count) : filtered;
 };

@@ -3,6 +3,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { Article } from '@/lib/types/article';
+import { Link } from 'react-router-dom';
 
 interface ArticleHeaderProps {
   article: Article;
@@ -10,6 +11,9 @@ interface ArticleHeaderProps {
 }
 
 const ArticleHeader: React.FC<ArticleHeaderProps> = ({ article, onGoBack }) => {
+  // Debug the category value
+  console.log(`ArticleHeader: Article "${article.title}" has category "${article.category}"`);
+  
   return (
     <>
       <div className="flex items-center mb-6 gap-4">
@@ -28,12 +32,12 @@ const ArticleHeader: React.FC<ArticleHeaderProps> = ({ article, onGoBack }) => {
       <div className="mb-4 block">
         <span className="text-muted-foreground text-sm inline-block">{article.date}</span>
         <span className="text-muted-foreground mx-2 text-sm inline-block">•</span>
-        <a 
-          href={`/articles/${article.category.toLowerCase()}`} 
+        <Link 
+          to={`/articles/${article.category.toLowerCase()}`} 
           className="text-primary font-medium text-sm inline-block"
         >
-          {article.category} {/* Preserve original capitalization for display */}
-        </a>
+          {article.category} {/* Display the exact category string from the data */}
+        </Link>
       </div>
       
       <p className="text-lg text-muted-foreground mb-6">{article.excerpt}</p>

@@ -19,8 +19,13 @@ export const useBlogPosts = () => {
       
       // Convert Sanity posts format to our Article type
       const formattedPosts: Article[] = posts.map((post: any) => {
-        // Log each post to see what category values we're getting from Sanity
+        // Additional logging to debug category values
         console.log(`Post "${post.title}" has category:`, post.category);
+        console.log(`Category type:`, typeof post.category);
+        
+        // Ensure we're preserving the exact category capitalization
+        const category = post.category || 'Blog';
+        console.log(`Using category "${category}" for post "${post.title}"`);
         
         return {
           id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -31,7 +36,7 @@ export const useBlogPosts = () => {
             month: 'long',
             day: 'numeric'
           }) : new Date().toLocaleDateString(),
-          category: post.category || 'Blog', // Ensure we're using the exact case from Sanity
+          category: category, // Use the exact category string from Sanity
           image: post.mainImage?.asset?.url || '',
           imageCaption: post.mainImage?.caption || '',
           excerpt: post.excerpt || '',
@@ -41,7 +46,7 @@ export const useBlogPosts = () => {
         };
       });
       
-      console.log("Formatted posts:", formattedPosts);
+      console.log("Formatted posts with preserved categories:", formattedPosts);
       setBlogPosts(formattedPosts);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error fetching blog posts';

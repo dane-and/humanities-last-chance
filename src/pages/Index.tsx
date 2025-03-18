@@ -1,12 +1,24 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import BlogSection from '@/components/home/BlogSection';
 import SidebarSection from '@/components/home/SidebarSection';
+import { useBlogPosts } from '@/components/home/blog/useBlogPosts';
 
 const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const { blogPosts } = useBlogPosts();
+  
+  // Debug logging for categories
+  useEffect(() => {
+    if (blogPosts && blogPosts.length > 0) {
+      console.log("Index page - all blog posts categories:");
+      blogPosts.forEach(post => {
+        console.log(`- Post "${post.title}" has category "${post.category}"`);
+      });
+    }
+  }, [blogPosts]);
   
   return (
     <div className="page-transition min-h-screen flex flex-col">

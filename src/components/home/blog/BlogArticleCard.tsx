@@ -41,7 +41,7 @@ const BlogArticleCard: React.FC<BlogArticleCardProps> = ({ post, index, fullCont
           to={`/articles/${post.category.toLowerCase()}`}
           className="inline-block hover:text-primary"
         >
-          {post.category} {/* Preserve original capitalization for display */}
+          {post.category} {/* Display the category exactly as it is in the data */}
         </Link>
         {post.comments && post.comments.length > 0 && (
           <>
