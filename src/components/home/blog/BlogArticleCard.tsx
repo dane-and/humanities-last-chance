@@ -55,7 +55,7 @@ const BlogArticleCard: React.FC<BlogArticleCardProps> = ({ post, index }) => {
       
       {/* Always show the image if available */}
       {post.image && post.image.trim() !== '' && (
-        <div className="mb-4 overflow-hidden rounded-md">
+        <div className="mb-3 overflow-hidden rounded-md">
           <AspectRatio ratio={16/9} className="bg-muted">
             <Link to={`/article/${post.slug}`} className="block w-full h-full">
               <OptimizedImage
@@ -76,17 +76,17 @@ const BlogArticleCard: React.FC<BlogArticleCardProps> = ({ post, index }) => {
       )}
       
       <div 
-        className="text-muted-foreground prose-p:text-base prose-p:md:text-lg prose-p:leading-relaxed line-clamp-4 mb-4"
+        className="text-muted-foreground prose-p:text-base prose-p:md:text-lg prose-p:leading-relaxed line-clamp-3 mb-3"
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
       
       {post.tags && post.tags.length > 0 && (
-        <div className="mt-2 mb-4">
+        <div className="mb-3">
           <TagList tags={post.tags} />
         </div>
       )}
       
-      <div className="mt-2">
+      <div className="mb-2">
         <Link 
           to={`/article/${post.slug}`}
           className="inline-block px-4 py-2 text-sm font-medium text-primary border border-primary/20 rounded-md hover:bg-primary/10 transition-colors"
