@@ -1,3 +1,4 @@
+
 /**
  * Application configuration
  * 
@@ -72,10 +73,10 @@ const CMS_CONFIG = {
 // Authentication configuration
 const AUTH_CONFIG = {
   // Admin credentials - for hosted environments, use environment variables
-  ADMIN_USERNAME: (isVercel || isNetlify)
+  ADMIN_USERNAME: isNetlify
     ? import.meta.env.VITE_ADMIN_USERNAME || 'daneanderson10'
     : 'daneanderson10',
-  ADMIN_PASSWORD: (isVercel || isNetlify)
+  ADMIN_PASSWORD: isNetlify
     ? import.meta.env.VITE_ADMIN_PASSWORD || 'uR5!9xB#k2Pz@Lm$'
     : 'uR5!9xB#k2Pz@Lm$',
   // Add other auth settings as needed
