@@ -69,7 +69,7 @@ const FeaturedArticle: React.FC<FeaturedArticleProps> = React.memo(({
             to={`/articles/${category.toLowerCase()}`}
             className="text-xs font-medium uppercase tracking-wider text-primary"
           >
-            {category} {/* Preserve original capitalization for display */}
+            {category}
           </Link>
           <span className="text-xs text-muted-foreground">{date}</span>
         </div>

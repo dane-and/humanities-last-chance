@@ -34,11 +34,11 @@ const ArticleGrid: React.FC<ArticleGridProps> = ({
         <ArticleCard
           key={article.id}
           title={article.title}
-          excerpt="" // Remove excerpt display
+          excerpt={article.excerpt || ""}
           category={article.category}
           author={article.author || ""}
           date={article.date}
-          image="" // Don't display images
+          image={article.image || ""}
           slug={article.slug}
           variant={variant}
         />

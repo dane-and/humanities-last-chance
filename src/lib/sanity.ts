@@ -96,7 +96,7 @@ export async function fetchArticlesByCategory(category: string) {
   try {
     console.log(`Fetching articles with category "${category}"`);
     
-    // Use category exactly as provided without any case conversion
+    // Use the exact category string for the query
     const posts = await sanityClient.fetch(`
       *[_type == "post" && category == $category] | order(publishedAt desc) {
         _id,

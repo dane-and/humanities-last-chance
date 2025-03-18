@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import { Article } from '@/lib/types/article';
 import { Page } from '@/lib/types/page';
@@ -28,23 +29,42 @@ export const useContentData = () => {
       
       if (posts && posts.length > 0) {
         // Convert Sanity posts to our Article format
-        const formattedArticles = posts.map((post: any) => ({
-          id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-          title: post.title || "Untitled Post",
-          slug: post.slug?.current || `post-${Date.now()}`,
-          date: post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          }) : new Date().toLocaleDateString(),
-          category: post.category || 'Blog', // Preserve exact capitalization
-          image: post.mainImage?.asset?.url || '',
-          imageCaption: post.mainImage?.caption || '',
-          excerpt: post.excerpt || '',
-          content: post.body || '',
-          featured: false,
-          tags: post.tags || [],
-        }));
+        const formattedArticles = posts.map((post: any) => {
+          // Ensure we're using the correct category type
+          let typedCategory: Article['category'];
+          const category = post.category || 'Blog';
+          const lowerCaseCategory = category.toLowerCase();
+          
+          if (lowerCaseCategory === 'blog') {
+            typedCategory = 'Blog';
+          } else if (lowerCaseCategory === 'interview') {
+            typedCategory = 'Interview';
+          } else if (lowerCaseCategory === 'review') {
+            typedCategory = 'Review';
+          } else if (lowerCaseCategory === 'resource') {
+            typedCategory = 'Resource';
+          } else {
+            typedCategory = 'Blog'; // Default
+          }
+          
+          return {
+            id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            title: post.title || "Untitled Post",
+            slug: post.slug?.current || `post-${Date.now()}`,
+            date: post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            }) : new Date().toLocaleDateString(),
+            category: typedCategory,
+            image: post.mainImage?.asset?.url || '',
+            imageCaption: post.mainImage?.caption || '',
+            excerpt: post.excerpt || '',
+            content: post.body || '',
+            featured: false,
+            tags: post.tags || [],
+          };
+        });
         
         setArticleList(formattedArticles);
       } else {

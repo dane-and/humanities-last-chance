@@ -15,6 +15,9 @@ interface BlogArticleCardProps {
 }
 
 const BlogArticleCard: React.FC<BlogArticleCardProps> = ({ post, index, fullContent = false }) => {
+  // For debugging - log the category exactly as it comes from the data
+  console.log(`BlogArticleCard: Rendering post "${post.title}" with category "${post.category}"`);
+  
   return (
     <article 
       className={`prose prose-lg max-w-none fade-up bg-background rounded-lg transition-all duration-300 ${fullContent ? '' : 'hover:shadow-md'}`}
@@ -41,7 +44,7 @@ const BlogArticleCard: React.FC<BlogArticleCardProps> = ({ post, index, fullCont
           to={`/articles/${post.category.toLowerCase()}`}
           className="inline-block hover:text-primary"
         >
-          {post.category} {/* Display the category exactly as it is in the data */}
+          {post.category}
         </Link>
         {post.comments && post.comments.length > 0 && (
           <>

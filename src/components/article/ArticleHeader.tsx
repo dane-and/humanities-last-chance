@@ -36,7 +36,7 @@ const ArticleHeader: React.FC<ArticleHeaderProps> = ({ article, onGoBack }) => {
           to={`/articles/${article.category.toLowerCase()}`} 
           className="text-primary font-medium text-sm inline-block"
         >
-          {article.category} {/* Display the exact category string from the data */}
+          {article.category}
         </Link>
       </div>
       

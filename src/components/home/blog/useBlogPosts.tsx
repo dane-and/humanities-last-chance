@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Article } from '@/lib/types/article';
 import { toast } from 'sonner';
-import { fetchBlogPosts, urlFor } from '@/lib/sanity';
+import { fetchBlogPosts } from '@/lib/sanity';
 
 export const useBlogPosts = () => {
   const [blogPosts, setBlogPosts] = useState<Article[]>([]);
@@ -27,6 +27,21 @@ export const useBlogPosts = () => {
         const category = post.category || 'Blog';
         console.log(`Using category "${category}" for post "${post.title}"`);
         
+        // Match category to our allowed types without changing case
+        let typedCategory: Article['category'];
+        const lowerCaseCategory = category.toLowerCase();
+        if (lowerCaseCategory === 'blog') {
+          typedCategory = 'Blog';
+        } else if (lowerCaseCategory === 'interview') {
+          typedCategory = 'Interview';
+        } else if (lowerCaseCategory === 'review') {
+          typedCategory = 'Review';
+        } else if (lowerCaseCategory === 'resource') {
+          typedCategory = 'Resource';
+        } else {
+          typedCategory = 'Blog'; // Default
+        }
+        
         return {
           id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
           title: post.title || "Untitled Post",
@@ -36,7 +51,7 @@ export const useBlogPosts = () => {
             month: 'long',
             day: 'numeric'
           }) : new Date().toLocaleDateString(),
-          category: category, // Use the exact category string from Sanity
+          category: typedCategory, // Use the correctly capitalized category
           image: post.mainImage?.asset?.url || '',
           imageCaption: post.mainImage?.caption || '',
           excerpt: post.excerpt || '',

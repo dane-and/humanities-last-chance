@@ -56,7 +56,7 @@ const ArticleCard: React.FC<ArticleCardProps> = React.memo(({
               isCompact && "text-[10px]"
             )}
           >
-            {category} {/* Preserve original capitalization for display */}
+            {category}
           </Link>
           <span className={cn(
             "text-xs text-muted-foreground flex items-center",
@@ -79,7 +79,7 @@ const ArticleCard: React.FC<ArticleCardProps> = React.memo(({
                 width={640}
                 height={274}
                 priority={false}
-                className="w-full h-full"
+                className="w-full h-full object-cover"
               />
             </Link>
           </AspectRatio>
