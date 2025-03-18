@@ -57,7 +57,7 @@ export const useArticleFormState = ({
       setSelectedTags(selectedArticle.tags || []);
     } else {
       // Reset form when no article is selected
-      setFormData(initializeFormData());
+      setFormData(defaultFormState());
       setSelectedTags([]);
     }
   }, [selectedArticle]);

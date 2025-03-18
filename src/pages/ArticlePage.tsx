@@ -52,7 +52,7 @@ const ArticlePage: React.FC = () => {
   };
   
   const handleGoBack = () => {
-    navigate(-1);
+    navigate("/");
   };
   
   if (loading) {
@@ -90,16 +90,17 @@ const ArticlePage: React.FC = () => {
     <div className="min-h-screen flex flex-col">
       <Navigation />
       
-      <main className="flex-grow pt-10 pb-16">
+      <main className="flex-grow pt-24 pb-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center mb-4">
+          <div className="flex items-center mb-6 gap-4">
             <Button 
               variant="ghost" 
               onClick={handleGoBack}
-              className="mr-2"
+              className="flex items-center text-muted-foreground hover:text-foreground"
+              size="sm"
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back
+              Home
             </Button>
             
             <h1 className="text-3xl font-serif font-bold">{currentArticle.title}</h1>
