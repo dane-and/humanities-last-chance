@@ -4,6 +4,18 @@ import { STORAGE_KEY, DRAFTS_KEY, SCHEDULED_KEY, saveToLocalStorage, LAST_BACKUP
 import { checkBackupReminder } from './backupStorage';
 
 /**
+ * Sorts articles by date (newest first)
+ */
+const sortArticlesByDate = (articles: Article[]): Article[] => {
+  return [...articles].sort((a, b) => {
+    // Handle null/undefined dates
+    const dateA = a.date ? new Date(a.date) : new Date(0);
+    const dateB = b.date ? new Date(b.date) : new Date(0);
+    return dateB.getTime() - dateA.getTime();
+  });
+};
+
+/**
  * Saves articles to local storage AND to the server
  */
 export const saveArticlesToStorage = async (articles: Article[]): Promise<void> => {
@@ -12,17 +24,20 @@ export const saveArticlesToStorage = async (articles: Article[]): Promise<void> 
     if (typeof window !== 'undefined' && window.localStorage) {
       console.log('Saving articles to local storage:', articles.length);
       
+      // Sort articles before saving (newest first)
+      const sortedArticles = sortArticlesByDate(articles);
+      
       // Save to localStorage 
-      saveToLocalStorage(STORAGE_KEY, articles);
+      saveToLocalStorage(STORAGE_KEY, sortedArticles);
       
       // Create a download data file to allow manual backup
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(articles, null, 2));
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(sortedArticles, null, 2));
       
       // Create and dispatch a custom event that the admin can listen for
       const event = new CustomEvent('articlesSaved', { 
         detail: { 
           timestamp: new Date().toISOString(),
-          articleCount: articles.length,
+          articleCount: sortedArticles.length,
           dataUrl: dataStr
         } 
       });
@@ -47,7 +62,13 @@ export const saveArticlesToStorage = async (articles: Article[]): Promise<void> 
  */
 export const saveDraftsToStorage = (drafts: Article[]): void => {
   console.log('Saving drafts to storage:', drafts.length);
-  saveToLocalStorage(DRAFTS_KEY, drafts);
+  // Sort drafts by lastModified date (newest first)
+  const sortedDrafts = [...drafts].sort((a, b) => {
+    const dateA = a.lastModified ? new Date(a.lastModified) : new Date(a.date);
+    const dateB = b.lastModified ? new Date(b.lastModified) : new Date(b.date);
+    return dateB.getTime() - dateA.getTime();
+  });
+  saveToLocalStorage(DRAFTS_KEY, sortedDrafts);
 };
 
 /**
@@ -55,5 +76,11 @@ export const saveDraftsToStorage = (drafts: Article[]): void => {
  */
 export const saveScheduledToStorage = (scheduled: Article[]): void => {
   console.log('Saving scheduled articles to storage:', scheduled.length);
-  saveToLocalStorage(SCHEDULED_KEY, scheduled);
+  // Sort by scheduled date (soonest first)
+  const sortedScheduled = [...scheduled].sort((a, b) => {
+    const dateA = a.scheduledDate ? new Date(a.scheduledDate) : new Date(0);
+    const dateB = b.scheduledDate ? new Date(b.scheduledDate) : new Date(0);
+    return dateA.getTime() - dateB.getTime();
+  });
+  saveToLocalStorage(SCHEDULED_KEY, sortedScheduled);
 };

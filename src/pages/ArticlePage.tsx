@@ -51,6 +51,10 @@ const ArticlePage: React.FC = () => {
     setRefreshCounter(prev => prev + 1);
   };
   
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+  
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -71,7 +75,7 @@ const ArticlePage: React.FC = () => {
           <div className="text-center">
             <h1 className="text-3xl font-bold mb-4">Article Not Found</h1>
             <p className="mb-6">The article you're looking for doesn't exist or has been removed.</p>
-            <Button onClick={() => navigate(-1)}>
+            <Button onClick={handleGoBack}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Go Back
             </Button>
@@ -88,34 +92,34 @@ const ArticlePage: React.FC = () => {
       
       <main className="flex-grow pt-10 pb-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Button 
-            variant="ghost" 
-            className="mb-1" 
-            onClick={() => navigate(-1)}
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back
-          </Button>
+          <div className="flex items-center mb-4">
+            <Button 
+              variant="ghost" 
+              onClick={handleGoBack}
+              className="mr-2"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back
+            </Button>
+            
+            <h1 className="text-3xl font-serif font-bold">{currentArticle.title}</h1>
+          </div>
           
-          <header className="mb-1">
-            <h1 className="text-3xl font-serif font-bold mb-1">{currentArticle.title}</h1>
-            
-            <div className="mb-1 block">
-              <span className="text-muted-foreground text-sm inline-block">{currentArticle.date}</span>
-              <span className="text-muted-foreground mx-2 text-sm inline-block">•</span>
-              <a 
-                href={`/articles/${currentArticle.category.toLowerCase()}`} 
-                className="text-primary font-medium text-sm inline-block"
-              >
-                {currentArticle.category}
-              </a>
-            </div>
-            
-            <p className="text-lg text-muted-foreground mb-2">{currentArticle.excerpt}</p>
-          </header>
+          <div className="mb-4 block">
+            <span className="text-muted-foreground text-sm inline-block">{currentArticle.date}</span>
+            <span className="text-muted-foreground mx-2 text-sm inline-block">•</span>
+            <a 
+              href={`/articles/${currentArticle.category.toLowerCase()}`} 
+              className="text-primary font-medium text-sm inline-block"
+            >
+              {currentArticle.category}
+            </a>
+          </div>
+          
+          <p className="text-lg text-muted-foreground mb-6">{currentArticle.excerpt}</p>
           
           {currentArticle.image && currentArticle.image.trim() !== '' && (
-            <div className="mb-4 overflow-hidden rounded-lg">
+            <div className="mb-6 overflow-hidden rounded-lg">
               <AspectRatio ratio={16 / 9}>
                 <OptimizedImage
                   src={currentArticle.image}

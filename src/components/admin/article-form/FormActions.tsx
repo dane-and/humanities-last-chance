@@ -39,17 +39,16 @@ const FormActions: React.FC<FormActionsProps> = ({
         Save as Draft
       </Button>
       
-      {isDraft && onPublish && (
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onPublish}
-          className="flex gap-2"
-        >
-          <Send className="h-4 w-4" />
-          Publish Now
-        </Button>
-      )}
+      {/* Always show the Publish Now button */}
+      <Button
+        type="button"
+        variant="outline"
+        onClick={onPublish}
+        className="flex gap-2"
+      >
+        <Send className="h-4 w-4" />
+        Publish Now
+      </Button>
       
       <SchedulePublishDialog 
         onSchedule={onSchedule}
