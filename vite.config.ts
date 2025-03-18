@@ -26,7 +26,10 @@ export default defineConfig(({ mode }) => ({
   // Dynamic base path - use the repository name for GitHub Pages, root path otherwise
   base: process.env.GITHUB_ACTIONS ? '/humanities-last-chance/' : '/',
   plugins: [
-    react(),
+    react({
+      // Configure React plugin to handle JSX properly
+      jsxImportSource: 'react',
+    }),
     mode === 'development' && componentTagger(),
   ].filter(Boolean),
   resolve: {
@@ -56,5 +59,15 @@ export default defineConfig(({ mode }) => ({
         }
       }
     }
+  },
+  // Add optimizeDeps to help with dependency resolution
+  optimizeDeps: {
+    include: ['react', 'react-dom'],
+    esbuildOptions: {
+      // Node.js global to browser globalThis
+      define: {
+        global: 'globalThis',
+      },
+    },
   },
 }));
