@@ -24,10 +24,10 @@ export const getDraftsFromStorage = (): Article[] => {
   const drafts = getFromLocalStorage<Article[]>(DRAFTS_KEY, []);
   console.log(`Retrieved ${drafts.length} drafts from storage`);
   
-  // Sort drafts by lastUpdated or date (newest first)
+  // Sort drafts by lastModified or date (newest first)
   return [...drafts].sort((a, b) => {
-    const dateA = a.lastUpdated ? new Date(a.lastUpdated) : new Date(a.date);
-    const dateB = b.lastUpdated ? new Date(b.lastUpdated) : new Date(b.date);
+    const dateA = a.lastModified ? new Date(a.lastModified) : new Date(a.date);
+    const dateB = b.lastModified ? new Date(b.lastModified) : new Date(b.date);
     return dateB.getTime() - dateA.getTime();
   });
 };
