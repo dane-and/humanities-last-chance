@@ -1,59 +1,75 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Article } from '@/lib/types/article';
 import { getArticlesByCategory } from '@/lib/queries/articleQueries';
 import { getArticlesFromStorage } from '@/lib/utils/storage/articleStorage';
+import { toast } from 'sonner';
 
 export const useBlogPosts = () => {
   const [blogPosts, setBlogPosts] = useState<Article[]>([]);
-  
-  const fetchBlogPosts = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  const fetchBlogPosts = useCallback(() => {
     console.log("Fetching blog posts...");
-    const articles = getArticlesFromStorage();
-    console.log("All articles:", articles);
+    setIsLoading(true);
+    setError(null);
     
-    if (!articles || articles.length === 0) {
-      console.warn("No articles found in storage!");
-      setBlogPosts([]);
-      return;
-    }
-    
-    const blogArticles = getArticlesByCategory('blog', undefined, articles);
-    console.log("Filtered blog articles:", blogArticles);
-    
-    if (blogArticles.length > 0) {
-      // Sort by date, newest first
-      const sortedArticles = [...blogArticles].sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-      );
-      setBlogPosts(sortedArticles);
-    } else {
-      console.warn("No blog articles found!");
+    try {
+      // Get all articles from storage
+      const articles = getArticlesFromStorage();
+      console.log(`Retrieved ${articles.length} total articles from storage`);
       
-      // Check if there are any articles with case-insensitive 'blog' category
-      const caseInsensitiveBlogArticles = articles.filter(
-        article => article.category.toLowerCase() === 'blog'
-      );
+      if (!articles || articles.length === 0) {
+        console.warn("No articles found in storage");
+        setBlogPosts([]);
+        return;
+      }
       
-      if (caseInsensitiveBlogArticles.length > 0) {
-        console.log("Found articles with case-insensitive 'blog' category:", caseInsensitiveBlogArticles);
-        // Sort by date, newest first
-        const sortedArticles = [...caseInsensitiveBlogArticles].sort(
+      // First try with exact case match for 'Blog' category
+      let blogArticles = getArticlesByCategory('Blog', undefined, articles);
+      
+      // If no exact matches, try case-insensitive match
+      if (blogArticles.length === 0) {
+        console.log("No exact 'Blog' category matches, trying case-insensitive search");
+        blogArticles = articles.filter(
+          article => article.category.toLowerCase() === 'blog'
+        );
+        
+        if (blogArticles.length > 0) {
+          console.log(`Found ${blogArticles.length} articles with case-insensitive 'blog' category`);
+        }
+      } else {
+        console.log(`Found ${blogArticles.length} 'Blog' category articles`);
+      }
+      
+      // Sort articles by date (newest first) and update state
+      if (blogArticles.length > 0) {
+        const sortedArticles = [...blogArticles].sort(
           (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
         );
         setBlogPosts(sortedArticles);
       } else {
+        console.warn("No blog articles found after searching");
         setBlogPosts([]);
       }
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error fetching blog posts';
+      console.error('Error fetching blog posts:', errorMessage);
+      setError(err instanceof Error ? err : new Error(errorMessage));
+      toast.error("Failed to load blog posts");
+      setBlogPosts([]);
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }, []);
   
   useEffect(() => {
     fetchBlogPosts();
     
-    // Add event listener for article updates with a more specific name for debugging
+    // Add event listener for article updates with a specific name for debugging
     const handleArticlesUpdatedEvent = () => {
-      console.log('articlesUpdated event detected in BlogSection, reloading blog posts');
+      console.log('articlesUpdated event detected in useBlogPosts, refreshing posts');
       fetchBlogPosts();
     };
     
@@ -63,7 +79,7 @@ export const useBlogPosts = () => {
     return () => {
       window.removeEventListener('articlesUpdated', handleArticlesUpdatedEvent);
     };
-  }, []);
+  }, [fetchBlogPosts]);
   
-  return { blogPosts, fetchBlogPosts };
+  return { blogPosts, isLoading, error, fetchBlogPosts };
 };
