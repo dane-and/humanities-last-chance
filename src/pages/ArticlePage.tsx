@@ -10,7 +10,7 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import OptimizedImage from '@/components/OptimizedImage';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Article } from '@/lib/types/article';
-import { fetchArticleBySlug } from '@/lib/sanity';
+import { fetchArticleBySlug, PortableText } from '@/lib/sanity';
 
 const ArticlePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -162,13 +162,19 @@ const ArticlePage: React.FC = () => {
                       alt={currentArticle.title}
                       className="w-full h-full object-cover object-top"
                       caption={currentArticle.imageCaption || ''}
+                      width={1200}
+                      height={800}
                     />
                   </AspectRatio>
                 </div>
               )}
               
               <article className="prose prose-slate max-w-none [&_a]:text-[#0EA5E9] [&_a]:no-underline hover:[&_a]:text-[#0EA5E9]/80">
-                <div dangerouslySetInnerHTML={{ __html: currentArticle.content }} />
+                {typeof currentArticle.content === 'object' ? (
+                  <PortableText value={currentArticle.content} />
+                ) : (
+                  <div dangerouslySetInnerHTML={{ __html: currentArticle.content }} />
+                )}
               </article>
               
               {currentArticle.tags && currentArticle.tags.length > 0 && (

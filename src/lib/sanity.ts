@@ -1,5 +1,7 @@
 
 import { createClient } from '@sanity/client';
+import imageUrlBuilder from '@sanity/image-url';
+import { PortableText as PortableTextComponent } from '@portabletext/react';
 
 export const sanityClient = createClient({
   projectId: 'nzyg33ca',  // Using your provided Sanity project ID
@@ -8,6 +10,16 @@ export const sanityClient = createClient({
   apiVersion: '2023-05-03'
 });
 
+// Set up image URL builder
+const builder = imageUrlBuilder(sanityClient);
+
+export function urlFor(source: any) {
+  return builder.image(source);
+}
+
+// Create a reusable PortableText component
+export const PortableText = (props: any) => <PortableTextComponent {...props} />;
+
 export async function fetchBlogPosts() {
   try {
     const posts = await sanityClient.fetch(`
@@ -15,7 +27,10 @@ export async function fetchBlogPosts() {
         title,
         slug,
         mainImage{
-          asset->{url}
+          asset->{
+            _id,
+            url
+          }
         },
         body,
         publishedAt,

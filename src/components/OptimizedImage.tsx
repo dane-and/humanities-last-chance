@@ -48,6 +48,9 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
     setImageLoaded(true);
   };
 
+  // Background gradient for the backfill effect
+  const backfillGradient = 'linear-gradient(to bottom, #ddd, #fff)';
+
   return (
     <figure className="relative">
       {/* Loading placeholder - only show when not loaded and no error */}
@@ -57,7 +60,8 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           style={{ 
             aspectRatio: `${width}/${height}`,
             width: width ? `${width}px` : '100%',
-            maxWidth: '100%'
+            maxWidth: '100%',
+            background: backfillGradient // Apply backfill gradient to placeholder
           }}
         >
           <div className="absolute inset-0 flex items-center justify-center">
@@ -74,6 +78,10 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
         height={height}
         loading={priority ? "eager" : "lazy"}
         className={`${className} ${imageLoaded || error ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 max-w-full h-auto`}
+        style={{
+          objectFit: 'cover',
+          background: backfillGradient // Apply backfill gradient behind image
+        }}
         onLoad={handleImageLoad}
         onError={handleImageError}
       />

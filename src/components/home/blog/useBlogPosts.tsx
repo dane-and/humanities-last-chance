@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Article } from '@/lib/types/article';
 import { toast } from 'sonner';
-import { fetchBlogPosts } from '@/lib/sanity';
+import { fetchBlogPosts, urlFor } from '@/lib/sanity';
 
 export const useBlogPosts = () => {
   const [blogPosts, setBlogPosts] = useState<Article[]>([]);
@@ -31,7 +31,7 @@ export const useBlogPosts = () => {
         image: post.mainImage?.asset?.url || '',
         imageCaption: post.mainImage?.caption || '',
         excerpt: post.excerpt || '',
-        content: post.body || '',
+        content: post.body || '', // Keep the portable text object as is
         featured: false,
         tags: post.tags || [],
       }));

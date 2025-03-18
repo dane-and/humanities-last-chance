@@ -34,7 +34,7 @@ const ArticlesBlog: React.FC = () => {
           image: post.mainImage?.asset?.url || '',
           imageCaption: post.mainImage?.caption || '',
           excerpt: post.excerpt || '',
-          content: post.body || '',
+          content: post.body || '', // Keep the portable text object as is
           featured: false,
           tags: post.tags || [],
         }));

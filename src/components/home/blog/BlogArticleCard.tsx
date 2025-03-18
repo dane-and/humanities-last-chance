@@ -7,6 +7,7 @@ import OptimizedImage from '@/components/OptimizedImage';
 import { Article } from '@/lib/types/article';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { cn } from '@/lib/utils';
+import { PortableText } from '@/lib/sanity';
 
 interface BlogArticleCardProps {
   post: Article;
@@ -75,10 +76,13 @@ const BlogArticleCard: React.FC<BlogArticleCardProps> = ({ post, index }) => {
         </div>
       )}
       
-      <div 
-        className="text-muted-foreground prose-p:text-base prose-p:md:text-lg prose-p:leading-relaxed line-clamp-3 mb-3"
-        dangerouslySetInnerHTML={{ __html: post.content }}
-      />
+      <div className="text-muted-foreground prose-p:text-base prose-p:md:text-lg prose-p:leading-relaxed line-clamp-3 mb-3">
+        {typeof post.content === 'object' ? (
+          <PortableText value={post.content} />
+        ) : (
+          <div dangerouslySetInnerHTML={{ __html: post.content }} />
+        )}
+      </div>
       
       {post.tags && post.tags.length > 0 && (
         <div className="mb-3">
