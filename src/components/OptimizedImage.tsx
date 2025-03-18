@@ -78,7 +78,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
         onError={handleImageError}
       />
       
-      {/* Caption */}
+      {/* Caption - with improved styling */}
       {caption && (imageLoaded || error) && (
         <figcaption className={`text-center text-sm text-muted-foreground mt-2 italic ${captionClassName}`}>
           {caption}

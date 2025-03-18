@@ -20,6 +20,15 @@ export const useBlogPosts = () => {
       const articles = getArticlesFromStorage();
       console.log(`Retrieved ${articles.length} total articles from storage`);
       
+      // Return an empty array to clear the preview
+      // This line will clear the posts in the preview
+      if (window.location.hostname === 'localhost' || 
+          window.location.hostname.includes('lovable')) {
+        setBlogPosts([]);
+        setIsLoading(false);
+        return;
+      }
+      
       if (!articles || articles.length === 0) {
         console.warn("No articles found in storage");
         setBlogPosts([]);

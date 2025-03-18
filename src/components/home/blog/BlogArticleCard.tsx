@@ -53,7 +53,7 @@ const BlogArticleCard: React.FC<BlogArticleCardProps> = ({ post, index }) => {
         )}
       </div>
       
-      {/* Add article image if available with improved responsive handling */}
+      {/* Always show the image if available */}
       {post.image && post.image.trim() !== '' && (
         <div className="mb-6 overflow-hidden rounded-md">
           <AspectRatio ratio={16/9} className="bg-muted">
