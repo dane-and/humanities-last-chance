@@ -42,7 +42,16 @@ export const useContentData = () => {
         pagesCount: pages.length
       });
       
-      setArticleList(published);
+      // Add sample articles for development/preview environments
+      if ((published.length === 0 || window.location.hostname.includes('lovable')) && 
+          process.env.NODE_ENV !== 'production') {
+        console.log('Adding sample articles for development environment');
+        const sampleArticles = getSampleArticles();
+        setArticleList([...published, ...sampleArticles]);
+      } else {
+        setArticleList(published);
+      }
+      
       setDraftList(drafts);
       setScheduledList(scheduled);
       setPageList(pages);
@@ -95,7 +104,55 @@ export const useContentData = () => {
       window.removeEventListener('articlesUpdated', handleArticlesUpdated);
       window.removeEventListener('draftsUpdated', handleDraftsUpdated);
     };
-  }, [loadData]);
+  }, [loadData, scheduledList.length]);
+
+  // Helper function to create sample articles for development/preview
+  const getSampleArticles = (): Article[] => {
+    return [
+      {
+        id: 'sample-1',
+        title: 'Sample Article 1',
+        slug: 'sample-article-1',
+        author: 'Sample Author',
+        date: new Date().toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true
+        }),
+        category: 'Blog',
+        image: '',
+        excerpt: 'This is a sample article for development and testing.',
+        content: '<p>This is a sample article that appears in development and preview environments to help with testing and demonstration.</p>',
+        featured: true,
+        comments: [],
+        tags: ['Sample', 'Development']
+      },
+      {
+        id: 'sample-2',
+        title: 'Sample Article 2',
+        slug: 'sample-article-2',
+        author: 'Sample Author',
+        date: new Date().toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true
+        }),
+        category: 'Blog',
+        image: '',
+        excerpt: 'Another sample article for testing purposes.',
+        content: '<p>This is another sample article for development and preview environments.</p>',
+        featured: false,
+        comments: [],
+        tags: ['Sample', 'Testing']
+      }
+    ];
+  };
 
   return {
     articleList,

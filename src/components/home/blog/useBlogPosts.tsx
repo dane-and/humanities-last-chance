@@ -16,21 +16,24 @@ export const useBlogPosts = () => {
     setError(null);
     
     try {
-      // Return an empty array when in the Lovable preview environment
-      if (window.location.hostname === 'localhost' || 
-          window.location.hostname.includes('lovable')) {
-        console.log("Preview environment detected, returning empty array");
-        setBlogPosts([]);
-        setIsLoading(false);
-        return;
-      }
-      
       // Get all articles from storage
       const articles = getArticlesFromStorage();
       console.log(`Retrieved ${articles.length} total articles from storage`);
       
       if (!articles || articles.length === 0) {
         console.warn("No articles found in storage");
+        
+        // Add sample articles in development/preview environments
+        if (process.env.NODE_ENV !== 'production' || 
+            window.location.hostname === 'localhost' || 
+            window.location.hostname.includes('lovable')) {
+          const sampleArticles = getSampleArticles();
+          console.log(`Adding ${sampleArticles.length} sample articles for development`);
+          setBlogPosts(sampleArticles);
+          setIsLoading(false);
+          return;
+        }
+        
         setBlogPosts([]);
         return;
       }
@@ -72,6 +75,54 @@ export const useBlogPosts = () => {
       setIsLoading(false);
     }
   }, []);
+  
+  // Helper function to create sample articles for development/preview
+  const getSampleArticles = (): Article[] => {
+    return [
+      {
+        id: 'sample-1',
+        title: 'Sample Article 1',
+        slug: 'sample-article-1',
+        author: 'Sample Author',
+        date: new Date().toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true
+        }),
+        category: 'Blog',
+        image: '',
+        excerpt: 'This is a sample article for development and testing.',
+        content: '<p>This is a sample article that appears in development and preview environments to help with testing and demonstration.</p>',
+        featured: true,
+        comments: [],
+        tags: ['Sample', 'Development']
+      },
+      {
+        id: 'sample-2',
+        title: 'Sample Article 2',
+        slug: 'sample-article-2',
+        author: 'Sample Author',
+        date: new Date().toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true
+        }),
+        category: 'Blog',
+        image: '',
+        excerpt: 'Another sample article for testing purposes.',
+        content: '<p>This is another sample article for development and preview environments.</p>',
+        featured: false,
+        comments: [],
+        tags: ['Sample', 'Testing']
+      }
+    ];
+  };
   
   useEffect(() => {
     fetchBlogPosts();
