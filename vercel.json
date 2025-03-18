@@ -1,16 +1,5 @@
 
 {
-  "version": 2,
-  "buildCommand": "npm run build",
-  "devCommand": "npm run dev",
-  "installCommand": "npm install",
-  "framework": "vite",
-  "outputDirectory": "dist",
-  "github": {
-    "enabled": true,
-    "silent": true,
-    "branch": "main"
-  },
   "redirects": [
     { "source": "/((?!api/.*).*)", "destination": "/index.html", "statusCode": 200 }
   ],

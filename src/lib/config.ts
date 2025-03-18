@@ -1,4 +1,3 @@
-
 /**
  * Application configuration
  * 
@@ -8,7 +7,6 @@
 
 // Determine current environment
 const isNetlify = import.meta.env.VITE_HOSTING === 'netlify';
-const isVercel = import.meta.env.VITE_HOSTING === 'vercel';
 const isGitHubPages = import.meta.env.VITE_HOSTING === 'github';
 const isDevelopment = import.meta.env.DEV;
 
@@ -19,7 +17,7 @@ const BASE_PATH = import.meta.env.VITE_BASE_URL || '/';
 const API_CONFIG = {
   // Base URL for API endpoints
   // In production: use environment variable or fall back to relative URL for self-hosted API
-  BASE_URL: (isVercel || isNetlify)
+  BASE_URL: isNetlify
     ? import.meta.env.VITE_API_URL || 'https://api.humanitieslastchance.org' 
     : '/api',
   
@@ -31,9 +29,9 @@ const API_CONFIG = {
     // Enable localStorage fallback for situations when API is unavailable
     USE_LOCAL_STORAGE_FALLBACK: true,
     // Enable Google Sheets fallback (configured below)
-    USE_GOOGLE_SHEETS_FALLBACK: (isVercel || isNetlify),
+    USE_GOOGLE_SHEETS_FALLBACK: isNetlify,
     // Disable API calls for pure static hosting
-    STATIC_ONLY: (isVercel || isNetlify || isGitHubPages) && !import.meta.env.VITE_API_URL,
+    STATIC_ONLY: (isNetlify || isGitHubPages) && !import.meta.env.VITE_API_URL,
   }
 };
 
