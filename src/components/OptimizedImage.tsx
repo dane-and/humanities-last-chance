@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 interface OptimizedImageProps {
   src: string;
@@ -29,6 +29,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   
   const [imageLoaded, setImageLoaded] = useState(false);
   const [error, setError] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
   
   // Use a static fallback image
   const fallbackImage = "/lovable-uploads/4a4437f6-55b6-4321-9e6f-5ca0a883ccd9.png";
@@ -38,6 +39,13 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
     setImageLoaded(false);
     setError(false);
   }, [src]);
+
+  // Set the background image
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.style.setProperty('--bg-image', `url(${error ? fallbackImage : src})`);
+    }
+  }, [src, error, fallbackImage]);
 
   const handleImageError = () => {
     console.error(`Error loading image: ${src}`);
@@ -67,7 +75,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       )}
       
       {/* The actual image or fallback */}
-      <div className="article-image-container">
+      <div className="article-image-container" ref={containerRef}>
         <img
           src={error ? fallbackImage : src}
           alt={alt}

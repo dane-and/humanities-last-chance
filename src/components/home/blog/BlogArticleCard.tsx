@@ -1,13 +1,12 @@
 
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { MessageCircle } from 'lucide-react';
 import TagList from '@/components/TagList';
-import OptimizedImage from '@/components/OptimizedImage';
 import { Article } from '@/lib/types/article';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { cn } from '@/lib/utils';
 import { PortableText } from '@/lib/sanity';
+import OptimizedImage from '@/components/OptimizedImage';
 
 interface BlogArticleCardProps {
   post: Article;
@@ -15,15 +14,6 @@ interface BlogArticleCardProps {
 }
 
 const BlogArticleCard: React.FC<BlogArticleCardProps> = ({ post, index }) => {
-  const imageContainerRef = useRef<HTMLDivElement>(null);
-
-  // Set the background image for the blur effect
-  useEffect(() => {
-    if (imageContainerRef.current && post.image) {
-      imageContainerRef.current.style.setProperty('--bg-image', `url(${post.image})`);
-    }
-  }, [post.image]);
-
   return (
     <article 
       className="prose prose-lg max-w-none fade-up bg-background rounded-lg transition-all duration-300 hover:shadow-md"
@@ -65,19 +55,17 @@ const BlogArticleCard: React.FC<BlogArticleCardProps> = ({ post, index }) => {
       
       {/* Always show the image if available */}
       {post.image && post.image.trim() !== '' && (
-        <div className="mb-3 overflow-hidden rounded-md" ref={imageContainerRef}>
+        <div className="mb-3 overflow-hidden rounded-md">
           <AspectRatio ratio={16/9} className="bg-muted">
             <Link to={`/article/${post.slug}`} className="block w-full h-full">
-              <div className="article-image-container">
-                <img
-                  src={post.image}
-                  alt={post.title}
-                  className="article-image transition-transform duration-500 hover:scale-105"
-                  width={1200}
-                  height={675}
-                  loading={index < 2 ? "eager" : "lazy"}
-                />
-              </div>
+              <OptimizedImage
+                src={post.image}
+                alt={post.title}
+                className="transition-transform duration-500 hover:scale-105"
+                width={1200}
+                height={675}
+                priority={index < 2}
+              />
             </Link>
           </AspectRatio>
         </div>

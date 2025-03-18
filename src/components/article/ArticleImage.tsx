@@ -24,6 +24,7 @@ const ArticleImage: React.FC<ArticleImageProps> = ({ image, title, imageCaption 
           caption={imageCaption || ''}
           width={1200}
           height={800}
+          priority={true}
         />
       </AspectRatio>
     </div>
