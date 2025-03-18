@@ -17,6 +17,7 @@ const ArticlesInterviews: React.FC = () => {
       console.log("Loading interview articles from Sanity...");
       
       try {
+        // Use exact case "Interview" for the API call
         const sanityPosts = await fetchArticlesByCategory('Interview');
         
         // Convert Sanity posts to Article format
@@ -29,11 +30,11 @@ const ArticlesInterviews: React.FC = () => {
             month: 'long',
             day: 'numeric'
           }) : new Date().toLocaleDateString(),
-          category: post.category || 'Interview',
+          category: post.category || 'Interview', // Keep the exact case from Sanity
           image: post.mainImage?.asset?.url || '',
           imageCaption: post.mainImage?.caption || '',
           excerpt: post.excerpt || '',
-          content: post.body || '', // Keep the portable text object as is
+          content: post.body || '',
           featured: false,
           tags: post.tags || [],
         }));

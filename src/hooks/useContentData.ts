@@ -23,11 +23,35 @@ export const useContentData = () => {
     setError(null);
     
     try {
-      // This will eventually fetch from Sanity
-      // For now, returning empty arrays as placeholders
+      // Load articles from Sanity
+      const posts = await fetchBlogPosts();
       
-      // Keep empty arrays until Sanity integration is complete
-      setArticleList([]);
+      if (posts && posts.length > 0) {
+        // Convert Sanity posts to our Article format
+        const formattedArticles = posts.map((post: any) => ({
+          id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          title: post.title || "Untitled Post",
+          slug: post.slug?.current || `post-${Date.now()}`,
+          date: post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          }) : new Date().toLocaleDateString(),
+          category: post.category || 'Blog', // Preserve exact capitalization
+          image: post.mainImage?.asset?.url || '',
+          imageCaption: post.mainImage?.caption || '',
+          excerpt: post.excerpt || '',
+          content: post.body || '',
+          featured: false,
+          tags: post.tags || [],
+        }));
+        
+        setArticleList(formattedArticles);
+      } else {
+        // Keep empty arrays until Sanity integration is complete
+        setArticleList([]);
+      }
+      
       setDraftList([]);
       setScheduledList([]);
       setPageList([]);

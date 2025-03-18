@@ -18,23 +18,28 @@ export const useBlogPosts = () => {
       const posts = await fetchBlogPosts();
       
       // Convert Sanity posts format to our Article type
-      const formattedPosts: Article[] = posts.map((post: any) => ({
-        id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        title: post.title || "Untitled Post",
-        slug: post.slug?.current || `post-${Date.now()}`,
-        date: post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-        }) : new Date().toLocaleDateString(),
-        category: post.category || 'Blog', // Preserve exact capitalization from Sanity
-        image: post.mainImage?.asset?.url || '',
-        imageCaption: post.mainImage?.caption || '',
-        excerpt: post.excerpt || '',
-        content: post.body || '', // Keep the portable text object as is
-        featured: false,
-        tags: post.tags || [],
-      }));
+      const formattedPosts: Article[] = posts.map((post: any) => {
+        // Log each post to see what category values we're getting from Sanity
+        console.log(`Post "${post.title}" has category:`, post.category);
+        
+        return {
+          id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          title: post.title || "Untitled Post",
+          slug: post.slug?.current || `post-${Date.now()}`,
+          date: post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          }) : new Date().toLocaleDateString(),
+          category: post.category || 'Blog', // Ensure we're using the exact case from Sanity
+          image: post.mainImage?.asset?.url || '',
+          imageCaption: post.mainImage?.caption || '',
+          excerpt: post.excerpt || '',
+          content: post.body || '', // Keep the portable text object as is
+          featured: false,
+          tags: post.tags || [],
+        };
+      });
       
       console.log("Formatted posts:", formattedPosts);
       setBlogPosts(formattedPosts);

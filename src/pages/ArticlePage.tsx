@@ -32,6 +32,9 @@ const ArticlePage: React.FC = () => {
         console.log("Fetched article from Sanity:", sanityPost);
         
         if (sanityPost) {
+          // Log the exact category we get from Sanity
+          console.log(`Article category from Sanity: "${sanityPost.category}"`);
+          
           // Convert Sanity post to Article format
           const article: Article = {
             id: sanityPost._id || `sanity-${Date.now()}`,
@@ -42,7 +45,7 @@ const ArticlePage: React.FC = () => {
               month: 'long',
               day: 'numeric'
             }) : new Date().toLocaleDateString(),
-            category: sanityPost.category || 'Blog',
+            category: sanityPost.category || 'Blog', // Preserve the exact case
             image: sanityPost.mainImage?.asset?.url || '',
             imageCaption: sanityPost.mainImage?.caption || '',
             excerpt: sanityPost.excerpt || '',
@@ -51,6 +54,7 @@ const ArticlePage: React.FC = () => {
             comments: sanityPost.comments || [],
           };
           
+          console.log("Formatted article with category:", article.category);
           setCurrentArticle(article);
         } else {
           setCurrentArticle(null);

@@ -27,6 +27,7 @@ export const getArticlesByCategory = (category: string, count?: number, articleL
   const articles = articleList.length ? articleList : getArticlesFromStorage();
   const normalizedCategory = category.toLowerCase();
   
+  // Filter by category (case-insensitive match)
   const filtered = articles.filter(
     article => article.category.toLowerCase() === normalizedCategory
   )
