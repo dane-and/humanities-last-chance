@@ -31,3 +31,14 @@
   height: auto;
   aspect-ratio: 1200/800;
 }
+
+/* Comment interaction animations */
+@keyframes vote-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.vote-animation {
+  animation: vote-pulse 0.3s ease-in-out;
+}
