@@ -7,7 +7,6 @@ import {
   TabsTrigger
 } from "@/components/ui/tabs";
 import { getDaysSinceLastBackup, processScheduledArticles } from '@/lib/utils/storage/articleStorage';
-import AnalyticsDashboard from './AnalyticsDashboard';
 import BackupRestoreTab from './data-management/BackupRestoreTab';
 
 interface DataManagementProps {
@@ -32,24 +31,11 @@ const DataManagement: React.FC<DataManagementProps> = ({ onDataImported }) => {
   
   return (
     <div className="space-y-4 p-4 border rounded-lg bg-card">
-      <Tabs defaultValue="analytics">
-        <TabsList className="mb-4">
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          <TabsTrigger value="backup">Backup & Restore</TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="analytics">
-          <AnalyticsDashboard />
-        </TabsContent>
-        
-        <TabsContent value="backup">
-          <BackupRestoreTab 
-            daysSinceBackup={daysSinceBackup}
-            setDaysSinceBackup={setDaysSinceBackup}
-            onDataImported={onDataImported}
-          />
-        </TabsContent>
-      </Tabs>
+      <BackupRestoreTab 
+        daysSinceBackup={daysSinceBackup}
+        setDaysSinceBackup={setDaysSinceBackup}
+        onDataImported={onDataImported}
+      />
     </div>
   );
 };
