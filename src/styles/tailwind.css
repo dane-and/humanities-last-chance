@@ -3,51 +3,41 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom styles for processed images */
-.article-image-container {
+/* New optimized image display system */
+.image-container {
   position: relative;
-  overflow: hidden;
   width: 100%;
   height: auto;
-  aspect-ratio: 1200/800;
+  overflow: hidden;
   background-color: #f0f0f0;
-}
-
-.article-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: contain;
-  z-index: 2; /* Ensure image is above the blurred background */
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* Create blurred background effect */
-.article-image-container::before {
+/* Blurred background effect */
+.image-container::before {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
+  width: 100%;
+  height: 100%;
   background-image: var(--bg-image, none);
   background-size: cover;
   background-position: center;
-  filter: blur(15px) brightness(0.7);
-  transform: scale(1.1);
+  filter: blur(10px) brightness(0.8);
+  transform: scale(1.05);
   z-index: 1;
 }
 
-/* Ensure processed images display well in different contexts */
-.article-image-fixed {
-  width: 100%;
-  max-width: 1200px;
-  height: auto;
-  aspect-ratio: 1200/800;
+/* Main image styling */
+.image-main {
+  position: relative;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  z-index: 2;
 }
 
 /* Comment interaction animations */

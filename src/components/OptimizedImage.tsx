@@ -29,7 +29,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   
   const [imageLoaded, setImageLoaded] = useState(false);
   const [error, setError] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const imageContainerRef = useRef<HTMLDivElement>(null);
   
   // Use a static fallback image
   const fallbackImage = "/lovable-uploads/4a4437f6-55b6-4321-9e6f-5ca0a883ccd9.png";
@@ -40,10 +40,11 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
     setError(false);
   }, [src]);
 
-  // Set the background image
+  // Set the background image for the blur effect
   useEffect(() => {
-    if (containerRef.current) {
-      containerRef.current.style.setProperty('--bg-image', `url(${error ? fallbackImage : src})`);
+    if (imageContainerRef.current) {
+      const imageSrc = error ? fallbackImage : src;
+      imageContainerRef.current.style.setProperty('--bg-image', `url(${imageSrc})`);
     }
   }, [src, error, fallbackImage]);
 
@@ -64,7 +65,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           className={`${className} bg-gray-200 animate-pulse`} 
           style={{ 
             aspectRatio: `${width}/${height}`,
-            width: width ? `${width}px` : '100%',
+            width: '100%',
             maxWidth: '100%',
           }}
         >
@@ -74,22 +75,25 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
         </div>
       )}
       
-      {/* The actual image or fallback */}
-      <div className="article-image-container" ref={containerRef}>
+      {/* Image container with blurred background */}
+      <div 
+        ref={imageContainerRef}
+        className="image-container"
+        style={{ aspectRatio: `${width}/${height}` }}
+      >
         <img
           src={error ? fallbackImage : src}
           alt={alt}
           width={width}
           height={height}
           loading={priority ? "eager" : "lazy"}
-          className={`article-image ${className} ${imageLoaded || error ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
+          className={`image-main ${imageLoaded || error ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ${className}`}
           onLoad={handleImageLoad}
           onError={handleImageError}
-          style={{ objectFit: 'contain', width: '100%', height: '100%' }}
         />
       </div>
       
-      {/* Caption - with improved styling */}
+      {/* Caption - only show when image is loaded or there's an error */}
       {caption && (imageLoaded || error) && (
         <figcaption className={`text-center text-sm text-muted-foreground mt-2 italic ${captionClassName}`}>
           {caption}

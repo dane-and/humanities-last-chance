@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import OptimizedImage from '@/components/OptimizedImage';
 
 interface ArticleCardProps {
   title: string;
@@ -72,13 +73,13 @@ const ArticleCard: React.FC<ArticleCardProps> = React.memo(({
         <div className={cn('relative', isCompact ? 'h-auto' : 'h-auto')}>
           <AspectRatio ratio={21 / 9} className="overflow-hidden">
             <Link to={`/article/${slug}`} aria-label={title} className="block w-full h-full">
-              <img
+              <OptimizedImage
                 src={image}
                 alt={title}
-                className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                loading="lazy"
                 width={640}
                 height={274}
+                priority={false}
+                className="w-full h-full"
               />
             </Link>
           </AspectRatio>

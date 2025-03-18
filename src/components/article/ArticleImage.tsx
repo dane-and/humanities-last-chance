@@ -23,7 +23,7 @@ const ArticleImage: React.FC<ArticleImageProps> = ({ image, title, imageCaption 
           className="w-full h-full"
           caption={imageCaption || ''}
           width={1200}
-          height={800}
+          height={675}
           priority={true}
         />
       </AspectRatio>
