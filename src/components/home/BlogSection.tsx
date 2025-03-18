@@ -86,7 +86,7 @@ const BlogSection: React.FC<BlogSectionProps> = ({
   
   return (
     <div className="space-y-0">
-      <div className={fullContent ? "" : ""}>
+      <div className="mb-8">
         {currentPosts.map((post, index) => (
           <BlogArticleCard 
             key={post.id} 

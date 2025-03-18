@@ -5,7 +5,7 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import ArticleGrid from '@/components/ArticleGrid';
 import { Article } from '@/lib/types/article';
-import { fetchArticlesByCategory } from '@/lib/sanity';
+import { fetchBlogPosts } from '@/lib/sanity';
 
 const ArticlesBlog: React.FC = () => {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -18,27 +18,31 @@ const ArticlesBlog: React.FC = () => {
       console.log("Loading blog articles from Sanity...");
       
       try {
-        // Use exact case "Blog" for the API call
-        const sanityPosts = await fetchArticlesByCategory('Blog');
+        // Get all posts and filter on the client side for "Blog" category
+        const sanityPosts = await fetchBlogPosts();
         
-        // Convert Sanity posts to Article format
-        const blogArticles: Article[] = sanityPosts.map((post: any) => ({
-          id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-          title: post.title || "Untitled Post",
-          slug: post.slug?.current || `post-${Date.now()}`,
-          date: post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          }) : new Date().toLocaleDateString(),
-          category: post.category || 'Blog', // Keep the exact case from Sanity
-          image: post.mainImage?.asset?.url || '',
-          imageCaption: post.mainImage?.caption || '',
-          excerpt: post.excerpt || '',
-          content: post.body || '',
-          featured: false,
-          tags: post.tags || [],
-        }));
+        // Convert Sanity posts to Article format and filter for Blog category
+        const blogArticles: Article[] = sanityPosts
+          .filter((post: any) => 
+            post.category?.toLowerCase() === 'blog'
+          )
+          .map((post: any) => ({
+            id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            title: post.title || "Untitled Post",
+            slug: post.slug?.current || `post-${Date.now()}`,
+            date: post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            }) : new Date().toLocaleDateString(),
+            category: 'Blog', // Always use properly capitalized category
+            image: post.mainImage?.asset?.url || '',
+            imageCaption: post.mainImage?.caption || '',
+            excerpt: post.excerpt || '',
+            content: post.body || '',
+            featured: false,
+            tags: post.tags || [],
+          }));
         
         console.log("Formatted blog articles:", blogArticles);
         setArticles(blogArticles);
