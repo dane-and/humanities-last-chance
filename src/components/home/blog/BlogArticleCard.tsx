@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { MessageCircle } from 'lucide-react';
 import TagList from '@/components/TagList';
@@ -15,6 +15,15 @@ interface BlogArticleCardProps {
 }
 
 const BlogArticleCard: React.FC<BlogArticleCardProps> = ({ post, index }) => {
+  const imageContainerRef = useRef<HTMLDivElement>(null);
+
+  // Set the background image for the blur effect
+  useEffect(() => {
+    if (imageContainerRef.current && post.image) {
+      imageContainerRef.current.style.setProperty('--bg-image', `url(${post.image})`);
+    }
+  }, [post.image]);
+
   return (
     <article 
       className="prose prose-lg max-w-none fade-up bg-background rounded-lg transition-all duration-300 hover:shadow-md"
@@ -56,21 +65,19 @@ const BlogArticleCard: React.FC<BlogArticleCardProps> = ({ post, index }) => {
       
       {/* Always show the image if available */}
       {post.image && post.image.trim() !== '' && (
-        <div className="mb-3 overflow-hidden rounded-md">
+        <div className="mb-3 overflow-hidden rounded-md" ref={imageContainerRef}>
           <AspectRatio ratio={16/9} className="bg-muted">
             <Link to={`/article/${post.slug}`} className="block w-full h-full">
-              <OptimizedImage
-                src={post.image}
-                alt={post.title}
-                className={cn(
-                  "w-full h-full object-cover transition-transform duration-500",
-                  "hover:scale-105"
-                )}
-                caption={post.imageCaption}
-                width={1200}
-                height={675}
-                priority={index < 2} // Prioritize loading for first two articles
-              />
+              <div className="article-image-container">
+                <img
+                  src={post.image}
+                  alt={post.title}
+                  className="article-image transition-transform duration-500 hover:scale-105"
+                  width={1200}
+                  height={675}
+                  loading={index < 2 ? "eager" : "lazy"}
+                />
+              </div>
             </Link>
           </AspectRatio>
         </div>

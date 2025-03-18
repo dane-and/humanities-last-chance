@@ -20,7 +20,7 @@ const ArticleImage: React.FC<ArticleImageProps> = ({ image, title, imageCaption 
         <OptimizedImage
           src={image}
           alt={title}
-          className="w-full h-full object-cover object-top"
+          className="w-full h-full"
           caption={imageCaption || ''}
           width={1200}
           height={800}

@@ -1,10 +1,9 @@
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import OptimizedImage from './OptimizedImage';
 
 interface FeaturedArticleProps {
   title: string;
@@ -29,6 +28,15 @@ const FeaturedArticle: React.FC<FeaturedArticleProps> = React.memo(({
   layout = 'horizontal',
   className,
 }) => {
+  const imageContainerRef = useRef<HTMLDivElement>(null);
+
+  // Set the background image for the blur effect
+  useEffect(() => {
+    if (imageContainerRef.current && image) {
+      imageContainerRef.current.style.setProperty('--bg-image', `url(${image})`);
+    }
+  }, [image]);
+  
   return (
     <article 
       className={cn(
@@ -46,12 +54,16 @@ const FeaturedArticle: React.FC<FeaturedArticleProps> = React.memo(({
         <AspectRatio ratio={21 / 9} className="overflow-hidden">
           <Link to={`/article/${slug}`} aria-label={title} className="block w-full h-full">
             {image ? (
-              <OptimizedImage
-                src={image}
-                alt={title}
-                className="w-full h-full object-cover"
-                priority={true}
-              />
+              <div className="article-image-container" ref={imageContainerRef}>
+                <img
+                  src={image}
+                  alt={title}
+                  className="article-image"
+                  width={1200}
+                  height={570}
+                  loading="eager"
+                />
+              </div>
             ) : (
               <div className="w-full h-full bg-muted flex items-center justify-center text-muted-foreground">
                 <span>No image</span>
