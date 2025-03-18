@@ -76,12 +76,12 @@ const BlogArticleCard: React.FC<BlogArticleCardProps> = ({ post, index }) => {
       )}
       
       <div 
-        className="text-muted-foreground prose-p:text-base prose-p:md:text-lg prose-p:leading-relaxed line-clamp-4"
+        className="text-muted-foreground prose-p:text-base prose-p:md:text-lg prose-p:leading-relaxed line-clamp-4 mb-4"
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
       
       {post.tags && post.tags.length > 0 && (
-        <div className="mt-2">
+        <div className="mt-2 mb-4">
           <TagList tags={post.tags} />
         </div>
       )}
