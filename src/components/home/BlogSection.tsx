@@ -7,17 +7,27 @@ import EmptyBlogMessage from './blog/EmptyBlogMessage';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { 
+  Pagination, 
+  PaginationContent, 
+  PaginationItem, 
+  PaginationLink, 
+  PaginationNext, 
+  PaginationPrevious
+} from '@/components/ui/pagination';
 
 interface BlogSectionProps {
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   postsPerPage: number;
+  fullContent?: boolean;
 }
 
 const BlogSection: React.FC<BlogSectionProps> = ({
   currentPage,
   setCurrentPage,
-  postsPerPage
+  postsPerPage,
+  fullContent = false
 }) => {
   const { blogPosts, isLoading, error } = useBlogPosts();
   
@@ -76,22 +86,60 @@ const BlogSection: React.FC<BlogSectionProps> = ({
   
   return (
     <div className="space-y-12">
-      <div className="space-y-14">
+      <div className={fullContent ? "space-y-20" : "space-y-14"}>
         {currentPosts.map((post, index) => (
           <BlogArticleCard 
             key={post.id} 
             post={post} 
-            index={index} 
+            index={index}
+            fullContent={fullContent}
           />
         ))}
       </div>
       
-      <BlogPagination 
-        currentPage={currentPage}
-        totalPages={totalPages}
-        nextPage={nextPage}
-        prevPage={prevPage}
-      />
+      {!fullContent ? (
+        <BlogPagination 
+          currentPage={currentPage}
+          totalPages={totalPages}
+          nextPage={nextPage}
+          prevPage={prevPage}
+        />
+      ) : (
+        totalPages > 1 && (
+          <Pagination className="mt-10">
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious 
+                  onClick={prevPage}
+                  className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                />
+              </PaginationItem>
+              
+              {[...Array(totalPages)].map((_, i) => (
+                <PaginationItem key={i}>
+                  <PaginationLink 
+                    isActive={currentPage === i + 1}
+                    onClick={() => {
+                      setCurrentPage(i + 1);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="cursor-pointer"
+                  >
+                    {i + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+              
+              <PaginationItem>
+                <PaginationNext 
+                  onClick={nextPage} 
+                  className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        )
+      )}
     </div>
   );
 };

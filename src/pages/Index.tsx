@@ -1,11 +1,13 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import BlogSection from '@/components/home/BlogSection';
 import SidebarSection from '@/components/home/SidebarSection';
 
 const Index = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  
   return (
     <div className="page-transition min-h-screen flex flex-col">
       <Navigation />
@@ -16,9 +18,10 @@ const Index = () => {
             <div className="flex flex-col lg:flex-row gap-8">
               <div className="w-full lg:w-2/3">
                 <BlogSection 
-                  currentPage={1}
-                  setCurrentPage={() => {}}
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
                   postsPerPage={5}
+                  fullContent={true}
                 />
               </div>
               
