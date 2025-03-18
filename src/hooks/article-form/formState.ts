@@ -1,8 +1,7 @@
-
 import { useState, useEffect } from 'react';
 import { Article } from '../../lib/types/article';
 import { ArticleFormProps } from './types';
-import { generateSlug, generateSlugFromTitle } from './utils/slugUtils';
+import { generateSlug } from './utils/slugUtils';
 
 /**
  * Default state for a new article form

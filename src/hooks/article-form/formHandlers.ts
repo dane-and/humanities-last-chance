@@ -7,7 +7,11 @@ import { createEditorHandlers } from './handlers/editorHandlers';
 import { createTagHandlers } from './handlers/tagHandlers';
 import { createImageHandlers } from './handlers/imageHandlers';
 
-export { generateSlug } from './utils/slugUtils';
+// Import the generateSlug function directly from utils/slugUtils
+import { generateSlug } from './utils/slugUtils';
+
+// Export the generateSlug function
+export { generateSlug };
 
 export const useArticleFormHandlers = (
   formData: Article,
