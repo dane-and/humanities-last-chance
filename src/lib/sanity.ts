@@ -24,6 +24,7 @@ export async function fetchBlogPosts() {
   try {
     const posts = await sanityClient.fetch(`
       *[_type == "post"] | order(publishedAt desc) {
+        _id,
         title,
         slug,
         mainImage{
@@ -51,6 +52,7 @@ export async function fetchArticleBySlug(slug: string) {
   try {
     const post = await sanityClient.fetch(`
       *[_type == "post" && slug.current == $slug][0] {
+        _id,
         title,
         slug,
         mainImage{
@@ -73,8 +75,10 @@ export async function fetchArticleBySlug(slug: string) {
 
 export async function fetchArticlesByCategory(category: string) {
   try {
+    console.log(`Fetching articles with category ${category}`);
     const posts = await sanityClient.fetch(`
       *[_type == "post" && category == $category] | order(publishedAt desc) {
+        _id,
         title,
         slug,
         mainImage{
@@ -87,6 +91,7 @@ export async function fetchArticlesByCategory(category: string) {
         excerpt
       }
     `, { category });
+    console.log(`Found ${posts.length} posts in category ${category}:`, posts);
     return posts;
   } catch (error) {
     console.error(`Error fetching articles with category ${category}:`, error);

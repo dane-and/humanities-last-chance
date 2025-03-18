@@ -27,7 +27,7 @@ export const useBlogPosts = () => {
           month: 'long',
           day: 'numeric'
         }) : new Date().toLocaleDateString(),
-        category: post.category || 'Blog',
+        category: post.category || 'Blog', // Use the category from Sanity, defaulting to Blog only if missing
         image: post.mainImage?.asset?.url || '',
         imageCaption: post.mainImage?.caption || '',
         excerpt: post.excerpt || '',

@@ -5,7 +5,7 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import ArticleGrid from '@/components/ArticleGrid';
 import { Article } from '@/lib/types/article';
-import { fetchBlogPosts } from '@/lib/sanity';
+import { fetchArticlesByCategory } from '@/lib/sanity';
 
 const ArticlesBlog: React.FC = () => {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -18,7 +18,7 @@ const ArticlesBlog: React.FC = () => {
       console.log("Loading blog articles from Sanity...");
       
       try {
-        const sanityPosts = await fetchBlogPosts();
+        const sanityPosts = await fetchArticlesByCategory('Blog');
         
         // Convert Sanity posts to Article format
         const blogArticles: Article[] = sanityPosts.map((post: any) => ({
