@@ -56,7 +56,7 @@ const ArticleCard: React.FC<ArticleCardProps> = React.memo(({
               isCompact && "text-[10px]"
             )}
           >
-            {category}
+            {category} {/* Preserve original capitalization for display */}
           </Link>
           <span className={cn(
             "text-xs text-muted-foreground flex items-center",

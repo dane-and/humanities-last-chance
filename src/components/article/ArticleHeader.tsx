@@ -32,7 +32,7 @@ const ArticleHeader: React.FC<ArticleHeaderProps> = ({ article, onGoBack }) => {
           href={`/articles/${article.category.toLowerCase()}`} 
           className="text-primary font-medium text-sm inline-block"
         >
-          {article.category}
+          {article.category} {/* Preserve original capitalization for display */}
         </a>
       </div>
       

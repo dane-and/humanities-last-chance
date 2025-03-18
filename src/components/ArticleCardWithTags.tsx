@@ -71,7 +71,7 @@ const ArticleCardWithTags: React.FC<ArticleCardWithTagsProps> = React.memo(({
                 to={`/articles/${article.category.toLowerCase()}`} 
                 className="hover:text-primary"
               >
-                {article.category}
+                {article.category} {/* Preserve original capitalization for display */}
               </Link>
             </div>
             
