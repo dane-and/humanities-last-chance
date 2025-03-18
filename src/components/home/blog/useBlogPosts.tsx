@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import { Article } from '@/lib/types/article';
 import { toast } from 'sonner';
@@ -14,16 +15,28 @@ export const useBlogPosts = () => {
     setError(null);
     
     try {
-      // Placeholder for Sanity integration
-      // When Sanity is connected, this will return real data
-      // For now, return empty array to show placeholders
       const posts = await fetchBlogPosts();
       
       // Convert Sanity posts format to our Article type
-      // This is a temporary mapping that will need adjustment based on actual Sanity schema
-      const formattedPosts: Article[] = [];
+      const formattedPosts: Article[] = posts.map((post: any) => ({
+        id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        title: post.title || "Untitled Post",
+        slug: post.slug?.current || `post-${Date.now()}`,
+        date: post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        }) : new Date().toLocaleDateString(),
+        category: post.category || 'Blog',
+        image: post.mainImage?.asset?.url || '',
+        imageCaption: post.mainImage?.caption || '',
+        excerpt: post.excerpt || '',
+        content: post.body || '',
+        featured: false,
+        tags: post.tags || [],
+      }));
       
-      // Keep empty for now - when Sanity is connected, this will populate with actual data
+      console.log("Formatted posts:", formattedPosts);
       setBlogPosts(formattedPosts);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error fetching blog posts';

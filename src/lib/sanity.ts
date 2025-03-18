@@ -2,7 +2,7 @@
 import { createClient } from '@sanity/client';
 
 export const sanityClient = createClient({
-  projectId: 'uftdylp6',  // Using the provided Sanity project ID
+  projectId: 'nzyg33ca',  // Using your provided Sanity project ID
   dataset: 'production',
   useCdn: true,
   apiVersion: '2023-05-03'

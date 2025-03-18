@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
@@ -27,12 +28,36 @@ const ArticlePage: React.FC = () => {
       console.log(`Loading article with slug: ${slug} from Sanity`);
       
       try {
-        // This will eventually fetch from Sanity
-        // For now, return null as placeholder
-        const article = null;
-        setCurrentArticle(article);
+        const sanityPost = await fetchArticleBySlug(slug);
+        console.log("Fetched article from Sanity:", sanityPost);
+        
+        if (sanityPost) {
+          // Convert Sanity post to Article format
+          const article: Article = {
+            id: sanityPost._id || `sanity-${Date.now()}`,
+            title: sanityPost.title || "Untitled Post",
+            slug: sanityPost.slug?.current || slug,
+            date: sanityPost.publishedAt ? new Date(sanityPost.publishedAt).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            }) : new Date().toLocaleDateString(),
+            category: sanityPost.category || 'Blog',
+            image: sanityPost.mainImage?.asset?.url || '',
+            imageCaption: sanityPost.mainImage?.caption || '',
+            excerpt: sanityPost.excerpt || '',
+            content: sanityPost.body || '',
+            tags: sanityPost.tags || [],
+            comments: sanityPost.comments || [],
+          };
+          
+          setCurrentArticle(article);
+        } else {
+          setCurrentArticle(null);
+        }
       } catch (error) {
         console.error("Error loading article:", error);
+        setCurrentArticle(null);
       } finally {
         setLoading(false);
       }
@@ -98,60 +123,77 @@ const ArticlePage: React.FC = () => {
               Home
             </Button>
             
-            <h1 className="text-3xl font-serif font-bold">{currentArticle.title}</h1>
+            {currentArticle && <h1 className="text-3xl font-serif font-bold">{currentArticle.title}</h1>}
           </div>
           
-          <div className="mb-4 block">
-            <span className="text-muted-foreground text-sm inline-block">{currentArticle.date}</span>
-            <span className="text-muted-foreground mx-2 text-sm inline-block">•</span>
-            <a 
-              href={`/articles/${currentArticle.category.toLowerCase()}`} 
-              className="text-primary font-medium text-sm inline-block"
-            >
-              {currentArticle.category}
-            </a>
-          </div>
-          
-          <p className="text-lg text-muted-foreground mb-6">{currentArticle.excerpt}</p>
-          
-          {currentArticle.image && currentArticle.image.trim() !== '' && (
-            <div className="mb-6 overflow-hidden rounded-lg">
-              <AspectRatio ratio={16 / 9}>
-                <OptimizedImage
-                  src={currentArticle.image}
-                  alt={currentArticle.title}
-                  className="w-full h-full object-cover object-top"
-                  caption={currentArticle.imageCaption || ''}
-                />
-              </AspectRatio>
+          {loading ? (
+            <div className="flex justify-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
             </div>
-          )}
-          
-          <article className="prose prose-slate max-w-none [&_a]:text-[#0EA5E9] [&_a]:no-underline hover:[&_a]:text-[#0EA5E9]/80">
-            <div dangerouslySetInnerHTML={{ __html: currentArticle.content }} />
-          </article>
-          
-          {currentArticle.tags && currentArticle.tags.length > 0 && (
-            <div className="mt-4 pt-2 border-t">
-              <div className="flex flex-wrap gap-2">
-                {currentArticle.tags.map(tag => (
-                  <a
-                    key={tag}
-                    href={`/tag/${tag.toLowerCase()}`}
-                    className="bg-secondary px-3 py-1 rounded-full text-sm hover:bg-secondary/80 transition-colors"
-                  >
-                    {tag}
-                  </a>
-                ))}
+          ) : !currentArticle ? (
+            <div className="text-center">
+              <h1 className="text-3xl font-bold mb-4">Article Not Found</h1>
+              <p className="mb-6">The article you're looking for doesn't exist or has not been published in Sanity.</p>
+              <Button onClick={handleGoBack}>
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Go Back
+              </Button>
+            </div>
+          ) : (
+            <>
+              <div className="mb-4 block">
+                <span className="text-muted-foreground text-sm inline-block">{currentArticle.date}</span>
+                <span className="text-muted-foreground mx-2 text-sm inline-block">•</span>
+                <a 
+                  href={`/articles/${currentArticle.category.toLowerCase()}`} 
+                  className="text-primary font-medium text-sm inline-block"
+                >
+                  {currentArticle.category}
+                </a>
               </div>
-            </div>
+              
+              <p className="text-lg text-muted-foreground mb-6">{currentArticle.excerpt}</p>
+              
+              {currentArticle.image && currentArticle.image.trim() !== '' && (
+                <div className="mb-6 overflow-hidden rounded-lg">
+                  <AspectRatio ratio={16 / 9}>
+                    <OptimizedImage
+                      src={currentArticle.image}
+                      alt={currentArticle.title}
+                      className="w-full h-full object-cover object-top"
+                      caption={currentArticle.imageCaption || ''}
+                    />
+                  </AspectRatio>
+                </div>
+              )}
+              
+              <article className="prose prose-slate max-w-none [&_a]:text-[#0EA5E9] [&_a]:no-underline hover:[&_a]:text-[#0EA5E9]/80">
+                <div dangerouslySetInnerHTML={{ __html: currentArticle.content }} />
+              </article>
+              
+              {currentArticle.tags && currentArticle.tags.length > 0 && (
+                <div className="mt-4 pt-2 border-t">
+                  <div className="flex flex-wrap gap-2">
+                    {currentArticle.tags.map(tag => (
+                      <a
+                        key={tag}
+                        href={`/tag/${tag.toLowerCase()}`}
+                        className="bg-secondary px-3 py-1 rounded-full text-sm hover:bg-secondary/80 transition-colors"
+                      >
+                        {tag}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              <ArticleComments 
+                articleId={currentArticle.id} 
+                comments={currentArticle.comments || []}
+                onCommentAdded={handleCommentAdded}
+              />
+            </>
           )}
-          
-          <ArticleComments 
-            articleId={currentArticle.id} 
-            comments={currentArticle.comments || []}
-            onCommentAdded={handleCommentAdded}
-          />
         </div>
       </main>
       
