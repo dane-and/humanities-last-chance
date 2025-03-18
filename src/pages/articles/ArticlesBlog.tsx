@@ -18,6 +18,15 @@ const ArticlesBlog: React.FC = () => {
       setLoading(true);
       console.log("Loading blog articles...");
       
+      // Return empty array when in Lovable preview
+      if (window.location.hostname === 'localhost' || 
+          window.location.hostname.includes('lovable')) {
+        console.log("Preview environment detected, returning empty article array");
+        setArticles([]);
+        setLoading(false);
+        return;
+      }
+      
       // Get articles from storage
       const storedArticles = getArticlesFromStorage();
       console.log("Loaded articles from storage:", storedArticles);

@@ -16,18 +16,18 @@ export const useBlogPosts = () => {
     setError(null);
     
     try {
-      // Get all articles from storage
-      const articles = getArticlesFromStorage();
-      console.log(`Retrieved ${articles.length} total articles from storage`);
-      
-      // Return an empty array to clear the preview
-      // This line will clear the posts in the preview
+      // Return an empty array when in the Lovable preview environment
       if (window.location.hostname === 'localhost' || 
           window.location.hostname.includes('lovable')) {
+        console.log("Preview environment detected, returning empty array");
         setBlogPosts([]);
         setIsLoading(false);
         return;
       }
+      
+      // Get all articles from storage
+      const articles = getArticlesFromStorage();
+      console.log(`Retrieved ${articles.length} total articles from storage`);
       
       if (!articles || articles.length === 0) {
         console.warn("No articles found in storage");
