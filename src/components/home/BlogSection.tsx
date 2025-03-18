@@ -39,7 +39,11 @@ const BlogSection: React.FC<BlogSectionProps> = ({
     console.log("Filtered blog articles:", blogArticles);
     
     if (blogArticles.length > 0) {
-      setBlogPosts(blogArticles);
+      // Sort by date, newest first
+      const sortedArticles = [...blogArticles].sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
+      setBlogPosts(sortedArticles);
     } else {
       console.warn("No blog articles found!");
       
@@ -50,7 +54,11 @@ const BlogSection: React.FC<BlogSectionProps> = ({
       
       if (caseInsensitiveBlogArticles.length > 0) {
         console.log("Found articles with case-insensitive 'blog' category:", caseInsensitiveBlogArticles);
-        setBlogPosts(caseInsensitiveBlogArticles);
+        // Sort by date, newest first
+        const sortedArticles = [...caseInsensitiveBlogArticles].sort(
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+        );
+        setBlogPosts(sortedArticles);
       } else {
         setBlogPosts([]);
       }
@@ -150,6 +158,20 @@ const BlogSection: React.FC<BlogSectionProps> = ({
                 </>
               )}
             </div>
+            
+            {/* Add article image if available */}
+            {post.image && post.image.trim() !== '' && (
+              <div className="mb-4">
+                <OptimizedImage
+                  src={post.image}
+                  alt={post.title}
+                  className="w-full rounded-md"
+                  caption={post.imageCaption}
+                  width={1200}
+                  height={800}
+                />
+              </div>
+            )}
             
             <div 
               className="text-muted-foreground"

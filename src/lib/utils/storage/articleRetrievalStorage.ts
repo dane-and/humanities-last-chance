@@ -8,7 +8,13 @@ import { STORAGE_KEY, DRAFTS_KEY, SCHEDULED_KEY, getFromLocalStorage } from './a
 export const getArticlesFromStorage = (): Article[] => {
   const articles = getFromLocalStorage<Article[]>(STORAGE_KEY, defaultArticles);
   console.log(`Retrieved ${articles.length} articles from storage`);
-  return articles;
+  
+  // Sort articles by date (newest first)
+  const sortedArticles = [...articles].sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  );
+  
+  return sortedArticles;
 };
 
 /**
@@ -17,14 +23,27 @@ export const getArticlesFromStorage = (): Article[] => {
 export const getDraftsFromStorage = (): Article[] => {
   const drafts = getFromLocalStorage<Article[]>(DRAFTS_KEY, []);
   console.log(`Retrieved ${drafts.length} drafts from storage`);
-  return drafts;
+  
+  // Sort drafts by lastUpdated or date (newest first)
+  return [...drafts].sort((a, b) => {
+    const dateA = a.lastUpdated ? new Date(a.lastUpdated) : new Date(a.date);
+    const dateB = b.lastUpdated ? new Date(b.lastUpdated) : new Date(b.date);
+    return dateB.getTime() - dateA.getTime();
+  });
 };
 
 /**
  * Gets scheduled articles from local storage
  */
 export const getScheduledFromStorage = (): Article[] => {
-  return getFromLocalStorage<Article[]>(SCHEDULED_KEY, []);
+  const scheduled = getFromLocalStorage<Article[]>(SCHEDULED_KEY, []);
+  
+  // Sort by scheduledDate (soonest first)
+  return [...scheduled].sort((a, b) => {
+    const dateA = a.scheduledDate ? new Date(a.scheduledDate) : new Date();
+    const dateB = b.scheduledDate ? new Date(b.scheduledDate) : new Date();
+    return dateA.getTime() - dateB.getTime();
+  });
 };
 
 /**
