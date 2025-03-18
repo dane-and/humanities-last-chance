@@ -5,6 +5,8 @@ import { MessageCircle } from 'lucide-react';
 import TagList from '@/components/TagList';
 import OptimizedImage from '@/components/OptimizedImage';
 import { Article } from '@/lib/types/article';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { cn } from '@/lib/utils';
 
 interface BlogArticleCardProps {
   post: Article;
@@ -14,7 +16,7 @@ interface BlogArticleCardProps {
 const BlogArticleCard: React.FC<BlogArticleCardProps> = ({ post, index }) => {
   return (
     <article 
-      className="prose prose-lg max-w-none fade-up"
+      className="prose prose-lg max-w-none fade-up bg-background rounded-lg transition-all duration-300 hover:shadow-md"
       style={{ animationDelay: `${index * 0.1}s` }}
     >
       <h2 className="font-serif text-xl md:text-2xl font-bold mb-2">
@@ -27,7 +29,7 @@ const BlogArticleCard: React.FC<BlogArticleCardProps> = ({ post, index }) => {
         </Link>
       </h2>
       
-      <div className="block text-sm text-muted-foreground mb-2">
+      <div className="flex flex-wrap items-center text-sm text-muted-foreground mb-4 gap-x-1 gap-y-2">
         <span className="inline-block">{post.date}</span>
         <span className="inline-block mx-1" aria-hidden="true">•</span>
         <Link 
@@ -51,30 +53,48 @@ const BlogArticleCard: React.FC<BlogArticleCardProps> = ({ post, index }) => {
         )}
       </div>
       
-      {/* Add article image if available */}
+      {/* Add article image if available with improved responsive handling */}
       {post.image && post.image.trim() !== '' && (
-        <div className="mb-4">
-          <OptimizedImage
-            src={post.image}
-            alt={post.title}
-            className="w-full rounded-md"
-            caption={post.imageCaption}
-            width={1200}
-            height={800}
-          />
+        <div className="mb-6 overflow-hidden rounded-md">
+          <AspectRatio ratio={16/9} className="bg-muted">
+            <Link to={`/article/${post.slug}`} className="block w-full h-full">
+              <OptimizedImage
+                src={post.image}
+                alt={post.title}
+                className={cn(
+                  "w-full h-full object-cover transition-transform duration-500",
+                  "hover:scale-105"
+                )}
+                caption={post.imageCaption}
+                width={1200}
+                height={675}
+                priority={index < 2} // Prioritize loading for first two articles
+              />
+            </Link>
+          </AspectRatio>
         </div>
       )}
       
       <div 
-        className="text-muted-foreground"
+        className="text-muted-foreground prose-p:text-base prose-p:md:text-lg prose-p:leading-relaxed"
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
       
       {post.tags && post.tags.length > 0 && (
-        <div className="mt-2">
+        <div className="mt-4">
           <TagList tags={post.tags} />
         </div>
       )}
+      
+      <div className="mt-4">
+        <Link 
+          to={`/article/${post.slug}`}
+          className="inline-block px-4 py-2 text-sm font-medium text-primary border border-primary/20 rounded-md hover:bg-primary/10 transition-colors"
+          aria-label={`Continue reading ${post.title}`}
+        >
+          Read more
+        </Link>
+      </div>
     </article>
   );
 };
