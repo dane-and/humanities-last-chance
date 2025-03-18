@@ -85,6 +85,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           className={`article-image ${className} ${imageLoaded || error ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
           onLoad={handleImageLoad}
           onError={handleImageError}
+          style={{ objectFit: 'contain', width: '100%', height: '100%' }}
         />
       </div>
       
