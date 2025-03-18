@@ -26,16 +26,23 @@ export const publishDraft = (id: string): boolean => {
     if (articleToPublish) {
       console.log(`Found draft to publish:`, articleToPublish);
       
+      // Get current date and time with 12-hour format
+      const now = new Date();
+      const formattedDateTime = now.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      });
+      
       // Convert draft to published article
       const publishedArticle: Article = {
         ...articleToPublish,
         isDraft: false,
         status: 'published',
-        date: new Date().toLocaleDateString('en-US', { 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
-        })
+        date: formattedDateTime
       };
       
       // Add to published articles
@@ -110,17 +117,24 @@ export const publishDirectly = (article: Article): boolean => {
     // Get current articles
     const articles = getArticlesFromStorage();
     
+    // Get current date and time with 12-hour format
+    const now = new Date();
+    const formattedDateTime = now.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
+    
     // Prepare the article for publishing
     const publishedArticle: Article = {
       ...article,
       id: article.id || crypto.randomUUID(),
       isDraft: false,
       status: 'published',
-      date: article.date || new Date().toLocaleDateString('en-US', { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-      }),
+      date: formattedDateTime,
       comments: article.comments || []
     };
     

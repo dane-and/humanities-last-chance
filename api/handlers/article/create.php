@@ -31,9 +31,9 @@ function createArticle() {
         $data['slug'] = strtolower(preg_replace('/[^a-z0-9]+/', '-', $data['title']));
     }
     
-    // Set default date if not provided
+    // Set default date with time if not provided
     if (empty($data['date'])) {
-        $data['date'] = date('F j, Y');
+        $data['date'] = date('F j, Y \a\t g:i A');
     }
     
     // Set empty author if not provided

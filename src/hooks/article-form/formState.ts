@@ -2,16 +2,21 @@
 import { useState, useEffect } from 'react';
 import { Article } from '../../lib/types/article';
 import { ArticleFormProps } from './types';
-import { generateSlugFromTitle } from './utils/slugUtils';
+import { generateSlug, generateSlugFromTitle } from './utils/slugUtils';
 
 /**
  * Default state for a new article form
  */
 export const defaultFormState = (): Article => {
-  const today = new Date().toLocaleDateString('en-US', {
+  // Get the current date and time with 12-hour format
+  const now = new Date();
+  const formattedDateTime = now.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
   });
   
   return {
@@ -19,7 +24,7 @@ export const defaultFormState = (): Article => {
     title: '',
     slug: '',
     author: '',
-    date: today,
+    date: formattedDateTime,
     category: 'Blog',
     image: '',
     excerpt: '',

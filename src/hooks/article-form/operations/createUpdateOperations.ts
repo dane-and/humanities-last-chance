@@ -29,6 +29,24 @@ export const handleArticleCreateOrUpdate = async (
   // Make a deep copy of the formData to avoid reference issues
   const articleToSave = JSON.parse(JSON.stringify(formData));
   
+  // For new articles, ensure we have current timestamp if not provided
+  if (!selectedArticle) {
+    const now = new Date();
+    const formattedDateTime = now.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
+    
+    // Only update if date doesn't already have time component
+    if (!articleToSave.date.includes('at')) {
+      articleToSave.date = formattedDateTime;
+    }
+  }
+  
   // Prepare updated article with selected tags
   const articleWithTags = {
     ...articleToSave,
