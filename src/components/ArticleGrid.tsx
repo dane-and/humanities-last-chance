@@ -40,6 +40,7 @@ const ArticleGrid: React.FC<ArticleGridProps> = ({
           date={article.date}
           image={article.image || ""}
           slug={article.slug}
+          commentCount={article.comments?.length || 0}
           variant={variant}
         />
       ))}

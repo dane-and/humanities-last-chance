@@ -1,99 +1,48 @@
 
-import React, { useState } from 'react';
-import { ThumbsUp, ThumbsDown } from 'lucide-react';
+import React from 'react';
 import { Comment } from '@/lib/types/article';
-import { 
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { formatDistanceToNow } from 'date-fns';
+import { ThumbsUp, ThumbsDown } from 'lucide-react';
 
 interface CommentItemProps {
   comment: Comment;
-  onVote: (commentId: string, voteType: 'like' | 'dislike') => void;
+  onVote?: (commentId: string, voteType: 'like' | 'dislike') => void;
 }
 
 const CommentItem: React.FC<CommentItemProps> = ({ comment, onVote }) => {
-  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  const [voteType, setVoteType] = useState<'like' | 'dislike'>('like');
-  const [isVoting, setIsVoting] = useState(false);
-
-  const handleVoteClick = (type: 'like' | 'dislike') => {
-    setVoteType(type);
-    setShowConfirmDialog(true);
-  };
-
-  const confirmVote = () => {
-    setIsVoting(true);
-    onVote(comment.id, voteType);
-    
-    // Reset state after short delay to show visual feedback
-    setTimeout(() => {
-      setIsVoting(false);
-      setShowConfirmDialog(false);
-    }, 300);
-  };
+  // Format the date as a relative time (e.g., "2 days ago")
+  const formattedDate = comment.date ? 
+    formatDistanceToNow(new Date(comment.date), { addSuffix: true }) : 
+    'just now';
 
   return (
-    <>
-      <div className="bg-secondary/20 rounded-lg p-4">
-        <div className="flex justify-between items-start">
-          <div>
-            <h3 className="font-medium">{comment.name}</h3>
-            <p className="text-sm text-muted-foreground">{comment.date}</p>
-          </div>
+    <div className="py-4 border-b border-border last:border-0">
+      <div className="flex justify-between items-start mb-2">
+        <div>
+          <h3 className="font-medium">{comment.name}</h3>
+          <p className="text-xs text-muted-foreground">{formattedDate}</p>
+        </div>
+        {onVote && (
           <div className="flex items-center space-x-2">
             <button 
-              className={`flex items-center text-sm transition-colors ${
-                voteType === 'like' && isVoting ? 'text-primary font-medium' : 'hover:text-primary'
-              }`}
-              onClick={() => handleVoteClick('like')}
-              disabled={isVoting}
+              className="flex items-center text-sm transition-colors hover:text-primary"
+              onClick={() => onVote(comment.id, 'like')}
             >
-              <ThumbsUp className={`h-4 w-4 mr-1 ${
-                voteType === 'like' && isVoting ? 'animate-pulse' : ''
-              }`} />
+              <ThumbsUp className="h-4 w-4 mr-1" />
               <span>{comment.likes}</span>
             </button>
             <button 
-              className={`flex items-center text-sm transition-colors ${
-                voteType === 'dislike' && isVoting ? 'text-destructive font-medium' : 'hover:text-destructive'
-              }`}
-              onClick={() => handleVoteClick('dislike')}
-              disabled={isVoting}
+              className="flex items-center text-sm transition-colors hover:text-destructive"
+              onClick={() => onVote(comment.id, 'dislike')}
             >
-              <ThumbsDown className={`h-4 w-4 mr-1 ${
-                voteType === 'dislike' && isVoting ? 'animate-pulse' : ''
-              }`} />
+              <ThumbsDown className="h-4 w-4 mr-1" />
               <span>{comment.dislikes}</span>
             </button>
           </div>
-        </div>
-        <p className="mt-2">{comment.content}</p>
+        )}
       </div>
-
-      <AlertDialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Confirm Your Vote</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to {voteType} this comment from {comment.name}?
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmVote}>
-              Confirm {voteType}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </>
+      <p className="text-sm leading-relaxed whitespace-pre-line">{comment.content}</p>
+    </div>
   );
 };
 

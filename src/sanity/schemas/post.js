@@ -96,11 +96,28 @@ export default {
         {
           type: 'object',
           fields: [
+            { name: 'id', type: 'string', title: 'ID' },
             { name: 'name', type: 'string', title: 'Name' },
-            { name: 'email', type: 'string', title: 'Email' },
-            { name: 'comment', type: 'text', title: 'Comment' },
-            { name: 'createdAt', type: 'datetime', title: 'Created At' }
-          ]
+            { name: 'content', type: 'text', title: 'Comment' },
+            { name: 'date', type: 'datetime', title: 'Posted At' },
+            { name: 'likes', type: 'number', title: 'Likes', initialValue: 0 },
+            { name: 'dislikes', type: 'number', title: 'Dislikes', initialValue: 0 }
+          ],
+          preview: {
+            select: {
+              name: 'name',
+              content: 'content',
+              date: 'date'
+            },
+            prepare(selection) {
+              const { name, content, date } = selection;
+              return {
+                title: name || 'Anonymous',
+                subtitle: content ? (content.length > 50 ? content.substring(0, 50) + '...' : content) : '',
+                description: date ? new Date(date).toLocaleString() : ''
+              };
+            }
+          }
         }
       ]
     }
@@ -109,13 +126,15 @@ export default {
     select: {
       title: 'title',
       category: 'category',
-      media: 'mainImage'
+      media: 'mainImage',
+      commentCount: 'comments'
     },
     prepare(selection) {
-      const { title, category, media } = selection;
+      const { title, category, media, commentCount } = selection;
+      const commentsCount = commentCount ? commentCount.length : 0;
       return {
         title,
-        subtitle: category || 'No category',
+        subtitle: `${category || 'No category'} • ${commentsCount} ${commentsCount === 1 ? 'comment' : 'comments'}`,
         media
       };
     }

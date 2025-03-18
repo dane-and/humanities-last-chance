@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, MessageCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import OptimizedImage from '@/components/OptimizedImage';
@@ -14,6 +14,7 @@ interface FeaturedArticleProps {
   date: string;
   image: string;
   slug: string;
+  commentCount?: number;
   layout?: 'horizontal' | 'vertical';
   className?: string;
 }
@@ -26,6 +27,7 @@ const FeaturedArticle: React.FC<FeaturedArticleProps> = React.memo(({
   date,
   image,
   slug,
+  commentCount = 0,
   layout = 'horizontal',
   className,
 }) => {
@@ -66,12 +68,22 @@ const FeaturedArticle: React.FC<FeaturedArticleProps> = React.memo(({
       <div className="flex flex-col justify-center p-4">
         <div className="flex items-center gap-x-4 mb-2">
           <Link
-            to={`/articles/${category.toLowerCase()}`}
+            to={`/articles/${category}`}
             className="text-xs font-medium uppercase tracking-wider text-primary"
           >
             {category}
           </Link>
           <span className="text-xs text-muted-foreground">{date}</span>
+          
+          {commentCount > 0 && (
+            <Link
+              to={`/article/${slug}#comments`}
+              className="text-xs flex items-center text-muted-foreground hover:text-primary"
+            >
+              <MessageCircle className="h-3 w-3 mr-1" />
+              {commentCount}
+            </Link>
+          )}
         </div>
         
         <h2 className="font-serif text-2xl font-medium mb-2 transition-colors group-hover:text-primary/80">

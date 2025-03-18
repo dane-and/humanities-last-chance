@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Clock } from 'lucide-react';
+import { Clock, MessageCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import OptimizedImage from '@/components/OptimizedImage';
@@ -14,6 +14,7 @@ interface ArticleCardProps {
   date: string;
   image: string;
   slug: string;
+  commentCount?: number;
   variant?: 'default' | 'compact';
   className?: string;
 }
@@ -26,6 +27,7 @@ const ArticleCard: React.FC<ArticleCardProps> = React.memo(({
   date,
   image,
   slug,
+  commentCount = 0,
   variant = 'default',
   className,
 }) => {
@@ -50,7 +52,7 @@ const ArticleCard: React.FC<ArticleCardProps> = React.memo(({
         
         <div className="flex items-center gap-x-3 mb-1">
           <Link
-            to={`/articles/${category.toLowerCase()}`}
+            to={`/articles/${category}`}
             className={cn(
               "text-xs font-medium uppercase tracking-wider text-primary",
               isCompact && "text-[10px]"
@@ -65,6 +67,19 @@ const ArticleCard: React.FC<ArticleCardProps> = React.memo(({
             <Clock className="h-3 w-3 mr-1" />
             {date}
           </span>
+          
+          {commentCount > 0 && (
+            <Link
+              to={`/article/${slug}#comments`}
+              className={cn(
+                "text-xs text-muted-foreground flex items-center hover:text-primary",
+                isCompact && "text-[10px]"
+              )}
+            >
+              <MessageCircle className="h-3 w-3 mr-1" />
+              {commentCount}
+            </Link>
+          )}
         </div>
       </div>
       

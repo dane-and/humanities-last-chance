@@ -2,7 +2,8 @@
 import React from 'react';
 import { Comment } from '@/lib/types/article';
 import { CommentForm, CommentList } from '@/components/comment';
-import { handleCommentVote } from '@/utils/commentUtils';
+import { MessageCircle } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 interface ArticleCommentsProps {
   articleId: string;
@@ -15,13 +16,14 @@ const ArticleComments: React.FC<ArticleCommentsProps> = ({
   comments,
   onCommentAdded
 }) => {
-  const handleVote = (commentId: string, voteType: 'like' | 'dislike') => {
-    handleCommentVote(articleId, commentId, voteType, onCommentAdded);
-  };
-
   return (
-    <div className="mt-16 pt-8 border-t">
-      <h2 className="text-2xl font-bold mb-6">Comments</h2>
+    <div id="comments" className="mt-16 pt-8 border-t">
+      <div className="flex items-center gap-2 mb-6">
+        <MessageCircle className="h-5 w-5" />
+        <h2 className="text-2xl font-bold">Comments ({comments?.length || 0})</h2>
+      </div>
+      
+      <Separator className="mb-6" />
       
       <CommentForm 
         articleId={articleId} 
@@ -29,8 +31,7 @@ const ArticleComments: React.FC<ArticleCommentsProps> = ({
       />
       
       <CommentList 
-        comments={comments} 
-        onVote={handleVote} 
+        comments={comments || []} 
       />
     </div>
   );

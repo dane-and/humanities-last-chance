@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
+import { sanityClient } from '@/lib/sanity';
 
 interface CommentFormProps {
   articleId: string;
@@ -15,7 +16,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ articleId, onCommentSubmitted
   const [content, setContent] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!name.trim()) {
@@ -31,50 +32,40 @@ const CommentForm: React.FC<CommentFormProps> = ({ articleId, onCommentSubmitted
     setSubmitting(true);
     
     try {
-      // Add comment using localStorage
-      const savedArticles = localStorage.getItem('hlc-articles');
-      if (!savedArticles) {
-        throw new Error('Articles not found in storage');
-      }
-      
-      const articles = JSON.parse(savedArticles);
-      const articleIndex = articles.findIndex((article: any) => article.id === articleId);
-      
-      if (articleIndex === -1) {
-        throw new Error('Article not found');
-      }
-      
-      const article = articles[articleIndex];
-      
-      if (!article.comments) {
-        article.comments = [];
-      }
-      
-      // Create new comment
+      // Create a new comment object
       const newComment = {
         id: crypto.randomUUID(),
-        articleId,
         name: name.trim(),
         content: content.trim(),
-        date: new Date().toLocaleDateString('en-US', { 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
-        }),
+        date: new Date().toISOString(),
         likes: 0,
         dislikes: 0
       };
       
-      article.comments.push(newComment);
-      articles[articleIndex] = article;
+      // Fetch the current document to get its _id and _rev
+      const post = await sanityClient.fetch(
+        `*[_type == "post" && _id == $id][0]`,
+        { id: articleId }
+      );
       
-      // Save updated articles
-      localStorage.setItem('hlc-articles', JSON.stringify(articles));
+      if (!post) {
+        throw new Error('Article not found in Sanity');
+      }
+      
+      // Update the post with the new comment
+      const result = await sanityClient
+        .patch(articleId)
+        .setIfMissing({ comments: [] })
+        .append('comments', [newComment])
+        .commit();
       
       toast.success("Your comment has been added");
       
+      // Reset form fields
       setName('');
       setContent('');
+      
+      // Notify parent component to refresh comments
       onCommentSubmitted();
     } catch (error) {
       console.error('Error adding comment:', error);
@@ -96,6 +87,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ articleId, onCommentSubmitted
           onChange={(e) => setName(e.target.value)}
           placeholder="Enter your name"
           maxLength={50}
+          required
         />
       </div>
       
@@ -110,12 +102,13 @@ const CommentForm: React.FC<CommentFormProps> = ({ articleId, onCommentSubmitted
           placeholder="Share your thoughts..."
           rows={4}
           maxLength={1000}
+          required
         />
       </div>
       
       <div className="flex justify-end">
         <Button type="submit" disabled={submitting}>
-          {submitting ? 'Posting...' : 'Post Comment'}
+          {submitting ? 'Posting...' : 'Submit Comment'}
         </Button>
       </div>
     </form>
