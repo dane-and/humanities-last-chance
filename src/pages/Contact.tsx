@@ -4,7 +4,6 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import OptimizedImage from '@/components/OptimizedImage';
 import { useIsMobile } from '@/hooks/use-mobile';
-import ContactForm from '@/components/ContactForm';
 
 const Contact = () => {
   const isMobile = useIsMobile();
@@ -55,8 +54,6 @@ const Contact = () => {
                 <a href="https://twitter.com/humanitieslc" target="_blank" rel="noopener noreferrer">@humanitieslc</a>
               </p>
             </div>
-            
-            <ContactForm />
           </div>
         </section>
       </main>
