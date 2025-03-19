@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import ArticleGrid from '@/components/ArticleGrid';
-import { Article } from '@/lib/types/article';
+import { Article, defaultArticles } from '@/lib/types/article';
 import { fetchBlogPosts } from '@/lib/sanity';
 
 const ArticlesBlog: React.FC = () => {
@@ -21,33 +21,48 @@ const ArticlesBlog: React.FC = () => {
         // Get all posts and filter on the client side for "Blog" category
         const sanityPosts = await fetchBlogPosts();
         
-        // Convert Sanity posts to Article format and filter for Blog category
-        const blogArticles: Article[] = sanityPosts
-          .filter((post: any) => 
-            post.category?.toLowerCase() === 'blog'
-          )
-          .map((post: any) => ({
-            id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-            title: post.title || "Untitled Post",
-            slug: post.slug?.current || `post-${Date.now()}`,
-            date: post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            }) : new Date().toLocaleDateString(),
-            category: 'Blog', // Always use properly capitalized category
-            image: post.mainImage?.asset?.url || '',
-            imageCaption: post.mainImage?.caption || '',
-            excerpt: post.excerpt || '',
-            content: post.body || '',
-            featured: false,
-            tags: post.tags || [],
-          }));
-        
-        console.log("Formatted blog articles:", blogArticles);
-        setArticles(blogArticles);
+        // Check if we got any posts back
+        if (sanityPosts && sanityPosts.length > 0) {
+          // Convert Sanity posts to Article format and filter for Blog category
+          const blogArticles: Article[] = sanityPosts
+            .filter((post: any) => 
+              post.category?.toLowerCase() === 'blog'
+            )
+            .map((post: any) => ({
+              id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+              title: post.title || "Untitled Post",
+              slug: post.slug?.current || `post-${Date.now()}`,
+              date: post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              }) : new Date().toLocaleDateString(),
+              category: 'Blog', // Always use properly capitalized category
+              image: post.mainImage?.asset?.url || '',
+              imageCaption: post.mainImage?.caption || '',
+              excerpt: post.excerpt || '',
+              content: post.body || '',
+              featured: false,
+              tags: post.tags || [],
+            }));
+          
+          console.log("Formatted blog articles:", blogArticles);
+          setArticles(blogArticles);
+        } else {
+          // Use default articles if no posts from Sanity
+          console.log("No posts from Sanity, using default articles");
+          const defaultBlogArticles = defaultArticles.filter(article => 
+            article.category === 'Blog'
+          );
+          setArticles(defaultBlogArticles);
+        }
       } catch (error) {
         console.error("Error loading articles:", error);
+        // Use default articles on error
+        const defaultBlogArticles = defaultArticles.filter(article => 
+          article.category === 'Blog'
+        );
+        setArticles(defaultBlogArticles);
       } finally {
         setLoading(false);
       }

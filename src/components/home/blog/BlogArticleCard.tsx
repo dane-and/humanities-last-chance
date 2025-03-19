@@ -52,14 +52,12 @@ const BlogArticleCard: React.FC<BlogArticleCardProps> = ({
             </div>
           )}
           
-          {/* Add separator line and comments link unless it's the last item and we're showing full content */}
-          {(!isLastItem || !fullContent) && (
-            <BlogSeparator
-              showComments={true}
-              commentCount={commentCount}
-              articleSlug={post.slug}
-            />
-          )}
+          {/* Always show separator and comments link */}
+          <BlogSeparator
+            showComments={true}
+            commentCount={commentCount}
+            articleSlug={post.slug}
+          />
         </CardContent>
       </Card>
     </div>

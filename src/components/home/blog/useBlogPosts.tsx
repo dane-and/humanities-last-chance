@@ -1,6 +1,6 @@
 
 import { useState, useEffect, useCallback } from 'react';
-import { Article } from '@/lib/types/article';
+import { Article, defaultArticles } from '@/lib/types/article';
 import { toast } from 'sonner';
 import { fetchBlogPosts } from '@/lib/sanity';
 
@@ -62,12 +62,22 @@ export const useBlogPosts = () => {
       });
       
       console.log("Formatted posts with preserved categories:", formattedPosts);
-      setBlogPosts(formattedPosts);
+      
+      // If no posts are returned from Sanity, use the default articles
+      if (formattedPosts.length === 0) {
+        console.log("No posts returned from Sanity, using default articles");
+        setBlogPosts(defaultArticles);
+      } else {
+        setBlogPosts(formattedPosts);
+      }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error fetching blog posts';
       console.error('Error fetching blog posts:', errorMessage);
       setError(err instanceof Error ? err : new Error(errorMessage));
-      setBlogPosts([]);
+      
+      // Use default articles on error
+      console.log("Error fetching from Sanity, using default articles");
+      setBlogPosts(defaultArticles);
     } finally {
       setIsLoading(false);
     }
