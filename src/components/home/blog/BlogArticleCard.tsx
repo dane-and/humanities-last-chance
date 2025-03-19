@@ -22,6 +22,8 @@ const BlogArticleCard: React.FC<BlogArticleCardProps> = ({
   // Get the comment count
   const commentCount = post.comments?.length || 0;
   
+  console.log(`Rendering BlogArticleCard for post: ${post.title}, category: ${post.category}`);
+  
   return (
     <div className={`mb-8 ${index > 0 ? 'mt-8' : ''}`}>
       <Card className="border-none shadow-none">
@@ -52,7 +54,6 @@ const BlogArticleCard: React.FC<BlogArticleCardProps> = ({
             </div>
           )}
           
-          {/* Always show separator and comments link */}
           <BlogSeparator
             showComments={true}
             commentCount={commentCount}

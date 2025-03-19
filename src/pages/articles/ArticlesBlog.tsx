@@ -47,12 +47,22 @@ const ArticlesBlog: React.FC = () => {
             }));
           
           console.log("Formatted blog articles:", blogArticles);
-          setArticles(blogArticles);
+          
+          if (blogArticles.length > 0) {
+            setArticles(blogArticles);
+          } else {
+            // If no blog posts from Sanity, use default blog articles
+            console.log("No blog posts from Sanity, using default articles");
+            const defaultBlogArticles = defaultArticles.filter(article => 
+              article.category.toLowerCase() === 'blog'
+            );
+            setArticles(defaultBlogArticles);
+          }
         } else {
           // Use default articles if no posts from Sanity
           console.log("No posts from Sanity, using default articles");
           const defaultBlogArticles = defaultArticles.filter(article => 
-            article.category === 'Blog'
+            article.category.toLowerCase() === 'blog'
           );
           setArticles(defaultBlogArticles);
         }
@@ -60,7 +70,7 @@ const ArticlesBlog: React.FC = () => {
         console.error("Error loading articles:", error);
         // Use default articles on error
         const defaultBlogArticles = defaultArticles.filter(article => 
-          article.category === 'Blog'
+          article.category.toLowerCase() === 'blog'
         );
         setArticles(defaultBlogArticles);
       } finally {
