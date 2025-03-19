@@ -22,7 +22,7 @@ const Contact = () => {
               src="/lovable-uploads/f26a3192-be99-49a7-ba1e-de7b29518b47.png"
               alt="Scholar writing in manuscript"
               className="mx-auto rounded-md shadow-md"
-              caption="A medieval scholar at work"
+              caption="Anonymous, St. Mathew, c. 830"
             />
           </div>
         </div>
