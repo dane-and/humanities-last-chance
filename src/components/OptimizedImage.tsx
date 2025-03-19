@@ -84,7 +84,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       </div>
       
       {/* Caption - only show when image is loaded or there's an error */}
-      {caption && (imageLoaded || error) && (
+      {caption && caption.trim() !== '' && (imageLoaded || error) && (
         <figcaption className={`text-center text-sm text-muted-foreground mt-2 italic ${captionClassName}`}>
           {caption}
         </figcaption>

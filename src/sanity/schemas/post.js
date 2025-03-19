@@ -33,6 +33,14 @@ export default {
       options: {
         hotspot: true,
       },
+      fields: [
+        {
+          name: 'caption',
+          type: 'string',
+          title: 'Caption',
+          description: 'Add a caption to display below the image'
+        }
+      ]
     },
     {
       name: 'category',
@@ -71,6 +79,15 @@ export default {
               name: 'alt',
               title: 'Alternative text',
               description: 'Important for SEO and accessibility.',
+              options: {
+                isHighlighted: true
+              }
+            },
+            {
+              type: 'string',
+              name: 'caption',
+              title: 'Caption',
+              description: 'Image caption to display',
               options: {
                 isHighlighted: true
               }

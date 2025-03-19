@@ -33,7 +33,8 @@ export async function fetchBlogPosts() {
           asset->{
             _id,
             url
-          }
+          },
+          caption
         },
         body,
         publishedAt,
@@ -67,7 +68,8 @@ export async function fetchArticleBySlug(slug: string) {
         title,
         slug,
         mainImage{
-          asset->{url}
+          asset->{url},
+          caption
         },
         body,
         publishedAt,
@@ -103,7 +105,8 @@ export async function fetchArticlesByCategory(category: string) {
         title,
         slug,
         mainImage{
-          asset->{url}
+          asset->{url},
+          caption
         },
         body,
         publishedAt,

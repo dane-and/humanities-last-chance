@@ -32,7 +32,7 @@ const CaptionedImage: React.FC<CaptionedImageProps> = ({
         alt={alt}
         caption={caption}
         className={imageClassName}
-        captionClassName={captionClassName}
+        captionClassName={captionClassName || 'text-center text-sm text-muted-foreground mt-2 italic'}
         width={width}
         height={height}
       />
