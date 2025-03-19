@@ -8,7 +8,7 @@ interface ArticleContentProps {
 
 const ArticleContent: React.FC<ArticleContentProps> = ({ content }) => {
   return (
-    <article className="prose prose-slate max-w-none [&_a]:text-[#0EA5E9] [&_a]:no-underline hover:[&_a]:text-[#0EA5E9]/80">
+    <article className="prose prose-slate max-w-none [&_a]:text-primary [&_a]:no-underline hover:[&_a]:text-primary/80 [&_ol]:pl-5 [&_ul]:pl-5 [&_li]:mb-2">
       {typeof content === 'object' ? (
         <PortableText value={content} />
       ) : (

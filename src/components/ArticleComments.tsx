@@ -17,7 +17,7 @@ const ArticleComments: React.FC<ArticleCommentsProps> = ({
   onCommentAdded
 }) => {
   return (
-    <div id="comments" className="mt-8 pt-8 border-t">
+    <div id="comments" className="mt-12 pt-8 border-t">
       <div className="flex items-center gap-2 mb-6">
         <MessageCircle className="h-5 w-5" />
         <h2 className="text-2xl font-bold">Comments ({comments?.length || 0})</h2>

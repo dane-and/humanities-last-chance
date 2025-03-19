@@ -11,9 +11,6 @@ interface ArticleHeaderProps {
 }
 
 const ArticleHeader: React.FC<ArticleHeaderProps> = ({ article, onGoBack }) => {
-  // Debug the category value
-  console.log(`ArticleHeader: Article "${article.title}" has category "${article.category}"`);
-  
   return (
     <>
       <div className="flex items-center mb-6 gap-4">
@@ -34,7 +31,7 @@ const ArticleHeader: React.FC<ArticleHeaderProps> = ({ article, onGoBack }) => {
         <span className="text-muted-foreground mx-2 text-sm inline-block">•</span>
         <Link 
           to={`/articles/${article.category}`} 
-          className="text-primary font-medium text-sm inline-block"
+          className="text-primary font-medium text-sm inline-block capitalize"
         >
           {article.category}
         </Link>
