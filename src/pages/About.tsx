@@ -18,7 +18,7 @@ const About = () => {
               src="/lovable-uploads/579d21dc-2855-4f28-8b61-34b44b735095.png"
               alt="Venice cityscape painting by Turner"
               className="mx-auto rounded-md shadow-md"
-              caption="The Dogana and Santa Maria della Salute, Venice by J.M.W. Turner"
+              caption="J.M.W. Turner, The Dogana and Santa Maria della Salute, 1834"
             />
           </div>
         </div>
