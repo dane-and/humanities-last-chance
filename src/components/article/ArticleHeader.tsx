@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { Article } from '@/lib/types/article';
 import { Link } from 'react-router-dom';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ArticleHeaderProps {
   article: Article;
@@ -11,19 +12,21 @@ interface ArticleHeaderProps {
 }
 
 const ArticleHeader: React.FC<ArticleHeaderProps> = ({ article, onGoBack }) => {
+  const isMobile = useIsMobile();
+  
   return (
     <>
-      <div className="flex items-center mb-6 gap-4">
+      <div className={`${isMobile ? 'flex flex-col items-start' : 'flex items-center'} mb-6 gap-4`}>
         <Button 
           variant="ghost" 
           onClick={onGoBack}
-          className="flex items-center text-muted-foreground hover:text-foreground"
+          className="flex items-center text-muted-foreground hover:text-foreground self-start"
           size="sm"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Home
         </Button>
-        <h1 className="text-3xl font-serif font-bold">{article.title}</h1>
+        <h1 className={`text-3xl font-serif font-bold ${isMobile ? 'mt-4 w-full' : ''}`}>{article.title}</h1>
       </div>
       
       <div className="mb-4 block">

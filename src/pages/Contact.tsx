@@ -1,9 +1,14 @@
+
 import React from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import OptimizedImage from '@/components/OptimizedImage';
+import { useIsMobile } from '@/hooks/use-mobile';
+import ContactForm from '@/components/ContactForm';
 
 const Contact = () => {
+  const isMobile = useIsMobile();
+  
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
@@ -12,7 +17,7 @@ const Contact = () => {
       <main className="flex-grow pt-24 md:pt-28">
         {/* Centered Image Container - positioned above the content */}
         <div className="flex justify-center mx-auto max-w-3xl px-4 pb-6">
-          <div className="w-full">
+          <div className={`w-full ${isMobile ? 'px-4' : ''}`}>
             <OptimizedImage
               src="/lovable-uploads/f26a3192-be99-49a7-ba1e-de7b29518b47.png"
               alt="Scholar writing in manuscript"
@@ -50,6 +55,8 @@ const Contact = () => {
                 <a href="https://twitter.com/humanitieslc" target="_blank" rel="noopener noreferrer">@humanitieslc</a>
               </p>
             </div>
+            
+            <ContactForm />
           </div>
         </section>
       </main>

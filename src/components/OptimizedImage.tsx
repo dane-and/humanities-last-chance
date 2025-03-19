@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface OptimizedImageProps {
   src: string;
@@ -29,7 +29,6 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   
   const [imageLoaded, setImageLoaded] = useState(false);
   const [error, setError] = useState(false);
-  const imageContainerRef = useRef<HTMLDivElement>(null);
   
   // Use a static fallback image
   const fallbackImage = "/lovable-uploads/4a4437f6-55b6-4321-9e6f-5ca0a883ccd9.png";
@@ -39,14 +38,6 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
     setImageLoaded(false);
     setError(false);
   }, [src]);
-
-  // Set the background image for the blur effect
-  useEffect(() => {
-    if (imageContainerRef.current) {
-      const imageSrc = error ? fallbackImage : src;
-      imageContainerRef.current.style.setProperty('--bg-image', `url(${imageSrc})`);
-    }
-  }, [src, error, fallbackImage]);
 
   const handleImageError = () => {
     console.error(`Error loading image: ${src}`);
@@ -62,7 +53,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       {/* Loading placeholder - only show when not loaded and no error */}
       {!imageLoaded && !error && (
         <div 
-          className={`${className} animate-pulse`} 
+          className={`${className} animate-pulse bg-gray-100`} 
           style={{ 
             aspectRatio: `${width}/${height}`,
             width: '100%',
@@ -75,11 +66,10 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
         </div>
       )}
       
-      {/* Image container with blurred background */}
+      {/* Image container with white background */}
       <div 
-        ref={imageContainerRef}
-        className="image-container"
-        style={{ aspectRatio: `${width}/${height}` }}
+        className="bg-white"
+        style={{ aspectRatio: imageLoaded ? 'auto' : `${width}/${height}` }}
       >
         <img
           src={error ? fallbackImage : src}
@@ -87,7 +77,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           width={width}
           height={height}
           loading={priority ? "eager" : "lazy"}
-          className={`image-main ${imageLoaded || error ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ${className}`}
+          className={`w-auto mx-auto max-w-full ${imageLoaded || error ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ${className}`}
           onLoad={handleImageLoad}
           onError={handleImageError}
         />

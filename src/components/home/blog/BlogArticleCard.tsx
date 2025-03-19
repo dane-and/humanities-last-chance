@@ -6,7 +6,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import ArticleContent from '@/components/article/ArticleContent';
 import BlogSeparator from './BlogSeparator';
 import OptimizedImage from '@/components/OptimizedImage';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 interface BlogArticleCardProps {
   post: Article;
@@ -46,18 +45,16 @@ const BlogArticleCard: React.FC<BlogArticleCardProps> = ({
           {/* Display image if available */}
           {hasImage && (
             <div className="mb-6 overflow-hidden rounded-lg">
-              <AspectRatio ratio={16 / 9}>
-                <Link to={`/article/${post.slug}`}>
-                  <OptimizedImage
-                    src={post.image}
-                    alt={post.title}
-                    className="w-full h-full object-cover"
-                    width={1200}
-                    height={675}
-                    priority={index === 0}
-                  />
-                </Link>
-              </AspectRatio>
+              <Link to={`/article/${post.slug}`}>
+                <OptimizedImage
+                  src={post.image}
+                  alt={post.title}
+                  className="w-auto max-w-full mx-auto"
+                  width={1200}
+                  height={675}
+                  priority={index === 0}
+                />
+              </Link>
             </div>
           )}
           
