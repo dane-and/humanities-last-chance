@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { 
   Book, BookOpen, Globe, Database, Library, Monitor, 
@@ -75,6 +76,12 @@ export const categoriesData: ResourceCategory[] = [
         url: 'https://podcasts.apple.com/us/podcast/the-rest-is-history/id1537788786',
         description: 'Engaging historical storytelling.',
         icon: React.createElement(History, { className: "h-5 w-5 text-primary" })
+      },
+      {
+        name: 'Approaching Shakespeare',
+        url: 'https://podcasts.apple.com/us/podcast/approaching-shakespeare/id399194760',
+        description: 'Emma Smith\'s lecture series on Shakespeare at Oxford University.',
+        icon: React.createElement(Mic, { className: "h-5 w-5 text-primary" })
       },
       {
         name: 'Conversations with Tyler',
