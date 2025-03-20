@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   Book, BookOpen, Globe, Database, Library, Monitor, 
@@ -28,12 +27,6 @@ export const categoriesData: ResourceCategory[] = [
         url: 'https://www.commonreader.co.uk/',
         description: 'Literary reviews and cultural commentary.',
         icon: React.createElement(BookOpen, { className: "h-5 w-5 text-primary" })
-      },
-      {
-        name: 'Marginal Revolution',
-        url: 'https://marginalrevolution.com/',
-        description: 'Economics blog with wide-ranging intellectual interests.',
-        icon: React.createElement(Globe, { className: "h-5 w-5 text-primary" })
       },
       {
         name: 'The Cosmos Institute',
