@@ -39,7 +39,6 @@ const About = () => {
                 <li>Showcase the work of humanities scholars to non-specialists</li>
                 <li>Demonstrate the practical and intellectual value of liberal arts education</li>
                 <li>Provide accessible entry points to various humanities disciplines</li>
-                <li>Offer viewpoint diversity that counters the ideological uniformity often found in academia</li>
               </ul>
               
               <h2 className="text-2xl font-bold mt-8 mb-4">What We Offer</h2>
