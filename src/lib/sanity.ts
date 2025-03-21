@@ -24,6 +24,7 @@ export async function fetchBlogPosts() {
   try {
     console.log("Fetching all blog posts from Sanity...");
     
+    // Explicitly order by publishedAt in descending order
     const posts = await sanityClient.fetch(`
       *[_type == "post"] | order(publishedAt desc) {
         _id,
@@ -49,6 +50,8 @@ export async function fetchBlogPosts() {
     // Verify category values in the raw data
     posts.forEach((post: any) => {
       console.log(`Raw post "${post.title}" has category:`, post.category);
+      // Also log the publishedAt date for debugging
+      console.log(`Raw post "${post.title}" has publishedAt:`, post.publishedAt);
     });
     
     return posts;

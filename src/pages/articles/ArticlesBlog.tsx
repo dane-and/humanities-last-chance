@@ -28,25 +28,37 @@ const ArticlesBlog: React.FC = () => {
             .filter((post: any) => 
               post.category?.toLowerCase() === 'blog'
             )
-            .map((post: any) => ({
-              id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-              title: post.title || "Untitled Post",
-              slug: post.slug?.current || `post-${Date.now()}`,
-              date: post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              }) : new Date().toLocaleDateString(),
-              category: 'Blog', // Always use properly capitalized category
-              image: post.mainImage?.asset?.url || '',
-              imageCaption: post.mainImage?.caption || '',
-              excerpt: post.excerpt || '',
-              content: post.body || '',
-              featured: false,
-              tags: post.tags || [],
-            }));
+            .map((post: any) => {
+              // Store the original publishedAt date for sorting
+              const publishedDate = post.publishedAt ? new Date(post.publishedAt) : new Date();
+              
+              return {
+                id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                title: post.title || "Untitled Post",
+                slug: post.slug?.current || `post-${Date.now()}`,
+                date: publishedDate.toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                }),
+                publishedAt: post.publishedAt || new Date().toISOString(),
+                category: 'Blog', // Always use properly capitalized category
+                image: post.mainImage?.asset?.url || '',
+                imageCaption: post.mainImage?.caption || '',
+                excerpt: post.excerpt || '',
+                content: post.body || '',
+                featured: false,
+                tags: post.tags || [],
+              };
+            })
+            // Explicitly sort by publishedAt (newest first)
+            .sort((a, b) => {
+              const dateA = new Date(a.publishedAt || a.date);
+              const dateB = new Date(b.publishedAt || b.date);
+              return dateB.getTime() - dateA.getTime();
+            });
           
-          console.log("Formatted blog articles:", blogArticles);
+          console.log("Formatted and sorted blog articles:", blogArticles);
           
           if (blogArticles.length > 0) {
             setArticles(blogArticles);
