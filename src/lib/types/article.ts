@@ -1,4 +1,3 @@
-
 export interface Comment {
   id: string;
   articleId: string;
@@ -36,6 +35,7 @@ export interface Article {
   lastModified?: string;
   status?: 'published' | 'draft' | 'scheduled';
   mediaAttachments?: string[];
+  publishedAt?: string; // Add this field for storing the original publication date
 }
 
 export const defaultArticles: Article[] = [
@@ -93,4 +93,3 @@ export const defaultArticles: Article[] = [
     comments: []
   }
 ];
-
