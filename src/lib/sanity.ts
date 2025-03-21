@@ -25,6 +25,7 @@ export async function fetchBlogPosts() {
     console.log("Fetching all blog posts from Sanity...");
     
     // Explicitly order by publishedAt in descending order
+    // Add a projection to ensure we get publishedAt as an ISO string
     const posts = await sanityClient.fetch(`
       *[_type == "post"] | order(publishedAt desc) {
         _id,
@@ -39,6 +40,8 @@ export async function fetchBlogPosts() {
         },
         body,
         publishedAt,
+        _createdAt,
+        _updatedAt,
         category,
         tags,
         excerpt
@@ -76,6 +79,8 @@ export async function fetchArticleBySlug(slug: string) {
         },
         body,
         publishedAt,
+        _createdAt,
+        _updatedAt,
         category,
         tags,
         excerpt,
@@ -86,6 +91,7 @@ export async function fetchArticleBySlug(slug: string) {
     if (post) {
       console.log(`Found post with slug "${slug}":`, post);
       console.log(`Post category:`, post.category);
+      console.log(`Post publishedAt:`, post.publishedAt);
     } else {
       console.log(`No post found with slug "${slug}"`);
     }
@@ -113,6 +119,8 @@ export async function fetchArticlesByCategory(category: string) {
         },
         body,
         publishedAt,
+        _createdAt,
+        _updatedAt,
         category,
         tags,
         excerpt
@@ -121,9 +129,9 @@ export async function fetchArticlesByCategory(category: string) {
     
     console.log(`Found ${posts.length} posts in category "${category}":`, posts);
     
-    // Verify category values
+    // Verify category values and publishedAt dates
     posts.forEach((post: any) => {
-      console.log(`Post "${post.title}" has category "${post.category}"`);
+      console.log(`Post "${post.title}" has category "${post.category}" and publishedAt "${post.publishedAt}"`);
     });
     
     return posts;

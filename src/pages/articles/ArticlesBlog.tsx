@@ -29,8 +29,12 @@ const ArticlesBlog: React.FC = () => {
               post.category?.toLowerCase() === 'blog'
             )
             .map((post: any) => {
-              // Store the original publishedAt date for sorting
-              const publishedDate = post.publishedAt ? new Date(post.publishedAt) : new Date();
+              // Always use the original publishedAt date from Sanity
+              const publishedDate = post.publishedAt 
+                ? new Date(post.publishedAt) 
+                : (post._createdAt ? new Date(post._createdAt) : new Date());
+              
+              console.log(`Blog post "${post.title}" using original date:`, publishedDate.toISOString());
               
               return {
                 id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -41,7 +45,7 @@ const ArticlesBlog: React.FC = () => {
                   month: 'long',
                   day: 'numeric'
                 }),
-                publishedAt: post.publishedAt || new Date().toISOString(),
+                publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
                 category: 'Blog', // Always use properly capitalized category
                 image: post.mainImage?.asset?.url || '',
                 imageCaption: post.mainImage?.caption || '',
@@ -51,14 +55,15 @@ const ArticlesBlog: React.FC = () => {
                 tags: post.tags || [],
               };
             })
-            // Explicitly sort by publishedAt (newest first)
+            // Explicitly sort by original publishedAt from Sanity (newest first)
             .sort((a, b) => {
-              const dateA = new Date(a.publishedAt || a.date);
-              const dateB = new Date(b.publishedAt || b.date);
+              const dateA = new Date(a.publishedAt || '');
+              const dateB = new Date(b.publishedAt || '');
               return dateB.getTime() - dateA.getTime();
             });
           
-          console.log("Formatted and sorted blog articles:", blogArticles);
+          console.log("Formatted and sorted blog articles by original dates:", 
+            blogArticles.map(a => ({ title: a.title, publishedAt: a.publishedAt })));
           
           if (blogArticles.length > 0) {
             setArticles(blogArticles);

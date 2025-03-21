@@ -19,8 +19,9 @@ export const useBlogPosts = () => {
       
       // Convert Sanity posts format to our Article type
       const formattedPosts: Article[] = posts.map((post: any) => {
-        // Additional logging to debug category values
+        // Additional logging to debug category values and dates
         console.log(`Post "${post.title}" has category:`, post.category);
+        console.log(`Post "${post.title}" has publishedAt:`, post.publishedAt);
         console.log(`Category type:`, typeof post.category);
         
         // Ensure we're preserving the exact category capitalization
@@ -42,8 +43,13 @@ export const useBlogPosts = () => {
           typedCategory = 'Blog'; // Default
         }
         
-        // Store the original publishedAt date for sorting
-        const publishedDate = post.publishedAt ? new Date(post.publishedAt) : new Date();
+        // Always use the original publishedAt date from Sanity
+        // This ensures we don't create new dates for old posts
+        const publishedDate = post.publishedAt 
+          ? new Date(post.publishedAt) 
+          : (post._createdAt ? new Date(post._createdAt) : new Date());
+        
+        console.log(`Post "${post.title}" using date:`, publishedDate.toISOString());
         
         return {
           id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -54,7 +60,7 @@ export const useBlogPosts = () => {
             month: 'long',
             day: 'numeric'
           }),
-          publishedAt: post.publishedAt || new Date().toISOString(),
+          publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
           category: typedCategory, // Use the correctly capitalized category
           image: post.mainImage?.asset?.url || '',
           imageCaption: post.mainImage?.caption || '',
@@ -65,7 +71,7 @@ export const useBlogPosts = () => {
         };
       });
       
-      console.log("Formatted posts with preserved categories:", formattedPosts);
+      console.log("Formatted posts with preserved categories and original dates:", formattedPosts);
       
       // If no posts are returned from Sanity, use the default articles
       if (formattedPosts.length === 0) {
@@ -73,13 +79,14 @@ export const useBlogPosts = () => {
         setBlogPosts(defaultArticles);
       } else {
         // Explicitly sort the posts by publishedAt date (newest first)
+        // but ensure we're using the original date from Sanity
         const sortedPosts = formattedPosts.sort((a, b) => {
-          const dateA = new Date(a.publishedAt || a.date);
-          const dateB = new Date(b.publishedAt || b.date);
+          const dateA = new Date(a.publishedAt || '');
+          const dateB = new Date(b.publishedAt || '');
           return dateB.getTime() - dateA.getTime();
         });
         
-        console.log("Posts sorted by date (newest first):", 
+        console.log("Posts sorted by original publishedAt date (newest first):", 
           sortedPosts.map(p => ({ 
             title: p.title, 
             date: p.date, 
