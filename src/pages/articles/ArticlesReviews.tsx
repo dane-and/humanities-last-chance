@@ -19,7 +19,7 @@ const ArticlesReviews: React.FC = () => {
       console.log("Loading review articles from Sanity...");
       
       try {
-        // Use "review" for the API call (switch to lowercase to match Sanity schema)
+        // Use "review" for the API call (lowercase to match Sanity schema)
         const sanityPosts = await fetchArticlesByCategory('review');
         console.log(`Found ${sanityPosts?.length || 0} review posts from Sanity`);
         

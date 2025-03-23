@@ -19,7 +19,7 @@ const ArticlesInterviews: React.FC = () => {
       console.log("Loading interview articles from Sanity...");
       
       try {
-        // Use "interview" for the API call (switch to lowercase to match Sanity schema)
+        // Use "interview" for the API call (lowercase to match Sanity schema)
         const sanityPosts = await fetchArticlesByCategory('interview');
         console.log(`Found ${sanityPosts?.length || 0} interview posts from Sanity`);
         

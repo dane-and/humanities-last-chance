@@ -25,8 +25,7 @@ export async function fetchBlogPosts() {
   try {
     console.log("Fetching all blog posts from Sanity...");
     
-    // Explicitly order by publishedAt in descending order
-    // Add a projection to ensure we get publishedAt as an ISO string
+    // Simple query to get all posts
     const posts = await sanityClient.fetch(`
       *[_type == "post"] | order(publishedAt desc) {
         _id,
@@ -60,9 +59,7 @@ export async function fetchBlogPosts() {
     if (posts && posts.length > 0) {
       posts.forEach((post: any) => {
         console.log(`Raw post "${post.title}" has category:`, post.category);
-        // Also log the publishedAt date for debugging
         console.log(`Raw post "${post.title}" has publishedAt:`, post.publishedAt);
-        // And log tags if any
         console.log(`Raw post "${post.title}" has tags:`, post.tags);
       });
     } else {
@@ -124,9 +121,10 @@ export async function fetchArticleBySlug(slug: string) {
 
 export async function fetchArticlesByCategory(category: string) {
   try {
-    console.log(`Fetching articles with category "${category}" - simplifying query for debugging`);
+    // Debug which category is being requested
+    console.log(`Fetching articles with category "${category}" from Sanity...`);
     
-    // Simplified query that doesn't filter by category at all - to see ALL posts
+    // First get ALL posts without filtering
     const posts = await sanityClient.fetch(`
       *[_type == "post"] | order(publishedAt desc) {
         _id,
@@ -146,36 +144,49 @@ export async function fetchArticlesByCategory(category: string) {
       }
     `)
     .catch(error => {
-      console.error(`Error in Sanity fetch:`, error);
+      console.error(`Error in Sanity fetch for category ${category}:`, error);
       toast.error("Failed to connect to Sanity CMS");
       return [];
     });
     
-    console.log(`Found ${posts ? posts.length : 0} total posts before filtering:`, posts);
+    // Log all posts to debug
+    console.log(`Found ${posts ? posts.length : 0} total posts from Sanity before filtering:`, posts);
     
-    // Log all posts to see what we're getting
+    // If we have posts, filter them client-side for the requested category
     if (posts && posts.length > 0) {
+      // Log all posts' categories for debugging
       posts.forEach((post: any) => {
-        console.log(`Post "${post.title}" has category "${post.category}" - matching requested "${category}"?`, 
-          post.category && post.category.toLowerCase() === category.toLowerCase());
+        console.log(`Post "${post.title}" has category "${post.category}"`);
       });
       
-      // Now filter on the client side to see what matches
-      const filteredPosts = posts.filter((post: any) => 
-        post.category && post.category.toLowerCase() === category.toLowerCase()
-      );
+      // Filter posts by category (case-insensitive)
+      const filteredPosts = posts.filter((post: any) => {
+        // Skip undefined categories
+        if (!post.category) {
+          console.log(`Post "${post.title}" has no category defined`);
+          return false;
+        }
+        
+        // Compare lowercase versions
+        const postCategory = post.category.toLowerCase();
+        const requestedCategory = category.toLowerCase();
+        const isMatch = postCategory === requestedCategory;
+        
+        console.log(`Post "${post.title}" category "${postCategory}" matches requested "${requestedCategory}"? ${isMatch}`);
+        
+        return isMatch;
+      });
       
-      console.log(`After filtering for category "${category}", found ${filteredPosts.length} posts:`, filteredPosts);
+      console.log(`After filtering for category "${category}", found ${filteredPosts.length} posts:`, 
+        filteredPosts.map(p => p.title));
       
-      // Return filtered posts for now
       return filteredPosts;
-    } else {
-      console.log(`No posts found at all`);
     }
     
-    return posts || [];
+    console.log(`No posts found at all from Sanity`);
+    return [];
   } catch (error) {
-    console.error(`Error fetching articles:`, error);
+    console.error(`Error fetching articles by category:`, error);
     return [];
   }
 }
