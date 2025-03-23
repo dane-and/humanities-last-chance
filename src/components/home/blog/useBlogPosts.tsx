@@ -3,41 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Article, defaultArticles } from '@/lib/types/article';
 import { toast } from 'sonner';
 import { fetchBlogPosts } from '@/lib/sanity';
-
-/**
- * Safely extracts a category string from various possible formats
- */
-const getCategoryString = (rawCategory: any): string => {
-  // If null or undefined, return default
-  if (rawCategory === null || rawCategory === undefined) {
-    return '';
-  }
-  
-  // If it's already a string
-  if (typeof rawCategory === 'string') {
-    return rawCategory;
-  }
-  
-  // If it's an array, take the first string element
-  if (Array.isArray(rawCategory) && rawCategory.length > 0) {
-    if (typeof rawCategory[0] === 'string') {
-      return rawCategory[0];
-    }
-  }
-  
-  // If it's an object with a name or title property
-  if (rawCategory && typeof rawCategory === 'object') {
-    if (typeof rawCategory.name === 'string') {
-      return rawCategory.name;
-    }
-    if (typeof rawCategory.title === 'string') {
-      return rawCategory.title;
-    }
-  }
-  
-  // Default fallback
-  return '';
-};
+import { getSafeCategoryString, getNormalizedCategory } from '@/lib/utils/categoryUtils';
 
 export const useBlogPosts = () => {
   const [blogPosts, setBlogPosts] = useState<Article[]>([]);
@@ -57,7 +23,7 @@ export const useBlogPosts = () => {
         // Only include posts that are categorized as 'Blog' (case-insensitive)
         .filter((post: any) => {
           // Safely extract category string
-          const categoryStr = getCategoryString(post.category);
+          const categoryStr = getSafeCategoryString(post.category);
           
           // If we couldn't extract a category, log and skip this post
           if (!categoryStr) {
@@ -83,6 +49,9 @@ export const useBlogPosts = () => {
           
           console.log(`Post "${post.title}" using date:`, publishedDate.toISOString());
           
+          // Use our utility function to get a normalized category value
+          const normalizedCategory = getNormalizedCategory(post.category);
+          
           return {
             id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
             title: post.title || "Untitled Post",
@@ -93,7 +62,7 @@ export const useBlogPosts = () => {
               day: 'numeric'
             }),
             publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
-            category: 'Blog', // Use the correctly capitalized category
+            category: normalizedCategory, // Use the normalized category
             image: post.mainImage?.asset?.url || '',
             imageCaption: post.mainImage?.caption || '',
             excerpt: post.excerpt || '',

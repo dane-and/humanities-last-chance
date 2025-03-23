@@ -4,6 +4,7 @@ import imageUrlBuilder from '@sanity/image-url';
 import { PortableText as SanityPortableText } from '@portabletext/react';
 import { toast } from 'sonner';
 import { CMS_CONFIG } from './config';
+import { getSafeCategoryString } from './utils/categoryUtils';
 
 // Get Sanity configuration from environment variables or fallback to config
 const projectId = CMS_CONFIG.SANITY.PROJECT_ID || 'nzyg33ca';
@@ -37,30 +38,6 @@ export function urlFor(source: any) {
 
 // Create a reusable PortableText component
 export const PortableText = SanityPortableText;
-
-// Safely get category string - utility function to avoid repetition
-function getSafeCategoryString(category: any): string {
-  if (typeof category === 'string') {
-    return category;
-  }
-  
-  if (Array.isArray(category) && category.length > 0) {
-    if (typeof category[0] === 'string') {
-      return category[0];
-    }
-  }
-  
-  if (category && typeof category === 'object') {
-    if (typeof category.name === 'string') {
-      return category.name;
-    }
-    if (typeof category.title === 'string') {
-      return category.title;
-    }
-  }
-  
-  return ''; // Empty string if we can't extract a category
-}
 
 export async function fetchBlogPosts() {
   try {

@@ -14,6 +14,7 @@ import ArticleContent from '@/components/article/ArticleContent';
 import ArticleTags from '@/components/article/ArticleTags';
 import { MessageCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { getNormalizedCategory } from '@/lib/utils/categoryUtils';
 
 const ArticlePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -21,6 +22,7 @@ const ArticlePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [currentArticle, setCurrentArticle] = useState<Article | null>(null);
   const [refreshCounter, setRefreshCounter] = useState(0);
+  const [rawCategoryValue, setRawCategoryValue] = useState<any>(null);
 
   useEffect(() => {
     const loadArticle = async () => {
@@ -34,6 +36,9 @@ const ArticlePage: React.FC = () => {
         console.log("Fetched article from Sanity:", sanityPost);
         
         if (sanityPost) {
+          // Store raw category value for debugging
+          setRawCategoryValue(sanityPost.category);
+          
           // Debug category type and value - log extensively to catch the issue
           console.log(`Article category from Sanity:`, {
             type: typeof sanityPost.category,
@@ -43,65 +48,11 @@ const ArticlePage: React.FC = () => {
             isUndefined: sanityPost.category === undefined
           });
           
-          // Apply type checking for category - handle all possible formats
-          let categoryValue: Article['category'] = 'Blog'; // Default fallback
-          
-          if (typeof sanityPost.category === 'string') {
-            // Direct string assignment - normalize to our expected values
-            const catLower = sanityPost.category.toLowerCase();
-            if (catLower === 'blog' || catLower === 'blogs') {
-              categoryValue = 'Blog';
-            } else if (catLower === 'interview' || catLower === 'interviews') {
-              categoryValue = 'Interview';
-            } else if (catLower === 'review' || catLower === 'reviews') {
-              categoryValue = 'Review';
-            } else if (catLower === 'resource' || catLower === 'resources') {
-              categoryValue = 'Resource';
-            }
-          } else if (Array.isArray(sanityPost.category) && sanityPost.category.length > 0) {
-            // Handle array format
-            if (typeof sanityPost.category[0] === 'string') {
-              const catLower = sanityPost.category[0].toLowerCase();
-              if (catLower === 'blog' || catLower === 'blogs') {
-                categoryValue = 'Blog';
-              } else if (catLower === 'interview' || catLower === 'interviews') {
-                categoryValue = 'Interview';
-              } else if (catLower === 'review' || catLower === 'reviews') {
-                categoryValue = 'Review';
-              } else if (catLower === 'resource' || catLower === 'resources') {
-                categoryValue = 'Resource';
-              }
-            }
-          } else if (sanityPost.category && typeof sanityPost.category === 'object') {
-            // Handle object format with potential name or title property
-            const objCat = sanityPost.category;
-            if (typeof objCat.name === 'string') {
-              const catLower = objCat.name.toLowerCase();
-              if (catLower === 'blog' || catLower === 'blogs') {
-                categoryValue = 'Blog';
-              } else if (catLower === 'interview' || catLower === 'interviews') {
-                categoryValue = 'Interview';
-              } else if (catLower === 'review' || catLower === 'reviews') {
-                categoryValue = 'Review';
-              } else if (catLower === 'resource' || catLower === 'resources') {
-                categoryValue = 'Resource';
-              }
-            } else if (typeof objCat.title === 'string') {
-              const catLower = objCat.title.toLowerCase();
-              if (catLower === 'blog' || catLower === 'blogs') {
-                categoryValue = 'Blog';
-              } else if (catLower === 'interview' || catLower === 'interviews') {
-                categoryValue = 'Interview';
-              } else if (catLower === 'review' || catLower === 'reviews') {
-                categoryValue = 'Review';
-              } else if (catLower === 'resource' || catLower === 'resources') {
-                categoryValue = 'Resource';
-              }
-            }
-          }
+          // Get normalized category using utility function
+          const categoryValue = getNormalizedCategory(sanityPost.category);
           
           // Log the final determined category value
-          console.log("Using safe category value:", categoryValue);
+          console.log("Using normalized category value:", categoryValue);
           
           // Debug the tags
           console.log(`Article tags from Sanity:`, sanityPost.tags);
@@ -167,6 +118,16 @@ const ArticlePage: React.FC = () => {
       
       <main className="flex-grow pt-24 pb-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Debug info */}
+          {process.env.NODE_ENV !== 'production' && (
+            <div className="mb-6 p-4 bg-gray-100 rounded text-xs">
+              <h3 className="font-bold mb-2">Debug Info:</h3>
+              <p><strong>Raw category value:</strong> {JSON.stringify(rawCategoryValue)}</p>
+              <p><strong>Normalized category:</strong> {currentArticle.category}</p>
+              <p><strong>Category type:</strong> {typeof currentArticle.category}</p>
+            </div>
+          )}
+          
           <ArticleHeader 
             article={currentArticle} 
             onGoBack={handleGoBack} 

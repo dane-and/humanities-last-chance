@@ -49,6 +49,12 @@ const ArticleHeader: React.FC<ArticleHeaderProps> = ({ article, onGoBack }) => {
         >
           {safeCategory}
         </Link>
+        {/* Display raw category value for debugging */}
+        {process.env.NODE_ENV !== 'production' && (
+          <div className="mt-2 p-2 bg-gray-100 text-xs">
+            <strong>Raw category value:</strong> {JSON.stringify(article.category)}
+          </div>
+        )}
       </div>
       
       <p className="text-lg text-muted-foreground mb-6">{article.excerpt}</p>

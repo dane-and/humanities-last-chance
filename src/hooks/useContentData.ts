@@ -1,44 +1,9 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import { Article } from '@/lib/types/article';
 import { Page } from '@/lib/types/page';
 import { toast } from 'sonner';
 import { fetchBlogPosts } from '@/lib/sanity';
-
-/**
- * Safely extracts a category string from various possible formats
- */
-const getCategoryString = (rawCategory: any): string => {
-  // If null or undefined, return default
-  if (rawCategory === null || rawCategory === undefined) {
-    return 'Blog';
-  }
-  
-  // If it's already a string
-  if (typeof rawCategory === 'string') {
-    return rawCategory;
-  }
-  
-  // If it's an array, take the first string element
-  if (Array.isArray(rawCategory) && rawCategory.length > 0) {
-    if (typeof rawCategory[0] === 'string') {
-      return rawCategory[0];
-    }
-  }
-  
-  // If it's an object with a name or title property
-  if (rawCategory && typeof rawCategory === 'object') {
-    if (typeof rawCategory.name === 'string') {
-      return rawCategory.name;
-    }
-    if (typeof rawCategory.title === 'string') {
-      return rawCategory.title;
-    }
-  }
-  
-  // Default fallback
-  return 'Blog';
-};
+import { getNormalizedCategory, getSafeCategoryString } from '@/lib/utils/categoryUtils';
 
 export const useContentData = () => {
   // Articles state
@@ -65,8 +30,8 @@ export const useContentData = () => {
       if (posts && posts.length > 0) {
         // Convert Sanity posts to our Article format
         const formattedArticles = posts.map((post: any) => {
-          // Extract category string safely from any potential format
-          const categoryString = getCategoryString(post.category);
+          // Extract category string safely using utility function
+          const categoryString = getSafeCategoryString(post.category);
           
           // Log category for debugging
           console.log(`Post "${post.title}" has category:`, {
@@ -75,25 +40,8 @@ export const useContentData = () => {
             extractedString: categoryString
           });
           
-          // Now that we have a safe string, determine the normalized category
-          // Use a lowercase comparison to standardize, but maintain proper case for display
-          let typedCategory: Article['category'];
-          
-          // Only apply toLowerCase if we have a string
-          const lowerCaseCategory = categoryString.toLowerCase();
-          
-          // Handle plural and singular forms of categories
-          if (lowerCaseCategory === 'blog' || lowerCaseCategory === 'blogs') {
-            typedCategory = 'Blog';
-          } else if (lowerCaseCategory === 'interview' || lowerCaseCategory === 'interviews') {
-            typedCategory = 'Interview';
-          } else if (lowerCaseCategory === 'review' || lowerCaseCategory === 'reviews') {
-            typedCategory = 'Review';
-          } else if (lowerCaseCategory === 'resource' || lowerCaseCategory === 'resources') {
-            typedCategory = 'Resource';
-          } else {
-            typedCategory = 'Blog'; // Default
-          }
+          // Get normalized category
+          const typedCategory = getNormalizedCategory(post.category);
           
           return {
             id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
