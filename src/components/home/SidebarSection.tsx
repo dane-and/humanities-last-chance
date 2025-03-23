@@ -40,7 +40,6 @@ const SidebarSection: React.FC = () => {
         console.log(`Found ${sanityReviews?.length || 0} reviews from Sanity`);
         
         // Take only 2 most recent for each category
-        // Note: fetchArticlesByCategory now returns properly typed Article[] objects
         setInterviews(sanityInterviews.slice(0, 2));
         setReviews(sanityReviews.slice(0, 2));
       } catch (error) {

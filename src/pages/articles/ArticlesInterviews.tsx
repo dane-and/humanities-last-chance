@@ -4,7 +4,7 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import ArticleGrid from '@/components/ArticleGrid';
 import { Article } from '@/lib/types/article';
-import { fetchArticlesByCategory, fetchBlogPosts } from '@/lib/sanity';
+import { fetchBlogPosts } from '@/lib/sanity';
 import { toast } from 'sonner';
 
 const ArticlesInterviews: React.FC = () => {
@@ -31,48 +31,17 @@ const ArticlesInterviews: React.FC = () => {
         
         if (allSanityPosts && allSanityPosts.length > 0) {
           console.log("All categories in posts:", 
-            [...new Set(allSanityPosts.map((post: any) => post.category))]);
+            [...new Set(allSanityPosts.map((post: Article) => post.category))]);
           
-          // Now filter for just interviews - match Sanity schema (could be singular or plural)
-          const interviewPosts = allSanityPosts.filter((post: any) => {
-            const category = post.category?.toLowerCase() || '';
-            return category === 'interview' || category === 'interviews';
-          });
+          // Now filter for just interviews
+          const interviewPosts = allSanityPosts.filter((post: Article) => 
+            post.category === 'Interview'
+          );
           
           console.log(`Found ${interviewPosts.length} interview posts after filtering`);
           
-          // Convert Sanity posts to Article format
-          const interviewArticles: Article[] = interviewPosts.map((post: any) => {
-            const publishedDate = post.publishedAt 
-              ? new Date(post.publishedAt) 
-              : (post._createdAt ? new Date(post._createdAt) : new Date());
-              
-            console.log(`Mapping interview post: "${post.title}" with category "${post.category}"`);
-            
-            return {
-              id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-              title: post.title || "Untitled Post",
-              slug: post.slug?.current || `post-${Date.now()}`,
-              date: publishedDate.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              }),
-              publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
-              category: 'Interview', // Normalize category for frontend use
-              image: post.mainImage?.asset?.url || '',
-              imageCaption: post.mainImage?.caption || '',
-              excerpt: post.excerpt || '',
-              content: post.body || '',
-              featured: false,
-              tags: post.tags || [],
-            };
-          }).sort((a, b) => {
-            return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
-          });
-          
-          console.log("Formatted interview articles:", interviewArticles);
-          setArticles(interviewArticles);
+          // Set the filtered articles
+          setArticles(interviewPosts);
         } else {
           console.log("No posts found from Sanity");
           setArticles([]);
@@ -120,7 +89,7 @@ const ArticlesInterviews: React.FC = () => {
                       allPosts.map((post, index) => (
                         <li key={index}>
                           "{post.title}" - category: "{post.category || 'undefined'}" - 
-                          slug: {post.slug?.current || 'undefined'}
+                          slug: {post.slug || 'undefined'}
                         </li>
                       ))
                     ) : (

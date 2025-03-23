@@ -22,45 +22,10 @@ const ArticlesBlog: React.FC = () => {
         
         // Check if we got any posts back
         if (sanityPosts && sanityPosts.length > 0) {
-          // Convert Sanity posts to Article format and filter for Blog category
-          // Use case-insensitive comparison for more reliable filtering
-          const blogArticles: Article[] = sanityPosts
-            .filter((post: any) => 
-              post.category && post.category.toLowerCase() === 'blog'
-            )
-            .map((post: any) => {
-              // Always use the original publishedAt date from Sanity
-              const publishedDate = post.publishedAt 
-                ? new Date(post.publishedAt) 
-                : (post._createdAt ? new Date(post._createdAt) : new Date());
-              
-              console.log(`Blog post "${post.title}" using original date:`, publishedDate.toISOString());
-              
-              return {
-                id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-                title: post.title || "Untitled Post",
-                slug: post.slug?.current || `post-${Date.now()}`,
-                date: publishedDate.toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                }),
-                publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
-                category: 'Blog', // Always use properly capitalized category
-                image: post.mainImage?.asset?.url || '',
-                imageCaption: post.mainImage?.caption || '',
-                excerpt: post.excerpt || '',
-                content: post.body || '',
-                featured: false,
-                tags: post.tags || [],
-              };
-            })
-            // Explicitly sort by original publishedAt from Sanity (newest first)
-            .sort((a, b) => {
-              const dateA = new Date(a.publishedAt || '');
-              const dateB = new Date(b.publishedAt || '');
-              return dateB.getTime() - dateA.getTime();
-            });
+          // Filter for Blog category posts - sanityPosts are already properly mapped to Article type
+          const blogArticles = sanityPosts.filter((post: Article) => 
+            post.category === 'Blog'
+          );
           
           console.log("Filtered and sorted blog articles:", 
             blogArticles.map(a => ({ title: a.title, category: a.category, publishedAt: a.publishedAt })));
@@ -71,7 +36,7 @@ const ArticlesBlog: React.FC = () => {
             // If no blog posts from Sanity, use default blog articles
             console.log("No blog posts from Sanity, using default articles");
             const defaultBlogArticles = defaultArticles.filter(article => 
-              article.category.toLowerCase() === 'blog'
+              article.category === 'Blog'
             );
             setArticles(defaultBlogArticles);
           }
@@ -79,7 +44,7 @@ const ArticlesBlog: React.FC = () => {
           // Use default articles if no posts from Sanity
           console.log("No posts from Sanity, using default articles");
           const defaultBlogArticles = defaultArticles.filter(article => 
-            article.category.toLowerCase() === 'blog'
+            article.category === 'Blog'
           );
           setArticles(defaultBlogArticles);
         }
@@ -87,7 +52,7 @@ const ArticlesBlog: React.FC = () => {
         console.error("Error loading articles:", error);
         // Use default articles on error
         const defaultBlogArticles = defaultArticles.filter(article => 
-          article.category.toLowerCase() === 'blog'
+          article.category === 'Blog'
         );
         setArticles(defaultBlogArticles);
       } finally {

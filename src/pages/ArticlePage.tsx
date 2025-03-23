@@ -26,53 +26,22 @@ const ArticlePage: React.FC = () => {
       console.log(`Loading article with slug: ${slug} from Sanity`);
       
       try {
-        const sanityPost = await fetchArticleBySlug(slug);
-        console.log("Fetched article from Sanity:", sanityPost);
+        const article = await fetchArticleBySlug(slug);
+        console.log("Fetched article from Sanity:", article);
         
-        if (sanityPost) {
+        if (article) {
           // Store raw category value for debugging
-          setRawCategoryValue(sanityPost.category);
+          setRawCategoryValue(article.category);
           
-          // Debug category type and value - log extensively to catch the issue
+          // Debug category type and value
           console.log(`Article category from Sanity:`, {
-            type: typeof sanityPost.category,
-            value: sanityPost.category,
-            toString: Object.prototype.toString.call(sanityPost.category),
-            isNull: sanityPost.category === null,
-            isUndefined: sanityPost.category === undefined
+            type: typeof article.category,
+            value: article.category
           });
           
-          // Get normalized category using utility function
-          const categoryValue = getNormalizedCategory(sanityPost.category);
-          
-          // Log the final determined category value
-          console.log("Using normalized category value:", categoryValue);
-          
           // Debug the tags
-          console.log(`Article tags from Sanity:`, sanityPost.tags);
+          console.log(`Article tags from Sanity:`, article.tags);
           
-          // Convert Sanity post to Article format
-          const article: Article = {
-            id: sanityPost._id || `sanity-${Date.now()}`,
-            title: sanityPost.title || "Untitled Post",
-            slug: sanityPost.slug?.current || slug,
-            date: sanityPost.publishedAt ? new Date(sanityPost.publishedAt).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            }) : new Date().toLocaleDateString(),
-            publishedAt: sanityPost.publishedAt || sanityPost._createdAt || new Date().toISOString(),
-            category: categoryValue, // Use the safely processed category value
-            image: sanityPost.mainImage?.asset?.url || '',
-            imageCaption: sanityPost.mainImage?.caption || '',
-            excerpt: sanityPost.excerpt || '',
-            content: sanityPost.body || '',
-            tags: sanityPost.tags || [],
-            comments: sanityPost.comments || [],
-          };
-          
-          console.log("Formatted article with category:", article.category);
-          console.log("Formatted article with tags:", article.tags);
           setCurrentArticle(article);
         } else {
           setCurrentArticle(null);

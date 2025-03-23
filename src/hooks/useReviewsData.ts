@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 import { Article } from '@/lib/types/article';
 import { fetchBlogPosts } from '@/lib/sanity';
 import { toast } from 'sonner';
-import { getSafeCategoryString } from '@/lib/utils/categoryUtils';
+import { getSafeCategoryString, getNormalizedCategory } from '@/lib/utils/categoryUtils';
+import { mapSanityPostToArticle } from '@/lib/sanity/queries/posts/utils';
 
 export const useReviewsData = () => {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -38,51 +39,15 @@ export const useReviewsData = () => {
           );
           
           // Now filter for reviews - using safe string extraction and lowercase comparison
-          const reviewPosts = allSanityPosts.filter((post: any) => {
-            // Get safe category string
-            const categoryStr = getSafeCategoryString(post.category);
-            
-            // Check if this is a review post (handle both singular and plural)
-            if (!categoryStr) return false;
-            
-            const lowerCaseCat = categoryStr.toLowerCase();
-            return lowerCaseCat === 'reviews' || lowerCaseCat === 'review';
+          const reviewPosts = allSanityPosts.filter((post: Article) => {
+            const categoryStr = typeof post.category === 'string' ? post.category.toLowerCase() : '';
+            return categoryStr === 'review' || categoryStr === 'reviews';
           });
           
           console.log(`Found ${reviewPosts.length} review posts after filtering`);
           
-          // Convert Sanity posts to Article format
-          const reviewArticles: Article[] = reviewPosts.map((post: any) => {
-            const publishedDate = post.publishedAt 
-              ? new Date(post.publishedAt) 
-              : (post._createdAt ? new Date(post._createdAt) : new Date());
-              
-            console.log(`Mapping review post: "${post.title}" with category "${post.category}"`);
-            
-            return {
-              id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-              title: post.title || "Untitled Post",
-              slug: post.slug?.current || `post-${Date.now()}`,
-              date: publishedDate.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              }),
-              publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
-              category: 'Review', // Normalize category for frontend use
-              image: post.mainImage?.asset?.url || '',
-              imageCaption: post.mainImage?.caption || '',
-              excerpt: post.excerpt || '',
-              content: post.body || '',
-              featured: false,
-              tags: post.tags || [],
-            };
-          }).sort((a, b) => {
-            return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
-          });
-          
-          console.log("Formatted review articles:", reviewArticles);
-          setArticles(reviewArticles);
+          // Articles are already mapped by fetchBlogPosts
+          setArticles(reviewPosts);
         } else {
           console.log("No posts found from Sanity");
           setArticles([]);
