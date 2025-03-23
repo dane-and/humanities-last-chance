@@ -166,10 +166,23 @@ export async function fetchArticlesByCategory(category: string) {
         if (!post.category) return false;
         
         // Simple string comparison (case-insensitive)
-        return post.category.toLowerCase() === category.toLowerCase();
+        // Handling both singular and plural forms for flexibility
+        const postCategory = post.category.toLowerCase();
+        const searchCategory = category.toLowerCase();
+        
+        // Match exactly what's in Sanity
+        if (postCategory === searchCategory) return true;
+        
+        // Handle singular/plural differences
+        if (searchCategory === 'review' && postCategory === 'reviews') return true;
+        if (searchCategory === 'reviews' && postCategory === 'review') return true;
+        if (searchCategory === 'interview' && postCategory === 'interviews') return true;
+        if (searchCategory === 'interviews' && postCategory === 'interview') return true;
+        
+        return false;
       });
       
-      console.log(`Found ${filteredPosts.length} posts with category "${category}"`);
+      console.log(`Found ${filteredPosts.length} posts with category "${category}" (including singular/plural variations)`);
       return filteredPosts;
     }
     

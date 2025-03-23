@@ -35,13 +35,14 @@ export const useContentData = () => {
           const category = post.category || 'Blog';
           const lowerCaseCategory = category.toLowerCase();
           
-          if (lowerCaseCategory === 'blog') {
+          // Handle plural and singular forms of categories
+          if (lowerCaseCategory === 'blog' || lowerCaseCategory === 'blogs') {
             typedCategory = 'Blog';
-          } else if (lowerCaseCategory === 'interview') {
+          } else if (lowerCaseCategory === 'interview' || lowerCaseCategory === 'interviews') {
             typedCategory = 'Interview';
-          } else if (lowerCaseCategory === 'review') {
+          } else if (lowerCaseCategory === 'review' || lowerCaseCategory === 'reviews') {
             typedCategory = 'Review';
-          } else if (lowerCaseCategory === 'resource') {
+          } else if (lowerCaseCategory === 'resource' || lowerCaseCategory === 'resources') {
             typedCategory = 'Resource';
           } else {
             typedCategory = 'Blog'; // Default

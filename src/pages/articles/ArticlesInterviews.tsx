@@ -33,10 +33,11 @@ const ArticlesInterviews: React.FC = () => {
           console.log("All categories in posts:", 
             [...new Set(allSanityPosts.map((post: any) => post.category))]);
           
-          // Now filter for just interviews
-          const interviewPosts = allSanityPosts.filter((post: any) => 
-            post.category && post.category.toLowerCase() === 'interview'
-          );
+          // Now filter for just interviews - match Sanity schema (could be singular or plural)
+          const interviewPosts = allSanityPosts.filter((post: any) => {
+            const category = post.category?.toLowerCase() || '';
+            return category === 'interview' || category === 'interviews';
+          });
           
           console.log(`Found ${interviewPosts.length} interview posts after filtering`);
           

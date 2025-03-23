@@ -65,9 +65,9 @@ const SidebarSection: React.FC = () => {
           });
         }
         
-        // Fetch reviews - using lowercase to match Sanity schema
+        // Fetch reviews - IMPORTANT: Changed from 'review' to 'reviews' to match Sanity schema
         console.log("Fetching review articles for sidebar...");
-        const sanityReviews = await fetchArticlesByCategory('review');
+        const sanityReviews = await fetchArticlesByCategory('reviews');
         console.log(`Found ${sanityReviews?.length || 0} reviews from Sanity`);
         
         let formattedReviews: Article[] = [];

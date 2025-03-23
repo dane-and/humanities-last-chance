@@ -33,9 +33,9 @@ const ArticlesReviews: React.FC = () => {
           console.log("All categories in posts:", 
             [...new Set(allSanityPosts.map((post: any) => post.category))]);
           
-          // Now filter for just reviews
+          // Now filter for reviews - IMPORTANT: Changed from 'review' to 'reviews' to match Sanity
           const reviewPosts = allSanityPosts.filter((post: any) => 
-            post.category && post.category.toLowerCase() === 'review'
+            post.category && post.category.toLowerCase() === 'reviews'
           );
           
           console.log(`Found ${reviewPosts.length} review posts after filtering`);
