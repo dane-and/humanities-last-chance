@@ -7,7 +7,6 @@ import HumanitiesPreview from './sidebar/HumanitiesPreview';
 import { Article } from '@/lib/types/article';
 import { fetchArticlesByCategory } from '@/lib/sanity';
 import { toast } from 'sonner';
-import { getNormalizedCategory } from '@/lib/utils/categoryUtils';
 
 // Featured courses list
 const featuredCourseTitles = [
@@ -35,86 +34,15 @@ const SidebarSection: React.FC = () => {
         const sanityInterviews = await fetchArticlesByCategory('interview');
         console.log(`Found ${sanityInterviews?.length || 0} interviews from Sanity`);
         
-        let formattedInterviews: Article[] = [];
-        
-        if (sanityInterviews && sanityInterviews.length > 0) {
-          formattedInterviews = sanityInterviews.map((post: any) => {
-            const publishedDate = post.publishedAt 
-              ? new Date(post.publishedAt) 
-              : (post._createdAt ? new Date(post._createdAt) : new Date());
-            
-            // Use the utility function to get a normalized category
-            const normalizedCategory = getNormalizedCategory(post.category);
-            console.log(`Interview post "${post.title}" normalized category: ${normalizedCategory}`);
-              
-            return {
-              id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-              title: post.title || "Untitled Post",
-              slug: post.slug?.current || `post-${Date.now()}`,
-              date: publishedDate.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              }),
-              publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
-              category: normalizedCategory, // Use the normalized category
-              image: post.mainImage?.asset?.url || '',
-              imageCaption: post.mainImage?.caption || '',
-              excerpt: post.excerpt || '',
-              content: post.body || '',
-              featured: false,
-              tags: post.tags || [],
-            };
-          }).sort((a: any, b: any) => {
-            return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
-          });
-        }
-        
         // Fetch reviews - Try both 'review' and 'reviews' to maximize matches
         console.log("Fetching review articles for sidebar...");
-        const sanityReviews = await fetchArticlesByCategory('reviews');
+        const sanityReviews = await fetchArticlesByCategory('review');
         console.log(`Found ${sanityReviews?.length || 0} reviews from Sanity`);
         
-        let formattedReviews: Article[] = [];
-        
-        if (sanityReviews && sanityReviews.length > 0) {
-          formattedReviews = sanityReviews.map((post: any) => {
-            const publishedDate = post.publishedAt 
-              ? new Date(post.publishedAt) 
-              : (post._createdAt ? new Date(post._createdAt) : new Date());
-            
-            // Use the utility function to get a normalized category
-            const normalizedCategory = getNormalizedCategory(post.category);
-            console.log(`Review post "${post.title}" normalized category: ${normalizedCategory}`);
-              
-            return {
-              id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-              title: post.title || "Untitled Post",
-              slug: post.slug?.current || `post-${Date.now()}`,
-              date: publishedDate.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              }),
-              publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
-              category: normalizedCategory, // Use the normalized category
-              image: post.mainImage?.asset?.url || '',
-              imageCaption: post.mainImage?.caption || '',
-              excerpt: post.excerpt || '',
-              content: post.body || '',
-              featured: false,
-              tags: post.tags || [],
-            };
-          }).sort((a: any, b: any) => {
-            return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
-          });
-        }
-        
-        console.log(`Formatted ${formattedInterviews.length} interviews and ${formattedReviews.length} reviews for sidebar`);
-        
         // Take only 2 most recent for each category
-        setInterviews(formattedInterviews.slice(0, 2));
-        setReviews(formattedReviews.slice(0, 2));
+        // Note: fetchArticlesByCategory now returns properly typed Article[] objects
+        setInterviews(sanityInterviews.slice(0, 2));
+        setReviews(sanityReviews.slice(0, 2));
       } catch (error) {
         console.error("Error fetching sidebar content:", error);
         toast.error("Failed to load sidebar content");

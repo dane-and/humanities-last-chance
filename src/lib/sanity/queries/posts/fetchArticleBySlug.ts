@@ -7,7 +7,9 @@
 
 import { sanityClient } from '../../client';
 import { toast } from 'sonner';
-import { POST_PROJECTION } from './utils';
+import { POST_PROJECTION, mapSanityPostToArticle } from './utils';
+import { Article } from '../../../types/article';
+import { getSafeCategoryString } from '../../../utils/categoryUtils';
 
 /**
  * Logs detailed category information for debugging
@@ -34,7 +36,7 @@ const logArticleCategoryInfo = (post: any, slug: string) => {
 /**
  * Fetches a specific article by its slug
  */
-export async function fetchArticleBySlug(slug: string) {
+export async function fetchArticleBySlug(slug: string): Promise<Article | null> {
   try {
     console.log(`Fetching article with slug "${slug}" from Sanity...`);
     
@@ -53,12 +55,10 @@ export async function fetchArticleBySlug(slug: string) {
     // Log category information for debugging
     logArticleCategoryInfo(post, slug);
     
-    return post;
+    // Map to our Article type with proper category normalization
+    return post ? mapSanityPostToArticle(post) : null;
   } catch (error) {
     console.error(`Error fetching article with slug ${slug}:`, error);
     return null;
   }
 }
-
-// Need to import this after the function declaration to avoid circular dependencies
-import { getSafeCategoryString } from '../../../utils/categoryUtils';

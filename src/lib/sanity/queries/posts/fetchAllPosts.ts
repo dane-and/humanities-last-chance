@@ -7,12 +7,13 @@
 
 import { toast } from 'sonner';
 import { sanityClient } from '../../client';
-import { POST_PROJECTION, handleSanityError, logSamplePostData } from './utils';
+import { POST_PROJECTION, handleSanityError, logSamplePostData, mapSanityPostToArticle } from './utils';
+import { Article } from '../../../types/article';
 
 /**
  * Fetches all blog posts from Sanity without filtering
  */
-export async function fetchBlogPosts() {
+export async function fetchBlogPosts(): Promise<Article[]> {
   try {
     console.log("Fetching all blog posts from Sanity...");
     
@@ -30,7 +31,8 @@ export async function fetchBlogPosts() {
     // Log sample data for debugging
     logSamplePostData(posts);
     
-    return posts || [];
+    // Map to our Article type with proper category normalization
+    return posts ? posts.map(mapSanityPostToArticle) : [];
   } catch (error) {
     console.error("Error fetching blog posts:", error);
     toast.error("Error loading posts from Sanity");

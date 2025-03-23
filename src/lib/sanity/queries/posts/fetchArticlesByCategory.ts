@@ -6,8 +6,9 @@
  */
 
 import { sanityClient } from '../../client';
-import { POST_PROJECTION, handleSanityError } from './utils';
+import { POST_PROJECTION, handleSanityError, mapSanityPostToArticle } from './utils';
 import { isCategoryMatch, getSafeCategoryString } from '../../../utils/categoryUtils';
+import { Article } from '../../../types/article';
 
 /**
  * Logs debug information about available categories
@@ -59,7 +60,7 @@ const filterPostsByCategory = (posts: any[], category: string) => {
 /**
  * Fetches articles filtered by category
  */
-export async function fetchArticlesByCategory(category: string) {
+export async function fetchArticlesByCategory(category: string): Promise<Article[]> {
   try {
     console.log(`Fetching articles with category "${category}" from Sanity...`);
     
@@ -78,7 +79,8 @@ export async function fetchArticlesByCategory(category: string) {
     // Filter posts by category using our utility function
     const filteredPosts = filterPostsByCategory(posts, category);
     
-    return filteredPosts || [];
+    // Map to our Article type with proper category normalization
+    return filteredPosts.map(mapSanityPostToArticle);
   } catch (error) {
     console.error(`Error fetching articles by category:`, error);
     return [];

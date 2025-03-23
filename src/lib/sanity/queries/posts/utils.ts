@@ -67,7 +67,7 @@ export const mapSanityPostToArticle = (post: any): Article => {
       day: 'numeric'
     }),
     publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
-    category: normalizedCategory,
+    category: normalizedCategory, // This ensures we have a valid category type
     image: post.mainImage?.asset?.url || '',
     imageCaption: post.mainImage?.caption || '',
     excerpt: post.excerpt || '',
