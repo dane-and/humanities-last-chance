@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 
 const ArticlesReviews: React.FC = () => {
   const [articles, setArticles] = useState<Article[]>([]);
+  const [allPosts, setAllPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Update articles with the latest from Sanity
@@ -22,6 +23,9 @@ const ArticlesReviews: React.FC = () => {
         const sanityPosts = await fetchArticlesByCategory('review');
         console.log(`Found ${sanityPosts?.length || 0} review posts from Sanity`);
         
+        // Store all posts to see what was actually returned
+        setAllPosts(sanityPosts || []);
+        
         if (sanityPosts && sanityPosts.length > 0) {
           // Convert Sanity posts to Article format
           const reviewArticles: Article[] = sanityPosts.map((post: any) => {
@@ -29,6 +33,8 @@ const ArticlesReviews: React.FC = () => {
               ? new Date(post.publishedAt) 
               : (post._createdAt ? new Date(post._createdAt) : new Date());
               
+            console.log(`Mapping review post: "${post.title}" with category "${post.category}"`);
+            
             return {
               id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
               title: post.title || "Untitled Post",
@@ -81,13 +87,32 @@ const ArticlesReviews: React.FC = () => {
             <div className="flex justify-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
             </div>
-          ) : articles.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-xl text-muted-foreground">No reviews available yet.</p>
-              <p className="text-muted-foreground mt-2">Check that you have published reviews in Sanity Studio with category set to "review".</p>
-            </div>
           ) : (
-            <ArticleGrid articles={articles} columns={3} />
+            <div>
+              {/* Debug section - only for development */}
+              <div className="bg-gray-100 p-4 rounded mb-8">
+                <h2 className="text-lg font-bold mb-2">Debugging Information:</h2>
+                <p>Total posts loaded: {allPosts.length}</p>
+                <p>Filtered review posts: {articles.length}</p>
+                <div className="mt-2">
+                  <h3 className="font-bold">All posts categories:</h3>
+                  <ul className="list-disc pl-8">
+                    {allPosts.map((post, index) => (
+                      <li key={index}>"{post.title}" - category: "{post.category}"</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              
+              {articles.length === 0 ? (
+                <div className="text-center py-12">
+                  <p className="text-xl text-muted-foreground">No reviews available yet.</p>
+                  <p className="text-muted-foreground mt-2">Check that you have published reviews in Sanity Studio with category set to "review".</p>
+                </div>
+              ) : (
+                <ArticleGrid articles={articles} columns={3} />
+              )}
+            </div>
           )}
         </div>
       </main>

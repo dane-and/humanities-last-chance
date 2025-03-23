@@ -124,11 +124,11 @@ export async function fetchArticleBySlug(slug: string) {
 
 export async function fetchArticlesByCategory(category: string) {
   try {
-    console.log(`Fetching articles with category "${category}"`);
+    console.log(`Fetching articles with category "${category}" - simplifying query for debugging`);
     
-    // Use case-insensitive comparison for category matching
+    // Simplified query that doesn't filter by category at all - to see ALL posts
     const posts = await sanityClient.fetch(`
-      *[_type == "post" && tolower(category) == tolower($category)] | order(publishedAt desc) {
+      *[_type == "post"] | order(publishedAt desc) {
         _id,
         title,
         slug,
@@ -144,28 +144,38 @@ export async function fetchArticlesByCategory(category: string) {
         tags,
         excerpt
       }
-    `, { category })
+    `)
     .catch(error => {
-      console.error(`Error in Sanity fetch for category ${category}:`, error);
+      console.error(`Error in Sanity fetch:`, error);
       toast.error("Failed to connect to Sanity CMS");
       return [];
     });
     
-    console.log(`Found ${posts ? posts.length : 0} posts in category "${category}":`, posts);
+    console.log(`Found ${posts ? posts.length : 0} total posts before filtering:`, posts);
     
-    // Verify category values and publishedAt dates
+    // Log all posts to see what we're getting
     if (posts && posts.length > 0) {
       posts.forEach((post: any) => {
-        console.log(`Post "${post.title}" has category "${post.category}" and publishedAt "${post.publishedAt}"`);
-        console.log(`Post "${post.title}" has tags:`, post.tags);
+        console.log(`Post "${post.title}" has category "${post.category}" - matching requested "${category}"?`, 
+          post.category && post.category.toLowerCase() === category.toLowerCase());
       });
+      
+      // Now filter on the client side to see what matches
+      const filteredPosts = posts.filter((post: any) => 
+        post.category && post.category.toLowerCase() === category.toLowerCase()
+      );
+      
+      console.log(`After filtering for category "${category}", found ${filteredPosts.length} posts:`, filteredPosts);
+      
+      // Return filtered posts for now
+      return filteredPosts;
     } else {
-      console.log(`No posts found in category "${category}"`);
+      console.log(`No posts found at all`);
     }
     
     return posts || [];
   } catch (error) {
-    console.error(`Error fetching articles with category ${category}:`, error);
+    console.error(`Error fetching articles:`, error);
     return [];
   }
 }

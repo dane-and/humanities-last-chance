@@ -18,7 +18,7 @@ const ArticleImage: React.FC<ArticleImageProps> = ({ image, title, imageCaption 
       <OptimizedImage
         src={image}
         alt={title}
-        className="mx-auto object-contain max-h-[800px]"
+        className="mx-auto object-contain max-h-[800px] max-w-[1200px] w-auto"
         caption={imageCaption || ''}
         captionClassName="text-center text-sm text-muted-foreground mt-2 italic"
         width={1200}
