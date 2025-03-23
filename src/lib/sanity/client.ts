@@ -20,7 +20,7 @@ const sanityConfig = {
   timeout: 60000, // Increased timeout (60 seconds)
   // Add retry configuration
   maxRetries: 3,
-  retryDelay: 1000 // Start with 1s delay, increases exponentially
+  retryDelay: (attemptNumber: number) => Math.min(1000 * Math.pow(2, attemptNumber), 10000) // Exponential backoff with 10s max
 };
 
 // Log configuration for debugging
