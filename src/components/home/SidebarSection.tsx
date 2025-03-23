@@ -7,6 +7,7 @@ import HumanitiesPreview from './sidebar/HumanitiesPreview';
 import { Article } from '@/lib/types/article';
 import { fetchArticlesByCategory } from '@/lib/sanity';
 import { toast } from 'sonner';
+import { getNormalizedCategory } from '@/lib/utils/categoryUtils';
 
 // Featured courses list
 const featuredCourseTitles = [
@@ -42,23 +43,9 @@ const SidebarSection: React.FC = () => {
               ? new Date(post.publishedAt) 
               : (post._createdAt ? new Date(post._createdAt) : new Date());
             
-            // Safely handle category - always guard against invalid types
-            let actualCategory: string;
-            
-            if (typeof post.category === 'string') {
-              actualCategory = post.category;
-            } else if (Array.isArray(post.category) && post.category.length > 0 && typeof post.category[0] === 'string') {
-              actualCategory = post.category[0];
-            } else if (post.category && typeof post.category === 'object' && typeof post.category.name === 'string') {
-              actualCategory = post.category.name;
-            } else if (post.category && typeof post.category === 'object' && typeof post.category.title === 'string') {
-              actualCategory = post.category.title;
-            } else {
-              actualCategory = 'Interview'; // Default for this section
-              console.warn(`Interview post "${post.title}" has invalid category:`, post.category);
-            }
-            
-            console.log(`Interview post "${post.title}" normalized category: ${actualCategory}`);
+            // Use the utility function to get a normalized category
+            const normalizedCategory = getNormalizedCategory(post.category);
+            console.log(`Interview post "${post.title}" normalized category: ${normalizedCategory}`);
               
             return {
               id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -70,7 +57,7 @@ const SidebarSection: React.FC = () => {
                 day: 'numeric'
               }),
               publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
-              category: 'Interview', // Always hardcode proper category here
+              category: normalizedCategory, // Use the normalized category
               image: post.mainImage?.asset?.url || '',
               imageCaption: post.mainImage?.caption || '',
               excerpt: post.excerpt || '',
@@ -96,23 +83,9 @@ const SidebarSection: React.FC = () => {
               ? new Date(post.publishedAt) 
               : (post._createdAt ? new Date(post._createdAt) : new Date());
             
-            // Safely handle category - always guard against invalid types
-            let actualCategory: string;
-            
-            if (typeof post.category === 'string') {
-              actualCategory = post.category;
-            } else if (Array.isArray(post.category) && post.category.length > 0 && typeof post.category[0] === 'string') {
-              actualCategory = post.category[0];
-            } else if (post.category && typeof post.category === 'object' && typeof post.category.name === 'string') {
-              actualCategory = post.category.name;
-            } else if (post.category && typeof post.category === 'object' && typeof post.category.title === 'string') {
-              actualCategory = post.category.title;
-            } else {
-              actualCategory = 'Review'; // Default for this section
-              console.warn(`Review post "${post.title}" has invalid category:`, post.category);
-            }
-            
-            console.log(`Review post "${post.title}" normalized category: ${actualCategory}`);
+            // Use the utility function to get a normalized category
+            const normalizedCategory = getNormalizedCategory(post.category);
+            console.log(`Review post "${post.title}" normalized category: ${normalizedCategory}`);
               
             return {
               id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -124,7 +97,7 @@ const SidebarSection: React.FC = () => {
                 day: 'numeric'
               }),
               publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
-              category: 'Review', // Always hardcode proper category here
+              category: normalizedCategory, // Use the normalized category
               image: post.mainImage?.asset?.url || '',
               imageCaption: post.mainImage?.caption || '',
               excerpt: post.excerpt || '',
