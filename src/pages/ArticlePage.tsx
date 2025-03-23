@@ -3,11 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { fetchArticleBySlug } from '@/lib/sanity';
+import { sanityClient } from '@/lib/sanity/client';
 import ArticleLoading from '@/components/article/ArticleLoading';
 import ArticleNotFound from '@/components/article/ArticleNotFound';
 import ArticlePageContent from '@/components/article/ArticlePageContent';
 import { Article } from '@/lib/types/article';
+import { mapSanityPostToArticle } from '@/lib/sanity/queries/posts/utils';
 import { getNormalizedCategory } from '@/lib/utils/categoryUtils';
 
 const ArticlePage: React.FC = () => {
@@ -26,24 +27,57 @@ const ArticlePage: React.FC = () => {
       console.log(`Loading article with slug: ${slug} from Sanity`);
       
       try {
-        const article = await fetchArticleBySlug(slug);
-        console.log("Fetched article from Sanity:", article);
+        // Use a direct GROQ query to get the article by slug
+        const query = `*[_type == "post" && slug.current == $slug][0]{
+          _id,
+          title,
+          slug,
+          mainImage{
+            asset->{
+              _id,
+              url
+            },
+            caption
+          },
+          body,
+          publishedAt,
+          _createdAt,
+          _updatedAt,
+          category,
+          tags,
+          excerpt,
+          comments
+        }`;
         
-        if (article) {
+        console.log("Executing Sanity query for article:", query);
+        
+        const post = await sanityClient.fetch(query, { slug });
+        console.log("Fetched article from Sanity:", post);
+        
+        if (post) {
           // Store raw category value for debugging
-          setRawCategoryValue(article.category);
+          setRawCategoryValue(post.category);
           
           // Debug category type and value
           console.log(`Article category from Sanity:`, {
-            type: typeof article.category,
-            value: article.category
+            type: typeof post.category,
+            value: post.category
           });
           
           // Debug the tags
-          console.log(`Article tags from Sanity:`, article.tags);
+          console.log(`Article tags from Sanity:`, post.tags);
+          
+          // Map to our Article type
+          const article = mapSanityPostToArticle(post);
+          console.log("Mapped article:", {
+            title: article.title,
+            slug: article.slug,
+            category: article.category
+          });
           
           setCurrentArticle(article);
         } else {
+          console.log(`No article found with slug: ${slug}`);
           setCurrentArticle(null);
         }
       } catch (error) {

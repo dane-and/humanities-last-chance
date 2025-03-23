@@ -5,7 +5,7 @@ import InterviewsSection from './sidebar/InterviewsSection';
 import ReviewsSection from './sidebar/ReviewsSection';
 import HumanitiesPreview from './sidebar/HumanitiesPreview';
 import { Article } from '@/lib/types/article';
-import { fetchArticlesByCategory } from '@/lib/sanity';
+import { sanityClient } from '@/lib/sanity/client';
 import { toast } from 'sonner';
 import { testSanityConnection } from '@/lib/sanity/client';
 import { mapSanityPostToArticle } from '@/lib/sanity/queries/posts/utils';
@@ -39,23 +39,36 @@ const SidebarSection: React.FC = () => {
           return;
         }
         
-        // Fetch interviews - using lowercase to match Sanity schema
+        // Fetch interviews with direct GROQ query - case insensitive matching
         console.log("Fetching interview articles for sidebar...");
-        const sanityInterviews = await fetchArticlesByCategory('interview');
+        const interviewQuery = `*[_type == "post" && category match "(?i)interview" && defined(slug.current)] | order(publishedAt desc)[0...2]`;
+        const sanityInterviews = await sanityClient.fetch(interviewQuery);
         console.log(`Found ${sanityInterviews?.length || 0} interviews from Sanity`);
         
-        // Fetch reviews - Try both 'review' and 'reviews' to maximize matches
+        // Fetch reviews with direct GROQ query - case insensitive matching
         console.log("Fetching review articles for sidebar...");
-        const sanityReviews = await fetchArticlesByCategory('review');
+        const reviewQuery = `*[_type == "post" && category match "(?i)review" && defined(slug.current)] | order(publishedAt desc)[0...2]`;
+        const sanityReviews = await sanityClient.fetch(reviewQuery);
         console.log(`Found ${sanityReviews?.length || 0} reviews from Sanity`);
         
         // Convert to proper Article types with normalized categories
         const typedInterviews = sanityInterviews.map(mapSanityPostToArticle);
         const typedReviews = sanityReviews.map(mapSanityPostToArticle);
         
-        // Take only 2 most recent for each category
-        setInterviews(typedInterviews.slice(0, 2));
-        setReviews(typedReviews.slice(0, 2));
+        // Check and log the finished articles
+        console.log("Sidebar interviews:", typedInterviews.map(a => ({ 
+          title: a.title, 
+          slug: a.slug, 
+          category: a.category 
+        })));
+        console.log("Sidebar reviews:", typedReviews.map(a => ({ 
+          title: a.title, 
+          slug: a.slug, 
+          category: a.category 
+        })));
+        
+        setInterviews(typedInterviews);
+        setReviews(typedReviews);
         setConnectionError(false);
       } catch (error) {
         console.error("Error fetching sidebar content:", error);

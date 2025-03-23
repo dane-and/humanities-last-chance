@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { Article } from '@/lib/types/article';
-import { fetchBlogPosts } from '@/lib/sanity';
+import { sanityClient } from '@/lib/sanity/client';
 import { toast } from 'sonner';
 import { getSafeCategoryString, getNormalizedCategory } from '@/lib/utils/categoryUtils';
 import { testSanityConnection } from '@/lib/sanity/client';
@@ -31,43 +31,46 @@ export const useReviewsData = () => {
           }
         }
         
-        // Then try to get all posts to see what's coming from Sanity
-        const allSanityPosts = await fetchBlogPosts();
-        console.log(`Found ${allSanityPosts?.length || 0} total posts from Sanity`);
+        // Use a direct GROQ query to get reviews by category
+        // This uses case-insensitive matching with a regex
+        const reviewQuery = `*[_type == "post" && category match "(?i)review" && defined(slug.current)] | order(publishedAt desc)`;
+        console.log("Executing Sanity query for reviews:", reviewQuery);
+        
+        const allSanityPosts = await sanityClient.fetch(reviewQuery);
+        console.log(`Found ${allSanityPosts?.length || 0} review posts from Sanity with direct query`);
         
         // Store all posts to see what was actually returned
         setAllPosts(allSanityPosts || []);
         
         if (allSanityPosts && allSanityPosts.length > 0) {
           // Log all categories with additional debug info
-          console.log("All categories in posts:", 
+          console.log("All categories in review posts:", 
             allSanityPosts.map((post: any) => ({
               title: post.title,
               categoryType: typeof post.category,
               categoryValue: post.category,
+              slug: post.slug?.current,
               extractedCategory: getSafeCategoryString(post.category)
             }))
           );
           
-          // Now filter for reviews - using safe string extraction and lowercase comparison
-          const reviewPosts = allSanityPosts.filter((post: any) => {
-            const categoryStr = getSafeCategoryString(post.category).toLowerCase();
-            return categoryStr === 'review' || categoryStr === 'reviews';
-          });
-          
-          console.log(`Found ${reviewPosts.length} review posts after filtering`);
-          
           // Map to Article type with proper category normalization
-          const typedReviews = reviewPosts.map(mapSanityPostToArticle);
+          const typedReviews = allSanityPosts.map(mapSanityPostToArticle);
+          console.log("Mapped review articles:", typedReviews.map(a => ({ 
+            title: a.title, 
+            slug: a.slug,
+            category: a.category 
+          })));
+          
           setArticles(typedReviews);
         } else {
-          console.log("No posts found from Sanity");
+          console.log("No review posts found from Sanity");
           setArticles([]);
-          setError("No posts could be fetched from Sanity");
+          setError("No review posts could be fetched from Sanity");
         }
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-        console.error("Error loading articles:", errorMessage);
+        console.error("Error loading review articles:", errorMessage);
         setError(`Error: ${errorMessage}`);
         toast.error("Failed to load review articles");
         setArticles([]);

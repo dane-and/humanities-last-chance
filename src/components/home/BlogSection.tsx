@@ -92,7 +92,7 @@ const BlogSection: React.FC<BlogSectionProps> = ({
             key={post.id} 
             post={post} 
             index={index}
-            fullContent={fullContent}
+            fullContent={true} // Always show full content on homepage
             isLastItem={index === currentPosts.length - 1}
           />
         ))}
