@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import ArticleGrid from '@/components/ArticleGrid';
 import { Article } from '@/lib/types/article';
 import { fetchArticlesByCategory } from '@/lib/sanity';
+import { toast } from 'sonner';
 
 const ArticlesReviews: React.FC = () => {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -17,42 +18,48 @@ const ArticlesReviews: React.FC = () => {
       console.log("Loading review articles from Sanity...");
       
       try {
-        // Use "review" for the API call (case-insensitive matching is handled in the fetchArticlesByCategory function)
+        // Use "review" for the API call (switch to lowercase to match Sanity schema)
         const sanityPosts = await fetchArticlesByCategory('review');
-        console.log(`Found ${sanityPosts.length} review posts from Sanity`);
+        console.log(`Found ${sanityPosts?.length || 0} review posts from Sanity`);
         
-        // Convert Sanity posts to Article format
-        const reviewArticles: Article[] = sanityPosts.map((post: any) => {
-          const publishedDate = post.publishedAt 
-            ? new Date(post.publishedAt) 
-            : (post._createdAt ? new Date(post._createdAt) : new Date());
-            
-          return {
-            id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-            title: post.title || "Untitled Post",
-            slug: post.slug?.current || `post-${Date.now()}`,
-            date: publishedDate.toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            }),
-            publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
-            category: 'Review', // Normalize category for frontend use
-            image: post.mainImage?.asset?.url || '',
-            imageCaption: post.mainImage?.caption || '',
-            excerpt: post.excerpt || '',
-            content: post.body || '',
-            featured: false,
-            tags: post.tags || [],
-          };
-        }).sort((a, b) => {
-          return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
-        });
-        
-        console.log("Formatted review articles:", reviewArticles);
-        setArticles(reviewArticles);
+        if (sanityPosts && sanityPosts.length > 0) {
+          // Convert Sanity posts to Article format
+          const reviewArticles: Article[] = sanityPosts.map((post: any) => {
+            const publishedDate = post.publishedAt 
+              ? new Date(post.publishedAt) 
+              : (post._createdAt ? new Date(post._createdAt) : new Date());
+              
+            return {
+              id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+              title: post.title || "Untitled Post",
+              slug: post.slug?.current || `post-${Date.now()}`,
+              date: publishedDate.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              }),
+              publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
+              category: 'Review', // Normalize category for frontend use
+              image: post.mainImage?.asset?.url || '',
+              imageCaption: post.mainImage?.caption || '',
+              excerpt: post.excerpt || '',
+              content: post.body || '',
+              featured: false,
+              tags: post.tags || [],
+            };
+          }).sort((a, b) => {
+            return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+          });
+          
+          console.log("Formatted review articles:", reviewArticles);
+          setArticles(reviewArticles);
+        } else {
+          console.log("No review posts found from Sanity");
+          setArticles([]);
+        }
       } catch (error) {
         console.error("Error loading articles:", error);
+        toast.error("Failed to load review articles");
         setArticles([]);
       } finally {
         setLoading(false);
@@ -77,7 +84,7 @@ const ArticlesReviews: React.FC = () => {
           ) : articles.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-xl text-muted-foreground">No reviews available yet.</p>
-              <p className="text-muted-foreground mt-2">Check that you have published reviews in Sanity Studio.</p>
+              <p className="text-muted-foreground mt-2">Check that you have published reviews in Sanity Studio with category set to "review".</p>
             </div>
           ) : (
             <ArticleGrid articles={articles} columns={3} />

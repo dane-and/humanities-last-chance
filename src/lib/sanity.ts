@@ -2,6 +2,7 @@
 import { createClient } from '@sanity/client';
 import imageUrlBuilder from '@sanity/image-url';
 import { PortableText as SanityPortableText } from '@portabletext/react';
+import { toast } from 'sonner';
 
 export const sanityClient = createClient({
   projectId: 'nzyg33ca',  // Using your provided Sanity project ID
@@ -46,22 +47,32 @@ export async function fetchBlogPosts() {
         tags,
         excerpt
       }
-    `);
+    `)
+    .catch(error => {
+      console.error("Error in Sanity fetch:", error);
+      toast.error("Failed to connect to Sanity CMS");
+      return [];
+    });
     
     console.log("Fetched raw posts from Sanity:", posts);
     
     // Verify category values in the raw data
-    posts.forEach((post: any) => {
-      console.log(`Raw post "${post.title}" has category:`, post.category);
-      // Also log the publishedAt date for debugging
-      console.log(`Raw post "${post.title}" has publishedAt:`, post.publishedAt);
-      // And log tags if any
-      console.log(`Raw post "${post.title}" has tags:`, post.tags);
-    });
+    if (posts && posts.length > 0) {
+      posts.forEach((post: any) => {
+        console.log(`Raw post "${post.title}" has category:`, post.category);
+        // Also log the publishedAt date for debugging
+        console.log(`Raw post "${post.title}" has publishedAt:`, post.publishedAt);
+        // And log tags if any
+        console.log(`Raw post "${post.title}" has tags:`, post.tags);
+      });
+    } else {
+      console.log("No posts returned from Sanity");
+    }
     
     return posts;
   } catch (error) {
     console.error("Error fetching blog posts:", error);
+    toast.error("Error loading posts from Sanity");
     return [];
   }
 }
@@ -88,7 +99,12 @@ export async function fetchArticleBySlug(slug: string) {
         excerpt,
         comments
       }
-    `, { slug });
+    `, { slug })
+    .catch(error => {
+      console.error(`Error in Sanity fetch for slug ${slug}:`, error);
+      toast.error("Failed to connect to Sanity CMS");
+      return null;
+    });
     
     if (post) {
       console.log(`Found post with slug "${slug}":`, post);
@@ -112,7 +128,7 @@ export async function fetchArticlesByCategory(category: string) {
     
     // Use case-insensitive comparison for category matching
     const posts = await sanityClient.fetch(`
-      *[_type == "post" && category match $category] | order(publishedAt desc) {
+      *[_type == "post" && tolower(category) == tolower($category)] | order(publishedAt desc) {
         _id,
         title,
         slug,
@@ -128,17 +144,26 @@ export async function fetchArticlesByCategory(category: string) {
         tags,
         excerpt
       }
-    `, { category: `(?i)${category}` });
-    
-    console.log(`Found ${posts.length} posts in category "${category}":`, posts);
-    
-    // Verify category values and publishedAt dates
-    posts.forEach((post: any) => {
-      console.log(`Post "${post.title}" has category "${post.category}" and publishedAt "${post.publishedAt}"`);
-      console.log(`Post "${post.title}" has tags:`, post.tags);
+    `, { category })
+    .catch(error => {
+      console.error(`Error in Sanity fetch for category ${category}:`, error);
+      toast.error("Failed to connect to Sanity CMS");
+      return [];
     });
     
-    return posts;
+    console.log(`Found ${posts ? posts.length : 0} posts in category "${category}":`, posts);
+    
+    // Verify category values and publishedAt dates
+    if (posts && posts.length > 0) {
+      posts.forEach((post: any) => {
+        console.log(`Post "${post.title}" has category "${post.category}" and publishedAt "${post.publishedAt}"`);
+        console.log(`Post "${post.title}" has tags:`, post.tags);
+      });
+    } else {
+      console.log(`No posts found in category "${category}"`);
+    }
+    
+    return posts || [];
   } catch (error) {
     console.error(`Error fetching articles with category ${category}:`, error);
     return [];
