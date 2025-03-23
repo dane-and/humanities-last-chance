@@ -37,12 +37,64 @@ const ArticlePage: React.FC = () => {
           // Debug category type and value
           console.log(`Article category from Sanity (type ${typeof sanityPost.category}):`, sanityPost.category);
           
-          // Apply type checking for category
-          const categoryValue = typeof sanityPost.category === 'string' 
-            ? sanityPost.category 
-            : (Array.isArray(sanityPost.category) && sanityPost.category.length > 0 && typeof sanityPost.category[0] === 'string'
-                ? sanityPost.category[0]
-                : 'Blog'); // Default fallback
+          // Apply type checking for category - handle all possible formats
+          let categoryValue: Article['category'] = 'Blog'; // Default fallback
+          
+          if (typeof sanityPost.category === 'string') {
+            // Direct string assignment - normalize to our expected values
+            const catLower = sanityPost.category.toLowerCase();
+            if (catLower === 'blog' || catLower === 'blogs') {
+              categoryValue = 'Blog';
+            } else if (catLower === 'interview' || catLower === 'interviews') {
+              categoryValue = 'Interview';
+            } else if (catLower === 'review' || catLower === 'reviews') {
+              categoryValue = 'Review';
+            } else if (catLower === 'resource' || catLower === 'resources') {
+              categoryValue = 'Resource';
+            }
+          } else if (Array.isArray(sanityPost.category) && sanityPost.category.length > 0) {
+            // Handle array format
+            if (typeof sanityPost.category[0] === 'string') {
+              const catLower = sanityPost.category[0].toLowerCase();
+              if (catLower === 'blog' || catLower === 'blogs') {
+                categoryValue = 'Blog';
+              } else if (catLower === 'interview' || catLower === 'interviews') {
+                categoryValue = 'Interview';
+              } else if (catLower === 'review' || catLower === 'reviews') {
+                categoryValue = 'Review';
+              } else if (catLower === 'resource' || catLower === 'resources') {
+                categoryValue = 'Resource';
+              }
+            }
+          } else if (sanityPost.category && typeof sanityPost.category === 'object') {
+            // Handle object format with potential name or title property
+            const objCat = sanityPost.category;
+            if (typeof objCat.name === 'string') {
+              const catLower = objCat.name.toLowerCase();
+              if (catLower === 'blog' || catLower === 'blogs') {
+                categoryValue = 'Blog';
+              } else if (catLower === 'interview' || catLower === 'interviews') {
+                categoryValue = 'Interview';
+              } else if (catLower === 'review' || catLower === 'reviews') {
+                categoryValue = 'Review';
+              } else if (catLower === 'resource' || catLower === 'resources') {
+                categoryValue = 'Resource';
+              }
+            } else if (typeof objCat.title === 'string') {
+              const catLower = objCat.title.toLowerCase();
+              if (catLower === 'blog' || catLower === 'blogs') {
+                categoryValue = 'Blog';
+              } else if (catLower === 'interview' || catLower === 'interviews') {
+                categoryValue = 'Interview';
+              } else if (catLower === 'review' || catLower === 'reviews') {
+                categoryValue = 'Review';
+              } else if (catLower === 'resource' || catLower === 'resources') {
+                categoryValue = 'Resource';
+              }
+            }
+          }
+          
+          console.log("Using safe category value:", categoryValue);
           
           // Debug the tags
           console.log(`Article tags from Sanity:`, sanityPost.tags);

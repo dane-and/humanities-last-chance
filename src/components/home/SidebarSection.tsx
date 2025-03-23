@@ -41,6 +41,15 @@ const SidebarSection: React.FC = () => {
             const publishedDate = post.publishedAt 
               ? new Date(post.publishedAt) 
               : (post._createdAt ? new Date(post._createdAt) : new Date());
+            
+            // Safely handle category
+            const categoryValue = typeof post.category === 'string' 
+              ? post.category 
+              : (Array.isArray(post.category) && post.category.length > 0 && typeof post.category[0] === 'string'
+                  ? post.category[0]
+                  : 'Interview'); // Default for this section
+            
+            console.log(`Interview post "${post.title}" category type:`, typeof post.category, "value:", post.category);
               
             return {
               id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -52,7 +61,7 @@ const SidebarSection: React.FC = () => {
                 day: 'numeric'
               }),
               publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
-              category: 'Interview',
+              category: 'Interview', // Always hardcode proper category here
               image: post.mainImage?.asset?.url || '',
               imageCaption: post.mainImage?.caption || '',
               excerpt: post.excerpt || '',
@@ -77,6 +86,15 @@ const SidebarSection: React.FC = () => {
             const publishedDate = post.publishedAt 
               ? new Date(post.publishedAt) 
               : (post._createdAt ? new Date(post._createdAt) : new Date());
+            
+            // Safely handle category
+            const categoryValue = typeof post.category === 'string' 
+              ? post.category 
+              : (Array.isArray(post.category) && post.category.length > 0 && typeof post.category[0] === 'string'
+                  ? post.category[0]
+                  : 'Review'); // Default for this section
+            
+            console.log(`Review post "${post.title}" category type:`, typeof post.category, "value:", post.category);
               
             return {
               id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -88,7 +106,7 @@ const SidebarSection: React.FC = () => {
                 day: 'numeric'
               }),
               publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
-              category: 'Review',
+              category: 'Review', // Always hardcode proper category here
               image: post.mainImage?.asset?.url || '',
               imageCaption: post.mainImage?.caption || '',
               excerpt: post.excerpt || '',

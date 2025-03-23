@@ -76,6 +76,15 @@ export async function fetchBlogPosts() {
     // Debug posts data
     if (posts && posts.length > 0) {
       console.log("Sample post data:", posts[0]);
+      // Log all categories for debugging
+      const categories = [...new Set(posts.map((post: any) => {
+        const cat = post.category;
+        if (typeof cat === 'string') return cat;
+        if (Array.isArray(cat) && cat.length > 0) return `Array: ${cat[0]}`;
+        if (cat && typeof cat === 'object') return `Object: ${JSON.stringify(cat)}`;
+        return 'undefined or null';
+      }))];
+      console.log("All categories found in posts:", categories);
     } else {
       console.log("No posts returned from Sanity");
     }
@@ -116,6 +125,17 @@ export async function fetchArticleBySlug(slug: string) {
       toast.error("Failed to connect to Sanity CMS");
       return null;
     });
+    
+    // Add detailed logging of the category field
+    if (post) {
+      console.log(`Category for article "${post.title}" (slug: ${slug}):`);
+      console.log(`  Type: ${typeof post.category}`);
+      console.log(`  Value:`, post.category);
+      if (typeof post.category === 'object' && post.category !== null) {
+        console.log(`  Keys: ${Object.keys(post.category).join(', ')}`);
+        console.log(`  JSON: ${JSON.stringify(post.category)}`);
+      }
+    }
     
     return post;
   } catch (error) {
@@ -158,31 +178,64 @@ export async function fetchArticlesByCategory(category: string) {
     
     if (posts && posts.length > 0) {
       // Log all categories for debugging
-      const categories = [...new Set(posts.map((post: any) => post.category))];
-      console.log("Available categories in posts:", categories);
+      const allCategories = [...new Set(posts.map((post: any) => {
+        const cat = post.category;
+        if (typeof cat === 'string') return cat;
+        if (Array.isArray(cat) && cat.length > 0) return `Array: ${cat[0]}`;
+        if (cat && typeof cat === 'object') return `Object: ${JSON.stringify(cat)}`;
+        return 'undefined or null';
+      }))];
+      console.log("Available categories in posts:", allCategories);
       
       // Filter posts by category (case-insensitive)
       const filteredPosts = posts.filter((post: any) => {
         if (!post.category) return false;
         
-        // Simple string comparison (case-insensitive)
-        // Handling both singular and plural forms for flexibility
-        const postCategory = post.category.toLowerCase();
+        // Safely extract category string for comparison
+        let postCategoryStr = '';
+        
+        if (typeof post.category === 'string') {
+          postCategoryStr = post.category.toLowerCase();
+        } else if (Array.isArray(post.category) && post.category.length > 0) {
+          if (typeof post.category[0] === 'string') {
+            postCategoryStr = post.category[0].toLowerCase();
+          }
+        } else if (post.category && typeof post.category === 'object') {
+          if (typeof post.category.name === 'string') {
+            postCategoryStr = post.category.name.toLowerCase();
+          } else if (typeof post.category.title === 'string') {
+            postCategoryStr = post.category.title.toLowerCase();
+          }
+        }
+        
+        if (postCategoryStr === '') return false;
+        
+        // Now compare with the search category
         const searchCategory = category.toLowerCase();
         
         // Match exactly what's in Sanity
-        if (postCategory === searchCategory) return true;
+        if (postCategoryStr === searchCategory) return true;
         
         // Handle singular/plural differences
-        if (searchCategory === 'review' && postCategory === 'reviews') return true;
-        if (searchCategory === 'reviews' && postCategory === 'review') return true;
-        if (searchCategory === 'interview' && postCategory === 'interviews') return true;
-        if (searchCategory === 'interviews' && postCategory === 'interview') return true;
+        if (searchCategory === 'review' && postCategoryStr === 'reviews') return true;
+        if (searchCategory === 'reviews' && postCategoryStr === 'review') return true;
+        if (searchCategory === 'interview' && postCategoryStr === 'interviews') return true;
+        if (searchCategory === 'interviews' && postCategoryStr === 'interview') return true;
         
         return false;
       });
       
       console.log(`Found ${filteredPosts.length} posts with category "${category}" (including singular/plural variations)`);
+      
+      // Log the titles of filtered posts for debugging
+      if (filteredPosts.length > 0) {
+        console.log("Filtered posts:", filteredPosts.map((p: any) => ({ 
+          title: p.title, 
+          categoryType: typeof p.category,
+          categoryValue: p.category
+        })));
+      }
+      
       return filteredPosts;
     }
     
