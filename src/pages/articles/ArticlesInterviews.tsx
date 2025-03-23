@@ -19,30 +19,41 @@ const ArticlesInterviews: React.FC = () => {
       try {
         // Use exact case "Interview" for the API call
         const sanityPosts = await fetchArticlesByCategory('Interview');
+        console.log(`Found ${sanityPosts.length} interview posts from Sanity`);
         
         // Convert Sanity posts to Article format
-        const interviewArticles: Article[] = sanityPosts.map((post: any) => ({
-          id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-          title: post.title || "Untitled Post",
-          slug: post.slug?.current || `post-${Date.now()}`,
-          date: post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          }) : new Date().toLocaleDateString(),
-          category: post.category || 'Interview', // Keep the exact case from Sanity
-          image: post.mainImage?.asset?.url || '',
-          imageCaption: post.mainImage?.caption || '',
-          excerpt: post.excerpt || '',
-          content: post.body || '',
-          featured: false,
-          tags: post.tags || [],
-        }));
+        const interviewArticles: Article[] = sanityPosts.map((post: any) => {
+          const publishedDate = post.publishedAt 
+            ? new Date(post.publishedAt) 
+            : (post._createdAt ? new Date(post._createdAt) : new Date());
+            
+          return {
+            id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            title: post.title || "Untitled Post",
+            slug: post.slug?.current || `post-${Date.now()}`,
+            date: publishedDate.toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            }),
+            publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
+            category: post.category || 'Interview', // Keep the exact case from Sanity
+            image: post.mainImage?.asset?.url || '',
+            imageCaption: post.mainImage?.caption || '',
+            excerpt: post.excerpt || '',
+            content: post.body || '',
+            featured: false,
+            tags: post.tags || [],
+          };
+        }).sort((a, b) => {
+          return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+        });
         
         console.log("Formatted interview articles:", interviewArticles);
         setArticles(interviewArticles);
       } catch (error) {
         console.error("Error loading articles:", error);
+        setArticles([]);
       } finally {
         setLoading(false);
       }

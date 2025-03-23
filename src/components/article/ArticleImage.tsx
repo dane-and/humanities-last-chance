@@ -22,7 +22,7 @@ const ArticleImage: React.FC<ArticleImageProps> = ({ image, title, imageCaption 
         caption={imageCaption || ''}
         captionClassName="text-center text-sm text-muted-foreground mt-2 italic"
         width={1200}
-        height={675}
+        height={800}
         priority={true}
       />
     </div>

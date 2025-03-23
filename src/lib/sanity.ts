@@ -55,6 +55,8 @@ export async function fetchBlogPosts() {
       console.log(`Raw post "${post.title}" has category:`, post.category);
       // Also log the publishedAt date for debugging
       console.log(`Raw post "${post.title}" has publishedAt:`, post.publishedAt);
+      // And log tags if any
+      console.log(`Raw post "${post.title}" has tags:`, post.tags);
     });
     
     return posts;
@@ -92,6 +94,7 @@ export async function fetchArticleBySlug(slug: string) {
       console.log(`Found post with slug "${slug}":`, post);
       console.log(`Post category:`, post.category);
       console.log(`Post publishedAt:`, post.publishedAt);
+      console.log(`Post tags:`, post.tags);
     } else {
       console.log(`No post found with slug "${slug}"`);
     }
@@ -132,6 +135,7 @@ export async function fetchArticlesByCategory(category: string) {
     // Verify category values and publishedAt dates
     posts.forEach((post: any) => {
       console.log(`Post "${post.title}" has category "${post.category}" and publishedAt "${post.publishedAt}"`);
+      console.log(`Post "${post.title}" has tags:`, post.tags);
     });
     
     return posts;

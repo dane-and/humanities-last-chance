@@ -29,48 +29,76 @@ const SidebarSection: React.FC = () => {
       
       try {
         // Fetch interviews
+        console.log("Fetching interview articles for sidebar...");
         const sanityInterviews = await fetchArticlesByCategory('Interview');
-        const formattedInterviews = sanityInterviews.map((post: any) => ({
-          id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-          title: post.title || "Untitled Post",
-          slug: post.slug?.current || `post-${Date.now()}`,
-          date: post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          }) : new Date().toLocaleDateString(),
-          category: 'Interview',
-          image: post.mainImage?.asset?.url || '',
-          excerpt: post.excerpt || '',
-          content: post.body || '',
-          featured: false,
-          tags: post.tags || [],
-        }));
+        console.log(`Found ${sanityInterviews.length} interviews from Sanity`);
+        
+        const formattedInterviews = sanityInterviews.map((post: any) => {
+          const publishedDate = post.publishedAt 
+            ? new Date(post.publishedAt) 
+            : (post._createdAt ? new Date(post._createdAt) : new Date());
+            
+          return {
+            id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            title: post.title || "Untitled Post",
+            slug: post.slug?.current || `post-${Date.now()}`,
+            date: publishedDate.toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            }),
+            publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
+            category: 'Interview',
+            image: post.mainImage?.asset?.url || '',
+            excerpt: post.excerpt || '',
+            content: post.body || '',
+            featured: false,
+            tags: post.tags || [],
+          };
+        }).sort((a: any, b: any) => {
+          return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+        });
         
         // Fetch reviews
+        console.log("Fetching review articles for sidebar...");
         const sanityReviews = await fetchArticlesByCategory('Review');
-        const formattedReviews = sanityReviews.map((post: any) => ({
-          id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-          title: post.title || "Untitled Post",
-          slug: post.slug?.current || `post-${Date.now()}`,
-          date: post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          }) : new Date().toLocaleDateString(),
-          category: 'Review',
-          image: post.mainImage?.asset?.url || '',
-          excerpt: post.excerpt || '',
-          content: post.body || '',
-          featured: false,
-          tags: post.tags || [],
-        }));
+        console.log(`Found ${sanityReviews.length} reviews from Sanity`);
+        
+        const formattedReviews = sanityReviews.map((post: any) => {
+          const publishedDate = post.publishedAt 
+            ? new Date(post.publishedAt) 
+            : (post._createdAt ? new Date(post._createdAt) : new Date());
+            
+          return {
+            id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            title: post.title || "Untitled Post",
+            slug: post.slug?.current || `post-${Date.now()}`,
+            date: publishedDate.toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            }),
+            publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
+            category: 'Review',
+            image: post.mainImage?.asset?.url || '',
+            excerpt: post.excerpt || '',
+            content: post.body || '',
+            featured: false,
+            tags: post.tags || [],
+          };
+        }).sort((a: any, b: any) => {
+          return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+        });
+        
+        console.log(`Formatted ${formattedInterviews.length} interviews and ${formattedReviews.length} reviews for sidebar`);
         
         // Take only 2 most recent for each category
         setInterviews(formattedInterviews.slice(0, 2));
         setReviews(formattedReviews.slice(0, 2));
       } catch (error) {
         console.error("Error fetching sidebar content:", error);
+        setInterviews([]);
+        setReviews([]);
       } finally {
         setLoading(false);
       }

@@ -57,7 +57,10 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           style={{ 
             aspectRatio: `${width}/${height}`,
             width: '100%',
-            maxWidth: '100%',
+            maxWidth: width + 'px',
+            height: 'auto',
+            maxHeight: height + 'px',
+            margin: '0 auto'
           }}
         >
           <div className="absolute inset-0 flex items-center justify-center">
@@ -69,7 +72,11 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       {/* Image container with white background */}
       <div 
         className="bg-white"
-        style={{ aspectRatio: imageLoaded ? 'auto' : `${width}/${height}` }}
+        style={{ 
+          maxWidth: width + 'px',
+          maxHeight: height + 'px',
+          margin: '0 auto'
+        }}
       >
         <img
           src={error ? fallbackImage : src}
@@ -77,7 +84,8 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           width={width}
           height={height}
           loading={priority ? "eager" : "lazy"}
-          className={`w-auto mx-auto max-w-full ${imageLoaded || error ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ${className}`}
+          className={`w-auto mx-auto max-w-full max-h-${height} ${imageLoaded || error ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ${className}`}
+          style={{ maxWidth: '100%', maxHeight: height + 'px', objectFit: 'contain' }}
           onLoad={handleImageLoad}
           onError={handleImageError}
         />

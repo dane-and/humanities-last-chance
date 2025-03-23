@@ -34,8 +34,9 @@ const ArticlePage: React.FC = () => {
         console.log("Fetched article from Sanity:", sanityPost);
         
         if (sanityPost) {
-          // Log the exact category we get from Sanity
+          // Log the exact category and tags we get from Sanity
           console.log(`Article category from Sanity: "${sanityPost.category}"`);
+          console.log(`Article tags from Sanity:`, sanityPost.tags);
           
           // Convert Sanity post to Article format
           const article: Article = {
@@ -47,6 +48,7 @@ const ArticlePage: React.FC = () => {
               month: 'long',
               day: 'numeric'
             }) : new Date().toLocaleDateString(),
+            publishedAt: sanityPost.publishedAt || sanityPost._createdAt || new Date().toISOString(),
             category: sanityPost.category || 'Blog', // Preserve the exact case
             image: sanityPost.mainImage?.asset?.url || '',
             imageCaption: sanityPost.mainImage?.caption || '',
@@ -57,6 +59,7 @@ const ArticlePage: React.FC = () => {
           };
           
           console.log("Formatted article with category:", article.category);
+          console.log("Formatted article with tags:", article.tags);
           setCurrentArticle(article);
         } else {
           setCurrentArticle(null);
@@ -109,7 +112,10 @@ const ArticlePage: React.FC = () => {
           
           <ArticleContent content={currentArticle.content} />
           
-          <ArticleTags tags={currentArticle.tags || []} />
+          {/* Only display tags if they exist */}
+          {currentArticle.tags && currentArticle.tags.length > 0 && (
+            <ArticleTags tags={currentArticle.tags} />
+          )}
           
           {/* Comments link at the bottom of article content */}
           <div className="mb-4 mt-8">
