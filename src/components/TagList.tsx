@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Tag } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
 
 interface TagListProps {
   tags: string[];
@@ -11,6 +12,7 @@ interface TagListProps {
 }
 
 const TagList: React.FC<TagListProps> = ({ tags, className, compact = false }) => {
+  // If no tags, don't render anything
   if (!tags || tags.length === 0) return null;
   
   return (
@@ -35,9 +37,13 @@ const TagList: React.FC<TagListProps> = ({ tags, className, compact = false }) =
           <Link
             key={tag}
             to={`/tag/${encodeURIComponent(tag.toLowerCase())}`}
-            className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-xs hover:bg-secondary/80 transition-colors"
           >
-            {tag}
+            <Badge 
+              variant="outline" 
+              className="bg-white text-blue-500 hover:bg-gray-100 border border-gray-200 transition-colors"
+            >
+              {tag}
+            </Badge>
           </Link>
         ))
       )}

@@ -5,7 +5,19 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { X } from 'lucide-react';
 
-const PREDEFINED_TAGS = ['History', 'Literature', 'Philosophy', 'Teaching', 'News'];
+const PREDEFINED_TAGS = [
+  'Literature',
+  'History',
+  'Philosophy',
+  'Teaching',
+  'AI',
+  'Religion',
+  'Visual Arts',
+  'Architecture',
+  'Music',
+  'Social Science',
+  'Science'
+];
 
 interface TagsFieldProps {
   selectedTags: string[];
@@ -44,12 +56,12 @@ const TagsField: React.FC<TagsFieldProps> = ({
       <label className="text-sm font-medium">Tags</label>
       <div className="flex flex-wrap gap-2 mb-2">
         {selectedTags.map(tag => (
-          <div key={tag} className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-sm flex items-center">
+          <div key={tag} className="bg-white text-blue-500 px-3 py-1 rounded-full text-sm flex items-center border border-gray-200">
             {tag}
             <button 
               type="button" 
               onClick={() => handleRemoveTag(tag)}
-              className="ml-2 text-secondary-foreground/70 hover:text-secondary-foreground"
+              className="ml-2 text-blue-500/70 hover:text-blue-500"
             >
               <X className="h-3 w-3" />
             </button>
