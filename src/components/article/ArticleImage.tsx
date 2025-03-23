@@ -14,7 +14,7 @@ const ArticleImage: React.FC<ArticleImageProps> = ({ image, title, imageCaption 
   }
   
   return (
-    <div className="mb-6 overflow-hidden rounded-lg">
+    <div className="mb-6 overflow-hidden">
       <OptimizedImage
         src={image}
         alt={title}

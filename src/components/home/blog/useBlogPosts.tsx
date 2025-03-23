@@ -19,7 +19,7 @@ export const useBlogPosts = () => {
       
       // Convert Sanity posts format to our Article type
       const formattedPosts: Article[] = posts
-        // Only include posts that are categorized as 'Blog'
+        // Only include posts that are categorized as 'Blog' (case-insensitive)
         .filter((post: any) => {
           const postCategory = post.category || '';
           console.log(`Post "${post.title}" has category: "${postCategory}"`);
@@ -29,11 +29,6 @@ export const useBlogPosts = () => {
           // Additional logging to debug category values and dates
           console.log(`Blog post "${post.title}" has category:`, post.category);
           console.log(`Blog post "${post.title}" has publishedAt:`, post.publishedAt);
-          console.log(`Category type:`, typeof post.category);
-          
-          // Ensure we're preserving the exact category capitalization
-          const category = post.category || 'Blog';
-          console.log(`Using category "${category}" for post "${post.title}"`);
           
           // Always use the original publishedAt date from Sanity
           const publishedDate = post.publishedAt 
@@ -62,11 +57,12 @@ export const useBlogPosts = () => {
           };
         });
       
-      console.log("Formatted blog posts with preserved categories and original dates:", formattedPosts);
+      console.log("Formatted blog posts after filtering:", formattedPosts);
+      console.log("Number of blog posts after filtering:", formattedPosts.length);
       
       // If no posts are returned from Sanity, use the default articles
       if (formattedPosts.length === 0) {
-        console.log("No posts returned from Sanity, using default articles");
+        console.log("No blog posts found after filtering, using default articles");
         setBlogPosts(defaultArticles.filter(article => article.category.toLowerCase() === 'blog'));
       } else {
         // Explicitly sort the posts by publishedAt date (newest first)

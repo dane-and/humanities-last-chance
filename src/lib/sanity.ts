@@ -110,9 +110,9 @@ export async function fetchArticlesByCategory(category: string) {
   try {
     console.log(`Fetching articles with category "${category}"`);
     
-    // Use the exact category string for the query
+    // Use case-insensitive comparison for category matching
     const posts = await sanityClient.fetch(`
-      *[_type == "post" && category == $category] | order(publishedAt desc) {
+      *[_type == "post" && category match $category] | order(publishedAt desc) {
         _id,
         title,
         slug,
@@ -128,7 +128,7 @@ export async function fetchArticlesByCategory(category: string) {
         tags,
         excerpt
       }
-    `, { category });
+    `, { category: `(?i)${category}` });
     
     console.log(`Found ${posts.length} posts in category "${category}":`, posts);
     

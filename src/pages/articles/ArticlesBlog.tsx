@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import ArticleGrid from '@/components/ArticleGrid';
@@ -24,9 +23,10 @@ const ArticlesBlog: React.FC = () => {
         // Check if we got any posts back
         if (sanityPosts && sanityPosts.length > 0) {
           // Convert Sanity posts to Article format and filter for Blog category
+          // Use case-insensitive comparison for more reliable filtering
           const blogArticles: Article[] = sanityPosts
             .filter((post: any) => 
-              post.category?.toLowerCase() === 'blog'
+              post.category && post.category.toLowerCase() === 'blog'
             )
             .map((post: any) => {
               // Always use the original publishedAt date from Sanity
@@ -62,8 +62,8 @@ const ArticlesBlog: React.FC = () => {
               return dateB.getTime() - dateA.getTime();
             });
           
-          console.log("Formatted and sorted blog articles by original dates:", 
-            blogArticles.map(a => ({ title: a.title, publishedAt: a.publishedAt })));
+          console.log("Filtered and sorted blog articles:", 
+            blogArticles.map(a => ({ title: a.title, category: a.category, publishedAt: a.publishedAt })));
           
           if (blogArticles.length > 0) {
             setArticles(blogArticles);

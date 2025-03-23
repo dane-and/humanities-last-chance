@@ -17,8 +17,8 @@ const ArticlesInterviews: React.FC = () => {
       console.log("Loading interview articles from Sanity...");
       
       try {
-        // Use exact case "Interview" for the API call
-        const sanityPosts = await fetchArticlesByCategory('Interview');
+        // Use "interview" for the API call (case-insensitive matching is handled in the fetchArticlesByCategory function)
+        const sanityPosts = await fetchArticlesByCategory('interview');
         console.log(`Found ${sanityPosts.length} interview posts from Sanity`);
         
         // Convert Sanity posts to Article format
@@ -37,7 +37,7 @@ const ArticlesInterviews: React.FC = () => {
               day: 'numeric'
             }),
             publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
-            category: post.category || 'Interview', // Keep the exact case from Sanity
+            category: 'Interview', // Normalize category for frontend use
             image: post.mainImage?.asset?.url || '',
             imageCaption: post.mainImage?.caption || '',
             excerpt: post.excerpt || '',
