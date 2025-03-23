@@ -38,6 +38,30 @@ export function urlFor(source: any) {
 // Create a reusable PortableText component
 export const PortableText = SanityPortableText;
 
+// Safely get category string - utility function to avoid repetition
+function getSafeCategoryString(category: any): string {
+  if (typeof category === 'string') {
+    return category;
+  }
+  
+  if (Array.isArray(category) && category.length > 0) {
+    if (typeof category[0] === 'string') {
+      return category[0];
+    }
+  }
+  
+  if (category && typeof category === 'object') {
+    if (typeof category.name === 'string') {
+      return category.name;
+    }
+    if (typeof category.title === 'string') {
+      return category.title;
+    }
+  }
+  
+  return ''; // Empty string if we can't extract a category
+}
+
 export async function fetchBlogPosts() {
   try {
     console.log("Fetching all blog posts from Sanity...");
@@ -126,14 +150,21 @@ export async function fetchArticleBySlug(slug: string) {
       return null;
     });
     
-    // Add detailed logging of the category field
+    // Add more detailed logging of the category field
     if (post) {
       console.log(`Category for article "${post.title}" (slug: ${slug}):`);
       console.log(`  Type: ${typeof post.category}`);
       console.log(`  Value:`, post.category);
-      if (typeof post.category === 'object' && post.category !== null) {
+      
+      // More extensive debug info for complex objects
+      if (post.category === null) {
+        console.log(`  Category is null`);
+      } else if (post.category === undefined) {
+        console.log(`  Category is undefined`);
+      } else if (typeof post.category === 'object' && post.category !== null) {
         console.log(`  Keys: ${Object.keys(post.category).join(', ')}`);
         console.log(`  JSON: ${JSON.stringify(post.category)}`);
+        console.log(`  Safe extracted category: ${getSafeCategoryString(post.category)}`);
       }
     }
     
@@ -192,23 +223,11 @@ export async function fetchArticlesByCategory(category: string) {
         if (!post.category) return false;
         
         // Safely extract category string for comparison
-        let postCategoryStr = '';
-        
-        if (typeof post.category === 'string') {
-          postCategoryStr = post.category.toLowerCase();
-        } else if (Array.isArray(post.category) && post.category.length > 0) {
-          if (typeof post.category[0] === 'string') {
-            postCategoryStr = post.category[0].toLowerCase();
-          }
-        } else if (post.category && typeof post.category === 'object') {
-          if (typeof post.category.name === 'string') {
-            postCategoryStr = post.category.name.toLowerCase();
-          } else if (typeof post.category.title === 'string') {
-            postCategoryStr = post.category.title.toLowerCase();
-          }
-        }
-        
+        let postCategoryStr = getSafeCategoryString(post.category);
         if (postCategoryStr === '') return false;
+        
+        // Convert to lowercase for comparison only if we have a string
+        postCategoryStr = postCategoryStr.toLowerCase();
         
         // Now compare with the search category
         const searchCategory = category.toLowerCase();
@@ -232,7 +251,8 @@ export async function fetchArticlesByCategory(category: string) {
         console.log("Filtered posts:", filteredPosts.map((p: any) => ({ 
           title: p.title, 
           categoryType: typeof p.category,
-          categoryValue: p.category
+          categoryValue: p.category,
+          safeCategoryStr: getSafeCategoryString(p.category)
         })));
       }
       

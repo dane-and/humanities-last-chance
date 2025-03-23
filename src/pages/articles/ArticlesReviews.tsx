@@ -7,6 +7,41 @@ import { Article } from '@/lib/types/article';
 import { fetchArticlesByCategory, fetchBlogPosts } from '@/lib/sanity';
 import { toast } from 'sonner';
 
+/**
+ * Safely extracts a category string from various possible formats
+ */
+const getCategoryString = (rawCategory: any): string => {
+  // If null or undefined, return empty string
+  if (rawCategory === null || rawCategory === undefined) {
+    return '';
+  }
+  
+  // If it's already a string
+  if (typeof rawCategory === 'string') {
+    return rawCategory;
+  }
+  
+  // If it's an array, take the first string element
+  if (Array.isArray(rawCategory) && rawCategory.length > 0) {
+    if (typeof rawCategory[0] === 'string') {
+      return rawCategory[0];
+    }
+  }
+  
+  // If it's an object with a name or title property
+  if (rawCategory && typeof rawCategory === 'object') {
+    if (typeof rawCategory.name === 'string') {
+      return rawCategory.name;
+    }
+    if (typeof rawCategory.title === 'string') {
+      return rawCategory.title;
+    }
+  }
+  
+  // Default fallback - empty string indicates we couldn't extract a category
+  return '';
+};
+
 const ArticlesReviews: React.FC = () => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [allPosts, setAllPosts] = useState<any[]>([]);
@@ -30,13 +65,27 @@ const ArticlesReviews: React.FC = () => {
         setAllPosts(allSanityPosts || []);
         
         if (allSanityPosts && allSanityPosts.length > 0) {
+          // Log all categories with additional debug info
           console.log("All categories in posts:", 
-            [...new Set(allSanityPosts.map((post: any) => post.category))]);
-          
-          // Now filter for reviews - IMPORTANT: Changed from 'review' to 'reviews' to match Sanity
-          const reviewPosts = allSanityPosts.filter((post: any) => 
-            post.category && post.category.toLowerCase() === 'reviews'
+            allSanityPosts.map((post: any) => ({
+              title: post.title,
+              categoryType: typeof post.category,
+              categoryValue: post.category,
+              extractedCategory: getCategoryString(post.category)
+            }))
           );
+          
+          // Now filter for reviews - using safe string extraction and lowercase comparison
+          const reviewPosts = allSanityPosts.filter((post: any) => {
+            // Get safe category string
+            const categoryStr = getCategoryString(post.category);
+            
+            // Check if this is a review post (handle both singular and plural)
+            if (!categoryStr) return false;
+            
+            const lowerCaseCat = categoryStr.toLowerCase();
+            return lowerCaseCat === 'reviews' || lowerCaseCat === 'review';
+          });
           
           console.log(`Found ${reviewPosts.length} review posts after filtering`);
           

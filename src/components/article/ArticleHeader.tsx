@@ -14,8 +14,16 @@ interface ArticleHeaderProps {
 const ArticleHeader: React.FC<ArticleHeaderProps> = ({ article, onGoBack }) => {
   const isMobile = useIsMobile();
   
-  // Ensure category is a valid string
+  // Ensure category is a valid string and log any issues
   const safeCategory = typeof article.category === 'string' ? article.category : 'Blog';
+  
+  // Debug log for category problems
+  if (typeof article.category !== 'string') {
+    console.error(`ArticleHeader: Invalid category type for article "${article.title}"`, {
+      categoryType: typeof article.category,
+      categoryValue: article.category
+    });
+  }
   
   return (
     <>

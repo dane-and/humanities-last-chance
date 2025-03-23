@@ -5,6 +5,41 @@ import { Page } from '@/lib/types/page';
 import { toast } from 'sonner';
 import { fetchBlogPosts } from '@/lib/sanity';
 
+/**
+ * Safely extracts a category string from various possible formats
+ */
+const getCategoryString = (rawCategory: any): string => {
+  // If null or undefined, return default
+  if (rawCategory === null || rawCategory === undefined) {
+    return 'Blog';
+  }
+  
+  // If it's already a string
+  if (typeof rawCategory === 'string') {
+    return rawCategory;
+  }
+  
+  // If it's an array, take the first string element
+  if (Array.isArray(rawCategory) && rawCategory.length > 0) {
+    if (typeof rawCategory[0] === 'string') {
+      return rawCategory[0];
+    }
+  }
+  
+  // If it's an object with a name or title property
+  if (rawCategory && typeof rawCategory === 'object') {
+    if (typeof rawCategory.name === 'string') {
+      return rawCategory.name;
+    }
+    if (typeof rawCategory.title === 'string') {
+      return rawCategory.title;
+    }
+  }
+  
+  // Default fallback
+  return 'Blog';
+};
+
 export const useContentData = () => {
   // Articles state
   const [articleList, setArticleList] = useState<Article[]>([]);
@@ -30,35 +65,21 @@ export const useContentData = () => {
       if (posts && posts.length > 0) {
         // Convert Sanity posts to our Article format
         const formattedArticles = posts.map((post: any) => {
-          // Ensure we're using the correct category type - safely handle non-string values
-          let typedCategory: Article['category'];
-          
-          // First ensure we have a valid string for the category
-          const rawCategory = post.category;
+          // Extract category string safely from any potential format
+          const categoryString = getCategoryString(post.category);
           
           // Log category for debugging
-          console.log(`Post "${post.title}" has category type: ${typeof rawCategory}, value:`, rawCategory);
+          console.log(`Post "${post.title}" has category:`, {
+            originalType: typeof post.category,
+            originalValue: post.category,
+            extractedString: categoryString
+          });
           
-          // Safely extract category string
-          let categoryString = 'Blog'; // Default
+          // Now that we have a safe string, determine the normalized category
+          // Use a lowercase comparison to standardize, but maintain proper case for display
+          let typedCategory: Article['category'];
           
-          if (typeof rawCategory === 'string') {
-            categoryString = rawCategory;
-          } else if (Array.isArray(rawCategory) && rawCategory.length > 0) {
-            // If it's an array, take the first element (if it's a string)
-            if (typeof rawCategory[0] === 'string') {
-              categoryString = rawCategory[0];
-            }
-          } else if (rawCategory && typeof rawCategory === 'object') {
-            // If it's an object with a name/title property
-            if (typeof rawCategory.name === 'string') {
-              categoryString = rawCategory.name;
-            } else if (typeof rawCategory.title === 'string') {
-              categoryString = rawCategory.title;
-            }
-          }
-          
-          // Process the category string (now safely a string)
+          // Only apply toLowerCase if we have a string
           const lowerCaseCategory = categoryString.toLowerCase();
           
           // Handle plural and singular forms of categories

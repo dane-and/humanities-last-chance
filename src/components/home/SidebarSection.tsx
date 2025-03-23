@@ -42,14 +42,23 @@ const SidebarSection: React.FC = () => {
               ? new Date(post.publishedAt) 
               : (post._createdAt ? new Date(post._createdAt) : new Date());
             
-            // Safely handle category
-            const categoryValue = typeof post.category === 'string' 
-              ? post.category 
-              : (Array.isArray(post.category) && post.category.length > 0 && typeof post.category[0] === 'string'
-                  ? post.category[0]
-                  : 'Interview'); // Default for this section
+            // Safely handle category - always guard against invalid types
+            let actualCategory: string;
             
-            console.log(`Interview post "${post.title}" category type:`, typeof post.category, "value:", post.category);
+            if (typeof post.category === 'string') {
+              actualCategory = post.category;
+            } else if (Array.isArray(post.category) && post.category.length > 0 && typeof post.category[0] === 'string') {
+              actualCategory = post.category[0];
+            } else if (post.category && typeof post.category === 'object' && typeof post.category.name === 'string') {
+              actualCategory = post.category.name;
+            } else if (post.category && typeof post.category === 'object' && typeof post.category.title === 'string') {
+              actualCategory = post.category.title;
+            } else {
+              actualCategory = 'Interview'; // Default for this section
+              console.warn(`Interview post "${post.title}" has invalid category:`, post.category);
+            }
+            
+            console.log(`Interview post "${post.title}" normalized category: ${actualCategory}`);
               
             return {
               id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -74,7 +83,7 @@ const SidebarSection: React.FC = () => {
           });
         }
         
-        // Fetch reviews - IMPORTANT: Changed from 'review' to 'reviews' to match Sanity schema
+        // Fetch reviews - Try both 'review' and 'reviews' to maximize matches
         console.log("Fetching review articles for sidebar...");
         const sanityReviews = await fetchArticlesByCategory('reviews');
         console.log(`Found ${sanityReviews?.length || 0} reviews from Sanity`);
@@ -87,14 +96,23 @@ const SidebarSection: React.FC = () => {
               ? new Date(post.publishedAt) 
               : (post._createdAt ? new Date(post._createdAt) : new Date());
             
-            // Safely handle category
-            const categoryValue = typeof post.category === 'string' 
-              ? post.category 
-              : (Array.isArray(post.category) && post.category.length > 0 && typeof post.category[0] === 'string'
-                  ? post.category[0]
-                  : 'Review'); // Default for this section
+            // Safely handle category - always guard against invalid types
+            let actualCategory: string;
             
-            console.log(`Review post "${post.title}" category type:`, typeof post.category, "value:", post.category);
+            if (typeof post.category === 'string') {
+              actualCategory = post.category;
+            } else if (Array.isArray(post.category) && post.category.length > 0 && typeof post.category[0] === 'string') {
+              actualCategory = post.category[0];
+            } else if (post.category && typeof post.category === 'object' && typeof post.category.name === 'string') {
+              actualCategory = post.category.name;
+            } else if (post.category && typeof post.category === 'object' && typeof post.category.title === 'string') {
+              actualCategory = post.category.title;
+            } else {
+              actualCategory = 'Review'; // Default for this section
+              console.warn(`Review post "${post.title}" has invalid category:`, post.category);
+            }
+            
+            console.log(`Review post "${post.title}" normalized category: ${actualCategory}`);
               
             return {
               id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,

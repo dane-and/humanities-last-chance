@@ -34,8 +34,14 @@ const ArticlePage: React.FC = () => {
         console.log("Fetched article from Sanity:", sanityPost);
         
         if (sanityPost) {
-          // Debug category type and value
-          console.log(`Article category from Sanity (type ${typeof sanityPost.category}):`, sanityPost.category);
+          // Debug category type and value - log extensively to catch the issue
+          console.log(`Article category from Sanity:`, {
+            type: typeof sanityPost.category,
+            value: sanityPost.category,
+            toString: Object.prototype.toString.call(sanityPost.category),
+            isNull: sanityPost.category === null,
+            isUndefined: sanityPost.category === undefined
+          });
           
           // Apply type checking for category - handle all possible formats
           let categoryValue: Article['category'] = 'Blog'; // Default fallback
@@ -94,6 +100,7 @@ const ArticlePage: React.FC = () => {
             }
           }
           
+          // Log the final determined category value
           console.log("Using safe category value:", categoryValue);
           
           // Debug the tags
