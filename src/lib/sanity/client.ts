@@ -16,7 +16,7 @@ const sanityConfig = {
   useCdn: true,
   apiVersion,
   // Add these settings for better network resilience
-  perspective: 'published',
+  perspective: 'published' as const, // Explicitly typed as const to match ClientPerspective
   timeout: 60000, // Increased timeout (60 seconds)
   // Add retry configuration
   maxRetries: 3,
