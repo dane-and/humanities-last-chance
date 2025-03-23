@@ -3,13 +3,30 @@ import { createClient } from '@sanity/client';
 import imageUrlBuilder from '@sanity/image-url';
 import { PortableText as SanityPortableText } from '@portabletext/react';
 import { toast } from 'sonner';
+import { CMS_CONFIG } from './config';
 
-export const sanityClient = createClient({
-  projectId: 'nzyg33ca',  // Using your provided Sanity project ID
-  dataset: 'production',
+// Get Sanity configuration from environment variables or fallback to config
+const projectId = CMS_CONFIG.SANITY.PROJECT_ID || 'nzyg33ca';
+const dataset = CMS_CONFIG.SANITY.DATASET || 'production';
+const apiVersion = '2023-05-03';
+
+// Configuration object for debugging
+const sanityConfig = {
+  projectId,
+  dataset,
   useCdn: true,
-  apiVersion: '2023-05-03'
+  apiVersion
+};
+
+// Log configuration for debugging
+console.log('Initializing Sanity client with config:', {
+  projectId: sanityConfig.projectId,
+  dataset: sanityConfig.dataset,
+  apiVersion: sanityConfig.apiVersion,
+  useCdn: sanityConfig.useCdn
 });
+
+export const sanityClient = createClient(sanityConfig);
 
 // Set up image URL builder
 const builder = imageUrlBuilder(sanityClient);
@@ -24,10 +41,11 @@ export const PortableText = SanityPortableText;
 export async function fetchBlogPosts() {
   try {
     console.log("Fetching all blog posts from Sanity...");
+    console.log("Using Sanity project ID:", projectId);
     
-    // Simple query to get all posts
+    // Simple query to get all posts without filtering
     const posts = await sanityClient.fetch(`
-      *[_type == "post"] | order(publishedAt desc) {
+      *[_type == "post"] {
         _id,
         title,
         slug,
@@ -53,20 +71,16 @@ export async function fetchBlogPosts() {
       return [];
     });
     
-    console.log("Fetched raw posts from Sanity:", posts);
+    console.log("Fetched posts from Sanity:", posts?.length || 0);
     
-    // Verify category values in the raw data
+    // Debug posts data
     if (posts && posts.length > 0) {
-      posts.forEach((post: any) => {
-        console.log(`Raw post "${post.title}" has category:`, post.category);
-        console.log(`Raw post "${post.title}" has publishedAt:`, post.publishedAt);
-        console.log(`Raw post "${post.title}" has tags:`, post.tags);
-      });
+      console.log("Sample post data:", posts[0]);
     } else {
       console.log("No posts returned from Sanity");
     }
     
-    return posts;
+    return posts || [];
   } catch (error) {
     console.error("Error fetching blog posts:", error);
     toast.error("Error loading posts from Sanity");
@@ -103,15 +117,6 @@ export async function fetchArticleBySlug(slug: string) {
       return null;
     });
     
-    if (post) {
-      console.log(`Found post with slug "${slug}":`, post);
-      console.log(`Post category:`, post.category);
-      console.log(`Post publishedAt:`, post.publishedAt);
-      console.log(`Post tags:`, post.tags);
-    } else {
-      console.log(`No post found with slug "${slug}"`);
-    }
-    
     return post;
   } catch (error) {
     console.error(`Error fetching article with slug ${slug}:`, error);
@@ -121,12 +126,11 @@ export async function fetchArticleBySlug(slug: string) {
 
 export async function fetchArticlesByCategory(category: string) {
   try {
-    // Debug which category is being requested
     console.log(`Fetching articles with category "${category}" from Sanity...`);
     
-    // First get ALL posts without filtering
+    // First get ALL posts - simplified query to reduce complexity
     const posts = await sanityClient.fetch(`
-      *[_type == "post"] | order(publishedAt desc) {
+      *[_type == "post"] {
         _id,
         title,
         slug,
@@ -149,41 +153,27 @@ export async function fetchArticlesByCategory(category: string) {
       return [];
     });
     
-    // Log all posts to debug
-    console.log(`Found ${posts ? posts.length : 0} total posts from Sanity before filtering:`, posts);
+    // Log all retrieved posts for debugging
+    console.log(`Retrieved ${posts?.length || 0} total posts from Sanity`);
     
-    // If we have posts, filter them client-side for the requested category
     if (posts && posts.length > 0) {
-      // Log all posts' categories for debugging
-      posts.forEach((post: any) => {
-        console.log(`Post "${post.title}" has category "${post.category}"`);
-      });
+      // Log all categories for debugging
+      const categories = [...new Set(posts.map((post: any) => post.category))];
+      console.log("Available categories in posts:", categories);
       
       // Filter posts by category (case-insensitive)
       const filteredPosts = posts.filter((post: any) => {
-        // Skip undefined categories
-        if (!post.category) {
-          console.log(`Post "${post.title}" has no category defined`);
-          return false;
-        }
+        if (!post.category) return false;
         
-        // Compare lowercase versions
-        const postCategory = post.category.toLowerCase();
-        const requestedCategory = category.toLowerCase();
-        const isMatch = postCategory === requestedCategory;
-        
-        console.log(`Post "${post.title}" category "${postCategory}" matches requested "${requestedCategory}"? ${isMatch}`);
-        
-        return isMatch;
+        // Simple string comparison (case-insensitive)
+        return post.category.toLowerCase() === category.toLowerCase();
       });
       
-      console.log(`After filtering for category "${category}", found ${filteredPosts.length} posts:`, 
-        filteredPosts.map(p => p.title));
-      
+      console.log(`Found ${filteredPosts.length} posts with category "${category}"`);
       return filteredPosts;
     }
     
-    console.log(`No posts found at all from Sanity`);
+    console.log("No posts found from Sanity");
     return [];
   } catch (error) {
     console.error(`Error fetching articles by category:`, error);
