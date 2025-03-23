@@ -1,8 +1,23 @@
 
 /**
- * Safely extracts a category string from various possible formats
+ * Category Utilities
+ * 
+ * This file contains utilities for working with category data in the application.
+ * It is organized into sections:
+ * 1. Category Extraction - Functions for safely extracting category values from various data structures
+ * 2. Category Normalization - Functions for standardizing category values
+ * 3. Category Comparison - Functions for safely comparing category values
+ */
+
+// --------------------------------
+// 1. CATEGORY EXTRACTION
+// --------------------------------
+
+/**
+ * Safely extracts a category string from various possible data formats
+ * 
  * @param rawCategory - The category field which could be string, object, array, etc.
- * @returns A safe string representation of the category
+ * @returns A string representation of the category or 'Blog' as fallback
  */
 export const getSafeCategoryString = (rawCategory: any): string => {
   // Log the incoming value for debugging
@@ -66,18 +81,13 @@ export const getSafeCategoryString = (rawCategory: any): string => {
   return 'Blog';
 };
 
-/**
- * Safely gets a normalized lowercase category for comparisons
- * @param rawCategory - The category field which could be string, object, array, etc.
- * @returns Lowercase string for safe comparisons, empty string if invalid
- */
-export const getSafeLowerCaseCategory = (rawCategory: any): string => {
-  const categoryString = getSafeCategoryString(rawCategory);
-  return categoryString ? categoryString.toLowerCase() : '';
-};
+// --------------------------------
+// 2. CATEGORY NORMALIZATION
+// --------------------------------
 
 /**
- * Gets a normalized category value that matches our defined Article types
+ * Normalizes a category value to match the application's defined Article types
+ * 
  * @param rawCategory - The category field from a post/article
  * @returns A normalized category string that matches our Article type
  */
@@ -101,4 +111,49 @@ export const getNormalizedCategory = (rawCategory: any): 'Blog' | 'Interview' | 
   
   // Default
   return 'Blog';
+};
+
+// --------------------------------
+// 3. CATEGORY COMPARISON
+// --------------------------------
+
+/**
+ * Gets a lowercase category string for safe comparisons
+ * 
+ * @param rawCategory - The category field which could be string, object, array, etc.
+ * @returns Lowercase string for safe comparisons, empty string if invalid
+ */
+export const getSafeLowerCaseCategory = (rawCategory: any): string => {
+  const categoryString = getSafeCategoryString(rawCategory);
+  return categoryString ? categoryString.toLowerCase() : '';
+};
+
+/**
+ * Checks if a category matches a given target category (case-insensitive)
+ * Handles singular/plural variations
+ * 
+ * @param rawCategory - The category to check
+ * @param targetCategory - The target category to match against
+ * @returns True if categories match (including singular/plural variations)
+ */
+export const isCategoryMatch = (rawCategory: any, targetCategory: string): boolean => {
+  const category = getSafeLowerCaseCategory(rawCategory);
+  const target = targetCategory.toLowerCase();
+  
+  // Direct match
+  if (category === target) {
+    return true;
+  }
+  
+  // Handle singular/plural variations
+  if (target === 'review' && category === 'reviews') return true;
+  if (target === 'reviews' && category === 'review') return true;
+  if (target === 'interview' && category === 'interviews') return true;
+  if (target === 'interviews' && category === 'interview') return true;
+  if (target === 'blog' && category === 'blogs') return true;
+  if (target === 'blogs' && category === 'blog') return true;
+  if (target === 'resource' && category === 'resources') return true;
+  if (target === 'resources' && category === 'resource') return true;
+  
+  return false;
 };
