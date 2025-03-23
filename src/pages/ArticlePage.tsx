@@ -34,8 +34,17 @@ const ArticlePage: React.FC = () => {
         console.log("Fetched article from Sanity:", sanityPost);
         
         if (sanityPost) {
-          // Log the exact category and tags we get from Sanity
-          console.log(`Article category from Sanity: "${sanityPost.category}"`);
+          // Debug category type and value
+          console.log(`Article category from Sanity (type ${typeof sanityPost.category}):`, sanityPost.category);
+          
+          // Apply type checking for category
+          const categoryValue = typeof sanityPost.category === 'string' 
+            ? sanityPost.category 
+            : (Array.isArray(sanityPost.category) && sanityPost.category.length > 0 && typeof sanityPost.category[0] === 'string'
+                ? sanityPost.category[0]
+                : 'Blog'); // Default fallback
+          
+          // Debug the tags
           console.log(`Article tags from Sanity:`, sanityPost.tags);
           
           // Convert Sanity post to Article format
@@ -49,7 +58,7 @@ const ArticlePage: React.FC = () => {
               day: 'numeric'
             }) : new Date().toLocaleDateString(),
             publishedAt: sanityPost.publishedAt || sanityPost._createdAt || new Date().toISOString(),
-            category: sanityPost.category || 'Blog', // Preserve the exact case
+            category: categoryValue, // Use the safely processed category value
             image: sanityPost.mainImage?.asset?.url || '',
             imageCaption: sanityPost.mainImage?.caption || '',
             excerpt: sanityPost.excerpt || '',

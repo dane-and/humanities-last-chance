@@ -14,6 +14,9 @@ interface ArticleHeaderProps {
 const ArticleHeader: React.FC<ArticleHeaderProps> = ({ article, onGoBack }) => {
   const isMobile = useIsMobile();
   
+  // Ensure category is a valid string
+  const safeCategory = typeof article.category === 'string' ? article.category : 'Blog';
+  
   return (
     <>
       <div className={`${isMobile ? 'flex flex-col items-start' : 'flex items-center'} mb-6 gap-4`}>
@@ -33,10 +36,10 @@ const ArticleHeader: React.FC<ArticleHeaderProps> = ({ article, onGoBack }) => {
         <span className="text-muted-foreground text-sm inline-block">{article.date}</span>
         <span className="text-muted-foreground mx-2 text-sm inline-block">•</span>
         <Link 
-          to={`/articles/${article.category}`} 
+          to={`/articles/${safeCategory}`} 
           className="text-primary font-medium text-sm inline-block capitalize"
         >
-          {article.category}
+          {safeCategory}
         </Link>
       </div>
       
