@@ -21,6 +21,9 @@ const ArticlePage: React.FC = () => {
   const [currentArticle, setCurrentArticle] = useState<Article | null>(null);
   const [refreshCounter, setRefreshCounter] = useState(0);
 
+  // Define the onGoBack function to navigate back to the home page
+  const handleGoBack = () => navigate('/');
+
   useEffect(() => {
     const loadArticle = async () => {
       if (!slug) return;
@@ -72,10 +75,10 @@ const ArticlePage: React.FC = () => {
           {loading ? (
             <ArticleLoading />
           ) : currentArticle === null ? (
-            <ArticleNotFound />
+            <ArticleNotFound onGoBack={handleGoBack} />
           ) : (
             <>
-              <ArticleHeader article={currentArticle} onGoBack={() => navigate('/')} />
+              <ArticleHeader article={currentArticle} onGoBack={handleGoBack} />
               <ArticleImage article={currentArticle} />
               <div className="mt-8 mb-12">
                 <ArticleContent content={currentArticle.content} />
