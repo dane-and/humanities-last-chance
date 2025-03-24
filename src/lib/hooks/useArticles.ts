@@ -1,66 +1,37 @@
+import { useEffect, useState } from 'react';
+import { getArticlesByTag } from '@/lib/queries/articleQueries';
+import { Article } from '@/lib/types/article';
 
-import { useState, useEffect } from 'react';
-import { Article } from '../types/article';
-import { toast } from 'sonner';
-import { getArticlesFromStorage, saveArticlesToStorage } from '../utils/storage/articleStorage';
+// Utility to normalize tags
+function normalizeTags(rawTags: (string | { label: string } | null | undefined)[]): string[] {
+  return rawTags
+    .filter((tag): tag is string | { label: string } => tag !== null && tag !== undefined)
+    .map(tag => (typeof tag === 'string' ? tag : tag.label))
+    .filter((tag): tag is string => typeof tag === 'string' && tag.trim().length > 0);
+}
 
-export const useArticles = () => {
+export function useArticles() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  const loadArticles = () => {
-    setIsLoading(true);
-    
-    try {
-      console.log('Loading articles from storage in useArticles hook');
-      // Load articles using the common storage function
-      const loadedArticles = getArticlesFromStorage();
-      setArticles(loadedArticles);
-      setError(null);
-    } catch (err) {
-      console.error('Error loading articles:', err);
-      setError(err instanceof Error ? err : new Error('Unknown error loading articles'));
-      
-      // Use empty array on error instead of defaults
-      setArticles([]);
-      toast.error("Error loading articles.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   useEffect(() => {
-    loadArticles();
-    
-    // Add event listener for article updates
-    const handleArticlesUpdated = () => {
-      console.log('Articles updated event detected, reloading articles');
-      loadArticles();
-    };
-    
-    window.addEventListener('articlesUpdated', handleArticlesUpdated);
-    
-    // Cleanup listener on unmount
-    return () => {
-      window.removeEventListener('articlesUpdated', handleArticlesUpdated);
-    };
+    async function fetchArticles() {
+      try {
+        const rawArticles = await getArticlesByTag(); // Replace with appropriate query
+        const processedArticles = rawArticles.map((article: any) => ({
+          ...article,
+          tags: normalizeTags(article.tags ?? []),
+        }));
+        setArticles(processedArticles);
+      } catch (error) {
+        console.error('Error loading articles:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchArticles();
   }, []);
 
-  const refreshArticles = () => {
-    loadArticles();
-  };
-
-  const updateArticles = (newArticles: Article[]) => {
-    try {
-      console.log('Updating articles in useArticles hook:', newArticles.length);
-      saveArticlesToStorage(newArticles);
-      setArticles(newArticles);
-    } catch (err) {
-      console.error('Error updating articles:', err);
-      toast.error("Failed to update articles");
-    }
-  };
-
-  return { articles, isLoading, error, refreshArticles, updateArticles };
-};
+  return { articles, isLoading };
+}
