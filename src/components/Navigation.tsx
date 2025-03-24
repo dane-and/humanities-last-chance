@@ -1,64 +1,63 @@
 
-import React from 'react';
-import { cn } from '@/lib/utils';
-import SearchBar from './SearchBar';
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import MobileNavigation from './MobileNavigation';
-import { NavigationProvider, useNavigation } from './navigation/NavigationContext';
 import NavLogo from './navigation/NavLogo';
 import DesktopNavItems from './navigation/DesktopNavItems';
-import MobileNavButton from './navigation/MobileNavButton';
+import { CONTENT_CONFIG } from '@/lib/config';
+import ExportButton from './ExportButton';
 
-const NavigationContent = () => {
-  const { isOpen, setIsOpen, scrolled, mainNavItems, dropdownItems } = useNavigation();
+const Navigation: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+  
+  // Define navigation items
+  const mainNavItems = [
+    { name: 'Home', path: '/' },
+    { name: 'About', path: '/about' },
+    { name: 'Articles', path: '/articles/blog' },
+    { name: 'Resources', path: '/resources' },
+    { name: 'Contact', path: '/contact' }
+  ];
+  
+  const dropdownItems = [
+    { name: 'Blog', path: '/articles/blog' },
+    { name: 'Interviews', path: '/articles/interviews' },
+    { name: 'Reviews', path: '/articles/reviews' }
+  ];
   
   return (
-    <nav
-      className={cn(
-        'fixed w-full z-[100] transition-all duration-300',
-        scrolled ? 'bg-background/95 backdrop-blur-md border-b' : 'bg-transparent'
-      )}
-      role="navigation"
-      aria-label="Main Navigation"
-    >
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-14 md:h-20">
-          {/* Logo and site name */}
+        <div className="flex justify-between items-center h-16">
+          {/* Logo */}
           <NavLogo />
           
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center">
+          <nav className="hidden md:flex items-center justify-between space-x-4">
             <DesktopNavItems 
               mainNavItems={mainNavItems}
               dropdownItems={dropdownItems}
             />
-            <div className="ml-6">
-              <SearchBar />
-            </div>
+          </nav>
+          
+          {/* Export Button */}
+          <div className="hidden md:flex items-center ml-4">
+            <ExportButton />
           </div>
           
-          {/* Mobile menu button and search */}
-          <div className="flex items-center gap-4 md:hidden">
-            <SearchBar className="mr-1" />
-            <MobileNavButton isOpen={isOpen} setIsOpen={setIsOpen} />
+          {/* Mobile Navigation toggle */}
+          <div className="flex md:hidden">
+            <MobileNavigation 
+              isOpen={isOpen} 
+              setIsOpen={setIsOpen} 
+              mainNavItems={mainNavItems}
+              dropdownItems={dropdownItems}
+            />
           </div>
         </div>
       </div>
-      
-      {/* Mobile Navigation Menu */}
-      <MobileNavigation 
-        isOpen={isOpen}
-        mainNavItems={mainNavItems}
-        dropdownItems={dropdownItems}
-      />
-    </nav>
-  );
-};
-
-const Navigation = () => {
-  return (
-    <NavigationProvider>
-      <NavigationContent />
-    </NavigationProvider>
+    </header>
   );
 };
 
