@@ -18,13 +18,13 @@ const TagsPage: React.FC = () => {
     articles.filter(article => {
       // Handle both string array and object array with label property
       const normalizedArticleTags = (article.tags || [])
-        .filter(Boolean) // Remove null and undefined values
+        .filter((t): t is NonNullable<typeof t> => t != null) // Remove null and undefined values
         .map(t => {
           // Handle objects with label property
           if (typeof t === 'object' && t !== null && 'label' in t) {
             return ((t as {label: string}).label).toLowerCase();
           }
-          // At this point, t won't be null due to filter(Boolean)
+          // At this point, t won't be null due to filter above
           return String(t).toLowerCase();
         })
         // Explicitly ensure we're only working with non-empty strings
