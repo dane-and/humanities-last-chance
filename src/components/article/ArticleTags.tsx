@@ -14,7 +14,7 @@ const ArticleTags: React.FC<ArticleTagsProps> = ({ tags }) => {
   return (
     <div className="mt-4 pt-2 border-t">
       <div className="flex flex-wrap gap-2">
-        <TagList tags={tags} />
+        <TagList tags={tags} compact={false} />
       </div>
     </div>
   );
