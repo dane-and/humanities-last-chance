@@ -48,13 +48,13 @@ export default {
       type: 'string',
       options: {
         list: [
-          { title: 'Blog', value: 'blog' },
-          { title: 'Interview', value: 'interview' },
-          { title: 'Review', value: 'review' }
+          { title: 'Blog', value: 'Blog' },
+          { title: 'Interview', value: 'Interview' },
+          { title: 'Review', value: 'Review' }
         ],
       },
       validation: Rule => Rule.required(),
-      initialValue: 'blog'
+      initialValue: 'Blog'
     },
     {
       name: 'excerpt',

@@ -3,7 +3,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { Article, defaultArticles } from '@/lib/types/article';
 import { toast } from 'sonner';
 import { fetchBlogPosts } from '@/lib/sanity';
-import { getSafeCategoryString, getNormalizedCategory } from '@/lib/utils/categoryUtils';
 
 export const useBlogPosts = () => {
   const [blogPosts, setBlogPosts] = useState<Article[]>([]);
@@ -19,72 +18,65 @@ export const useBlogPosts = () => {
       const posts = await fetchBlogPosts();
       
       // Convert Sanity posts format to our Article type
-      const formattedPosts: Article[] = posts
-        // Only include posts that are categorized as 'Blog' (case-insensitive)
-        .filter((post: any) => {
-          // Safely extract category string
-          const categoryStr = getSafeCategoryString(post.category);
-          
-          // If we couldn't extract a category, log and skip this post
-          if (!categoryStr) {
-            console.warn(`Post "${post.title}" has invalid category, skipping:`, post.category);
-            return false;
-          }
-          
-          // Log the extracted category
-          console.log(`Post "${post.title}" has extracted category: "${categoryStr}"`);
-          
-          // We use lowercase comparison for filtering
-          return categoryStr.toLowerCase() === 'blog';
-        })
-        .map((post: any) => {
-          // Additional logging to debug category values and dates
-          console.log(`Blog post "${post.title}" has category:`, post.category);
-          console.log(`Blog post "${post.title}" has publishedAt:`, post.publishedAt);
-          
-          // Always use the original publishedAt date from Sanity
-          const publishedDate = post.publishedAt 
-            ? new Date(post.publishedAt) 
-            : (post._createdAt ? new Date(post._createdAt) : new Date());
-          
-          console.log(`Post "${post.title}" using date:`, publishedDate.toISOString());
-          
-          // Use our utility function to get a normalized category value
-          const normalizedCategory = getNormalizedCategory(post.category);
-          
-          return {
-            id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-            title: post.title || "Untitled Post",
-            slug: post.slug?.current || `post-${Date.now()}`,
-            date: publishedDate.toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            }),
-            publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
-            category: normalizedCategory, // Use the normalized category
-            image: post.mainImage?.asset?.url || '',
-            imageCaption: post.mainImage?.caption || '',
-            excerpt: post.excerpt || '',
-            content: post.body || '', // Keep the portable text object as is
-            featured: false,
-            tags: post.tags || [],
-          };
-        });
+      const formattedPosts: Article[] = posts.map((post: any) => {
+        // Additional logging to debug category values and dates
+        console.log(`Post "${post.title}" has category:`, post.category);
+        console.log(`Post "${post.title}" has publishedAt:`, post.publishedAt);
+        console.log(`Category type:`, typeof post.category);
+        
+        // Ensure we're preserving the exact category capitalization
+        const category = post.category || 'Blog';
+        console.log(`Using category "${category}" for post "${post.title}"`);
+        
+        // Match category to our allowed types without changing case
+        let typedCategory: Article['category'];
+        const lowerCaseCategory = category.toLowerCase();
+        if (lowerCaseCategory === 'blog') {
+          typedCategory = 'Blog';
+        } else if (lowerCaseCategory === 'interview') {
+          typedCategory = 'Interview';
+        } else if (lowerCaseCategory === 'review') {
+          typedCategory = 'Review';
+        } else if (lowerCaseCategory === 'resource') {
+          typedCategory = 'Resource';
+        } else {
+          typedCategory = 'Blog'; // Default
+        }
+        
+        // Always use the original publishedAt date from Sanity
+        // This ensures we don't create new dates for old posts
+        const publishedDate = post.publishedAt 
+          ? new Date(post.publishedAt) 
+          : (post._createdAt ? new Date(post._createdAt) : new Date());
+        
+        console.log(`Post "${post.title}" using date:`, publishedDate.toISOString());
+        
+        return {
+          id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          title: post.title || "Untitled Post",
+          slug: post.slug?.current || `post-${Date.now()}`,
+          date: publishedDate.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          }),
+          publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
+          category: typedCategory, // Use the correctly capitalized category
+          image: post.mainImage?.asset?.url || '',
+          imageCaption: post.mainImage?.caption || '',
+          excerpt: post.excerpt || '',
+          content: post.body || '', // Keep the portable text object as is
+          featured: false,
+          tags: post.tags || [],
+        };
+      });
       
-      console.log("Formatted blog posts after filtering:", formattedPosts);
-      console.log("Number of blog posts after filtering:", formattedPosts.length);
+      console.log("Formatted posts with preserved categories and original dates:", formattedPosts);
       
       // If no posts are returned from Sanity, use the default articles
       if (formattedPosts.length === 0) {
-        console.log("No blog posts found after filtering, using default articles");
-        setBlogPosts(defaultArticles.filter(article => {
-          // Type guard for the article.category
-          if (typeof article.category !== 'string') {
-            return false;
-          }
-          return article.category.toLowerCase() === 'blog';
-        }));
+        console.log("No posts returned from Sanity, using default articles");
+        setBlogPosts(defaultArticles);
       } else {
         // Explicitly sort the posts by publishedAt date (newest first)
         // but ensure we're using the original date from Sanity
@@ -94,7 +86,7 @@ export const useBlogPosts = () => {
           return dateB.getTime() - dateA.getTime();
         });
         
-        console.log("Blog posts sorted by original publishedAt date (newest first):", 
+        console.log("Posts sorted by original publishedAt date (newest first):", 
           sortedPosts.map(p => ({ 
             title: p.title, 
             date: p.date, 
@@ -109,15 +101,9 @@ export const useBlogPosts = () => {
       console.error('Error fetching blog posts:', errorMessage);
       setError(err instanceof Error ? err : new Error(errorMessage));
       
-      // Use default articles on error, but filter for blog category only
+      // Use default articles on error
       console.log("Error fetching from Sanity, using default articles");
-      setBlogPosts(defaultArticles.filter(article => {
-        // Type guard for the article.category
-        if (typeof article.category !== 'string') {
-          return false;
-        }
-        return article.category.toLowerCase() === 'blog';
-      }));
+      setBlogPosts(defaultArticles);
     } finally {
       setIsLoading(false);
     }

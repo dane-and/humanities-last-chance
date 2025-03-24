@@ -1,9 +1,9 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import { Article } from '@/lib/types/article';
 import { Page } from '@/lib/types/page';
 import { toast } from 'sonner';
 import { fetchBlogPosts } from '@/lib/sanity';
-import { getNormalizedCategory, getSafeCategoryString } from '@/lib/utils/categoryUtils';
 
 export const useContentData = () => {
   // Articles state
@@ -30,18 +30,22 @@ export const useContentData = () => {
       if (posts && posts.length > 0) {
         // Convert Sanity posts to our Article format
         const formattedArticles = posts.map((post: any) => {
-          // Extract category string safely using utility function
-          const categoryString = getSafeCategoryString(post.category);
+          // Ensure we're using the correct category type
+          let typedCategory: Article['category'];
+          const category = post.category || 'Blog';
+          const lowerCaseCategory = category.toLowerCase();
           
-          // Log category for debugging
-          console.log(`Post "${post.title}" has category:`, {
-            originalType: typeof post.category,
-            originalValue: post.category,
-            extractedString: categoryString
-          });
-          
-          // Get normalized category
-          const typedCategory = getNormalizedCategory(post.category);
+          if (lowerCaseCategory === 'blog') {
+            typedCategory = 'Blog';
+          } else if (lowerCaseCategory === 'interview') {
+            typedCategory = 'Interview';
+          } else if (lowerCaseCategory === 'review') {
+            typedCategory = 'Review';
+          } else if (lowerCaseCategory === 'resource') {
+            typedCategory = 'Resource';
+          } else {
+            typedCategory = 'Blog'; // Default
+          }
           
           return {
             id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,

@@ -14,15 +14,15 @@ const ArticleImage: React.FC<ArticleImageProps> = ({ image, title, imageCaption 
   }
   
   return (
-    <div className="mb-6 overflow-hidden bg-white">
+    <div className="mb-6 overflow-hidden rounded-lg">
       <OptimizedImage
         src={image}
         alt={title}
-        className="mx-auto object-contain max-h-[800px] max-w-[1200px] w-auto"
+        className="mx-auto"
         caption={imageCaption || ''}
         captionClassName="text-center text-sm text-muted-foreground mt-2 italic"
         width={1200}
-        height={800}
+        height={675}
         priority={true}
       />
     </div>

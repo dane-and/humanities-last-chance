@@ -60,16 +60,20 @@ const BlogArticleCard: React.FC<BlogArticleCardProps> = ({
             </div>
           )}
           
-          {fullContent ? (
+          {!fullContent && post.excerpt ? (
+            <p className="text-muted-foreground mb-2">
+              {post.excerpt}
+            </p>
+          ) : (
             <div className="mb-4">
               <ArticleContent content={post.content} />
             </div>
-          ) : (
-            post.excerpt && (
-              <p className="text-muted-foreground mb-2">
-                {post.excerpt}
-              </p>
-            )
+          )}
+          
+          {!fullContent && !post.excerpt && (
+            <div className="mb-4">
+              <ArticleContent content={post.content} />
+            </div>
           )}
           
           <BlogSeparator

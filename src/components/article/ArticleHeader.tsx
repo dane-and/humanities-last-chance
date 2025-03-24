@@ -14,17 +14,6 @@ interface ArticleHeaderProps {
 const ArticleHeader: React.FC<ArticleHeaderProps> = ({ article, onGoBack }) => {
   const isMobile = useIsMobile();
   
-  // Ensure category is a valid string and log any issues
-  const safeCategory = typeof article.category === 'string' ? article.category : 'Blog';
-  
-  // Debug log for category problems
-  if (typeof article.category !== 'string') {
-    console.error(`ArticleHeader: Invalid category type for article "${article.title}"`, {
-      categoryType: typeof article.category,
-      categoryValue: article.category
-    });
-  }
-  
   return (
     <>
       <div className={`${isMobile ? 'flex flex-col items-start' : 'flex items-center'} mb-6 gap-4`}>
@@ -44,17 +33,11 @@ const ArticleHeader: React.FC<ArticleHeaderProps> = ({ article, onGoBack }) => {
         <span className="text-muted-foreground text-sm inline-block">{article.date}</span>
         <span className="text-muted-foreground mx-2 text-sm inline-block">•</span>
         <Link 
-          to={`/articles/${safeCategory}`} 
+          to={`/articles/${article.category}`} 
           className="text-primary font-medium text-sm inline-block capitalize"
         >
-          {safeCategory}
+          {article.category}
         </Link>
-        {/* Display raw category value for debugging */}
-        {process.env.NODE_ENV !== 'production' && (
-          <div className="mt-2 p-2 bg-gray-100 text-xs">
-            <strong>Raw category value:</strong> {JSON.stringify(article.category)}
-          </div>
-        )}
       </div>
       
       <p className="text-lg text-muted-foreground mb-6">{article.excerpt}</p>

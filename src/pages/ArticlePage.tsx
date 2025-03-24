@@ -3,13 +3,17 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { sanityClient } from '@/lib/sanity/client';
+import ArticleComments from '@/components/ArticleComments';
+import { Article } from '@/lib/types/article';
+import { fetchArticleBySlug } from '@/lib/sanity';
 import ArticleLoading from '@/components/article/ArticleLoading';
 import ArticleNotFound from '@/components/article/ArticleNotFound';
-import ArticlePageContent from '@/components/article/ArticlePageContent';
-import { Article } from '@/lib/types/article';
-import { mapSanityPostToArticle } from '@/lib/sanity/queries/posts/utils';
-import { getNormalizedCategory } from '@/lib/utils/categoryUtils';
+import ArticleHeader from '@/components/article/ArticleHeader';
+import ArticleImage from '@/components/article/ArticleImage';
+import ArticleContent from '@/components/article/ArticleContent';
+import ArticleTags from '@/components/article/ArticleTags';
+import { MessageCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const ArticlePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -17,7 +21,6 @@ const ArticlePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [currentArticle, setCurrentArticle] = useState<Article | null>(null);
   const [refreshCounter, setRefreshCounter] = useState(0);
-  const [rawCategoryValue, setRawCategoryValue] = useState<any>(null);
 
   useEffect(() => {
     const loadArticle = async () => {
@@ -27,57 +30,35 @@ const ArticlePage: React.FC = () => {
       console.log(`Loading article with slug: ${slug} from Sanity`);
       
       try {
-        // Use a direct GROQ query to get the article by slug
-        const query = `*[_type == "post" && slug.current == $slug][0]{
-          _id,
-          title,
-          slug,
-          mainImage{
-            asset->{
-              _id,
-              url
-            },
-            caption
-          },
-          body,
-          publishedAt,
-          _createdAt,
-          _updatedAt,
-          category,
-          tags,
-          excerpt,
-          comments
-        }`;
+        const sanityPost = await fetchArticleBySlug(slug);
+        console.log("Fetched article from Sanity:", sanityPost);
         
-        console.log("Executing Sanity query for article:", query);
-        
-        const post = await sanityClient.fetch(query, { slug });
-        console.log("Fetched article from Sanity:", post);
-        
-        if (post) {
-          // Store raw category value for debugging
-          setRawCategoryValue(post.category);
+        if (sanityPost) {
+          // Log the exact category we get from Sanity
+          console.log(`Article category from Sanity: "${sanityPost.category}"`);
           
-          // Debug category type and value
-          console.log(`Article category from Sanity:`, {
-            type: typeof post.category,
-            value: post.category
-          });
+          // Convert Sanity post to Article format
+          const article: Article = {
+            id: sanityPost._id || `sanity-${Date.now()}`,
+            title: sanityPost.title || "Untitled Post",
+            slug: sanityPost.slug?.current || slug,
+            date: sanityPost.publishedAt ? new Date(sanityPost.publishedAt).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            }) : new Date().toLocaleDateString(),
+            category: sanityPost.category || 'Blog', // Preserve the exact case
+            image: sanityPost.mainImage?.asset?.url || '',
+            imageCaption: sanityPost.mainImage?.caption || '',
+            excerpt: sanityPost.excerpt || '',
+            content: sanityPost.body || '',
+            tags: sanityPost.tags || [],
+            comments: sanityPost.comments || [],
+          };
           
-          // Debug the tags
-          console.log(`Article tags from Sanity:`, post.tags);
-          
-          // Map to our Article type
-          const article = mapSanityPostToArticle(post);
-          console.log("Mapped article:", {
-            title: article.title,
-            slug: article.slug,
-            category: article.category
-          });
-          
+          console.log("Formatted article with category:", article.category);
           setCurrentArticle(article);
         } else {
-          console.log(`No article found with slug: ${slug}`);
           setCurrentArticle(null);
         }
       } catch (error) {
@@ -107,17 +88,46 @@ const ArticlePage: React.FC = () => {
     return <ArticleNotFound onGoBack={handleGoBack} />;
   }
 
+  const commentCount = currentArticle.comments?.length || 0;
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
       
       <main className="flex-grow pt-24 pb-16">
-        <ArticlePageContent 
-          article={currentArticle}
-          rawCategoryValue={rawCategoryValue}
-          onGoBack={handleGoBack}
-          onCommentAdded={handleCommentAdded}
-        />
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <ArticleHeader 
+            article={currentArticle} 
+            onGoBack={handleGoBack} 
+          />
+          
+          <ArticleImage
+            image={currentArticle.image}
+            title={currentArticle.title}
+            imageCaption={currentArticle.imageCaption}
+          />
+          
+          <ArticleContent content={currentArticle.content} />
+          
+          <ArticleTags tags={currentArticle.tags || []} />
+          
+          {/* Comments link at the bottom of article content */}
+          <div className="mb-4 mt-8">
+            <Link 
+              to="#comments" 
+              className="text-muted-foreground hover:text-primary text-sm inline-flex items-center transition-colors"
+            >
+              <MessageCircle className="h-4 w-4 mr-1" />
+              {commentCount} {commentCount === 1 ? 'comment' : 'comments'}
+            </Link>
+          </div>
+          
+          <ArticleComments 
+            articleId={currentArticle.id} 
+            comments={currentArticle.comments || []}
+            onCommentAdded={handleCommentAdded}
+          />
+        </div>
       </main>
       
       <Footer />

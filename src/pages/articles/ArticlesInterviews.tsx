@@ -4,55 +4,45 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import ArticleGrid from '@/components/ArticleGrid';
 import { Article } from '@/lib/types/article';
-import { fetchBlogPosts } from '@/lib/sanity';
-import { toast } from 'sonner';
+import { fetchArticlesByCategory } from '@/lib/sanity';
 
 const ArticlesInterviews: React.FC = () => {
   const [articles, setArticles] = useState<Article[]>([]);
-  const [allPosts, setAllPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   // Update articles with the latest from Sanity
   useEffect(() => {
     const loadArticles = async () => {
       setLoading(true);
-      setError(null);
-      
       console.log("Loading interview articles from Sanity...");
       
       try {
-        // First try to get all posts to see what's coming from Sanity
-        const allSanityPosts = await fetchBlogPosts();
-        console.log(`Found ${allSanityPosts?.length || 0} total posts from Sanity`);
+        // Use exact case "Interview" for the API call
+        const sanityPosts = await fetchArticlesByCategory('Interview');
         
-        // Store all posts to see what was actually returned
-        setAllPosts(allSanityPosts || []);
+        // Convert Sanity posts to Article format
+        const interviewArticles: Article[] = sanityPosts.map((post: any) => ({
+          id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          title: post.title || "Untitled Post",
+          slug: post.slug?.current || `post-${Date.now()}`,
+          date: post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          }) : new Date().toLocaleDateString(),
+          category: post.category || 'Interview', // Keep the exact case from Sanity
+          image: post.mainImage?.asset?.url || '',
+          imageCaption: post.mainImage?.caption || '',
+          excerpt: post.excerpt || '',
+          content: post.body || '',
+          featured: false,
+          tags: post.tags || [],
+        }));
         
-        if (allSanityPosts && allSanityPosts.length > 0) {
-          console.log("All categories in posts:", 
-            [...new Set(allSanityPosts.map((post: Article) => post.category))]);
-          
-          // Now filter for just interviews
-          const interviewPosts = allSanityPosts.filter((post: Article) => 
-            post.category === 'Interview'
-          );
-          
-          console.log(`Found ${interviewPosts.length} interview posts after filtering`);
-          
-          // Set the filtered articles
-          setArticles(interviewPosts);
-        } else {
-          console.log("No posts found from Sanity");
-          setArticles([]);
-          setError("No posts could be fetched from Sanity");
-        }
-      } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-        console.error("Error loading articles:", errorMessage);
-        setError(`Error: ${errorMessage}`);
-        toast.error("Failed to load interview articles");
-        setArticles([]);
+        console.log("Formatted interview articles:", interviewArticles);
+        setArticles(interviewArticles);
+      } catch (error) {
+        console.error("Error loading articles:", error);
       } finally {
         setLoading(false);
       }
@@ -73,43 +63,13 @@ const ArticlesInterviews: React.FC = () => {
             <div className="flex justify-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
             </div>
-          ) : (
-            <div>
-              {/* Debug section - only for development */}
-              <div className="bg-gray-100 p-4 rounded mb-8">
-                <h2 className="text-lg font-bold mb-2">Debugging Information:</h2>
-                <p>Total posts loaded: {allPosts.length}</p>
-                <p>Filtered interview posts: {articles.length}</p>
-                {error && <p className="text-red-500 font-bold">Error: {error}</p>}
-                
-                <div className="mt-2">
-                  <h3 className="font-bold">All posts categories:</h3>
-                  <ul className="list-disc pl-8">
-                    {allPosts.length > 0 ? (
-                      allPosts.map((post, index) => (
-                        <li key={index}>
-                          "{post.title}" - category: "{post.category || 'undefined'}" - 
-                          slug: {post.slug || 'undefined'}
-                        </li>
-                      ))
-                    ) : (
-                      <li className="text-red-500">No posts loaded from Sanity</li>
-                    )}
-                  </ul>
-                </div>
-              </div>
-              
-              {articles.length === 0 ? (
-                <div className="text-center py-12">
-                  <p className="text-xl text-muted-foreground">No interviews available yet.</p>
-                  <p className="text-muted-foreground mt-2">
-                    {error || "Check that you have published interviews in Sanity Studio with category set to \"interview\"."}
-                  </p>
-                </div>
-              ) : (
-                <ArticleGrid articles={articles} columns={3} />
-              )}
+          ) : articles.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-xl text-muted-foreground">No interviews available yet.</p>
+              <p className="text-muted-foreground mt-2">Check that you have published interviews in Sanity Studio.</p>
             </div>
+          ) : (
+            <ArticleGrid articles={articles} columns={3} />
           )}
         </div>
       </main>
