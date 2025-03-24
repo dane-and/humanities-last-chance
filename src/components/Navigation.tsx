@@ -50,7 +50,7 @@ const Navigation: React.FC = () => {
           <div className="flex md:hidden">
             <MobileNavigation 
               isOpen={isOpen} 
-              setIsOpen={setIsOpen} 
+              onToggle={() => setIsOpen(!isOpen)}
               mainNavItems={mainNavItems}
               dropdownItems={dropdownItems}
             />
