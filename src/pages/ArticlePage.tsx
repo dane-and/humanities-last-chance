@@ -26,15 +26,9 @@ const ArticlePage: React.FC = () => {
       if (!slug) return;
 
       setLoading(true);
-      console.log(`Loading article with slug: ${slug} from Sanity`);
-
       try {
         const sanityPost = await fetchArticleBySlug(slug);
-        console.log("Fetched article from Sanity:", sanityPost);
-
         if (sanityPost) {
-          console.log(`Article category from Sanity: "${sanityPost.category}"`);
-
           const article: Article = {
             id: sanityPost._id || `sanity-${Date.now()}`,
             title: sanityPost.title || "Untitled Post",
@@ -54,76 +48,9 @@ const ArticlePage: React.FC = () => {
             tags: Array.isArray(sanityPost.tags) ? sanityPost.tags : [],
             comments: Array.isArray(sanityPost.comments) ? sanityPost.comments : [],
           };
-
-          console.log("Formatted article with category:", article.category);
           setCurrentArticle(article);
         } else {
           setCurrentArticle(null);
         }
       } catch (error) {
-        console.error("Error loading article:", error);
-        setCurrentArticle(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadArticle();
-  }, [slug, refreshCounter]);
-
-  const handleCommentAdded = () => {
-    setRefreshCounter((prev) => prev + 1);
-  };
-
-  const handleGoBack = () => {
-    navigate("/");
-  };
-
-  if (loading) return <ArticleLoading />;
-  if (!currentArticle) return <ArticleNotFound onGoBack={handleGoBack} />;
-
-  const commentCount = currentArticle.comments?.length || 0;
-
-  return (
-    <div className="min-h-screen flex flex-col">
-      <Navigation />
-
-      <main className="flex-grow pt-24 pb-16">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ArticleHeader article={currentArticle} onGoBack={handleGoBack} />
-
-          <ArticleImage
-            image={currentArticle.image}
-            title={currentArticle.title}
-            imageCaption={currentArticle.imageCaption}
-          />
-
-          <ArticleContent content={currentArticle.content} />
-
-          <ArticleTags tags={currentArticle.tags || []} />
-
-          <div className="mb-4 mt-8">
-            <Link
-              to="#comments"
-              className="text-muted-foreground hover:text-primary text-sm inline-flex items-center transition-colors"
-            >
-              <MessageCircle className="h-4 w-4 mr-1" />
-              {commentCount} {commentCount === 1 ? 'comment' : 'comments'}
-            </Link>
-          </div>
-
-          <ArticleComments
-            articleId={currentArticle.id}
-            comments={currentArticle.comments || []}
-            onCommentAdded={handleCommentAdded}
-          />
-        </div>
-      </main>
-
-      <Footer />
-    </div>
-  );
-};
-
-export default ArticlePage;
-
+        console.error("
