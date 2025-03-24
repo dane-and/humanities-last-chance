@@ -27,7 +27,7 @@ const TagsPage: React.FC = () => {
           // At this point, t won't be null due to filter(Boolean)
           return String(t).toLowerCase();
         })
-        .filter(t => t.trim() !== '');
+        .filter(t => typeof t === 'string' && t.trim() !== '');
       
       return normalizedArticleTags.some(t => t === normalizedTag.toLowerCase());
     }) : [];

@@ -23,10 +23,10 @@ const TagList: React.FC<TagListProps> = ({ tags, className, compact = false }) =
       if (typeof tag === 'object' && tag !== null && 'label' in tag) {
         return (tag as {label: string}).label;
       }
-      // Convert to string (non-null at this point due to filter(Boolean))
+      // At this point, tag won't be null due to filter(Boolean)
       return String(tag);
     })
-    .filter(tag => tag.trim() !== '');
+    .filter(tag => typeof tag === 'string' && tag.trim() !== '');
 
   if (normalizedTags.length === 0) return null;
 
