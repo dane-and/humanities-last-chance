@@ -17,8 +17,12 @@ const TagList: React.FC<TagListProps> = ({ tags, className, compact = false }) =
   
   // Filter out any empty or malformed tags and normalize
   const normalizedTags = tags
-    .filter(tag => typeof tag === 'string' && tag.trim() !== '')
-    .map(tag => typeof tag === 'object' && tag.label ? tag.label : String(tag));
+    .filter(tag => tag !== null && tag !== undefined)
+    .map(tag => {
+      if (tag === null || tag === undefined) return '';
+      return typeof tag === 'object' && tag.label ? tag.label : String(tag);
+    })
+    .filter(tag => tag.trim() !== '');
 
   if (normalizedTags.length === 0) return null;
 

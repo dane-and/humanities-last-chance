@@ -9,12 +9,16 @@ interface ArticleTagsProps {
 const ArticleTags: React.FC<ArticleTagsProps> = ({ tags }) => {
   // Normalize tags that might come from Sanity in different formats
   const normalizedTags = Array.isArray(tags) 
-    ? tags.map(tag => {
-        if (typeof tag === 'object' && tag !== null && 'label' in tag) {
-          return tag.label;
-        }
-        return tag;
-      })
+    ? tags
+        .filter(tag => tag !== null && tag !== undefined)
+        .map(tag => {
+          if (tag === null || tag === undefined) return '';
+          if (typeof tag === 'object' && tag !== null && 'label' in tag) {
+            return tag.label;
+          }
+          return tag;
+        })
+        .filter(tag => tag && tag.trim() !== '')
     : [];
   
   if (!normalizedTags || normalizedTags.length === 0) {

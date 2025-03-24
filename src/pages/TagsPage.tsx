@@ -17,12 +17,16 @@ const TagsPage: React.FC = () => {
   const tagArticles = normalizedTag ? 
     articles.filter(article => {
       // Handle both string array and object array with label property
-      const normalizedArticleTags = (article.tags || []).map(t => {
-        if (typeof t === 'object' && t !== null && 'label' in t) {
-          return (t.label as string).toLowerCase();
-        }
-        return typeof t === 'string' ? t.toLowerCase() : '';
-      });
+      const normalizedArticleTags = (article.tags || [])
+        .filter(t => t !== null && t !== undefined)
+        .map(t => {
+          if (t === null || t === undefined) return '';
+          if (typeof t === 'object' && t !== null && 'label' in t) {
+            return (t.label as string).toLowerCase();
+          }
+          return typeof t === 'string' ? t.toLowerCase() : '';
+        })
+        .filter(t => t.trim() !== '');
       
       return normalizedArticleTags.some(t => t === normalizedTag.toLowerCase());
     }) : [];
