@@ -1,4 +1,17 @@
-// ...imports remain unchanged...
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
+import ArticleComments from '@/components/ArticleComments';
+import { Article } from '@/lib/types/article';
+import { fetchArticleBySlug } from '@/lib/sanity';
+import ArticleLoading from '@/components/article/ArticleLoading';
+import ArticleNotFound from '@/components/article/ArticleNotFound';
+import ArticleHeader from '@/components/article/ArticleHeader';
+import ArticleImage from '@/components/article/ArticleImage';
+import ArticleContent from '@/components/article/ArticleContent';
+import ArticleTags from '@/components/article/ArticleTags';
+import { MessageCircle } from 'lucide-react';
 
 const ArticlePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
