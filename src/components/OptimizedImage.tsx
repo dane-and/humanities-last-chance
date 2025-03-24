@@ -53,7 +53,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       {/* Loading placeholder - only show when not loaded and no error */}
       {!imageLoaded && !error && (
         <div 
-          className={`${className} animate-pulse bg-gray-100`} 
+          className={`${className} bg-gray-100`} 
           style={{ 
             aspectRatio: `${width}/${height}`,
             width: '100%',
@@ -77,9 +77,13 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           width={width}
           height={height}
           loading={priority ? "eager" : "lazy"}
-          className={`w-auto mx-auto max-w-full ${imageLoaded || error ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ${className}`}
+          className={`w-auto max-w-full mx-auto ${imageLoaded || error ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ${className}`}
           onLoad={handleImageLoad}
           onError={handleImageError}
+          style={{ 
+            maxHeight: height ? `${height}px` : 'auto',
+            objectFit: 'contain'
+          }}
         />
       </div>
       
