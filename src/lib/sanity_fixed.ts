@@ -67,46 +67,6 @@ export async function fetchBlogPosts() {
 export async function fetchArticleBySlug(slug: string) {
   try {
     console.log(`Fetching article with slug "${slug}" from Sanity...`);
-
-    const post = await sanityClient.fetch(`
-      *[_type == "post" && slug.current == $slug][0] {
-        _id,
-        title,
-        slug,
-        mainImage{
-          asset->{url},
-          caption
-        },
-        body,
-        publishedAt,
-        _createdAt,
-        _updatedAt,
-        category,
-        tags,
-        excerpt,
-        comments
-      }
-    `, { slug });
-
-    if (post) {
-      console.log(`Found post with slug "${slug}":`, post);
-      console.log(`Post category:`, post.category);
-      console.log(`Post publishedAt:`, post.publishedAt);
-
-      // ✅ Transform tags to array of strings
-      post.tags = Array.isArray(post.tags) ? post.tags.map(t => t.label) : [];
-    } else {
-      console.log(`No post found with slug "${slug}"`);
-    }
-
-    return post;
-  } catch (error) {
-    console.error(`Error fetching article with slug ${slug}:`, error);
-    return null;
-  }
-}
-  try {
-    console.log(`Fetching article with slug "${slug}" from Sanity...`);
     
     const post = await sanityClient.fetch(`
       *[_type == "post" && slug.current == $slug][0] {
