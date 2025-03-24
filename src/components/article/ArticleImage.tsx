@@ -1,26 +1,38 @@
 import React from 'react';
+import { Article } from '@/lib/types/article';
 
 interface ArticleImageProps {
-  image: string;
-  title: string;
-  imageCaption?: string;
+  article: Article;
 }
 
-const ArticleImage: React.FC<ArticleImageProps> = ({ image, title, imageCaption }) => {
-  if (!image) return null;
+const ArticleImage: React.FC<ArticleImageProps> = ({ article }) => {
+  if (!article.image) return null;
 
   return (
-    <div className="w-full flex justify-center bg-white py-8">
-      <div className="relative w-full max-w-[1200px] aspect-[3/2] overflow-hidden rounded-xl shadow-sm">
-        <img
-          src={image}
-          alt={title}
-          className="absolute top-0 left-0 w-full h-full object-contain bg-white"
-        />
-      </div>
-      {imageCaption && (
-        <p className="text-muted-foreground text-sm mt-2 text-center">{imageCaption}</p>
-      )}
+    <div className="relative max-w-full mx-auto my-8">
+      <div
+        className="w-full h-full absolute top-0 left-0 z-0 rounded-lg"
+        style={{
+          backgroundImage: `url(${article.image})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          filter: 'blur(20px)',
+          opacity: 0.25,
+          borderRadius: '0.5rem',
+        }}
+      />
+      <img
+        src={article.image}
+        alt={article.imageCaption || article.title}
+        className="relative z-10 mx-auto rounded-lg shadow"
+        style={{
+          maxWidth: '100%',
+          maxHeight: '800px',
+          display: 'block',
+          objectFit: 'contain',
+          background: 'white',
+        }}
+      />
     </div>
   );
 };
