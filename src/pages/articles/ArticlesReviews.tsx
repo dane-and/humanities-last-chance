@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
@@ -33,7 +34,7 @@ const ArticlesReviews: React.FC = () => {
           excerpt: post.excerpt || '',
           content: post.body || '',
           featured: false,
-          tags: post.tags || [],
+          tags: Array.isArray(post.tags) ? post.tags.map((tag: any) => tag.label || tag) : [],
           publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
         }));
         
@@ -84,4 +85,3 @@ const ArticlesReviews: React.FC = () => {
 };
 
 export default ArticlesReviews;
-

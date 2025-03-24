@@ -37,6 +37,15 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   useEffect(() => {
     setImageLoaded(false);
     setError(false);
+
+    // Preload the image
+    const preloadImg = new Image();
+    preloadImg.src = src;
+    
+    // Check if image is already cached
+    if (preloadImg.complete) {
+      setImageLoaded(true);
+    }
   }, [src]);
 
   const handleImageError = () => {
@@ -46,6 +55,20 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
 
   const handleImageLoad = () => {
     setImageLoaded(true);
+  };
+
+  // Optimize image loading by adding srcSet for responsive images
+  const generateSrcSet = () => {
+    if (src.includes('sanity.io') || src.includes('cdn.sanity.io')) {
+      // For Sanity images, we can use their image API for responsive sizes
+      const baseSrc = src.split('?')[0];
+      return `
+        ${baseSrc}?w=${width/2}&h=${height/2}&auto=format&q=75 ${width/2}w,
+        ${baseSrc}?w=${width}&h=${height}&auto=format&q=80 ${width}w,
+        ${baseSrc}?w=${width*1.5}&h=${height*1.5}&auto=format&q=70 ${width*1.5}w
+      `;
+    }
+    return undefined;
   };
 
   return (
@@ -68,10 +91,13 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       <div className="bg-white w-full flex justify-center p-2 overflow-hidden">
         <img
           src={error ? fallbackImage : src}
+          srcSet={!error ? generateSrcSet() : undefined}
+          sizes={`(max-width: 768px) ${width/2}px, ${width}px`}
           alt={alt}
           width={width}
           height={height}
           loading={priority ? "eager" : "lazy"}
+          decoding="async"
           className={`max-w-full h-auto object-contain ${imageLoaded || error ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ${className}`}
           onLoad={handleImageLoad}
           onError={handleImageError}

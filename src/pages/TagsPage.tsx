@@ -4,9 +4,7 @@ import { useParams } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import ArticleGrid from '@/components/ArticleGrid';
-import { getArticlesByTag } from '@/lib/queries/articleQueries';
 import { useArticles } from '@/lib/hooks/useArticles';
-import { Article } from '@/lib/types/article';
 
 const TagsPage: React.FC = () => {
   const { tag } = useParams<{ tag: string }>();
@@ -17,9 +15,17 @@ const TagsPage: React.FC = () => {
   
   // Get articles with this tag (case-insensitive)
   const tagArticles = normalizedTag ? 
-    articles.filter(article => 
-      article.tags?.some(t => t.toLowerCase() === normalizedTag.toLowerCase())
-    ) : [];
+    articles.filter(article => {
+      // Handle both string array and object array with label property
+      const normalizedArticleTags = (article.tags || []).map(t => {
+        if (typeof t === 'object' && t !== null && 'label' in t) {
+          return (t.label as string).toLowerCase();
+        }
+        return typeof t === 'string' ? t.toLowerCase() : '';
+      });
+      
+      return normalizedArticleTags.some(t => t === normalizedTag.toLowerCase());
+    }) : [];
   
   return (
     <div className="min-h-screen flex flex-col">

@@ -7,14 +7,25 @@ interface ArticleTagsProps {
 }
 
 const ArticleTags: React.FC<ArticleTagsProps> = ({ tags }) => {
-  if (!tags || tags.length === 0) {
+  // Normalize tags that might come from Sanity in different formats
+  const normalizedTags = Array.isArray(tags) 
+    ? tags.map(tag => {
+        if (typeof tag === 'object' && tag !== null && 'label' in tag) {
+          return tag.label;
+        }
+        return tag;
+      })
+    : [];
+  
+  if (!normalizedTags || normalizedTags.length === 0) {
     return null;
   }
   
   return (
     <div className="mt-4 pt-2 border-t">
+      <h3 className="text-sm font-medium mb-2">Tags:</h3>
       <div className="flex flex-wrap gap-2">
-        <TagList tags={tags} compact={false} />
+        <TagList tags={normalizedTags} compact={false} />
       </div>
     </div>
   );

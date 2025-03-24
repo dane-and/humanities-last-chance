@@ -31,6 +31,16 @@ const ArticlePage: React.FC = () => {
       try {
         const sanityPost = await fetchArticleBySlug(slug);
         if (sanityPost) {
+          // Process tags - handle both string array and object array formats from Sanity
+          const processedTags = Array.isArray(sanityPost.tags) 
+            ? sanityPost.tags.map((tag: any) => {
+                if (typeof tag === 'object' && tag !== null && tag.label) {
+                  return tag.label;
+                }
+                return tag;
+              })
+            : [];
+
           const article: Article = {
             id: sanityPost._id || `sanity-${Date.now()}`,
             title: sanityPost.title || "Untitled Post",
@@ -47,7 +57,7 @@ const ArticlePage: React.FC = () => {
             imageCaption: sanityPost.mainImage?.caption || '',
             excerpt: sanityPost.excerpt || '',
             content: sanityPost.body || '',
-            tags: Array.isArray(sanityPost.tags) ? sanityPost.tags : [],
+            tags: processedTags,
             comments: Array.isArray(sanityPost.comments) ? sanityPost.comments : [],
           };
           setCurrentArticle(article);
