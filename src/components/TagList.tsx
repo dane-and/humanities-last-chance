@@ -24,7 +24,7 @@ const TagList: React.FC<TagListProps> = ({ tags, className, compact = false }) =
         return (tag as {label: string}).label;
       }
       // At this point, tag won't be null due to filter above
-      return String(tag);
+      return String(tag as NonNullable<typeof tag>);
     })
     // Explicitly ensure we're only working with non-empty strings
     .filter((tag): tag is string => typeof tag === 'string' && tag.trim() !== '');

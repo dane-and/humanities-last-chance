@@ -25,7 +25,7 @@ const TagsPage: React.FC = () => {
             return ((t as {label: string}).label).toLowerCase();
           }
           // At this point, t won't be null due to filter above
-          return String(t).toLowerCase();
+          return String(t as NonNullable<typeof t>).toLowerCase();
         })
         // Explicitly ensure we're only working with non-empty strings
         .filter((t): t is string => typeof t === 'string' && t.trim() !== '');
