@@ -42,6 +42,20 @@ const ArticleCard: React.FC<ArticleCardProps> = React.memo(({
         className
       )}
     >
+      {/* Only render image if it exists and is not empty */}
+      {hasImage && (
+        <div className="w-full bg-white p-2 flex justify-center items-center">
+          <Link to={`/article/${slug}`} aria-label={title} className="block bg-white">
+            <img
+              src={image}
+              alt={title}
+              className="object-contain max-w-full"
+              style={{ maxHeight: '240px' }}
+            />
+          </Link>
+        </div>
+      )}
+      
       <div className={cn('flex flex-col flex-grow', isCompact ? 'p-4' : 'p-5')}>
         <h3 className={cn(
           "font-serif font-medium mb-2 transition-colors group-hover:text-primary/80 line-clamp-2",
@@ -82,24 +96,6 @@ const ArticleCard: React.FC<ArticleCardProps> = React.memo(({
           )}
         </div>
       </div>
-      
-      {/* Only render image if it exists and is not empty */}
-      {hasImage && (
-        <div className={cn('relative bg-white', isCompact ? 'h-auto' : 'h-auto')}>
-          <AspectRatio ratio={21 / 9} className="overflow-hidden">
-            <Link to={`/article/${slug}`} aria-label={title} className="block w-full h-full">
-              <OptimizedImage
-                src={image}
-                alt={title}
-                width={640}
-                height={274}
-                priority={false}
-                className="w-full h-full object-contain bg-white"
-              />
-            </Link>
-          </AspectRatio>
-        </div>
-      )}
       
       {!isCompact && excerpt && (
         <div className="p-5 pt-3">

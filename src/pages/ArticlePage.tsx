@@ -31,15 +31,17 @@ const ArticlePage: React.FC = () => {
       try {
         const sanityPost = await fetchArticleBySlug(slug);
         if (sanityPost) {
-          // Process tags - handle both string array and object array formats from Sanity
+          // Process tags - ensure they're correctly formatted from Sanity
           const processedTags = Array.isArray(sanityPost.tags) 
             ? sanityPost.tags.map((tag: any) => {
                 if (typeof tag === 'object' && tag !== null && tag.label) {
                   return tag.label;
                 }
                 return tag;
-              })
+              }).filter((tag: any) => tag !== null && tag !== undefined)
             : [];
+
+          console.log("Processed tags for article:", processedTags);
 
           const article: Article = {
             id: sanityPost._id || `sanity-${Date.now()}`,
@@ -61,7 +63,7 @@ const ArticlePage: React.FC = () => {
             comments: Array.isArray(sanityPost.comments) ? sanityPost.comments : [],
           };
           setCurrentArticle(article);
-          console.log("Article loaded:", article);
+          console.log("Article loaded with tags:", article.tags);
         } else {
           setCurrentArticle(null);
         }
@@ -93,7 +95,9 @@ const ArticlePage: React.FC = () => {
               <div className="mt-8 mb-12">
                 <ArticleContent content={currentArticle.content} />
               </div>
-              <ArticleTags tags={currentArticle.tags} />
+              {currentArticle.tags && currentArticle.tags.length > 0 && (
+                <ArticleTags tags={currentArticle.tags} />
+              )}
               <div className="flex items-center mt-8 mb-4">
                 <MessageCircle className="w-5 h-5 mr-2 text-muted-foreground" />
                 <span className="text-sm text-muted-foreground">

@@ -44,7 +44,7 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews }) => {
             <h3 className="font-serif text-base font-medium mb-2">
               <Link 
                 to={`/article/${review.slug}`} 
-                className="hover:text-primary/80 transition-colors"
+                className="hover:text-primary/80 transition-colors no-underline"
               >
                 {review.title}
               </Link>

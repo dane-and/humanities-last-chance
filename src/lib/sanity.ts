@@ -75,6 +75,17 @@ export async function fetchBlogPosts() {
       if (post.mainImage && post.mainImage.asset) {
         post.mainImage.url = urlFor(post.mainImage);
       }
+      
+      // Process tags to handle both string arrays and object arrays
+      if (Array.isArray(post.tags)) {
+        post.tags = post.tags.map((tag: any) => {
+          if (typeof tag === 'object' && tag !== null && tag.label) {
+            return tag.label;
+          }
+          return tag;
+        }).filter(Boolean);
+      }
+      
       return post;
     });
     
@@ -118,6 +129,18 @@ export async function fetchArticleBySlug(slug: string) {
       if (post.mainImage && post.mainImage.asset) {
         post.mainImage.url = urlFor(post.mainImage);
       }
+      
+      // Process tags to handle both string arrays and object arrays
+      if (Array.isArray(post.tags)) {
+        post.tags = post.tags.map((tag: any) => {
+          if (typeof tag === 'object' && tag !== null && tag.label) {
+            return tag.label;
+          }
+          return tag;
+        }).filter(Boolean);
+        
+        console.log("Processed tags:", post.tags);
+      }
     } else {
       console.log(`No post found with slug "${slug}"`);
     }
@@ -157,11 +180,22 @@ export async function fetchArticlesByCategory(category: string) {
     
     console.log(`Found ${posts.length} posts in category "${category}":`, posts);
     
-    // Process image URLs with optimized parameters
+    // Process image URLs with optimized parameters and tags
     const processedPosts = posts.map((post: any) => {
       if (post.mainImage && post.mainImage.asset) {
         post.mainImage.url = urlFor(post.mainImage);
       }
+      
+      // Process tags to handle both string arrays and object arrays
+      if (Array.isArray(post.tags)) {
+        post.tags = post.tags.map((tag: any) => {
+          if (typeof tag === 'object' && tag !== null && tag.label) {
+            return tag.label;
+          }
+          return tag;
+        }).filter(Boolean);
+      }
+      
       return post;
     });
     
