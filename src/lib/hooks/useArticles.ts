@@ -36,17 +36,23 @@ export const useArticles = () => {
             typedCategory = 'Blog'; // Default
           }
           
-          // Process tags
-          const processedTags = Array.isArray(post.tags) 
-            ? post.tags.map((tag: any) => {
-                if (typeof tag === 'object' && tag !== null && tag.label) {
+          // Process tags - handle both string tags and object tags with label property
+          let processedTags: string[] = [];
+          
+          if (Array.isArray(post.tags)) {
+            processedTags = post.tags
+              .map((tag: any) => {
+                if (typeof tag === 'string') {
+                  return tag;
+                } else if (typeof tag === 'object' && tag !== null && tag.label) {
                   return tag.label;
                 }
-                return tag;
-              }).filter((tag: any) => tag !== null && tag !== undefined)
-            : [];
+                return null;
+              })
+              .filter((tag: any): tag is string => tag !== null && tag !== undefined && tag.trim() !== '');
+          }
             
-          console.log(`Article ${post.title} has tags:`, processedTags);
+          console.log(`Article "${post.title}" has processed tags:`, processedTags);
           
           return {
             id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,

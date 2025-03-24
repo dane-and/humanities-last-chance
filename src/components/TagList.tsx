@@ -31,7 +31,7 @@ const TagList: React.FC<TagListProps> = ({ tags, className, compact = false }) =
           {nonNullTags.map((tag, index) => (
             <React.Fragment key={tag}>
               <Link
-                to={`/tag/${encodeURIComponent(tag.toLowerCase())}`}
+                to={`/tag/${encodeURIComponent(tag)}`}
                 className="hover:text-primary transition-colors"
               >
                 {tag}
@@ -42,7 +42,7 @@ const TagList: React.FC<TagListProps> = ({ tags, className, compact = false }) =
         </div>
       ) : (
         nonNullTags.map((tag) => (
-          <Link key={tag} to={`/tag/${encodeURIComponent(tag.toLowerCase())}`}>
+          <Link key={tag} to={`/tag/${encodeURIComponent(tag)}`}>
             <Badge
               variant="outline"
               className="bg-white text-blue-500 hover:bg-gray-100 border border-gray-200 transition-colors"
