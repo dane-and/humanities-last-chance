@@ -1,5 +1,3 @@
-// SidebarSection.tsx
-
 import React, { useState, useEffect } from 'react';
 import { findCourse } from '@/components/resources/humanities/utils';
 import InterviewsSection from './sidebar/InterviewsSection';
@@ -26,23 +24,24 @@ const SidebarSection: React.FC = () => {
       setLoading(true);
 
       try {
-        // Fetch interviews
         const sanityInterviews = await fetchArticlesByCategory('interviews');
         const formattedInterviews = sanityInterviews.map((post: any) => ({
           id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
           title: post.title || "Untitled Post",
           slug: post.slug?.current || `post-${Date.now()}`,
-          date: post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          }) : new Date().toLocaleDateString(),
+          date: post.publishedAt
+            ? new Date(post.publishedAt).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })
+            : new Date().toLocaleDateString(),
           category: post.category ?? '',
           image: post.mainImage?.asset?.url || '',
           excerpt: post.excerpt || '',
           content: post.body || '',
           featured: false,
-          tags: post.tags || [],
+          tags: Array.isArray(post.tags) ? post.tags.map(t => t.label) : [],
           publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
         }));
 
@@ -50,23 +49,24 @@ const SidebarSection: React.FC = () => {
           new Date(b.publishedAt || '').getTime() - new Date(a.publishedAt || '').getTime()
         );
 
-        // ✅ Fix: fetch reviews using lowercase key
         const sanityReviews = await fetchArticlesByCategory('reviews');
         const formattedReviews = sanityReviews.map((post: any) => ({
           id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
           title: post.title || "Untitled Post",
           slug: post.slug?.current || `post-${Date.now()}`,
-          date: post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          }) : new Date().toLocaleDateString(),
+          date: post.publishedAt
+            ? new Date(post.publishedAt).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })
+            : new Date().toLocaleDateString(),
           category: post.category ?? '',
           image: post.mainImage?.asset?.url || '',
           excerpt: post.excerpt || '',
           content: post.body || '',
           featured: false,
-          tags: post.tags || [],
+          tags: Array.isArray(post.tags) ? post.tags.map(t => t.label) : [],
           publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
         }));
 
