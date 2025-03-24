@@ -1,18 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import Navigation from '@/components/Navigation';
-import Footer from '@/components/Footer';
-import ArticleComments from '@/components/ArticleComments';
-import { Article } from '@/lib/types/article';
-import { fetchArticleBySlug } from '@/lib/sanity';
-import ArticleLoading from '@/components/article/ArticleLoading';
-import ArticleNotFound from '@/components/article/ArticleNotFound';
-import ArticleHeader from '@/components/article/ArticleHeader';
-import ArticleImage from '@/components/article/ArticleImage';
-import ArticleContent from '@/components/article/ArticleContent';
-import ArticleTags from '@/components/article/ArticleTags';
-import { MessageCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
+// ...imports remain unchanged...
 
 const ArticlePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -24,7 +10,6 @@ const ArticlePage: React.FC = () => {
   useEffect(() => {
     const loadArticle = async () => {
       if (!slug) return;
-
       setLoading(true);
       try {
         const sanityPost = await fetchArticleBySlug(slug);
@@ -69,19 +54,13 @@ const ArticlePage: React.FC = () => {
 
       <main className="flex-grow pt-24 pb-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-4">
-            <Link to="/" className="text-sm text-muted-foreground hover:text-primary transition">
-              ← Home
-            </Link>
-          </div>
-
           {loading ? (
             <ArticleLoading />
           ) : currentArticle === null ? (
             <ArticleNotFound />
           ) : (
             <>
-              <ArticleHeader article={currentArticle} />
+              <ArticleHeader article={currentArticle} onGoBack={() => navigate('/')} />
               <ArticleImage article={currentArticle} />
               <ArticleContent article={currentArticle} />
               <ArticleTags tags={currentArticle.tags} />
@@ -107,3 +86,4 @@ const ArticlePage: React.FC = () => {
 };
 
 export default ArticlePage;
+

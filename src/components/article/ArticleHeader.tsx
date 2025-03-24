@@ -2,7 +2,6 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { Article } from '@/lib/types/article';
-import { Link } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ArticleHeaderProps {
@@ -15,7 +14,11 @@ const ArticleHeader: React.FC<ArticleHeaderProps> = ({ article, onGoBack }) => {
 
   return (
     <div className="relative mb-6">
-      <div className="absolute left-0 -ml-8 top-1">
+      <div
+        className={`${
+          isMobile ? 'text-center mb-2' : 'absolute top-0 left-0'
+        }`}
+      >
         <Button
           variant="ghost"
           onClick={onGoBack}
@@ -32,12 +35,7 @@ const ArticleHeader: React.FC<ArticleHeaderProps> = ({ article, onGoBack }) => {
       <div className="mt-6 text-center text-muted-foreground text-sm">
         <span>{article.date}</span>
         <span className="mx-2">•</span>
-        <Link
-          to={`/articles/${article.category}`}
-          className="text-primary font-medium capitalize"
-        >
-          {article.category}
-        </Link>
+        <span className="text-primary font-medium capitalize">{article.category}</span>
       </div>
 
       {article.excerpt && (
@@ -50,4 +48,5 @@ const ArticleHeader: React.FC<ArticleHeaderProps> = ({ article, onGoBack }) => {
 };
 
 export default ArticleHeader;
+
 

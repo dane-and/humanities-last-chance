@@ -10,13 +10,13 @@ const ArticleImage: React.FC<ArticleImageProps> = ({ article }) => {
 
   return (
     <div
-      className="relative mx-auto my-8 flex items-center justify-center"
+      className="mx-auto my-8 flex items-center justify-center"
       style={{
         width: '1200px',
         height: '800px',
         backgroundColor: 'white',
-        overflow: 'hidden',
         borderRadius: '0.5rem',
+        overflow: 'hidden',
       }}
     >
       <img
@@ -34,3 +34,4 @@ const ArticleImage: React.FC<ArticleImageProps> = ({ article }) => {
 };
 
 export default ArticleImage;
+
