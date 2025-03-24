@@ -1,28 +1,51 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import ArticleGrid from '@/components/ArticleGrid';
 import { useArticles } from '@/lib/hooks/useArticles';
+import { fetchBlogPosts } from '@/lib/sanity';
 
 const TagsPage: React.FC = () => {
   const { tag } = useParams<{ tag: string }>();
-  const { articles, isLoading } = useArticles();
+  const { articles, isLoading, refreshArticles } = useArticles();
+
+  // Force refresh articles to ensure we have latest data from Sanity
+  useEffect(() => {
+    const loadData = async () => {
+      refreshArticles();
+    };
+    loadData();
+  }, [refreshArticles, tag]);
 
   const normalizedTag = tag ? decodeURIComponent(tag) : '';
+  console.log("TagsPage with normalizedTag:", normalizedTag);
+  console.log("All available articles:", articles);
 
   const tagArticles = normalizedTag
     ? articles.filter(article => {
         // First ensure article.tags exists and is an array
-        if (!Array.isArray(article.tags)) return false;
+        if (!Array.isArray(article.tags)) {
+          console.log(`Article ${article.title} has no tags array`);
+          return false;
+        }
         
         // Filter out any null or undefined tags and check for tag match using type predicate
-        return article.tags
+        const hasTag = article.tags
           .filter((t): t is string => t !== null && t !== undefined && typeof t === 'string')
-          .some(t => t.toLowerCase() === normalizedTag.toLowerCase());
+          .some(t => {
+            const match = t.toLowerCase() === normalizedTag.toLowerCase();
+            console.log(`Comparing tag "${t}" with "${normalizedTag}": ${match}`);
+            return match;
+          });
+        
+        console.log(`Article "${article.title}" has tag "${normalizedTag}": ${hasTag}`);
+        return hasTag;
       })
     : [];
+
+  console.log("Filtered tag articles:", tagArticles);
 
   return (
     <div className="min-h-screen flex flex-col">

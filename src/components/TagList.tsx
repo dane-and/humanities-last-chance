@@ -16,10 +16,12 @@ const TagList: React.FC<TagListProps> = ({ tags, className, compact = false }) =
 
   // Filter out null and undefined values using type predicate
   const nonNullTags = tags.filter((tag): tag is string => 
-    tag !== null && tag !== undefined && typeof tag === 'string'
+    tag !== null && tag !== undefined && typeof tag === 'string' && tag.trim() !== ''
   );
 
   if (nonNullTags.length === 0) return null;
+
+  console.log("TagList rendering with tags:", nonNullTags);
 
   return (
     <div className={cn("flex flex-wrap gap-2", className)}>
