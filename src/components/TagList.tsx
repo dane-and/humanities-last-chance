@@ -68,3 +68,4 @@ const TagList: React.FC<TagListProps> = ({ tags, className, compact = false }) =
 };
 
 export default TagList;
+

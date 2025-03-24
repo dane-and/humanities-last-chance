@@ -38,3 +38,4 @@ const ArticleTags: React.FC<ArticleTagsProps> = ({ tags }) => {
 };
 
 export default ArticleTags;
+
