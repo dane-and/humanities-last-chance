@@ -9,17 +9,14 @@ interface ArticleImageProps {
 
 const ArticleImage: React.FC<ArticleImageProps> = ({ article }) => {
   if (!article.image) return null;
-
-  // Determine if the article is a blog post
-  const isBlogPost = article.category?.toLowerCase() === 'blog';
   
-  // Use much smaller dimensions for blog posts
-  const maxWidth = isBlogPost ? 300 : 600;
-  const maxHeight = isBlogPost ? 225 : 450;
+  // Use consistent dimensions for all article types
+  const maxWidth = 500;
+  const maxHeight = 350;
 
   return (
     <div className="w-full flex justify-center my-6">
-      <div className={`${isBlogPost ? 'max-w-xs' : 'max-w-md'} w-full bg-white rounded-md overflow-hidden shadow-sm`}>
+      <div className="max-w-md w-full bg-white rounded-md overflow-hidden shadow-sm">
         <OptimizedImage 
           src={article.image}
           alt={article.imageCaption || article.title}

@@ -26,12 +26,12 @@ export function urlFor(source: any) {
       .focalPoint(source.hotspot.x, source.hotspot.y);
   }
   
-  // Apply much more conservative size constraints for better article display
+  // Standardize all image sizes to 500x350
   return imageBuilder
-    .width(400)  // Significantly reduced from previous 600
-    .height(300)  // Significantly reduced from previous 450
+    .width(500)
+    .height(350)
     .format('webp')
-    .quality(80)  // Reduced quality for faster loading and smaller file size
+    .quality(85)
     .url();
 }
 
