@@ -73,8 +73,22 @@ export const useBlogPosts = () => {
       
       console.log("Formatted posts with preserved categories and original dates:", formattedPosts);
       
-      // Set formatted posts as our blog posts
-      setBlogPosts(formattedPosts);
+      // Filter to only include posts with category "Blog" (case-insensitive)
+      const blogOnlyPosts = formattedPosts.filter(post => 
+        post.category.toLowerCase() === 'blog'
+      );
+      
+      // Sort blog posts by publishedAt date in descending order
+      const sortedBlogPosts = blogOnlyPosts.sort((a, b) => {
+        const dateA = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
+        const dateB = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+        return dateB - dateA;
+      });
+      
+      console.log(`Filtered to ${sortedBlogPosts.length} blog posts from ${formattedPosts.length} total posts`);
+      
+      // Set filtered and sorted blog posts
+      setBlogPosts(sortedBlogPosts);
       
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error fetching blog posts';
