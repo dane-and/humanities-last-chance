@@ -44,7 +44,7 @@ const InterviewsSection: React.FC<InterviewsSectionProps> = ({ interviews }) => 
             <h3 className="font-serif text-base font-medium mb-2">
               <Link 
                 to={`/article/${interview.slug}`} 
-                className="hover:text-primary/80 transition-colors"
+                className="hover:text-primary/80 transition-colors no-underline"
               >
                 {interview.title}
               </Link>

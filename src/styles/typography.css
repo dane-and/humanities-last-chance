@@ -24,8 +24,8 @@
     @apply text-[#0EA5E9] transition-colors duration-200 hover:text-[#0EA5E9]/80 !important;
   }
   
-  /* Apply underlines specifically to content links */
-  article a, .prose a, main p a, main li a {
+  /* Apply underlines specifically to content links, but not to article titles */
+  article .prose a, .prose a, main p a:not(article h3 a), main li a {
     @apply underline !important;
   }
 }
