@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Tag } from 'lucide-react';
@@ -13,7 +14,10 @@ interface TagListProps {
 const TagList: React.FC<TagListProps> = ({ tags, className, compact = false }) => {
   if (!tags || tags.length === 0) return null;
 
-  const nonNullTags = tags.filter((tag): tag is string => tag != null && typeof tag === 'string');
+  // Filter out null and undefined values first
+  const nonNullTags = tags.filter((tag): tag is string => 
+    tag !== null && tag !== undefined && typeof tag === 'string'
+  );
 
   if (nonNullTags.length === 0) return null;
 
@@ -23,7 +27,7 @@ const TagList: React.FC<TagListProps> = ({ tags, className, compact = false }) =
         <div className="flex items-center text-xs text-muted-foreground">
           <Tag className="h-3 w-3 mr-1" />
           {nonNullTags.map((tag, index) => (
-            <React.Fragment key={tag || index}>
+            <React.Fragment key={tag}>
               <Link
                 to={`/tag/${encodeURIComponent(tag.toLowerCase())}`}
                 className="hover:text-primary transition-colors"
@@ -36,7 +40,7 @@ const TagList: React.FC<TagListProps> = ({ tags, className, compact = false }) =
         </div>
       ) : (
         nonNullTags.map((tag, index) => (
-          <Link key={tag || index} to={`/tag/${encodeURIComponent(tag.toLowerCase())}`}>
+          <Link key={tag} to={`/tag/${encodeURIComponent(tag.toLowerCase())}`}>
             <Badge
               variant="outline"
               className="bg-white text-blue-500 hover:bg-gray-100 border border-gray-200 transition-colors"
@@ -51,4 +55,3 @@ const TagList: React.FC<TagListProps> = ({ tags, className, compact = false }) =
 };
 
 export default TagList;
-

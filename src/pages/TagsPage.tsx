@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
@@ -14,11 +15,15 @@ const TagsPage: React.FC = () => {
   const normalizedTag = tag ? decodeURIComponent(tag) : '';
 
   const tagArticles = normalizedTag
-    ? articles.filter(article =>
-        (article.tags ?? [])
-          .filter((t): t is string => t != null && typeof t === 'string')
-          .some(t => t.toLowerCase() === normalizedTag.toLowerCase())
-      )
+    ? articles.filter(article => {
+        // First ensure article.tags exists and is an array
+        if (!Array.isArray(article.tags)) return false;
+        
+        // Then filter out any null or undefined tags and check for tag match
+        return article.tags
+          .filter((t): t is string => t !== null && t !== undefined && typeof t === 'string')
+          .some(t => t.toLowerCase() === normalizedTag.toLowerCase());
+      })
     : [];
 
   return (

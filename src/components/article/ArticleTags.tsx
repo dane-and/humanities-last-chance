@@ -1,3 +1,4 @@
+
 import React from 'react';
 import TagList from '@/components/TagList';
 
@@ -6,7 +7,10 @@ interface ArticleTagsProps {
 }
 
 const ArticleTags: React.FC<ArticleTagsProps> = ({ tags }) => {
-  const nonNullTags = tags.filter((tag): tag is string => tag != null && typeof tag === 'string');
+  // Filter out null and undefined values
+  const nonNullTags = tags.filter((tag): tag is string => 
+    tag !== null && tag !== undefined && typeof tag === 'string'
+  );
 
   if (nonNullTags.length === 0) return null;
 
