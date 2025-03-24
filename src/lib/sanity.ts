@@ -1,3 +1,4 @@
+
 import { createClient } from '@sanity/client';
 import imageUrlBuilder from '@sanity/image-url';
 import { PortableText as SanityPortableText } from '@portabletext/react';
@@ -25,12 +26,12 @@ export function urlFor(source: any) {
       .focalPoint(source.hotspot.x, source.hotspot.y);
   }
   
-  // Apply size constraints optimized for article display
+  // Apply more conservative size constraints for better article display
   return imageBuilder
-    .width(800)
-    .height(600)
+    .width(600)  // Reduced from 800
+    .height(450)  // Reduced from 600
     .format('webp')
-    .quality(90)
+    .quality(85)  // Slightly reduced quality for faster loading
     .url();
 }
 

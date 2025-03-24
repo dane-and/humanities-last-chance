@@ -57,7 +57,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           style={{ 
             width: '100%',
             maxWidth: `${width}px`,
-            height: `${Math.min(300, height)}px`,
+            height: `${Math.min(250, height)}px`,
           }}
         >
           <span className="text-gray-400">Loading...</span>
@@ -65,7 +65,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       )}
       
       {/* Image container with white background */}
-      <div className="bg-white w-full flex justify-center p-2">
+      <div className="bg-white w-full flex justify-center p-2 overflow-hidden">
         <img
           src={error ? fallbackImage : src}
           alt={alt}
@@ -78,8 +78,8 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           style={{ 
             maxWidth: `${width}px`,
             maxHeight: `${height}px`,
-            width: 'auto',  // Allow width to adjust proportionally
-            height: 'auto', // Allow height to adjust proportionally
+            width: 'auto',  
+            height: 'auto',
           }}
         />
       </div>
