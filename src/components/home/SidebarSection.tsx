@@ -1,3 +1,4 @@
+// SidebarSection.tsx
 
 import React, { useState, useEffect } from 'react';
 import { findCourse } from '@/components/resources/humanities/utils';
@@ -7,7 +8,6 @@ import HumanitiesPreview from './sidebar/HumanitiesPreview';
 import { Article } from '@/lib/types/article';
 import { fetchArticlesByCategory } from '@/lib/sanity';
 
-// Featured courses list
 const featuredCourseTitles = [
   "Shakespeare After All: The Later Plays",
   "The Hebrew Bible",
@@ -17,19 +17,17 @@ const featuredCourseTitles = [
 ];
 
 const SidebarSection: React.FC = () => {
-  // State for interviews and reviews
   const [interviews, setInterviews] = useState<Article[]>([]);
   const [reviews, setReviews] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
-  
-  // Fetch interviews and reviews from Sanity
+
   useEffect(() => {
     const fetchSidebarContent = async () => {
       setLoading(true);
-      
+
       try {
         // Fetch interviews
-        const sanityInterviews = await fetchArticlesByCategory('Interview');
+        const sanityInterviews = await fetchArticlesByCategory('interviews');
         const formattedInterviews = sanityInterviews.map((post: any) => ({
           id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
           title: post.title || "Untitled Post",
@@ -39,7 +37,7 @@ const SidebarSection: React.FC = () => {
             month: 'long',
             day: 'numeric'
           }) : new Date().toLocaleDateString(),
-          category: 'Interview',
+          category: post.category ?? '',
           image: post.mainImage?.asset?.url || '',
           excerpt: post.excerpt || '',
           content: post.body || '',
@@ -47,16 +45,13 @@ const SidebarSection: React.FC = () => {
           tags: post.tags || [],
           publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
         }));
-        
-        // Explicitly sort by publishedAt date in descending order
-        const sortedInterviews = formattedInterviews.sort((a, b) => {
-          const dateA = new Date(a.publishedAt || '').getTime();
-          const dateB = new Date(b.publishedAt || '').getTime();
-          return dateB - dateA;
-        });
-        
-        // Fetch reviews
-        const sanityReviews = await fetchArticlesByCategory('Review');
+
+        const sortedInterviews = formattedInterviews.sort((a, b) =>
+          new Date(b.publishedAt || '').getTime() - new Date(a.publishedAt || '').getTime()
+        );
+
+        // ✅ Fix: fetch reviews using lowercase key
+        const sanityReviews = await fetchArticlesByCategory('reviews');
         const formattedReviews = sanityReviews.map((post: any) => ({
           id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
           title: post.title || "Untitled Post",
@@ -66,7 +61,7 @@ const SidebarSection: React.FC = () => {
             month: 'long',
             day: 'numeric'
           }) : new Date().toLocaleDateString(),
-          category: 'Review',
+          category: post.category ?? '',
           image: post.mainImage?.asset?.url || '',
           excerpt: post.excerpt || '',
           content: post.body || '',
@@ -74,15 +69,11 @@ const SidebarSection: React.FC = () => {
           tags: post.tags || [],
           publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
         }));
-        
-        // Explicitly sort by publishedAt date in descending order
-        const sortedReviews = formattedReviews.sort((a, b) => {
-          const dateA = new Date(a.publishedAt || '').getTime();
-          const dateB = new Date(b.publishedAt || '').getTime();
-          return dateB - dateA;
-        });
-        
-        // Take only 2 most recent for each category
+
+        const sortedReviews = formattedReviews.sort((a, b) =>
+          new Date(b.publishedAt || '').getTime() - new Date(a.publishedAt || '').getTime()
+        );
+
         setInterviews(sortedInterviews.slice(0, 2));
         setReviews(sortedReviews.slice(0, 2));
       } catch (error) {
@@ -91,15 +82,14 @@ const SidebarSection: React.FC = () => {
         setLoading(false);
       }
     };
-    
+
     fetchSidebarContent();
   }, []);
-  
-  // Get featured courses
+
   const featuredCourses = featuredCourseTitles
     .map(findCourse)
     .filter(course => course !== null);
-  
+
   return (
     <div className="space-y-8 sticky top-4">
       <InterviewsSection interviews={interviews} />
