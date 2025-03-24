@@ -53,4 +53,57 @@ const ArticlePage: React.FC = () => {
           setCurrentArticle(null);
         }
       } catch (error) {
-        console.error("
+        console.error("Error loading article:", error);
+        setCurrentArticle(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadArticle();
+  }, [slug, refreshCounter]);
+
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Navigation />
+
+      <main className="flex-grow pt-24 pb-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-4">
+            <Link to="/" className="text-sm text-muted-foreground hover:text-primary transition">
+              ← Home
+            </Link>
+          </div>
+
+          {loading ? (
+            <ArticleLoading />
+          ) : currentArticle === null ? (
+            <ArticleNotFound />
+          ) : (
+            <>
+              <ArticleHeader article={currentArticle} />
+              <ArticleImage article={currentArticle} />
+              <ArticleContent article={currentArticle} />
+              <ArticleTags tags={currentArticle.tags} />
+              <div className="flex items-center mt-8 mb-4">
+                <MessageCircle className="w-5 h-5 mr-2 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">
+                  {currentArticle.comments?.length || 0} comments
+                </span>
+              </div>
+              <ArticleComments
+                articleId={currentArticle.id}
+                comments={currentArticle.comments}
+                onCommentAdded={() => setRefreshCounter((count) => count + 1)}
+              />
+            </>
+          )}
+        </div>
+      </main>
+
+      <Footer />
+    </div>
+  );
+};
+
+export default ArticlePage;
