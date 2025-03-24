@@ -49,40 +49,35 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   };
 
   return (
-    <figure className="relative">
+    <figure className="relative w-full flex flex-col items-center">
       {/* Loading placeholder - only show when not loaded and no error */}
       {!imageLoaded && !error && (
         <div 
-          className={`${className} bg-gray-100`} 
+          className={`bg-gray-100 flex items-center justify-center ${className}`} 
           style={{ 
-            aspectRatio: `${width}/${height}`,
             width: '100%',
-            maxWidth: '100%',
+            maxWidth: `${width}px`,
+            height: `${Math.min(400, height)}px`,
           }}
         >
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-gray-400">Loading...</span>
-          </div>
+          <span className="text-gray-400">Loading...</span>
         </div>
       )}
       
       {/* Image container with white background */}
-      <div 
-        className="bg-white"
-        style={{ aspectRatio: imageLoaded ? 'auto' : `${width}/${height}` }}
-      >
+      <div className="bg-white w-full flex justify-center">
         <img
           src={error ? fallbackImage : src}
           alt={alt}
           width={width}
           height={height}
           loading={priority ? "eager" : "lazy"}
-          className={`w-auto max-w-full mx-auto ${imageLoaded || error ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ${className}`}
+          className={`max-w-full object-contain ${imageLoaded || error ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ${className}`}
           onLoad={handleImageLoad}
           onError={handleImageError}
           style={{ 
-            maxHeight: height ? `${height}px` : 'auto',
-            objectFit: 'contain'
+            maxWidth: `${width}px`,
+            maxHeight: `${height}px`,
           }}
         />
       </div>

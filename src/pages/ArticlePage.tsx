@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
@@ -47,6 +48,7 @@ const ArticlePage: React.FC = () => {
             comments: Array.isArray(sanityPost.comments) ? sanityPost.comments : [],
           };
           setCurrentArticle(article);
+          console.log("Article loaded:", article);
         } else {
           setCurrentArticle(null);
         }
@@ -75,7 +77,9 @@ const ArticlePage: React.FC = () => {
             <>
               <ArticleHeader article={currentArticle} onGoBack={() => navigate('/')} />
               <ArticleImage article={currentArticle} />
-              <ArticleContent article={currentArticle} />
+              <div className="mt-8 mb-12">
+                <ArticleContent content={currentArticle.content} />
+              </div>
               <ArticleTags tags={currentArticle.tags} />
               <div className="flex items-center mt-8 mb-4">
                 <MessageCircle className="w-5 h-5 mr-2 text-muted-foreground" />
@@ -99,4 +103,3 @@ const ArticlePage: React.FC = () => {
 };
 
 export default ArticlePage;
-
