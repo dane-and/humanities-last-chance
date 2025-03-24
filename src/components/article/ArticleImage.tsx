@@ -12,13 +12,13 @@ const ArticleImage: React.FC<ArticleImageProps> = ({ article }) => {
 
   return (
     <div className="w-full flex justify-center my-8">
-      <div className="max-w-2xl w-full bg-white rounded-md overflow-hidden">
+      <div className="max-w-xl w-full bg-white rounded-md overflow-hidden shadow-sm">
         <OptimizedImage 
           src={article.image}
           alt={article.imageCaption || article.title}
-          className="mx-auto w-auto max-h-[600px] object-contain"
-          width={800}
-          height={600}
+          className="mx-auto w-auto max-h-[500px] object-contain"
+          width={700}
+          height={500}
           caption={article.imageCaption}
         />
       </div>

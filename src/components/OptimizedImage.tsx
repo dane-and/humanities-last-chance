@@ -78,6 +78,8 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           style={{ 
             maxWidth: `${width}px`,
             maxHeight: `${height}px`,
+            width: 'auto',  // Allow width to adjust proportionally
+            height: 'auto', // Allow height to adjust proportionally
           }}
         />
       </div>
