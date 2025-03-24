@@ -14,7 +14,7 @@ interface TagListProps {
 const TagList: React.FC<TagListProps> = ({ tags, className, compact = false }) => {
   if (!tags || tags.length === 0) return null;
 
-  // Filter out null and undefined values first
+  // Filter out null and undefined values using type predicate
   const nonNullTags = tags.filter((tag): tag is string => 
     tag !== null && tag !== undefined && typeof tag === 'string'
   );
@@ -39,7 +39,7 @@ const TagList: React.FC<TagListProps> = ({ tags, className, compact = false }) =
           ))}
         </div>
       ) : (
-        nonNullTags.map((tag, index) => (
+        nonNullTags.map((tag) => (
           <Link key={tag} to={`/tag/${encodeURIComponent(tag.toLowerCase())}`}>
             <Badge
               variant="outline"

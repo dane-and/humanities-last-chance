@@ -7,7 +7,7 @@ interface ArticleTagsProps {
 }
 
 const ArticleTags: React.FC<ArticleTagsProps> = ({ tags }) => {
-  // Filter out null and undefined values
+  // Filter out null and undefined values using type predicate
   const nonNullTags = tags.filter((tag): tag is string => 
     tag !== null && tag !== undefined && typeof tag === 'string'
   );

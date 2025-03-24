@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Clock, MessageCircle } from 'lucide-react';
@@ -44,16 +43,16 @@ const ArticleCard: React.FC<ArticleCardProps> = React.memo(({
     >
       {/* Only render image if it exists and is not empty */}
       {hasImage && (
-        <div className={cn('relative bg-white', isCompact ? 'h-auto' : 'h-auto')}>
-          <AspectRatio ratio={21 / 9} className="overflow-hidden">
-            <Link to={`/article/${slug}`} aria-label={title} className="block w-full h-full bg-white">
+        <div className={cn('relative bg-white w-full', isCompact ? 'h-auto' : 'h-auto')}>
+          <AspectRatio ratio={16 / 9} className="overflow-hidden bg-white">
+            <Link to={`/article/${slug}`} aria-label={title} className="block w-full h-full bg-white flex justify-center items-center">
               <OptimizedImage
                 src={image}
                 alt={title}
                 width={640}
-                height={274}
+                height={360}
                 priority={false}
-                className="w-full h-full object-contain bg-white"
+                className="max-w-full max-h-full object-contain bg-white"
               />
             </Link>
           </AspectRatio>

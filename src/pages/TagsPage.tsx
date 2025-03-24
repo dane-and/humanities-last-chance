@@ -4,9 +4,7 @@ import { useParams } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import ArticleGrid from '@/components/ArticleGrid';
-import { getArticlesByTag } from '@/lib/queries/articleQueries';
 import { useArticles } from '@/lib/hooks/useArticles';
-import { Article } from '@/lib/types/article';
 
 const TagsPage: React.FC = () => {
   const { tag } = useParams<{ tag: string }>();
@@ -19,7 +17,7 @@ const TagsPage: React.FC = () => {
         // First ensure article.tags exists and is an array
         if (!Array.isArray(article.tags)) return false;
         
-        // Then filter out any null or undefined tags and check for tag match
+        // Filter out any null or undefined tags and check for tag match using type predicate
         return article.tags
           .filter((t): t is string => t !== null && t !== undefined && typeof t === 'string')
           .some(t => t.toLowerCase() === normalizedTag.toLowerCase());
