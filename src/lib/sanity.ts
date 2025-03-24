@@ -107,9 +107,9 @@ export async function fetchArticlesByCategory(category: string) {
   try {
     console.log(`Fetching articles with category "${category}"`);
     
-    // Use the exact category string for the query
+    // Updated to use case-insensitive comparison with lower() function
     const posts = await sanityClient.fetch(`
-      *[_type == "post" && category == $category] | order(publishedAt desc) {
+      *[_type == "post" && lower(category) == lower($category)] | order(publishedAt desc) {
         _id,
         title,
         slug,
