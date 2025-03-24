@@ -10,15 +10,16 @@ const ArticleTags: React.FC<ArticleTagsProps> = ({ tags }) => {
   // Normalize tags that might come from Sanity in different formats
   const normalizedTags = Array.isArray(tags) 
     ? tags
-        .filter(tag => tag !== null && tag !== undefined)
+        .filter(Boolean) // Remove null and undefined values
         .map(tag => {
-          if (tag === null || tag === undefined) return '';
+          // Handle objects with label property
           if (typeof tag === 'object' && tag !== null && 'label' in tag) {
-            return tag.label;
+            return (tag as {label: string}).label;
           }
-          return tag;
+          // At this point, tag won't be null due to filter(Boolean)
+          return String(tag);
         })
-        .filter(tag => tag && tag.trim() !== '')
+        .filter(tag => tag.trim() !== '')
     : [];
   
   if (!normalizedTags || normalizedTags.length === 0) {
