@@ -1,36 +1,27 @@
 import React from 'react';
-import OptimizedImage from '@/components/OptimizedImage';
 
 interface ArticleImageProps {
-  image: string;
-  title: string;
-  imageCaption?: string;
+  src: string;
+  alt: string;
+  caption?: string;
 }
 
-const ArticleImage: React.FC<ArticleImageProps> = ({ image, title, imageCaption }) => {
-  if (!image || image.trim() === '') {
-    return null;
-  }
-
+const ArticleImage: React.FC<ArticleImageProps> = ({ src, alt, caption }) => {
   return (
-    <div className="mb-6">
-      <div
-        className="mx-auto flex items-center justify-center bg-white"
-        style={{ width: '100%', maxWidth: '1200px', height: '800px' }}
-      >
-        <OptimizedImage
-          src={image}
-          alt={title}
-          className="max-h-full max-w-full object-contain"
-          caption={imageCaption || ''}
-          captionClassName="text-center text-sm text-muted-foreground mt-2 italic"
-          width={1200}
-          height={800}
-          priority={true}
+    <div className="w-full flex justify-center bg-white py-8">
+      <div className="relative w-full max-w-[1200px] aspect-[3/2] overflow-hidden rounded-xl shadow-sm">
+        <img
+          src={src}
+          alt={alt}
+          className="absolute top-0 left-0 w-full h-full object-contain bg-white"
         />
       </div>
+      {caption && (
+        <p className="text-muted-foreground text-sm mt-2 text-center">{caption}</p>
+      )}
     </div>
   );
 };
 
 export default ArticleImage;
+

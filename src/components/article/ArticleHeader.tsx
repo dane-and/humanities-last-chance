@@ -14,36 +14,40 @@ const ArticleHeader: React.FC<ArticleHeaderProps> = ({ article, onGoBack }) => {
   const isMobile = useIsMobile();
 
   return (
-    <>
-      <div className="mb-6">
-        <div className="mb-2">
-          <Button 
-            variant="ghost" 
-            onClick={onGoBack}
-            className="flex items-center text-muted-foreground hover:text-foreground"
-            size="sm"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Home
-          </Button>
-        </div>
-        <h1 className="text-3xl font-serif font-bold">{article.title}</h1>
+    <div className="relative mb-6">
+      <div className="absolute left-0 -ml-8 top-1">
+        <Button
+          variant="ghost"
+          onClick={onGoBack}
+          className="flex items-center text-muted-foreground hover:text-foreground"
+          size="sm"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Home
+        </Button>
       </div>
 
-      <div className="mb-4 block">
-        <span className="text-muted-foreground text-sm inline-block">{article.date}</span>
-        <span className="text-muted-foreground mx-2 text-sm inline-block">•</span>
-        <Link 
-          to={`/articles/${article.category}`} 
-          className="text-primary font-medium text-sm inline-block capitalize"
+      <h1 className="text-3xl font-serif font-bold text-center">{article.title}</h1>
+
+      <div className="mt-6 text-center text-muted-foreground text-sm">
+        <span>{article.date}</span>
+        <span className="mx-2">•</span>
+        <Link
+          to={`/articles/${article.category}`}
+          className="text-primary font-medium capitalize"
         >
           {article.category}
         </Link>
       </div>
 
-      <p className="text-lg text-muted-foreground mb-6">{article.excerpt}</p>
-    </>
+      {article.excerpt && (
+        <p className="text-lg text-muted-foreground text-center mt-4 max-w-2xl mx-auto">
+          {article.excerpt}
+        </p>
+      )}
+    </div>
   );
 };
 
 export default ArticleHeader;
+
