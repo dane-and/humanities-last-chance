@@ -37,10 +37,18 @@ const ArticlesReviews: React.FC = () => {
           content: post.body || '',
           featured: false,
           tags: post.tags || [],
+          publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
         }));
         
-        console.log("Formatted review articles:", reviewArticles);
-        setArticles(reviewArticles);
+        // Explicitly sort by publishedAt date in descending order 
+        const sortedReviewArticles = reviewArticles.sort((a, b) => {
+          const dateA = new Date(a.publishedAt || '').getTime();
+          const dateB = new Date(b.publishedAt || '').getTime();
+          return dateB - dateA;
+        });
+        
+        console.log("Formatted and sorted review articles:", sortedReviewArticles);
+        setArticles(sortedReviewArticles);
       } catch (error) {
         console.error("Error loading articles:", error);
       } finally {

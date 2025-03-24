@@ -37,10 +37,18 @@ const ArticlesInterviews: React.FC = () => {
           content: post.body || '',
           featured: false,
           tags: post.tags || [],
+          publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
         }));
         
-        console.log("Formatted interview articles:", interviewArticles);
-        setArticles(interviewArticles);
+        // Explicitly sort by publishedAt date in descending order
+        const sortedInterviewArticles = interviewArticles.sort((a, b) => {
+          const dateA = new Date(a.publishedAt || '').getTime();
+          const dateB = new Date(b.publishedAt || '').getTime();
+          return dateB - dateA;
+        });
+        
+        console.log("Formatted and sorted interview articles:", sortedInterviewArticles);
+        setArticles(sortedInterviewArticles);
       } catch (error) {
         console.error("Error loading articles:", error);
       } finally {

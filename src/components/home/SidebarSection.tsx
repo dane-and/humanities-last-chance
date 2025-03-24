@@ -45,7 +45,15 @@ const SidebarSection: React.FC = () => {
           content: post.body || '',
           featured: false,
           tags: post.tags || [],
+          publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
         }));
+        
+        // Explicitly sort by publishedAt date in descending order
+        const sortedInterviews = formattedInterviews.sort((a, b) => {
+          const dateA = new Date(a.publishedAt || '').getTime();
+          const dateB = new Date(b.publishedAt || '').getTime();
+          return dateB - dateA;
+        });
         
         // Fetch reviews
         const sanityReviews = await fetchArticlesByCategory('Review');
@@ -64,11 +72,19 @@ const SidebarSection: React.FC = () => {
           content: post.body || '',
           featured: false,
           tags: post.tags || [],
+          publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
         }));
         
+        // Explicitly sort by publishedAt date in descending order
+        const sortedReviews = formattedReviews.sort((a, b) => {
+          const dateA = new Date(a.publishedAt || '').getTime();
+          const dateB = new Date(b.publishedAt || '').getTime();
+          return dateB - dateA;
+        });
+        
         // Take only 2 most recent for each category
-        setInterviews(formattedInterviews.slice(0, 2));
-        setReviews(formattedReviews.slice(0, 2));
+        setInterviews(sortedInterviews.slice(0, 2));
+        setReviews(sortedReviews.slice(0, 2));
       } catch (error) {
         console.error("Error fetching sidebar content:", error);
       } finally {
