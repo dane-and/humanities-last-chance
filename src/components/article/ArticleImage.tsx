@@ -13,13 +13,13 @@ const ArticleImage: React.FC<ArticleImageProps> = ({ article }) => {
   // Determine if the article is a blog post
   const isBlogPost = article.category?.toLowerCase() === 'blog';
   
-  // Use smaller dimensions for blog posts
-  const maxWidth = isBlogPost ? 500 : 700;
-  const maxHeight = isBlogPost ? 350 : 500;
+  // Use much smaller dimensions for blog posts
+  const maxWidth = isBlogPost ? 300 : 600;
+  const maxHeight = isBlogPost ? 225 : 450;
 
   return (
-    <div className="w-full flex justify-center my-8">
-      <div className={`max-w-lg w-full bg-white rounded-md overflow-hidden shadow-sm ${isBlogPost ? 'max-w-md' : 'max-w-lg'}`}>
+    <div className="w-full flex justify-center my-6">
+      <div className={`${isBlogPost ? 'max-w-xs' : 'max-w-md'} w-full bg-white rounded-md overflow-hidden shadow-sm`}>
         <OptimizedImage 
           src={article.image}
           alt={article.imageCaption || article.title}

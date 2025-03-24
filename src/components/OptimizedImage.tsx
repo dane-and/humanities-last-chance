@@ -57,7 +57,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           style={{ 
             width: '100%',
             maxWidth: `${width}px`,
-            height: `${Math.min(250, height)}px`,
+            height: `${Math.min(200, height)}px`,
           }}
         >
           <span className="text-gray-400">Loading...</span>

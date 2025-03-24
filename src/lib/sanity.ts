@@ -26,12 +26,12 @@ export function urlFor(source: any) {
       .focalPoint(source.hotspot.x, source.hotspot.y);
   }
   
-  // Apply more conservative size constraints for better article display
+  // Apply much more conservative size constraints for better article display
   return imageBuilder
-    .width(600)  // Reduced from 800
-    .height(450)  // Reduced from 600
+    .width(400)  // Significantly reduced from previous 600
+    .height(300)  // Significantly reduced from previous 450
     .format('webp')
-    .quality(85)  // Slightly reduced quality for faster loading
+    .quality(80)  // Reduced quality for faster loading and smaller file size
     .url();
 }
 
