@@ -18,8 +18,8 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   className = '',
   caption,
   captionClassName = '',
-  width = 1200,
-  height = 800,
+  width = 800,
+  height = 600,
   priority = false
 }) => {
   // If src is empty, don't render anything
@@ -57,7 +57,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           style={{ 
             width: '100%',
             maxWidth: `${width}px`,
-            height: `${Math.min(400, height)}px`,
+            height: `${Math.min(300, height)}px`,
           }}
         >
           <span className="text-gray-400">Loading...</span>
@@ -65,14 +65,14 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       )}
       
       {/* Image container with white background */}
-      <div className="bg-white w-full flex justify-center">
+      <div className="bg-white w-full flex justify-center p-2">
         <img
           src={error ? fallbackImage : src}
           alt={alt}
           width={width}
           height={height}
           loading={priority ? "eager" : "lazy"}
-          className={`max-w-full object-contain ${imageLoaded || error ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ${className}`}
+          className={`max-w-full h-auto object-contain ${imageLoaded || error ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ${className}`}
           onLoad={handleImageLoad}
           onError={handleImageError}
           style={{ 
