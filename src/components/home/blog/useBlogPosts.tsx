@@ -17,75 +17,41 @@ export const useBlogPosts = () => {
     try {
       const posts = await fetchBlogPosts();
       
-      // Convert Sanity posts format to our Article type
-      const formattedPosts: Article[] = posts.map((post: any) => {
-        // Additional logging to debug category values and dates
-        console.log(`Post "${post.title}" has category:`, post.category);
-        console.log(`Post "${post.title}" has publishedAt:`, post.publishedAt);
-        console.log(`Category type:`, typeof post.category);
-        
-        // Ensure we're preserving the exact category capitalization
-        const category = post.category || 'Blog';
-        console.log(`Using category "${category}" for post "${post.title}"`);
-        
-        // Match category to our allowed types without changing case
-        let typedCategory: Article['category'];
-        const lowerCaseCategory = category.toLowerCase();
-        if (lowerCaseCategory === 'blog') {
-          typedCategory = 'Blog';
-        } else if (lowerCaseCategory === 'interview') {
-          typedCategory = 'Interview';
-        } else if (lowerCaseCategory === 'review') {
-          typedCategory = 'Review';
-        } else if (lowerCaseCategory === 'resource') {
-          typedCategory = 'Resource';
-        } else {
-          typedCategory = 'Blog'; // Default
-        }
-        
-        // Always use the original publishedAt date from Sanity
-        // This ensures we don't create new dates for old posts
-        const publishedDate = post.publishedAt 
-          ? new Date(post.publishedAt) 
-          : (post._createdAt ? new Date(post._createdAt) : new Date());
-        
-        console.log(`Post "${post.title}" using date:`, publishedDate.toISOString());
-        
-        return {
-          id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-          title: post.title || "Untitled Post",
-          slug: post.slug?.current || `post-${Date.now()}`,
-          date: publishedDate.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          }),
-          publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
-          category: typedCategory, // Use the correctly capitalized category
-          image: post.mainImage?.asset?.url || '',
-          imageCaption: post.mainImage?.caption || '',
-          excerpt: post.excerpt || '',
-          content: post.body || '', // Keep the portable text object as is
-          featured: false,
-          tags: post.tags || [],
-        };
-      });
-      
-      console.log("Formatted posts with preserved categories and original dates:", formattedPosts);
-      
       // Filter to only include posts with category "Blog" (case-insensitive)
-      const blogOnlyPosts = formattedPosts.filter(post => 
-        post.category.toLowerCase() === 'blog'
+      const filtered = posts.filter((post: any) =>
+        post.category?.toLowerCase() === 'blog'
       );
       
+      console.log(`Filtered ${filtered.length} blog posts from ${posts.length} total posts`);
+      
+      // Convert Sanity posts format to our Article type
+      const formattedPosts: Article[] = filtered.map((post: any) => ({
+        id: post._id || `sanity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        title: post.title || "Untitled Post",
+        slug: post.slug?.current || `post-${Date.now()}`,
+        date: post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }) : new Date().toLocaleDateString(),
+        category: post.category || 'Blog',
+        image: post.mainImage?.asset?.url || '',
+        imageCaption: post.mainImage?.caption || '',
+        excerpt: post.excerpt || '',
+        content: post.body || '', // Keep the portable text object as is
+        featured: false,
+        tags: post.tags || [],
+        publishedAt: post.publishedAt || post._createdAt || new Date().toISOString(),
+      }));
+      
       // Sort blog posts by publishedAt date in descending order
-      const sortedBlogPosts = blogOnlyPosts.sort((a, b) => {
+      const sortedBlogPosts = formattedPosts.sort((a, b) => {
         const dateA = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
         const dateB = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
         return dateB - dateA;
       });
       
-      console.log(`Filtered to ${sortedBlogPosts.length} blog posts from ${formattedPosts.length} total posts`);
+      console.log(`Setting ${sortedBlogPosts.length} filtered and sorted blog posts`);
       
       // Set filtered and sorted blog posts
       setBlogPosts(sortedBlogPosts);
