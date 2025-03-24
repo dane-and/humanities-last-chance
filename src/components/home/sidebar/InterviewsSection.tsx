@@ -32,11 +32,17 @@ const InterviewsSection: React.FC<InterviewsSectionProps> = ({ interviews }) => 
               <div className="mb-3">
                 <AspectRatio ratio={21 / 9} className="overflow-hidden rounded">
                   <Link to={`/article/${interview.slug}`}>
-                    <img 
-                      src={interview.image} 
-                      alt={interview.title} 
-                      className="w-full h-full object-cover"
-                    />
+                    <div className="relative w-full h-full">
+                      <img 
+                        src={interview.image} 
+                        alt={interview.title} 
+                        className="w-full h-auto relative z-10 object-contain"
+                      />
+                      <div
+                        className="absolute inset-0 blur-lg scale-105 z-0"
+                        style={{ backgroundImage: `url(${interview.image})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+                      />
+                    </div>
                   </Link>
                 </AspectRatio>
               </div>
