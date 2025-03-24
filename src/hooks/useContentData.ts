@@ -68,7 +68,7 @@ export const useContentData = () => {
         
         setArticleList(formattedArticles);
       } else {
-        // Keep empty arrays until Sanity integration is complete
+        // Use empty array
         setArticleList([]);
       }
       

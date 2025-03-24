@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Article, defaultArticles } from '../types/article';
+import { Article } from '../types/article';
 import { toast } from 'sonner';
 import { getArticlesFromStorage, saveArticlesToStorage } from '../utils/storage/articleStorage';
 
@@ -22,9 +22,9 @@ export const useArticles = () => {
       console.error('Error loading articles:', err);
       setError(err instanceof Error ? err : new Error('Unknown error loading articles'));
       
-      // Use defaults on error
-      setArticles(defaultArticles);
-      toast.error("Error loading articles. Using default content.");
+      // Use empty array on error instead of defaults
+      setArticles([]);
+      toast.error("Error loading articles.");
     } finally {
       setIsLoading(false);
     }

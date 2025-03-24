@@ -73,37 +73,17 @@ export const useBlogPosts = () => {
       
       console.log("Formatted posts with preserved categories and original dates:", formattedPosts);
       
-      // If no posts are returned from Sanity, use the default articles
-      if (formattedPosts.length === 0) {
-        console.log("No posts returned from Sanity, using default articles");
-        setBlogPosts(defaultArticles);
-      } else {
-        // Explicitly sort the posts by publishedAt date (newest first)
-        // but ensure we're using the original date from Sanity
-        const sortedPosts = formattedPosts.sort((a, b) => {
-          const dateA = new Date(a.publishedAt || '');
-          const dateB = new Date(b.publishedAt || '');
-          return dateB.getTime() - dateA.getTime();
-        });
-        
-        console.log("Posts sorted by original publishedAt date (newest first):", 
-          sortedPosts.map(p => ({ 
-            title: p.title, 
-            date: p.date, 
-            publishedAt: p.publishedAt 
-          }))
-        );
-        
-        setBlogPosts(sortedPosts);
-      }
+      // Set formatted posts as our blog posts
+      setBlogPosts(formattedPosts);
+      
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error fetching blog posts';
       console.error('Error fetching blog posts:', errorMessage);
       setError(err instanceof Error ? err : new Error(errorMessage));
       
-      // Use default articles on error
-      console.log("Error fetching from Sanity, using default articles");
-      setBlogPosts(defaultArticles);
+      // Use empty array on error instead of default articles
+      console.log("Error fetching from Sanity, using empty articles array");
+      setBlogPosts([]);
     } finally {
       setIsLoading(false);
     }
