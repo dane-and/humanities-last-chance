@@ -1,5 +1,7 @@
+
 import React from 'react';
 import { Article } from '@/lib/types/article';
+import OptimizedImage from '@/components/OptimizedImage';
 
 interface ArticleImageProps {
   article: Article;
@@ -7,31 +9,25 @@ interface ArticleImageProps {
 
 const ArticleImage: React.FC<ArticleImageProps> = ({ article }) => {
   if (!article.image) return null;
+  
+  // Use consistent dimensions for all article types
+  const maxWidth = 600;
+  const maxHeight = 450;
 
   return (
-    <div
-      className="mx-auto my-8 flex items-center justify-center"
-      style={{
-        width: '1200px',
-        height: '800px',
-        backgroundColor: 'white',
-        borderRadius: '0.5rem',
-        overflow: 'hidden',
-      }}
-    >
-      <img
-        src={article.image}
-        alt={article.imageCaption || article.title}
-        style={{
-          maxWidth: '100%',
-          maxHeight: '100%',
-          objectFit: 'contain',
-          display: 'block',
-        }}
-      />
+    <div className="w-full flex justify-center my-6">
+      <div className="max-w-2xl w-full bg-white rounded-md overflow-hidden shadow-sm">
+        <OptimizedImage 
+          src={article.image}
+          alt={article.imageCaption || article.title}
+          className="mx-auto w-auto object-contain"
+          width={maxWidth}
+          height={maxHeight}
+          caption={article.imageCaption}
+        />
+      </div>
     </div>
   );
 };
 
 export default ArticleImage;
-

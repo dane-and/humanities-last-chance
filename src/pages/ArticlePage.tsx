@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
@@ -20,6 +21,9 @@ const ArticlePage: React.FC = () => {
   const [currentArticle, setCurrentArticle] = useState<Article | null>(null);
   const [refreshCounter, setRefreshCounter] = useState(0);
 
+  // Define the onGoBack function to navigate back to the home page
+  const handleGoBack = () => navigate('/');
+
   useEffect(() => {
     const loadArticle = async () => {
       if (!slug) return;
@@ -27,6 +31,16 @@ const ArticlePage: React.FC = () => {
       try {
         const sanityPost = await fetchArticleBySlug(slug);
         if (sanityPost) {
+          // Process tags - handle both string array and object array formats from Sanity
+          const processedTags = Array.isArray(sanityPost.tags) 
+            ? sanityPost.tags.map((tag: any) => {
+                if (typeof tag === 'object' && tag !== null && tag.label) {
+                  return tag.label;
+                }
+                return tag;
+              })
+            : [];
+
           const article: Article = {
             id: sanityPost._id || `sanity-${Date.now()}`,
             title: sanityPost.title || "Untitled Post",
@@ -43,10 +57,11 @@ const ArticlePage: React.FC = () => {
             imageCaption: sanityPost.mainImage?.caption || '',
             excerpt: sanityPost.excerpt || '',
             content: sanityPost.body || '',
-            tags: Array.isArray(sanityPost.tags) ? sanityPost.tags : [],
+            tags: processedTags,
             comments: Array.isArray(sanityPost.comments) ? sanityPost.comments : [],
           };
           setCurrentArticle(article);
+          console.log("Article loaded:", article);
         } else {
           setCurrentArticle(null);
         }
@@ -70,12 +85,14 @@ const ArticlePage: React.FC = () => {
           {loading ? (
             <ArticleLoading />
           ) : currentArticle === null ? (
-            <ArticleNotFound />
+            <ArticleNotFound onGoBack={handleGoBack} />
           ) : (
             <>
-              <ArticleHeader article={currentArticle} onGoBack={() => navigate('/')} />
+              <ArticleHeader article={currentArticle} onGoBack={handleGoBack} />
               <ArticleImage article={currentArticle} />
-              <ArticleContent article={currentArticle} />
+              <div className="mt-8 mb-12">
+                <ArticleContent content={currentArticle.content} />
+              </div>
               <ArticleTags tags={currentArticle.tags} />
               <div className="flex items-center mt-8 mb-4">
                 <MessageCircle className="w-5 h-5 mr-2 text-muted-foreground" />
@@ -99,4 +116,3 @@ const ArticlePage: React.FC = () => {
 };
 
 export default ArticlePage;
-

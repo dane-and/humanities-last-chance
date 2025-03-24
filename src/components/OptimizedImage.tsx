@@ -18,8 +18,8 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   className = '',
   caption,
   captionClassName = '',
-  width = 1200,
-  height = 800,
+  width = 800,
+  height = 600,
   priority = false
 }) => {
   // If src is empty, don't render anything
@@ -37,6 +37,15 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   useEffect(() => {
     setImageLoaded(false);
     setError(false);
+
+    // Preload the image
+    const preloadImg = new Image();
+    preloadImg.src = src;
+    
+    // Check if image is already cached
+    if (preloadImg.complete) {
+      setImageLoaded(true);
+    }
   }, [src]);
 
   const handleImageError = () => {
@@ -48,41 +57,55 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
     setImageLoaded(true);
   };
 
+  // Optimize image loading by adding srcSet for responsive images
+  const generateSrcSet = () => {
+    if (src.includes('sanity.io') || src.includes('cdn.sanity.io')) {
+      // For Sanity images, we can use their image API for responsive sizes
+      const baseSrc = src.split('?')[0];
+      return `
+        ${baseSrc}?w=${width/2}&h=${height/2}&auto=format&q=75 ${width/2}w,
+        ${baseSrc}?w=${width}&h=${height}&auto=format&q=80 ${width}w,
+        ${baseSrc}?w=${width*1.5}&h=${height*1.5}&auto=format&q=70 ${width*1.5}w
+      `;
+    }
+    return undefined;
+  };
+
   return (
-    <figure className="relative">
+    <figure className="relative w-full flex flex-col items-center">
       {/* Loading placeholder - only show when not loaded and no error */}
       {!imageLoaded && !error && (
         <div 
-          className={`${className} bg-gray-100`} 
+          className={`bg-gray-100 flex items-center justify-center ${className}`} 
           style={{ 
-            aspectRatio: `${width}/${height}`,
             width: '100%',
-            maxWidth: '100%',
+            maxWidth: `${width}px`,
+            height: `${Math.min(200, height)}px`,
           }}
         >
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-gray-400">Loading...</span>
-          </div>
+          <span className="text-gray-400">Loading...</span>
         </div>
       )}
       
       {/* Image container with white background */}
-      <div 
-        className="bg-white"
-        style={{ aspectRatio: imageLoaded ? 'auto' : `${width}/${height}` }}
-      >
+      <div className="bg-white w-full flex justify-center p-2 overflow-hidden">
         <img
           src={error ? fallbackImage : src}
+          srcSet={!error ? generateSrcSet() : undefined}
+          sizes={`(max-width: 768px) ${width/2}px, ${width}px`}
           alt={alt}
           width={width}
           height={height}
           loading={priority ? "eager" : "lazy"}
-          className={`w-auto max-w-full mx-auto ${imageLoaded || error ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ${className}`}
+          decoding="async"
+          className={`max-w-full h-auto object-contain ${imageLoaded || error ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ${className}`}
           onLoad={handleImageLoad}
           onError={handleImageError}
           style={{ 
-            maxHeight: height ? `${height}px` : 'auto',
-            objectFit: 'contain'
+            maxWidth: `${width}px`,
+            maxHeight: `${height}px`,
+            width: 'auto',  
+            height: 'auto',
           }}
         />
       </div>

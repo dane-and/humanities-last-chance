@@ -85,7 +85,7 @@ const ArticleCard: React.FC<ArticleCardProps> = React.memo(({
       
       {/* Only render image if it exists and is not empty */}
       {hasImage && (
-        <div className={cn('relative', isCompact ? 'h-auto' : 'h-auto')}>
+        <div className={cn('relative bg-white', isCompact ? 'h-auto' : 'h-auto')}>
           <AspectRatio ratio={21 / 9} className="overflow-hidden">
             <Link to={`/article/${slug}`} aria-label={title} className="block w-full h-full">
               <OptimizedImage
@@ -94,7 +94,7 @@ const ArticleCard: React.FC<ArticleCardProps> = React.memo(({
                 width={640}
                 height={274}
                 priority={false}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain bg-white"
               />
             </Link>
           </AspectRatio>

@@ -30,19 +30,13 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews }) => {
           <article key={review.id} className="border-b border-border/30 pb-4 last:border-b-0 last:pb-0">
             {review.image && (
               <div className="mb-3">
-                <AspectRatio ratio={21 / 9} className="overflow-hidden rounded">
+                <AspectRatio ratio={21 / 9} className="overflow-hidden rounded bg-white">
                   <Link to={`/article/${review.slug}`}>
-                    <div className="relative w-full h-full">
-                      <img 
-                        src={review.image} 
-                        alt={review.title} 
-                        className="w-full h-auto relative z-10 object-contain"
-                      />
-                      <div
-                        className="absolute inset-0 blur-lg scale-105 z-0"
-                        style={{ backgroundImage: `url(${review.image})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
-                      />
-                    </div>
+                    <img 
+                      src={review.image} 
+                      alt={review.title} 
+                      className="w-full h-full object-contain bg-white"
+                    />
                   </Link>
                 </AspectRatio>
               </div>

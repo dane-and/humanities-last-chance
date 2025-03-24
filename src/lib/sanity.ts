@@ -14,7 +14,25 @@ export const sanityClient = createClient({
 const builder = imageUrlBuilder(sanityClient);
 
 export function urlFor(source: any) {
-  return builder.image(source);
+  if (!source) return '';
+  
+  // Create a configured image builder
+  const imageBuilder = builder.image(source);
+  
+  // If the source has hotspot info, use it
+  if (source.hotspot) {
+    imageBuilder.fit('crop')
+      .crop('focalpoint')
+      .focalPoint(source.hotspot.x, source.hotspot.y);
+  }
+  
+  // Standardize all image sizes to 600x450
+  return imageBuilder
+    .width(600)
+    .height(450)
+    .format('webp')
+    .quality(85)
+    .url();
 }
 
 // Create a reusable PortableText component
@@ -36,7 +54,9 @@ export async function fetchBlogPosts() {
             _id,
             url
           },
-          caption
+          hotspot,
+          caption,
+          alt
         },
         body,
         publishedAt,
@@ -50,14 +70,15 @@ export async function fetchBlogPosts() {
     
     console.log("Fetched raw posts from Sanity:", posts);
     
-    // Verify category values in the raw data
-    posts.forEach((post: any) => {
-      console.log(`Raw post "${post.title}" has category:`, post.category);
-      // Also log the publishedAt date for debugging
-      console.log(`Raw post "${post.title}" has publishedAt:`, post.publishedAt);
+    // Process image URLs with optimized parameters
+    const processedPosts = posts.map((post: any) => {
+      if (post.mainImage && post.mainImage.asset) {
+        post.mainImage.url = urlFor(post.mainImage);
+      }
+      return post;
     });
     
-    return posts;
+    return processedPosts;
   } catch (error) {
     console.error("Error fetching blog posts:", error);
     return [];
@@ -74,8 +95,10 @@ export async function fetchArticleBySlug(slug: string) {
         title,
         slug,
         mainImage{
-          asset->{url},
-          caption
+          asset->{url, _id},
+          hotspot,
+          caption,
+          alt
         },
         body,
         publishedAt,
@@ -90,8 +113,11 @@ export async function fetchArticleBySlug(slug: string) {
     
     if (post) {
       console.log(`Found post with slug "${slug}":`, post);
-      console.log(`Post category:`, post.category);
-      console.log(`Post publishedAt:`, post.publishedAt);
+      
+      // Process image URL with optimized parameters
+      if (post.mainImage && post.mainImage.asset) {
+        post.mainImage.url = urlFor(post.mainImage);
+      }
     } else {
       console.log(`No post found with slug "${slug}"`);
     }
@@ -114,8 +140,10 @@ export async function fetchArticlesByCategory(category: string) {
         title,
         slug,
         mainImage{
-          asset->{url},
-          caption
+          asset->{url, _id},
+          hotspot,
+          caption,
+          alt
         },
         body,
         publishedAt,
@@ -129,12 +157,15 @@ export async function fetchArticlesByCategory(category: string) {
     
     console.log(`Found ${posts.length} posts in category "${category}":`, posts);
     
-    // Verify category values and publishedAt dates
-    posts.forEach((post: any) => {
-      console.log(`Post "${post.title}" has category "${post.category}" and publishedAt "${post.publishedAt}"`);
+    // Process image URLs with optimized parameters
+    const processedPosts = posts.map((post: any) => {
+      if (post.mainImage && post.mainImage.asset) {
+        post.mainImage.url = urlFor(post.mainImage);
+      }
+      return post;
     });
     
-    return posts;
+    return processedPosts;
   } catch (error) {
     console.error(`Error fetching articles with category ${category}:`, error);
     return [];

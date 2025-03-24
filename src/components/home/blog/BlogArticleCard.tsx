@@ -52,8 +52,8 @@ const BlogArticleCard: React.FC<BlogArticleCardProps> = ({
                   className="w-auto max-w-full mx-auto"
                   caption={post.imageCaption || ''}
                   captionClassName="text-center text-sm text-muted-foreground mt-2 italic"
-                  width={1200}
-                  height={675}
+                  width={600}
+                  height={450}
                   priority={index === 0}
                 />
               </Link>

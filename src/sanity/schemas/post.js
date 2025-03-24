@@ -1,4 +1,3 @@
-
 export default {
   name: 'post',
   title: 'Post',
@@ -32,6 +31,7 @@ export default {
       type: 'image',
       options: {
         hotspot: true,
+        metadata: ['palette', 'lqip', 'dimensions'],
       },
       fields: [
         {
@@ -39,6 +39,12 @@ export default {
           type: 'string',
           title: 'Caption',
           description: 'Add a caption to display below the image'
+        },
+        {
+          name: 'alt',
+          type: 'string',
+          title: 'Alternative text',
+          description: 'Important for SEO and accessibility'
         }
       ]
     },
@@ -91,7 +97,10 @@ export default {
                 isHighlighted: true
               }
             }
-          ]
+          ],
+          options: {
+            hotspot: true
+          }
         }
       ]
     },

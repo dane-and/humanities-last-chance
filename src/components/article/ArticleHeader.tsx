@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
@@ -13,12 +14,8 @@ const ArticleHeader: React.FC<ArticleHeaderProps> = ({ article, onGoBack }) => {
   const isMobile = useIsMobile();
 
   return (
-    <div className="relative mb-6">
-      <div
-        className={`${
-          isMobile ? 'text-center mb-2' : 'absolute top-0 left-0'
-        }`}
-      >
+    <div className="relative mb-6 mt-4 pt-8">
+      <div className="absolute top-0 left-0">
         <Button
           variant="ghost"
           onClick={onGoBack}
@@ -30,7 +27,7 @@ const ArticleHeader: React.FC<ArticleHeaderProps> = ({ article, onGoBack }) => {
         </Button>
       </div>
 
-      <h1 className="text-3xl font-serif font-bold text-center">{article.title}</h1>
+      <h1 className="text-3xl font-serif font-bold text-center mt-10">{article.title}</h1>
 
       <div className="mt-6 text-center text-muted-foreground text-sm">
         <span>{article.date}</span>
@@ -48,5 +45,3 @@ const ArticleHeader: React.FC<ArticleHeaderProps> = ({ article, onGoBack }) => {
 };
 
 export default ArticleHeader;
-
-
