@@ -26,10 +26,10 @@ export function urlFor(source: any) {
       .focalPoint(source.hotspot.x, source.hotspot.y);
   }
   
-  // Standardize all image sizes to 500x350
+  // Standardize all image sizes to 600x450
   return imageBuilder
-    .width(500)
-    .height(350)
+    .width(600)
+    .height(450)
     .format('webp')
     .quality(85)
     .url();
