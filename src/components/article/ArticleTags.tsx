@@ -19,7 +19,8 @@ const ArticleTags: React.FC<ArticleTagsProps> = ({ tags }) => {
           // At this point, tag won't be null due to filter(Boolean)
           return String(tag);
         })
-        .filter(tag => typeof tag === 'string' && tag.trim() !== '')
+        // Explicitly ensure we're only working with non-empty strings
+        .filter((tag): tag is string => typeof tag === 'string' && tag.trim() !== '')
     : [];
   
   if (!normalizedTags || normalizedTags.length === 0) {
