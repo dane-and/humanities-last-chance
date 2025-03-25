@@ -1,4 +1,3 @@
-
 export default {
   name: 'post',
   title: 'Post',
@@ -24,7 +23,15 @@ export default {
       name: 'publishedAt',
       title: 'Published at',
       type: 'datetime',
-      validation: Rule => Rule.required()
+      description: 'This date determines the order of posts. It is set once on publication and should not be changed.',
+      validation: Rule => Rule.required(),
+      initialValue: () => new Date().toISOString(),
+      readOnly: ({ document }) => !!document?.publishedAt,
+      options: {
+        dateFormat: 'YYYY-MM-DD',
+        timeFormat: 'HH:mm',
+        calendarTodayLabel: 'Today',
+      }
     },
     {
       name: 'mainImage',
