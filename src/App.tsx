@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { AuthProvider } from "./context/AuthContext";
 import { BASE_PATH } from "./lib/config";
 import { ErrorBoundary } from "react-error-boundary";
+import ScrollToTop from "./components/ScrollToTop";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/AdminLogin";
@@ -78,6 +79,7 @@ const App = () => {
           <Sonner />
           <ErrorBoundary FallbackComponent={AppErrorFallback}>
             <BrowserRouter basename={BASE_PATH}>
+              <ScrollToTop />
               <Routes>
                 <Route path="/" element={<Index />} />
                 {/* Admin routes - with authentication */}
