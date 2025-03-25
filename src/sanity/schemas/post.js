@@ -116,23 +116,24 @@ export default {
       name: 'tags',
       title: 'Tags',
       type: 'array',
-      of: [{ type: 'string' }],
-      options: {
-        list: [
-          {title: 'Literature', value: 'Literature'},
-          {title: 'History', value: 'History'},
-          {title: 'Philosophy', value: 'Philosophy'},
-          {title: 'Teaching', value: 'Teaching'},
-          {title: 'AI', value: 'AI'},
-          {title: 'Religion', value: 'Religion'},
-          {title: 'Visual Arts', value: 'Visual Arts'},
-          {title: 'Architecture', value: 'Architecture'},
-          {title: 'Music', value: 'Music'},
-          {title: 'Social Science', value: 'Social Science'},
-          {title: 'Science', value: 'Science'}
-        ],
-        layout: 'tags'
-      }
+      of: [
+        {
+          type: 'object',
+          name: 'tag',
+          fields: [
+            {
+              name: 'label',
+              title: 'Label',
+              type: 'string',
+            }
+          ],
+          preview: {
+            select: {
+              title: 'label',
+            }
+          }
+        }
+      ]
     },
     {
       name: 'comments',
@@ -186,3 +187,4 @@ export default {
     }
   }
 };
+
