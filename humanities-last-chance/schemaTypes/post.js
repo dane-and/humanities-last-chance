@@ -1,104 +1,64 @@
 
 export default {
-  name: "post",
-  title: "Post",
-  type: "document",
+  name: 'post',
+  title: 'Post',
+  type: 'document',
   fields: [
     {
-      name: "title",
-      title: "Title",
-      type: "string",
+      name: 'title',
+      title: 'Title',
+      type: 'string',
     },
     {
-      name: "slug",
-      title: "Slug",
-      type: "slug",
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
       options: {
-        source: "title",
+        source: 'title',
         maxLength: 96,
       },
     },
     {
-      name: "category",
-      title: "Category",
-      type: "string",
+      name: 'publishedAt',
+      title: 'Published at',
+      type: 'datetime',
+    },
+    {
+      name: 'category',
+      title: 'Category',
+      type: 'string',
       options: {
         list: [
-          { title: "Blog", value: "blog" },
-          { title: "Interviews", value: "interviews" },
-          { title: "Reviews", value: "reviews" },
+          { title: 'Blog', value: 'Blog' },
+          { title: 'Interviews', value: 'Interviews' },
+          { title: 'Reviews', value: 'Reviews' },
         ],
       },
     },
     {
-      name: "tags",
-      title: "Tags",
-      type: "array",
-      of: [{ type: "string" }],
-      options: {
-        list: [
-          {title: "Literature", value: "Literature"},
-          {title: "History", value: "History"},
-          {title: "Philosophy", value: "Philosophy"},
-          {title: "Teaching", value: "Teaching"},
-          {title: "AI", value: "AI"},
-          {title: "Religion", value: "Religion"},
-          {title: "Visual Arts", value: "Visual Arts"},
-          {title: "Architecture", value: "Architecture"},
-          {title: "Music", value: "Music"},
-          {title: "Social Science", value: "Social Science"},
-          {title: "Science", value: "Science"},
-        ],
-        layout: "tags"
-      }
+      name: 'tags',
+      title: 'Tags',
+      type: 'array',
+      of: [{ type: 'string' }],
     },
     {
-      name: "body",
-      title: "Body",
-      type: "array",
-      of: [{ type: "block" }],
+      name: 'excerpt',
+      title: 'Excerpt',
+      type: 'text',
+      rows: 3,
     },
     {
-      name: "mainImage",
-      title: "Main Image",
-      type: "image",
+      name: 'mainImage',
+      title: 'Main Image',
+      type: 'image',
       options: {
         hotspot: true,
       },
-      fields: [
-        {
-          name: "caption",
-          title: "Caption",
-          type: "string",
-        },
-      ],
     },
     {
-      name: "comments",
-      title: "Comments",
-      type: "array",
-      of: [
-        {
-          type: "object",
-          fields: [
-            {
-              name: "name",
-              title: "Name",
-              type: "string",
-            },
-            {
-              name: "comment",
-              title: "Comment",
-              type: "text",
-            },
-            {
-              name: "date",
-              title: "Date",
-              type: "datetime",
-            },
-          ],
-        },
-      ],
+      name: 'body',
+      title: 'Body',
+      type: 'blockContent',
     },
   ],
 };
