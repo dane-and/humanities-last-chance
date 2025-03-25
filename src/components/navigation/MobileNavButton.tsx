@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Menu } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 interface MobileNavButtonProps {
   isOpen: boolean;
@@ -18,7 +18,7 @@ const MobileNavButton: React.FC<MobileNavButtonProps> = ({ isOpen, setIsOpen }) 
       type="button"
     >
       {isOpen ? (
-        <img src="/lovable-uploads/f590c355-5b49-4f27-8bef-541f52d68c3b.png" className="h-5 w-5" aria-hidden="true" alt="Close menu" />
+        <X className="h-5 w-5" aria-hidden="true" />
       ) : (
         <Menu className="h-5 w-5" aria-hidden="true" />
       )}
