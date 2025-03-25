@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, MessageCircle } from 'lucide-react';
@@ -74,7 +75,8 @@ const FeaturedArticle: React.FC<FeaturedArticleProps> = React.memo(({
           </Link>
           <span className="text-xs text-muted-foreground">{date}</span>
           
-          {commentCount > 0 && (
+          {/* Comment count temporarily disabled */}
+          {/* {commentCount > 0 && (
             <Link
               to={`/article/${slug}#comments`}
               className="text-xs flex items-center text-muted-foreground hover:text-primary"
@@ -82,7 +84,7 @@ const FeaturedArticle: React.FC<FeaturedArticleProps> = React.memo(({
               <MessageCircle className="h-3 w-3 mr-1" />
               {commentCount}
             </Link>
-          )}
+          )} */}
         </div>
         
         <h2 className="font-serif text-2xl font-medium mb-2 transition-colors group-hover:text-primary/80">

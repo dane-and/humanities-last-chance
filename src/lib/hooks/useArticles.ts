@@ -1,12 +1,12 @@
+
 import { useEffect, useState } from 'react';
-import { getArticlesByTag } from '@/lib/queries/articleQueries';
+import { getArticlesFromStorage } from '@/lib/utils/storage/articleStorage';
 import { Article } from '@/lib/types/article';
 
-// Utility to normalize tags
-function normalizeTags(rawTags: (string | { label: string } | null | undefined)[]): string[] {
+// Utility to normalize tags - now simpler since we're using string[] in Sanity
+function normalizeTags(rawTags: (string | null | undefined)[]): string[] {
   return rawTags
-    .filter((tag): tag is string | { label: string } => tag !== null && tag !== undefined)
-    .map(tag => (typeof tag === 'string' ? tag : tag.label))
+    .filter((tag): tag is string => tag !== null && tag !== undefined)
     .filter((tag): tag is string => typeof tag === 'string' && tag.trim().length > 0);
 }
 
@@ -17,7 +17,8 @@ export function useArticles() {
   useEffect(() => {
     async function fetchArticles() {
       try {
-        const rawArticles = await getArticlesByTag(); // Replace with appropriate query
+        // Get all articles rather than filtering by tag at this stage
+        const rawArticles = await getArticlesFromStorage();
         const processedArticles = rawArticles.map((article: any) => ({
           ...article,
           tags: normalizeTags(article.tags ?? []),

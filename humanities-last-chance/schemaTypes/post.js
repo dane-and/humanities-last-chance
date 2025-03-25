@@ -1,3 +1,4 @@
+
 export default {
   name: "post",
   title: "Post",
@@ -33,33 +34,23 @@ export default {
       name: "tags",
       title: "Tags",
       type: "array",
-      of: [
-        {
-          type: "object",
-          fields: [
-            {
-              name: "label",
-              title: "Label",
-              type: "string",
-              options: {
-                list: [
-                  { title: "Literature", value: "Literature" },
-                  { title: "History", value: "History" },
-                  { title: "Philosophy", value: "Philosophy" },
-                  { title: "Teaching", value: "Teaching" },
-                  { title: "AI", value: "AI" },
-                  { title: "Religion", value: "Religion" },
-                  { title: "Visual Arts", value: "Visual Arts" },
-                  { title: "Architecture", value: "Architecture" },
-                  { title: "Music", value: "Music" },
-                  { title: "Social Science", value: "Social Science" },
-                  { title: "Science", value: "Science" },
-                ]
-              }
-            }
-          ]
-        }
-      ]
+      of: [{ type: "string" }],
+      options: {
+        list: [
+          {title: "Literature", value: "Literature"},
+          {title: "History", value: "History"},
+          {title: "Philosophy", value: "Philosophy"},
+          {title: "Teaching", value: "Teaching"},
+          {title: "AI", value: "AI"},
+          {title: "Religion", value: "Religion"},
+          {title: "Visual Arts", value: "Visual Arts"},
+          {title: "Architecture", value: "Architecture"},
+          {title: "Music", value: "Music"},
+          {title: "Social Science", value: "Social Science"},
+          {title: "Science", value: "Science"},
+        ],
+        layout: "tags"
+      }
     },
     {
       name: "body",

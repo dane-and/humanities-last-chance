@@ -82,7 +82,8 @@ const ArticleCard: React.FC<ArticleCardProps> = React.memo(({
             {date}
           </span>
           
-          {commentCount > 0 && (
+          {/* Comment count temporarily disabled */}
+          {/* {commentCount > 0 && (
             <Link
               to={`/article/${slug}#comments`}
               className={cn(
@@ -93,7 +94,7 @@ const ArticleCard: React.FC<ArticleCardProps> = React.memo(({
               <MessageCircle className="h-3 w-3 mr-1" />
               {commentCount}
             </Link>
-          )}
+          )} */}
         </div>
       </div>
       

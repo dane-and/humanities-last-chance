@@ -86,9 +86,10 @@ const ArticleCardWithTags: React.FC<ArticleCardWithTagsProps> = React.memo(({
             )}
           </div>
           
-          {article.tags && article.tags.length > 0 && (
+          {/* Tags temporarily disabled */}
+          {/* {article.tags && article.tags.length > 0 && (
             <TagList tags={article.tags} compact={true} className="mt-2" />
-          )}
+          )} */}
         </div>
       </div>
     </article>
