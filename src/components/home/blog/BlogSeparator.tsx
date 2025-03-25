@@ -14,7 +14,8 @@ const BlogSeparator: React.FC<BlogSeparatorProps> = ({
 }) => {
   return (
     <div className="py-4 flex flex-col">
-      {showComments && (
+      {/* Comment links temporarily disabled */}
+      {/* {showComments && (
         <div className="mb-2">
           <a 
             href={`/article/${articleSlug}#comments`}
@@ -23,7 +24,7 @@ const BlogSeparator: React.FC<BlogSeparatorProps> = ({
             {commentCount > 0 ? `Comments (${commentCount})` : 'Add a comment'}
           </a>
         </div>
-      )}
+      )} */}
       <div className="w-full h-px bg-border/50"></div>
     </div>
   );

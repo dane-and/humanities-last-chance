@@ -95,10 +95,14 @@ const ArticlePage: React.FC = () => {
               <div className="mt-8 mb-12">
                 <ArticleContent content={currentArticle.content} />
               </div>
-              {currentArticle.tags && currentArticle.tags.length > 0 && (
+              
+              {/* Tags are disabled for now */}
+              {/* {currentArticle.tags && currentArticle.tags.length > 0 && (
                 <ArticleTags tags={currentArticle.tags} />
-              )}
-              <div className="flex items-center mt-8 mb-4">
+              )} */}
+              
+              {/* Comments section disabled for now */}
+              {/* <div className="flex items-center mt-8 mb-4">
                 <MessageCircle className="w-5 h-5 mr-2 text-muted-foreground" />
                 <span className="text-sm text-muted-foreground">
                   {currentArticle.comments?.length || 0} comments
@@ -108,7 +112,7 @@ const ArticlePage: React.FC = () => {
                 articleId={currentArticle.id}
                 comments={currentArticle.comments}
                 onCommentAdded={() => setRefreshCounter((count) => count + 1)}
-              />
+              /> */}
             </>
           )}
         </div>

@@ -13,7 +13,7 @@ import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import SearchPage from "./pages/SearchPage";
-import TagsPage from "./pages/TagsPage";
+// import TagsPage from "./pages/TagsPage"; // Temporarily disabled
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Resources from "./pages/Resources";
@@ -89,7 +89,8 @@ const App = () => {
                   </ProtectedRoute>
                 } />
                 <Route path="/search" element={<SearchPage />} />
-                <Route path="/tag/:tag" element={<TagsPage />} />
+                {/* Temporarily disabled tag route - redirect to home */}
+                <Route path="/tag/:tag" element={<Navigate to="/" replace />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/resources" element={<Resources />} />

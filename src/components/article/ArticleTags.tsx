@@ -7,6 +7,10 @@ interface ArticleTagsProps {
 }
 
 const ArticleTags: React.FC<ArticleTagsProps> = ({ tags }) => {
+  // Temporarily disabled - return null to hide tags
+  return null;
+
+  /* Original implementation kept for future reference
   if (!tags || tags.length === 0) return null;
 
   return (
@@ -16,6 +20,7 @@ const ArticleTags: React.FC<ArticleTagsProps> = ({ tags }) => {
       </div>
     </div>
   );
+  */
 };
 
 export default ArticleTags;

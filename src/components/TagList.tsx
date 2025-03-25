@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Tag } from 'lucide-react';
@@ -11,6 +12,10 @@ interface TagListProps {
 }
 
 const TagList: React.FC<TagListProps> = ({ tags, className, compact = false }) => {
+  // Temporarily disabled - return null to hide tags
+  return null;
+
+  /* Original implementation kept for future reference
   if (!tags || tags.length === 0) return null;
 
   return (
@@ -44,6 +49,7 @@ const TagList: React.FC<TagListProps> = ({ tags, className, compact = false }) =
       )}
     </div>
   );
+  */
 };
 
 export default TagList;
