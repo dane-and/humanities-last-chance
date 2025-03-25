@@ -20,97 +20,40 @@ export default {
       validation: Rule => Rule.required()
     },
     {
-      name: 'publishedAt',
-      title: 'Published at',
-      type: 'datetime',
-      description: 'This date determines the order of posts. It is set once on publication and should not be changed.',
-      validation: Rule => Rule.required(),
-      initialValue: () => new Date().toISOString(),
-      readOnly: ({ document }) => !!document?.publishedAt,
-      options: {
-        dateFormat: 'YYYY-MM-DD',
-        timeFormat: 'HH:mm',
-        calendarTodayLabel: 'Today',
-      }
-    },
-    {
-      name: 'mainImage',
-      title: 'Main image',
-      type: 'image',
-      options: {
-        hotspot: true,
-        metadata: ['palette', 'lqip', 'dimensions'],
-      },
-      fields: [
-        {
-          name: 'caption',
-          type: 'string',
-          title: 'Caption',
-          description: 'Add a caption to display below the image'
-        },
-        {
-          name: 'alt',
-          type: 'string',
-          title: 'Alternative text',
-          description: 'Important for SEO and accessibility'
-        }
-      ]
-    },
-    {
       name: 'category',
       title: 'Category',
       type: 'string',
       options: {
-        list: [
-          { title: 'Blog', value: 'Blog' },
-          { title: 'Interview', value: 'Interview' },
-          { title: 'Review', value: 'Review' }
-        ],
+        list: ['Blog', 'Interviews', 'Reviews'],
       },
-      validation: Rule => Rule.required(),
-      initialValue: 'Blog'
+      validation: Rule => Rule.required()
     },
     {
-      name: 'excerpt',
-      title: 'Excerpt',
-      type: 'text',
-      rows: 4,
+      name: 'publishedAt',
+      title: 'Published at',
+      type: 'datetime',
+      initialValue: () => new Date().toISOString(),
+      validation: Rule => Rule.required()
     },
     {
-      name: 'body',
-      title: 'Body',
-      type: 'array',
-      of: [
+      name: 'mainImage',
+      title: 'Main Image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+      fields: [
         {
-          type: 'block'
+          name: 'alt',
+          title: 'Alt Text',
+          type: 'string',
         },
         {
-          type: 'image',
-          fields: [
-            {
-              type: 'text',
-              name: 'alt',
-              title: 'Alternative text',
-              description: 'Important for SEO and accessibility.',
-              options: {
-                isHighlighted: true
-              }
-            },
-            {
-              type: 'string',
-              name: 'caption',
-              title: 'Caption',
-              description: 'Image caption to display',
-              options: {
-                isHighlighted: true
-              }
-            }
-          ],
-          options: {
-            hotspot: true
-          }
-        }
-      ]
+          name: 'caption',
+          title: 'Caption',
+          type: 'string',
+        },
+      ],
     },
     {
       name: 'tags',
@@ -125,15 +68,41 @@ export default {
               name: 'label',
               title: 'Label',
               type: 'string',
+              validation: Rule => Rule.required(),
             }
           ],
           preview: {
             select: {
               title: 'label',
-            }
-          }
+            },
+          },
         }
       ]
+    },
+    {
+      name: 'body',
+      title: 'Body',
+      type: 'array',
+      of: [
+        {
+          type: 'block',
+        },
+        {
+          type: 'image',
+          fields: [
+            {
+              name: 'alt',
+              title: 'Alt Text',
+              type: 'string',
+            },
+            {
+              name: 'caption',
+              title: 'Caption',
+              type: 'string',
+            },
+          ],
+        },
+      ],
     },
     {
       name: 'comments',
@@ -143,28 +112,40 @@ export default {
         {
           type: 'object',
           fields: [
-            { name: 'id', type: 'string', title: 'ID' },
-            { name: 'name', type: 'string', title: 'Name' },
-            { name: 'content', type: 'text', title: 'Comment' },
-            { name: 'date', type: 'datetime', title: 'Posted At' },
-            { name: 'likes', type: 'number', title: 'Likes', initialValue: 0 },
-            { name: 'dislikes', type: 'number', title: 'Dislikes', initialValue: 0 }
+            {
+              name: 'name',
+              title: 'Name',
+              type: 'string',
+            },
+            {
+              name: 'comment',
+              title: 'Comment',
+              type: 'text',
+            },
+            {
+              name: 'date',
+              title: 'Date',
+              type: 'datetime',
+            },
+            {
+              name: 'likes',
+              title: 'Likes',
+              type: 'number',
+              initialValue: 0,
+            },
+            {
+              name: 'dislikes',
+              title: 'Dislikes',
+              type: 'number',
+              initialValue: 0,
+            },
           ],
           preview: {
             select: {
-              name: 'name',
-              content: 'content',
-              date: 'date'
+              title: 'name',
+              subtitle: 'comment',
             },
-            prepare(selection) {
-              const { name, content, date } = selection;
-              return {
-                title: name || 'Anonymous',
-                subtitle: content ? (content.length > 50 ? content.substring(0, 50) + '...' : content) : '',
-                description: date ? new Date(date).toLocaleString() : ''
-              };
-            }
-          }
+          },
         }
       ]
     }
@@ -172,19 +153,19 @@ export default {
   preview: {
     select: {
       title: 'title',
-      category: 'category',
+      subtitle: 'category',
       media: 'mainImage',
-      commentCount: 'comments'
+      comments: 'comments'
     },
     prepare(selection) {
-      const { title, category, media, commentCount } = selection;
-      const commentsCount = commentCount ? commentCount.length : 0;
+      const {title, subtitle, media, comments} = selection
+      const commentCount = comments?.length || 0
       return {
         title,
-        subtitle: `${category || 'No category'} • ${commentsCount} ${commentsCount === 1 ? 'comment' : 'comments'}`,
+        subtitle: `${subtitle} – ${commentCount} comment${commentCount === 1 ? '' : 's'}`,
         media
-      };
+      }
     }
   }
-};
+}
 
