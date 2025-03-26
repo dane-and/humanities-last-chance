@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import ArticleComments from '@/components/ArticleComments';
@@ -23,6 +24,10 @@ const ArticlePage: React.FC = () => {
 
   // Define the onGoBack function to navigate back to the home page
   const handleGoBack = () => navigate('/');
+
+  // Get base URL for canonical URLs and image URLs
+  const baseUrl = 'https://humanitieslastchance.org';
+  const canonicalUrl = `${baseUrl}/article/${slug}`;
 
   useEffect(() => {
     const loadArticle = async () => {
@@ -80,6 +85,29 @@ const ArticlePage: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      {currentArticle && (
+        <Helmet>
+          <title>{currentArticle.title} | Humanities Last Chance</title>
+          <meta name="description" content={currentArticle.excerpt} />
+          
+          {/* Open Graph Meta Tags */}
+          <meta property="og:title" content={currentArticle.title} />
+          <meta property="og:description" content={currentArticle.excerpt} />
+          <meta property="og:url" content={canonicalUrl} />
+          <meta property="og:type" content="article" />
+          {currentArticle.image && <meta property="og:image" content={currentArticle.image} />}
+          
+          {/* Twitter Card Meta Tags */}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={currentArticle.title} />
+          <meta name="twitter:description" content={currentArticle.excerpt} />
+          {currentArticle.image && <meta name="twitter:image" content={currentArticle.image} />}
+          
+          {/* Canonical URL */}
+          <link rel="canonical" href={canonicalUrl} />
+        </Helmet>
+      )}
+
       <Navigation />
 
       <main className="flex-grow pt-24 pb-16">
