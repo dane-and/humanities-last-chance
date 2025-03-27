@@ -27,7 +27,7 @@ const About = () => {
           <div className="container mx-auto px-4 lg:px-8 max-w-3xl">
             <div className="prose max-w-none">
               <h1 className="text-3xl font-bold mb-6">About Humanities Last Chance</h1>
-              <p>Humanities Last Chance is a free digital platform and resource dedicated to connecting curious people of all backgrounds to academic humanities scholarship. Based in Washington D.C. but reaching across the English-speaking world, our mission is to demonstrate the enduring value and relevance of the liberal arts in today's world.</p>
+              <p>Humanities Last Chance is a free digital platform and resource dedicated to connecting curious people of all backgrounds to academic humanities scholarship. Based in Washington D.C., our mission is to demonstrate the enduring value and relevance of the liberal arts in today's world.</p>
               
               <h2 className="text-2xl font-bold mt-8 mb-4">Why "Humanities Last Chance"?</h2>
               <p>Our name reflects two critical realities. First, the humanities face significant challenges today—with university funding cuts and a widespread public perception that the academic humanities have become merely the R&D wing of left-wing political and social movements.</p>
