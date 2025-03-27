@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
@@ -17,8 +16,8 @@ const ArticlesInterviews: React.FC = () => {
       console.log("Loading interview articles from Sanity...");
       
       try {
-        // Use exact case "Interview" for the API call
-        const sanityPosts = await fetchArticlesByCategory('Interview');
+        // Updated to use 'interviews' (lowercase, plural) to match Sanity schema
+        const sanityPosts = await fetchArticlesByCategory('interviews');
         
         // Convert Sanity posts to Article format
         const interviewArticles: Article[] = sanityPosts.map((post: any) => ({
