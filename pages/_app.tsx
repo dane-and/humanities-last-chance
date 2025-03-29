@@ -1,5 +1,5 @@
 
-import '../src/index.css';
+import '@/src/index.css';
 import type { AppProps } from 'next/app';
 import { Toaster } from 'sonner';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
