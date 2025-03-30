@@ -5,14 +5,14 @@ import { CONTENT_CONFIG } from '@/lib/config';
 
 const NavLogo = () => {
   return (
-    <div className="flex-shrink-0 flex items-center gap-2">
+    <div className="flex-shrink-0 flex items-center gap-1">
       <img 
         src="/lovable-uploads/25d9abe1-5882-442f-acf4-d37c96268fb4.png" 
         alt="Humanities Last Chance Logo" 
-        className="h-7 w-auto md:h-12"
+        className="h-8 w-auto md:h-14"
         loading="eager"
-        width="48"
-        height="48"
+        width="56"
+        height="56"
       />
       <Link 
         to="/" 

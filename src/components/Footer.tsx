@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ExternalLink } from 'lucide-react';
@@ -21,14 +20,14 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
           {/* Column 1: Logo, Description and X link */}
           <div className="col-span-2 md:col-span-1">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               <img 
                 src="/lovable-uploads/25d9abe1-5882-442f-acf4-d37c96268fb4.png" 
                 alt="Humanities Last Chance Logo" 
-                className="h-10 w-auto"
+                className="h-12 w-auto"
                 loading="lazy"
-                width="40"
-                height="40"
+                width="48"
+                height="48"
               />
               <h3 className="text-lg font-semibold text-gray-800">Humanities Last Chance</h3>
             </div>
