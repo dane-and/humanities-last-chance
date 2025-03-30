@@ -21,12 +21,11 @@ const NavigationContent = () => {
       aria-label="Main Navigation"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* On iPad screens (md to lg), use a vertical layout with centered elements */}
-        <div className="flex flex-col md:flex-col lg:flex-row justify-between items-center h-auto md:py-3 lg:h-20">
-          {/* Logo and site name - centered on iPad */}
-          <NavLogo className="mb-0 md:mb-2 lg:mb-0" />
+        <div className="flex flex-row justify-between items-center h-16 sm:h-16 md:flex-col md:h-auto md:py-3 lg:flex-row lg:h-20">
+          {/* Logo and site name - left-aligned on mobile, centered on iPad, left-aligned on desktop */}
+          <NavLogo className="md:mb-2 lg:mb-0" />
           
-          {/* Desktop Navigation - centered on iPad */}
+          {/* Desktop Navigation - hidden on mobile, centered on iPad, right-aligned on desktop */}
           <div className="hidden md:flex items-center justify-center">
             <DesktopNavItems 
               mainNavItems={mainNavItems}
@@ -37,7 +36,7 @@ const NavigationContent = () => {
             </div>
           </div>
           
-          {/* Mobile menu button and search */}
+          {/* Mobile menu button and search - right-aligned on mobile, hidden on larger screens */}
           <div className="flex items-center gap-4 md:hidden">
             <SearchBar className="mr-1" />
             <MobileNavButton isOpen={isOpen} setIsOpen={setIsOpen} />
