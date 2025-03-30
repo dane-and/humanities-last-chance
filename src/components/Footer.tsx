@@ -23,7 +23,7 @@ const Footer: React.FC = () => {
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2">
               <img 
-                src="/lovable-uploads/37b0d49a-9d52-495f-a48c-f3c692e03b3e.png" 
+                src="/lovable-uploads/25d9abe1-5882-442f-acf4-d37c96268fb4.png" 
                 alt="Humanities Last Chance Logo" 
                 className="h-10 w-auto"
                 loading="lazy"

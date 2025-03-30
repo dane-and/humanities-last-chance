@@ -7,7 +7,7 @@ const NavLogo = () => {
   return (
     <div className="flex-shrink-0 flex items-center gap-2">
       <img 
-        src="/lovable-uploads/37b0d49a-9d52-495f-a48c-f3c692e03b3e.png" 
+        src="/lovable-uploads/25d9abe1-5882-442f-acf4-d37c96268fb4.png" 
         alt="Humanities Last Chance Logo" 
         className="h-7 w-auto md:h-12"
         loading="eager"
