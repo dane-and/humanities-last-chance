@@ -2,10 +2,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { CONTENT_CONFIG } from '@/lib/config';
+import { cn } from '@/lib/utils';
 
-const NavLogo = () => {
+interface NavLogoProps {
+  className?: string;
+}
+
+const NavLogo: React.FC<NavLogoProps> = ({ className }) => {
   return (
-    <div className="flex-shrink-0 flex items-center gap-1">
+    <div className={cn("flex-shrink-0 flex items-center gap-1", className)}>
       <img 
         src="/lovable-uploads/25d9abe1-5882-442f-acf4-d37c96268fb4.png" 
         alt="Humanities Last Chance Logo" 

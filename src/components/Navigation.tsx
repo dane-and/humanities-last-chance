@@ -21,12 +21,13 @@ const NavigationContent = () => {
       aria-label="Main Navigation"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-14 md:h-20">
-          {/* Logo and site name */}
-          <NavLogo />
+        {/* On iPad screens (md to lg), use a vertical layout with centered elements */}
+        <div className="flex flex-col md:flex-col lg:flex-row justify-between items-center h-auto md:py-3 lg:h-20">
+          {/* Logo and site name - centered on iPad */}
+          <NavLogo className="mb-0 md:mb-2 lg:mb-0" />
           
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center">
+          {/* Desktop Navigation - centered on iPad */}
+          <div className="hidden md:flex items-center justify-center">
             <DesktopNavItems 
               mainNavItems={mainNavItems}
               dropdownItems={dropdownItems}
