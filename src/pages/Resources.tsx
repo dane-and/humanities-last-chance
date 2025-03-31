@@ -40,7 +40,7 @@ const Resources = () => {
       <Navigation />
       
       <main className="flex-grow">
-        <section className="pt-16 pb-8 sm:pt-16 md:pt-24 lg:pt-24 md:pb-12">
+        <section className="pt-16 pb-8 sm:pt-16 md:pt-32 lg:pt-24 md:pb-12">
           <div className="container mx-auto px-4 lg:px-8 max-w-6xl">
             <Tabs 
               defaultValue={getTabFromURL()} 
