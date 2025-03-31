@@ -34,7 +34,7 @@ const PageTemplate: React.FC<PageTemplateProps> = ({ slug }) => {
   
   return (
     <>
-      <section className="py-4 md:py-6">
+      <section className="py-4 md:py-24 lg:py-6 mt-16 md:mt-12 lg:mt-0">
         <div className="container mx-auto px-4 lg:px-8 max-w-4xl">
           {isLoading ? (
             <div className="flex justify-center py-20">
