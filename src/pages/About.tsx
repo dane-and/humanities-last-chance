@@ -30,8 +30,8 @@ const About = () => {
               <p>Humanities Last Chance is a free digital platform and resource dedicated to connecting curious people of all backgrounds to academic humanities scholarship. Based in Washington D.C., our mission is to demonstrate the enduring value and relevance of the liberal arts in today's world.</p>
               
               <h2 className="text-2xl font-bold mt-8 mb-4">Why "Humanities Last Chance"?</h2>
-              <p>Our name reflects two critical realities. First, the humanities face significant challenges today, with university funding cuts and a widespread perception that the academic humanities are merely the R&D wing of left-wing social movements.</p>
-              <p>Yet more importantly, the humanities remain what they have always been: the essential arena for inquiry into life's ultimate questions. They offer us the space to explore how we should live, what we should believe, and who we should aspire to become. In this sense, the humanities represent our "last chance" for establishing meaningful principles as we collectively shape the world around us.</p>
+              <p>Our name reflects two critical realities. First, the humanities face significant challenges today. These include funding cuts, declining enrollments, and the public's widespread view that humanities departments are irredeemably tainted with political bias. But more importantly, the humanities remain what they have always been: an essential arena for inquiry into life's ultimate questions.</p>
+              <p>They offer us the space to explore how we should live, what we should believe, and who we should aspire to become. In this sense, the humanities represent our "last chance" for establishing meaningful principles as we collectively shape the world around us.</p>
               
               <h2 className="text-2xl font-bold mt-8 mb-4">Our Purpose</h2>
               <p>We believe the humanities offer essential perspectives and tools for understanding ourselves and our society. Through our platform, we aim to:</p>
