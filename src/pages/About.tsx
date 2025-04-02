@@ -35,7 +35,7 @@ const About = () => {
               <p>But more importantly, the humanities remain what they have always been: an essential arena for inquiry into life's ultimate questions. They offer us the space to explore how we should live, what we should believe, and who we should aspire to become. In this sense, the humanities represent our "last chance" for establishing meaningful principles as we collectively shape the world around us.</p>
               
               <h2 className="text-2xl font-bold mt-8 mb-4">Our Purpose</h2>
-              <p>We believe the humanities offer essential perspectives and tools for understanding ourselves and our society. Through our platform, we aim to:</p>
+              <p>We believe the humanities offer essential perspectives and tools for understanding ourselves and others. Through our platform, we aim to:</p>
               <ul>
                 <li>Showcase the work of humanities scholars to non-specialists</li>
                 <li>Demonstrate the practical and intellectual value of liberal arts education</li>
