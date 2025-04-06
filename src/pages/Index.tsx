@@ -38,9 +38,7 @@ const Index = () => {
               </div>
               
               <div className="w-full lg:w-1/3 mt-8 lg:mt-0">
-                <div className="sticky top-24">
-                  <SidebarSection />
-                </div>
+                <SidebarSection />
               </div>
             </div>
           </div>
