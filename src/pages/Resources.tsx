@@ -46,18 +46,17 @@ const Resources = () => {
               defaultValue={getTabFromURL()} 
               value={getTabFromURL()}
               onValueChange={handleTabChange}
-              className="w-full"
             >
               <TabsList className="mb-6 w-full justify-start">
                 <TabsTrigger value="humanities-u">Humanities Last Chance U</TabsTrigger>
                 <TabsTrigger value="general">Other Resources</TabsTrigger>
               </TabsList>
               
-              <TabsContent value="humanities-u" className="focus-visible:outline-none focus-visible:ring-0">
+              <TabsContent value="humanities-u">
                 <HumanitiesLastChanceU />
               </TabsContent>
               
-              <TabsContent value="general" className="focus-visible:outline-none focus-visible:ring-0">
+              <TabsContent value="general">
                 <OtherResources />
               </TabsContent>
             </Tabs>
