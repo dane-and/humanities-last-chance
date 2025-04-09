@@ -246,5 +246,5 @@ export {
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
-  DropdownMenuRadioGroup: DropdownMenuPrimitive.RadioGroup,
+  DropdownMenuRadioGroup: DropdownMenuPrimitive.RadioGroup
 }
