@@ -28,10 +28,7 @@ const DialogClose = React.forwardRef<
       className
     )}
     {...props}
-  >
-    <X className="h-4 w-4" />
-    <span className="sr-only">Close</span>
-  </DialogPrimitive.Close>
+  />
 ))
 DialogClose.displayName = DialogPrimitive.Close.displayName
 
