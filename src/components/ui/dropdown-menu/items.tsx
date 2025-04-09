@@ -116,6 +116,9 @@ const DropdownMenuShortcut = ({
 }
 DropdownMenuShortcut.displayName = "DropdownMenuShortcut"
 
+// Define RadioGroup separately before the export
+const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup
+
 export {
   DropdownMenuItem,
   DropdownMenuCheckboxItem,
@@ -123,5 +126,5 @@ export {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuRadioGroup: DropdownMenuPrimitive.RadioGroup
+  DropdownMenuRadioGroup
 }
