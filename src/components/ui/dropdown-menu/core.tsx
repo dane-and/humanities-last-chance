@@ -5,15 +5,23 @@ import { cn } from "@/lib/utils"
 
 const DropdownMenu = DropdownMenuPrimitive.Root
 
+interface DropdownMenuTriggerProps extends React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Trigger> {
+  className?: string;
+  children?: React.ReactNode;
+  asChild?: boolean;
+}
+
 const DropdownMenuTrigger = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Trigger>
->((props, ref) => (
+  DropdownMenuTriggerProps
+>(({ className, children, ...props }, ref) => (
   <DropdownMenuPrimitive.Trigger
     ref={ref}
-    className={cn("focus:outline-none", props.className)}
+    className={cn("focus:outline-none", className)}
     {...props}
-  />
+  >
+    {children}
+  </DropdownMenuPrimitive.Trigger>
 ))
 DropdownMenuTrigger.displayName = DropdownMenuPrimitive.Trigger.displayName
 
@@ -21,10 +29,15 @@ const DropdownMenuGroup = DropdownMenuPrimitive.Group
 
 const DropdownMenuPortal = DropdownMenuPrimitive.Portal
 
+interface DropdownMenuContentProps extends React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content> {
+  className?: string;
+  children?: React.ReactNode;
+}
+
 const DropdownMenuContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
->(({ className, sideOffset = 4, ...props }, ref) => (
+  DropdownMenuContentProps
+>(({ className, sideOffset = 4, children, ...props }, ref) => (
   <DropdownMenuPrimitive.Portal>
     <DropdownMenuPrimitive.Content
       ref={ref}
@@ -34,7 +47,9 @@ const DropdownMenuContent = React.forwardRef<
         className
       )}
       {...props}
-    />
+    >
+      {children}
+    </DropdownMenuPrimitive.Content>
   </DropdownMenuPrimitive.Portal>
 ))
 DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName

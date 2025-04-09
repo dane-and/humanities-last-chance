@@ -4,22 +4,58 @@ import * as TooltipPrimitive from "@radix-ui/react-tooltip"
 
 import { cn } from "@/lib/utils"
 
-const TooltipProvider = TooltipPrimitive.Provider
+interface TooltipProviderProps extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Provider> {
+  children?: React.ReactNode;
+}
 
-const Tooltip = TooltipPrimitive.Root
+const TooltipProvider = React.forwardRef<
+  React.ElementRef<typeof TooltipPrimitive.Provider>,
+  TooltipProviderProps
+>(({ children, ...props }, ref) => (
+  <TooltipPrimitive.Provider ref={ref} {...props}>
+    {children}
+  </TooltipPrimitive.Provider>
+))
+TooltipProvider.displayName = TooltipPrimitive.Provider.displayName
+
+interface TooltipProps extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Root> {
+  children?: React.ReactNode;
+}
+
+const Tooltip = React.forwardRef<
+  React.ElementRef<typeof TooltipPrimitive.Root>,
+  TooltipProps
+>(({ children, ...props }, ref) => (
+  <TooltipPrimitive.Root ref={ref} {...props}>
+    {children}
+  </TooltipPrimitive.Root>
+))
+Tooltip.displayName = TooltipPrimitive.Root.displayName
+
+interface TooltipTriggerProps extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Trigger> {
+  children?: React.ReactNode;
+  asChild?: boolean;
+}
 
 const TooltipTrigger = React.forwardRef<
   React.ElementRef<typeof TooltipPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Trigger>
->((props, ref) => (
-  <TooltipPrimitive.Trigger ref={ref} {...props} />
+  TooltipTriggerProps
+>(({ children, ...props }, ref) => (
+  <TooltipPrimitive.Trigger ref={ref} {...props}>
+    {children}
+  </TooltipPrimitive.Trigger>
 ))
 TooltipTrigger.displayName = TooltipPrimitive.Trigger.displayName
 
+interface TooltipContentProps extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content> {
+  className?: string;
+  children?: React.ReactNode;
+}
+
 const TooltipContent = React.forwardRef<
   React.ElementRef<typeof TooltipPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>
->(({ className, sideOffset = 4, ...props }, ref) => (
+  TooltipContentProps
+>(({ className, sideOffset = 4, children, ...props }, ref) => (
   <TooltipPrimitive.Content
     ref={ref}
     sideOffset={sideOffset}
@@ -28,7 +64,9 @@ const TooltipContent = React.forwardRef<
       className
     )}
     {...props}
-  />
+  >
+    {children}
+  </TooltipPrimitive.Content>
 ))
 TooltipContent.displayName = TooltipPrimitive.Content.displayName
 
