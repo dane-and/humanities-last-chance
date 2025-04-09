@@ -3,6 +3,7 @@ import React from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import OptimizedImage from '@/components/OptimizedImage';
+import CaptionedImage from '@/components/CaptionedImage';
 
 const About = () => {
   return (
@@ -50,11 +51,21 @@ const About = () => {
                 <li><strong>Humanities Last Chance U:</strong> A curated collection of resources for self-directed learning at all levels</li>
               </ul>
               
-              <h2 className="text-2xl font-bold mt-8 mb-4">Connect With Us</h2>
-              <p>We're committed to fostering a community of curious minds. Whether you're a student, educator, or simply someone interested in exploring the humanities, we invite you to join our conversation.</p>
-              <p><strong>Founder:</strong> Dane Anderson</p>
-              <p><strong>Email:</strong> <a href="mailto:dane.anderson@humanitieslastchance.org">dane.anderson@humanitieslastchance.org</a></p>
-              <p><strong>Location:</strong> Washington D.C.</p>
+              <h2 className="text-2xl font-bold mt-8 mb-4">Who 'We' Are</h2>
+              <div className="flex flex-col md:flex-row gap-6 items-start">
+                <div className="md:w-1/2">
+                  <p>Dane Anderson founded Humanities Last Chance as a platform to push his pet theories, of which there are enough to fill a veterinary, and to use as a prop to interview people he would want to talk to anyway. Unless marked as a guest post, all blog posts, reviews, and interviews are written by Dane, with the help of his research assistant and personal gentleman's gentleman, Jeeves.</p>
+                  <p>You can reach Dane anytime at <a href="mailto:dane.anderson@humanitieslastchance.org">dane.anderson@humanitieslastchance.org</a>. Although he's a PhD candidate at the University of Michigan, Dane currently lives in the D.C. metro area and would be happy to meet if you're ever passing through.</p>
+                </div>
+                <div className="md:w-1/2">
+                  <OptimizedImage
+                    src="/lovable-uploads/fe1f0e62-d341-407e-9735-69aa75e57a27.png"
+                    alt="Dane Anderson pointing at a street sign for Rue Edward-Gibbon"
+                    className="w-full rounded-md shadow-md"
+                    caption="Dane at Rue Edward Gibbon in Paris"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </section>

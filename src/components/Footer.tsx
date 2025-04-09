@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ExternalLink } from 'lucide-react';
@@ -8,11 +9,6 @@ export const FOOTER_COMPONENT_REQUIRED = true;
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
-  
-  // Log navigation attempt to admin page for debugging
-  const handleAdminLinkClick = () => {
-    console.log('Footer: Admin link clicked, navigating to /admin');
-  };
 
   return (
     <footer className="bg-gray-100 py-8 mt-16">
@@ -88,16 +84,7 @@ const Footer: React.FC = () => {
                   <li>
                     <Link to="/contact" className="text-sm text-gray-600 hover:text-gray-900">Contact</Link>
                   </li>
-                  <li>
-                    <Link 
-                      to="/admin/login" 
-                      className="text-sm text-gray-600 hover:text-gray-900 flex items-center"
-                      onClick={handleAdminLinkClick}
-                    >
-                      Admin
-                      <ExternalLink size={14} className="ml-1" />
-                    </Link>
-                  </li>
+                  {/* Admin button removed as requested */}
                 </ul>
               </div>
             </div>
