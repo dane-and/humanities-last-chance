@@ -32,7 +32,7 @@ const SchedulePublishDialog: React.FC<SchedulePublishDialogProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
+      <DialogTrigger>
         <Button variant="outline" size="sm">
           <CalendarIcon className="mr-2 h-4 w-4" />
           Schedule
@@ -45,7 +45,7 @@ const SchedulePublishDialog: React.FC<SchedulePublishDialogProps> = ({
         
         <div className="py-4">
           <Popover>
-            <PopoverTrigger asChild>
+            <PopoverTrigger>
               <Button
                 variant="outline"
                 className="w-full justify-start text-left font-normal"
@@ -61,13 +61,14 @@ const SchedulePublishDialog: React.FC<SchedulePublishDialogProps> = ({
                 onSelect={setDate}
                 initialFocus
                 disabled={(date) => date < new Date()}
+                className="p-3 pointer-events-auto"
               />
             </PopoverContent>
           </Popover>
         </div>
         
         <DialogFooter>
-          <DialogClose asChild>
+          <DialogClose>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
           <Button onClick={handleSchedule} disabled={!date}>

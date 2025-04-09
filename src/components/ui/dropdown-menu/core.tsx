@@ -11,15 +11,13 @@ const DropdownMenu = DropdownMenuPrimitive.Root
 
 const DropdownMenuTrigger = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Trigger>,
-  DropdownMenuTriggerProps
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Trigger>
+>(({ className, ...props }, ref) => (
   <DropdownMenuPrimitive.Trigger
     ref={ref}
     className={cn("focus:outline-none", className)}
     {...props}
-  >
-    {children}
-  </DropdownMenuPrimitive.Trigger>
+  />
 ))
 DropdownMenuTrigger.displayName = DropdownMenuPrimitive.Trigger.displayName
 
@@ -29,7 +27,7 @@ const DropdownMenuPortal = DropdownMenuPrimitive.Portal
 
 const DropdownMenuContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Content>,
-  DropdownMenuContentProps
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
 >(({ className, sideOffset = 4, ...props }, ref) => (
   <DropdownMenuPrimitive.Portal>
     <DropdownMenuPrimitive.Content

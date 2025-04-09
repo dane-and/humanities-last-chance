@@ -9,14 +9,9 @@ const Dialog = DialogPrimitive.Root
 
 const DialogTrigger = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Trigger> & {
-    children: React.ReactNode;
-    asChild?: boolean;
-  }
->(({ className, children, ...props }, ref) => (
-  <DialogPrimitive.Trigger ref={ref} className={cn(className)} {...props}>
-    {children}
-  </DialogPrimitive.Trigger>
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Trigger>
+>(({ className, ...props }, ref) => (
+  <DialogPrimitive.Trigger ref={ref} className={cn(className)} {...props} />
 ))
 DialogTrigger.displayName = DialogPrimitive.Trigger.displayName
 
@@ -24,10 +19,8 @@ const DialogPortal = DialogPrimitive.Portal
 
 const DialogClose = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Close>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Close> & {
-    children: React.ReactNode;
-  }
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Close>
+>(({ className, ...props }, ref) => (
   <DialogPrimitive.Close
     ref={ref}
     className={cn(
@@ -36,7 +29,7 @@ const DialogClose = React.forwardRef<
     )}
     {...props}
   >
-    {children}
+    <X className="h-4 w-4" />
     <span className="sr-only">Close</span>
   </DialogPrimitive.Close>
 ))
@@ -44,9 +37,7 @@ DialogClose.displayName = DialogPrimitive.Close.displayName
 
 const DialogOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay> & {
-    className?: string;
-  }
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Overlay
     ref={ref}
@@ -74,9 +65,7 @@ const DialogContent = React.forwardRef<
       {...props}
     >
       {children}
-      <DialogClose>
-        <X className="h-4 w-4" />
-      </DialogClose>
+      <DialogClose />
     </DialogPrimitive.Content>
   </DialogPortal>
 ))
@@ -110,15 +99,10 @@ const DialogFooter = ({
 )
 DialogFooter.displayName = "DialogFooter"
 
-interface DialogTitleProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title> {
-  children: React.ReactNode;
-  className?: string;
-}
-
 const DialogTitle = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Title>,
-  DialogTitleProps
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
+>(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
     className={cn(
@@ -126,28 +110,19 @@ const DialogTitle = React.forwardRef<
       className
     )}
     {...props}
-  >
-    {children}
-  </DialogPrimitive.Title>
+  />
 ))
 DialogTitle.displayName = DialogPrimitive.Title.displayName
 
-interface DialogDescriptionProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description> {
-  children: React.ReactNode;
-  className?: string;
-}
-
 const DialogDescription = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Description>,
-  DialogDescriptionProps
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
+>(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
     className={cn("text-sm text-muted-foreground", className)}
     {...props}
-  >
-    {children}
-  </DialogPrimitive.Description>
+  />
 ))
 DialogDescription.displayName = DialogPrimitive.Description.displayName
 

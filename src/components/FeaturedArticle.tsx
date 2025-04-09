@@ -45,24 +45,26 @@ const FeaturedArticle: React.FC<FeaturedArticleProps> = React.memo(({
         'overflow-hidden',
         layout === 'horizontal' ? 'h-auto' : 'h-auto'
       )}>
-        <AspectRatio ratio={21 / 9} className="overflow-hidden bg-white">
-          <Link to={`/article/${slug}`} aria-label={title} className="block w-full h-full">
-            {image ? (
-              <OptimizedImage
-                src={image}
-                alt={title}
-                className="w-full h-full object-contain bg-white"
-                width={1200}
-                height={570}
-                priority={true}
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                <span>No image</span>
-              </div>
-            )}
-          </Link>
-        </AspectRatio>
+        <div className="overflow-hidden bg-white rounded-md">
+          <AspectRatio ratio={21 / 9}>
+            <Link to={`/article/${slug}`} aria-label={title} className="block w-full h-full">
+              {image ? (
+                <OptimizedImage
+                  src={image}
+                  alt={title}
+                  className="w-full h-full object-contain bg-white"
+                  width={1200}
+                  height={570}
+                  priority={true}
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                  <span>No image</span>
+                </div>
+              )}
+            </Link>
+          </AspectRatio>
+        </div>
       </div>
       
       <div className="flex flex-col justify-center p-4">

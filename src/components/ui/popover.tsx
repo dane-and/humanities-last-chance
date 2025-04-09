@@ -6,18 +6,11 @@ import { cn } from "@/lib/utils"
 
 const Popover = PopoverPrimitive.Root
 
-interface PopoverTriggerProps extends React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Trigger> {
-  children: React.ReactNode;
-  asChild?: boolean;
-}
-
 const PopoverTrigger = React.forwardRef<
   React.ElementRef<typeof PopoverPrimitive.Trigger>,
-  PopoverTriggerProps
->(({ className, children, ...props }, ref) => (
-  <PopoverPrimitive.Trigger ref={ref} className={cn(className)} {...props}>
-    {children}
-  </PopoverPrimitive.Trigger>
+  React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Trigger>
+>(({ className, ...props }, ref) => (
+  <PopoverPrimitive.Trigger ref={ref} className={cn(className)} {...props} />
 ))
 PopoverTrigger.displayName = PopoverPrimitive.Trigger.displayName
 

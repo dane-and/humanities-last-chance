@@ -108,7 +108,7 @@ const MediaManager: React.FC = () => {
   
   return (
     <Sheet>
-      <SheetTrigger asChild>
+      <SheetTrigger>
         <Button variant="outline" className="flex gap-2">
           <FileImage className="h-4 w-4" />
           Media Library
