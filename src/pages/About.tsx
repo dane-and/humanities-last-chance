@@ -52,33 +52,34 @@ const About = () => {
               </ul>
               
               {/* "Who 'We' Are" section with improved layout */}
-              <div>
-                <div className="flex flex-col md:flex-row md:items-start">
-                  <div className="md:w-3/5 md:pr-6">
-                    <h2 className="text-2xl font-bold mt-8 mb-4">Who 'We' Are</h2>
-                    <div className="block md:hidden">
-                      {/* Mobile image positioning - below text */}
-                      <div className="mt-4 mb-6">
-                        <OptimizedImage
-                          src="/lovable-uploads/86f13bf5-844d-4ed5-acf0-5fedacefc08c.png"
-                          alt="Dane Anderson pointing at a street sign for Rue Edward-Gibbon"
-                          className="mx-auto w-full max-w-sm rounded-md shadow-md"
-                          caption="Dane having completed his search for vestiges of Edward Gibbon's residence in Lausanne, Switzerland"
-                        />
-                      </div>
-                    </div>
+              <div className="mt-8">
+                <div className="flex flex-col md:flex-row">
+                  <div className="md:w-3/5">
+                    <h2 className="text-2xl font-bold mb-4">Who 'We' Are</h2>
                     <p>Dane Anderson founded Humanities Last Chance as a platform to push his pet theories, of which there are enough to fill a veterinary, and to use as a prop to interview people he would want to talk to anyway. Unless marked as a guest post, all blog posts, reviews, and interviews are written by Dane, with the help of his research assistant and personal gentleman's gentleman, Jeeves.</p>
                     <p className="mt-3">You can reach Dane anytime at <a href="mailto:dane.anderson@humanitieslastchance.org">dane.anderson@humanitieslastchance.org</a>. Although he's a PhD candidate at the University of Michigan, Dane currently lives in the D.C. metro area and would be happy to meet if you're ever passing through.</p>
                   </div>
-                  <div className="hidden md:block md:w-2/5 md:pt-8">
-                    {/* Desktop image positioning - aligned with section title */}
-                    <OptimizedImage
-                      src="/lovable-uploads/86f13bf5-844d-4ed5-acf0-5fedacefc08c.png"
-                      alt="Dane Anderson pointing at a street sign for Rue Edward-Gibbon"
-                      className="w-full rounded-md shadow-md"
-                      caption="Dane having completed his search for vestiges of Edward Gibbon's residence in Lausanne, Switzerland"
-                    />
+                  <div className="md:w-2/5 md:pl-6 flex md:justify-start justify-center">
+                    {/* Desktop: Show beside text, aligned with title */}
+                    <div className="hidden md:block mt-0">
+                      <OptimizedImage
+                        src="/lovable-uploads/86f13bf5-844d-4ed5-acf0-5fedacefc08c.png"
+                        alt="Dane Anderson pointing at a street sign for Rue Edward-Gibbon"
+                        className="w-full rounded-md shadow-md"
+                        caption="Dane having completed his search for vestiges of Edward Gibbon's residence in Lausanne, Switzerland"
+                      />
+                    </div>
                   </div>
+                </div>
+                
+                {/* Mobile: Show below text */}
+                <div className="block md:hidden mt-6">
+                  <OptimizedImage
+                    src="/lovable-uploads/86f13bf5-844d-4ed5-acf0-5fedacefc08c.png"
+                    alt="Dane Anderson pointing at a street sign for Rue Edward-Gibbon"
+                    className="w-full max-w-sm mx-auto rounded-md shadow-md"
+                    caption="Dane having completed his search for vestiges of Edward Gibbon's residence in Lausanne, Switzerland"
+                  />
                 </div>
               </div>
             </div>
