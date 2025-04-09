@@ -4,7 +4,7 @@ import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { cn } from "@/lib/utils";
 import PropTypes from "prop-types";
 
-const Accordion = React.forwardRef((props, ref) => {
+const Accordion = React.forwardRef(function Accordion(props, ref) {
   const { children, className, type = "single", ...otherProps } = props;
   
   return (
@@ -37,13 +37,14 @@ Accordion.propTypes = {
   onValueChange: PropTypes.func
 };
 
-const AccordionItem = React.forwardRef((props, ref) => {
-  const { className, ...otherProps } = props;
+const AccordionItem = React.forwardRef(function AccordionItem(props, ref) {
+  const { className, value, ...otherProps } = props;
   
   return (
     <AccordionPrimitive.Item
       ref={ref}
       className={cn("border-b", className)}
+      value={value}
       {...otherProps}
     />
   );
@@ -53,10 +54,11 @@ AccordionItem.displayName = "AccordionItem";
 
 AccordionItem.propTypes = {
   className: PropTypes.string,
-  value: PropTypes.string.isRequired
+  value: PropTypes.string.isRequired,
+  children: PropTypes.node
 };
 
-const AccordionTrigger = React.forwardRef((props, ref) => {
+const AccordionTrigger = React.forwardRef(function AccordionTrigger(props, ref) {
   const { className, children, ...otherProps } = props;
   
   return (
@@ -82,7 +84,7 @@ AccordionTrigger.propTypes = {
   children: PropTypes.node
 };
 
-const AccordionContent = React.forwardRef((props, ref) => {
+const AccordionContent = React.forwardRef(function AccordionContent(props, ref) {
   const { className, children, ...otherProps } = props;
   
   return (

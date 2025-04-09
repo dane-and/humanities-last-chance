@@ -4,7 +4,7 @@ import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
 import { cn } from "@/lib/utils";
 import PropTypes from "prop-types";
 
-const ToggleGroup = React.forwardRef((props, ref) => {
+const ToggleGroup = React.forwardRef(function ToggleGroup(props, ref) {
   const { 
     children, 
     className, 
