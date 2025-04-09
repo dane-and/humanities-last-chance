@@ -1,7 +1,8 @@
+
 import * as React from "react"
 import * as AspectRatioPrimitive from "@radix-ui/react-aspect-ratio"
 
-interface AspectRatioProps
+export interface AspectRatioProps
   extends React.ComponentPropsWithoutRef<typeof AspectRatioPrimitive.Root> {
   children: React.ReactNode
 }

@@ -4,7 +4,7 @@ import * as TooltipPrimitive from "@radix-ui/react-tooltip"
 
 import { cn } from "@/lib/utils"
 
-export interface TooltipProviderProps extends Omit<React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Provider>, "children"> {
+export interface TooltipProviderProps extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Provider> {
   children?: React.ReactNode;
 }
 
@@ -15,7 +15,7 @@ const TooltipProvider = ({ children, ...props }: TooltipProviderProps) => (
 )
 TooltipProvider.displayName = TooltipPrimitive.Provider.displayName
 
-export interface TooltipProps extends Omit<React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Root>, "children"> {
+export interface TooltipProps extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Root> {
   children?: React.ReactNode;
 }
 

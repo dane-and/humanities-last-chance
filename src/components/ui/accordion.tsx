@@ -1,9 +1,13 @@
+
 import * as React from "react"
 import * as AccordionPrimitive from "@radix-ui/react-accordion"
 import { ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-type AccordionProps = React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root>
+export interface AccordionProps extends React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root> {
+  children?: React.ReactNode;
+  className?: string;
+}
 
 const Accordion = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Root>,
@@ -15,7 +19,10 @@ const Accordion = React.forwardRef<
 ))
 Accordion.displayName = "Accordion"
 
-type AccordionItemProps = React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>
+export interface AccordionItemProps extends React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item> {
+  className?: string;
+  children?: React.ReactNode;
+}
 
 const AccordionItem = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Item>,
@@ -31,7 +38,10 @@ const AccordionItem = React.forwardRef<
 ))
 AccordionItem.displayName = "AccordionItem"
 
-type AccordionTriggerProps = React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
+export interface AccordionTriggerProps extends React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger> {
+  className?: string;
+  children?: React.ReactNode;
+}
 
 const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Trigger>,
@@ -53,7 +63,10 @@ const AccordionTrigger = React.forwardRef<
 ))
 AccordionTrigger.displayName = "AccordionTrigger"
 
-type AccordionContentProps = React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>
+export interface AccordionContentProps extends React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content> {
+  className?: string;
+  children?: React.ReactNode;
+}
 
 const AccordionContent = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Content>,
