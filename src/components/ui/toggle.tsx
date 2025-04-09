@@ -27,10 +27,10 @@ const toggleVariants = cva(
   }
 )
 
-interface ToggleProps extends React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root>,
+export interface ToggleProps extends React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root>,
   VariantProps<typeof toggleVariants> {
-  className?: string;
-  children?: React.ReactNode;
+    className?: string;
+    children?: React.ReactNode;
 }
 
 const Toggle = React.forwardRef<

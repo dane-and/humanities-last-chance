@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 
 const Dialog = DialogPrimitive.Root
 
-interface DialogTriggerProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Trigger> {
+export interface DialogTriggerProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Trigger> {
   children?: React.ReactNode;
   asChild?: boolean;
 }
@@ -24,7 +24,7 @@ DialogTrigger.displayName = DialogPrimitive.Trigger.displayName
 
 const DialogPortal = DialogPrimitive.Portal
 
-interface DialogCloseProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Close> {
+export interface DialogCloseProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Close> {
   className?: string;
   children?: React.ReactNode;
   asChild?: boolean;
@@ -47,7 +47,7 @@ const DialogClose = React.forwardRef<
 ))
 DialogClose.displayName = DialogPrimitive.Close.displayName
 
-interface DialogOverlayProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay> {
+export interface DialogOverlayProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay> {
   className?: string;
 }
 
@@ -66,7 +66,7 @@ const DialogOverlay = React.forwardRef<
 ))
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
 
-interface DialogContentProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> {
+export interface DialogContentProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> {
   className?: string;
   children?: React.ReactNode;
 }
@@ -92,7 +92,7 @@ const DialogContent = React.forwardRef<
 ))
 DialogContent.displayName = DialogPrimitive.Content.displayName
 
-interface DialogHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface DialogHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
   children?: React.ReactNode;
 }
@@ -114,7 +114,7 @@ const DialogHeader = ({
 )
 DialogHeader.displayName = "DialogHeader"
 
-interface DialogFooterProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface DialogFooterProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
   children?: React.ReactNode;
 }
@@ -136,7 +136,7 @@ const DialogFooter = ({
 )
 DialogFooter.displayName = "DialogFooter"
 
-interface DialogTitleProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title> {
+export interface DialogTitleProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title> {
   className?: string;
   children?: React.ReactNode;
 }
@@ -158,7 +158,7 @@ const DialogTitle = React.forwardRef<
 ))
 DialogTitle.displayName = DialogPrimitive.Title.displayName
 
-interface DialogDescriptionProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description> {
+export interface DialogDescriptionProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description> {
   className?: string;
   children?: React.ReactNode;
 }

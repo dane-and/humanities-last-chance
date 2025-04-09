@@ -4,35 +4,29 @@ import * as TooltipPrimitive from "@radix-ui/react-tooltip"
 
 import { cn } from "@/lib/utils"
 
-interface TooltipProviderProps extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Provider> {
+export interface TooltipProviderProps extends Omit<React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Provider>, "children"> {
   children?: React.ReactNode;
 }
 
-const TooltipProvider = React.forwardRef<
-  React.ElementRef<typeof TooltipPrimitive.Provider>,
-  TooltipProviderProps
->(({ children, ...props }, ref) => (
-  <TooltipPrimitive.Provider ref={ref} {...props}>
+const TooltipProvider = ({ children, ...props }: TooltipProviderProps) => (
+  <TooltipPrimitive.Provider {...props}>
     {children}
   </TooltipPrimitive.Provider>
-))
+)
 TooltipProvider.displayName = TooltipPrimitive.Provider.displayName
 
-interface TooltipProps extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Root> {
+export interface TooltipProps extends Omit<React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Root>, "children"> {
   children?: React.ReactNode;
 }
 
-const Tooltip = React.forwardRef<
-  React.ElementRef<typeof TooltipPrimitive.Root>,
-  TooltipProps
->(({ children, ...props }, ref) => (
-  <TooltipPrimitive.Root ref={ref} {...props}>
+const Tooltip = ({ children, ...props }: TooltipProps) => (
+  <TooltipPrimitive.Root {...props}>
     {children}
   </TooltipPrimitive.Root>
-))
+)
 Tooltip.displayName = TooltipPrimitive.Root.displayName
 
-interface TooltipTriggerProps extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Trigger> {
+export interface TooltipTriggerProps extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Trigger> {
   children?: React.ReactNode;
   asChild?: boolean;
 }
@@ -47,7 +41,7 @@ const TooltipTrigger = React.forwardRef<
 ))
 TooltipTrigger.displayName = TooltipPrimitive.Trigger.displayName
 
-interface TooltipContentProps extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content> {
+export interface TooltipContentProps extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content> {
   className?: string;
   children?: React.ReactNode;
 }

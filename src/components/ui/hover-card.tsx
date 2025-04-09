@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils"
 
 const HoverCard = HoverCardPrimitive.Root
 
-interface HoverCardTriggerProps extends React.ComponentPropsWithoutRef<typeof HoverCardPrimitive.Trigger> {
+export interface HoverCardTriggerProps extends React.ComponentPropsWithoutRef<typeof HoverCardPrimitive.Trigger> {
   children?: React.ReactNode;
   asChild?: boolean;
 }
@@ -21,7 +21,7 @@ const HoverCardTrigger = React.forwardRef<
 ))
 HoverCardTrigger.displayName = HoverCardPrimitive.Trigger.displayName
 
-interface HoverCardContentProps extends React.ComponentPropsWithoutRef<typeof HoverCardPrimitive.Content> {
+export interface HoverCardContentProps extends React.ComponentPropsWithoutRef<typeof HoverCardPrimitive.Content> {
   className?: string;
   children?: React.ReactNode;
 }
