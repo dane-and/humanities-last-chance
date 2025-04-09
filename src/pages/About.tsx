@@ -62,7 +62,7 @@ const About = () => {
                     src="/lovable-uploads/fe1f0e62-d341-407e-9735-69aa75e57a27.png"
                     alt="Dane Anderson pointing at a street sign for Rue Edward-Gibbon"
                     className="w-full rounded-md shadow-md"
-                    caption="Dane having completed his search for any vestiges of Edward Gibbon's residence in Lausanne, Switzerland"
+                    caption="Dane having completed his search for vestiges of Edward Gibbon's residence in Lausanne, Switzerland"
                   />
                 </div>
               </div>
