@@ -8,14 +8,26 @@ const ToggleGroup = React.forwardRef(function ToggleGroup(props, ref) {
   const { 
     children, 
     className, 
-    type = "single", 
+    type, 
+    value,
+    defaultValue,
+    onValueChange,
+    disabled,
+    rovingFocus,
+    loop,
     ...otherProps 
   } = props;
   
   return (
     <ToggleGroupPrimitive.Root
       ref={ref}
-      type={type}
+      type={type || "single"}
+      value={value}
+      defaultValue={defaultValue}
+      onValueChange={onValueChange}
+      disabled={disabled}
+      rovingFocus={rovingFocus}
+      loop={loop}
       className={cn("toggle-group", className)}
       {...otherProps}
     >
@@ -44,4 +56,33 @@ ToggleGroup.propTypes = {
   loop: PropTypes.bool
 };
 
+// Create a ToggleGroupItem component for completeness
+const ToggleGroupItem = React.forwardRef(function ToggleGroupItem(props, ref) {
+  const { className, children, value, ...otherProps } = props;
+  
+  return (
+    <ToggleGroupPrimitive.Item
+      ref={ref}
+      value={value}
+      className={cn(
+        "toggle-group-item",
+        className
+      )}
+      {...otherProps}
+    >
+      {children}
+    </ToggleGroupPrimitive.Item>
+  );
+});
+
+ToggleGroupItem.displayName = "ToggleGroupItem";
+
+ToggleGroupItem.propTypes = {
+  className: PropTypes.string,
+  children: PropTypes.node,
+  value: PropTypes.string.isRequired,
+  disabled: PropTypes.bool
+};
+
+export { ToggleGroup, ToggleGroupItem };
 export default ToggleGroup;

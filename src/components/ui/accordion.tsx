@@ -5,12 +5,16 @@ import { cn } from "@/lib/utils";
 import PropTypes from "prop-types";
 
 const Accordion = React.forwardRef(function Accordion(props, ref) {
-  const { children, className, type = "single", ...otherProps } = props;
+  const { children, className, type, collapsible, defaultValue, value, onValueChange, ...otherProps } = props;
   
   return (
     <AccordionPrimitive.Root
       ref={ref}
-      type={type}
+      type={type || "single"}
+      collapsible={collapsible}
+      defaultValue={defaultValue}
+      value={value}
+      onValueChange={onValueChange}
       className={cn("accordion", className)}
       {...otherProps}
     >
@@ -38,7 +42,7 @@ Accordion.propTypes = {
 };
 
 const AccordionItem = React.forwardRef(function AccordionItem(props, ref) {
-  const { className, value, ...otherProps } = props;
+  const { className, value, children, ...otherProps } = props;
   
   return (
     <AccordionPrimitive.Item
@@ -46,7 +50,9 @@ const AccordionItem = React.forwardRef(function AccordionItem(props, ref) {
       className={cn("border-b", className)}
       value={value}
       {...otherProps}
-    />
+    >
+      {children}
+    </AccordionPrimitive.Item>
   );
 });
 
@@ -108,5 +114,5 @@ AccordionContent.propTypes = {
   children: PropTypes.node
 };
 
-export { AccordionItem, AccordionTrigger, AccordionContent };
+export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };
 export default Accordion;
