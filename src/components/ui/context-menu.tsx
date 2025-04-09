@@ -5,13 +5,7 @@ import { Check, ChevronRight, Circle } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
-const ContextMenu = React.forwardRef<
-  React.ElementRef<typeof ContextMenuPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Root>
->((props, ref) => (
-  <ContextMenuPrimitive.Root ref={ref} {...props} />
-))
-ContextMenu.displayName = ContextMenuPrimitive.Root.displayName
+const ContextMenu = ContextMenuPrimitive.Root
 
 const ContextMenuTrigger = React.forwardRef<
   React.ElementRef<typeof ContextMenuPrimitive.Trigger>,
@@ -21,37 +15,13 @@ const ContextMenuTrigger = React.forwardRef<
 ))
 ContextMenuTrigger.displayName = ContextMenuPrimitive.Trigger.displayName
 
-const ContextMenuGroup = React.forwardRef<
-  React.ElementRef<typeof ContextMenuPrimitive.Group>,
-  React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Group>
->((props, ref) => (
-  <ContextMenuPrimitive.Group ref={ref} {...props} />
-))
-ContextMenuGroup.displayName = ContextMenuPrimitive.Group.displayName
+const ContextMenuGroup = ContextMenuPrimitive.Group
 
-const ContextMenuPortal = React.forwardRef<
-  React.ElementRef<typeof ContextMenuPrimitive.Portal>,
-  React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Portal>
->((props, ref) => (
-  <ContextMenuPrimitive.Portal ref={ref} {...props} />
-))
-ContextMenuPortal.displayName = ContextMenuPrimitive.Portal.displayName
+const ContextMenuPortal = ContextMenuPrimitive.Portal
 
-const ContextMenuSub = React.forwardRef<
-  React.ElementRef<typeof ContextMenuPrimitive.Sub>,
-  React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Sub>
->((props, ref) => (
-  <ContextMenuPrimitive.Sub ref={ref} {...props} />
-))
-ContextMenuSub.displayName = ContextMenuPrimitive.Sub.displayName
+const ContextMenuSub = ContextMenuPrimitive.Sub
 
-const ContextMenuRadioGroup = React.forwardRef<
-  React.ElementRef<typeof ContextMenuPrimitive.RadioGroup>,
-  React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.RadioGroup>
->((props, ref) => (
-  <ContextMenuPrimitive.RadioGroup ref={ref} {...props} />
-))
-ContextMenuRadioGroup.displayName = ContextMenuPrimitive.RadioGroup.displayName
+const ContextMenuRadioGroup = ContextMenuPrimitive.RadioGroup
 
 const ContextMenuSubTrigger = React.forwardRef<
   React.ElementRef<typeof ContextMenuPrimitive.SubTrigger>,
