@@ -1,3 +1,4 @@
+
 {
   "name": "humanities-last-chance",
   "private": true,
@@ -15,16 +16,17 @@
     "sanity"
   ],
   "dependencies": {
+    "@sanity/vision": "^3.79.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "styled-components": "^6.1.16"
+    "sanity": "^3.79.0",
+    "styled-components": "^6.1.8"
   },
   "devDependencies": {
     "@sanity/eslint-config-studio": "^5.0.2",
     "@types/react": "^18.0.25",
     "eslint": "^9.9.0",
     "prettier": "^3.0.2",
-    "sanity": "^3.80.1",
     "typescript": "^5.1.6"
   },
   "prettier": {

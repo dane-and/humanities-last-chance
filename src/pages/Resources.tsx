@@ -10,7 +10,7 @@ import OtherResources from '@/components/resources/OtherResources';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const Resources = () => {
-  const { getPageBySlug, isLoading } = usePages();
+  const { getPageBySlug } = usePages();
   const resourcesPage = getPageBySlug('resources');
   const isMobile = useIsMobile();
   
