@@ -1,21 +1,34 @@
 
 import * as React from "react";
-import { ToggleGroupPrimitive } from "@radix-ui/react-toggle-group";
+import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
 import { cn } from "../../utils";
 
-export interface ToggleGroupProps extends React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Root> {
+export interface ToggleGroupProps {
   className?: string;
   children?: React.ReactNode;
-  type: string; // Added type property
+  type?: "single" | "multiple";
+  value?: string | string[];
+  defaultValue?: string | string[];
+  onValueChange?: (value: string | string[]) => void;
+  disabled?: boolean;
+  rovingFocus?: boolean;
+  loop?: boolean;
 }
 
-const ToggleGroup = React.forwardRef<HTMLDivElement, ToggleGroupProps>(({ children, className, type, ...props }, ref) => {
-  return (
-    <ToggleGroupPrimitive.Root ref={ref} {...props} className={cn("toggle-group", className)}>
-      {children}
-    </ToggleGroupPrimitive.Root>
-  );
-});
+const ToggleGroup = React.forwardRef<HTMLDivElement, ToggleGroupProps>(
+  ({ children, className, type = "single", ...props }, ref) => {
+    return (
+      <ToggleGroupPrimitive.Root
+        ref={ref}
+        type={type as any}
+        {...props}
+        className={cn("toggle-group", className)}
+      >
+        {children}
+      </ToggleGroupPrimitive.Root>
+    );
+  }
+);
 
 ToggleGroup.displayName = "ToggleGroup";
 
