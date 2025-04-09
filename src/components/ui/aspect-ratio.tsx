@@ -8,6 +8,6 @@ const AspectRatio = React.forwardRef<
 >(({ ...props }, ref) => (
   <AspectRatioPrimitive.Root ref={ref} {...props} />
 ))
-AspectRatio.displayName = "AspectRatio"
+AspectRatio.displayName = AspectRatioPrimitive.Root.displayName
 
 export { AspectRatio }
