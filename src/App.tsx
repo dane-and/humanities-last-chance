@@ -26,39 +26,39 @@ import ArticlesBlog from "./pages/articles/ArticlesBlog";
 import ArticlesInterviews from "./pages/articles/ArticlesInterviews";
 import ArticlesReviews from "./pages/articles/ArticlesReviews";
 
-// Query client with better error handling - updated to use the correct API
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      retry: 1,
-      // Using the newer way to handle errors in @tanstack/react-query v5+
-      meta: {
-        onError: (error: Error) => {
-          console.error('Query error:', error);
-        }
-      }
-    },
-  },
-});
-
-// Simple error fallback for the entire app
-const AppErrorFallback = ({ error, resetErrorBoundary }) => (
-  <div className="flex items-center justify-center min-h-screen flex-col p-4">
-    <h2 className="text-xl font-bold mb-4">Something went wrong</h2>
-    <pre className="bg-gray-100 p-4 rounded mb-4 max-w-2xl overflow-auto text-sm">
-      {error.message}
-    </pre>
-    <button 
-      onClick={resetErrorBoundary} 
-      className="px-4 py-2 bg-blue-600 text-white rounded"
-    >
-      Try again
-    </button>
-  </div>
-);
-
+// Query client creation moved inside component
 const App = () => {
+  // Create new QueryClient instance inside the component
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 5 * 60 * 1000, // 5 minutes
+        retry: 1,
+        meta: {
+          onError: (error: Error) => {
+            console.error('Query error:', error);
+          }
+        }
+      },
+    },
+  });
+
+  // Simple error fallback for the entire app
+  const AppErrorFallback = ({ error, resetErrorBoundary }: { error: Error, resetErrorBoundary: () => void }) => (
+    <div className="flex items-center justify-center min-h-screen flex-col p-4">
+      <h2 className="text-xl font-bold mb-4">Something went wrong</h2>
+      <pre className="bg-gray-100 p-4 rounded mb-4 max-w-2xl overflow-auto text-sm">
+        {error.message}
+      </pre>
+      <button 
+        onClick={resetErrorBoundary} 
+        className="px-4 py-2 bg-blue-600 text-white rounded"
+      >
+        Try again
+      </button>
+    </div>
+  );
+
   // Update the title and meta description based on the current route
   useEffect(() => {
     // Set default title and description

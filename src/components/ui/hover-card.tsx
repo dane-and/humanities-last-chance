@@ -1,3 +1,4 @@
+
 import * as React from "react"
 import * as HoverCardPrimitive from "@radix-ui/react-hover-card"
 
@@ -5,12 +6,30 @@ import { cn } from "@/lib/utils"
 
 const HoverCard = HoverCardPrimitive.Root
 
-const HoverCardTrigger = HoverCardPrimitive.Trigger
+export interface HoverCardTriggerProps extends React.ComponentPropsWithoutRef<typeof HoverCardPrimitive.Trigger> {
+  children?: React.ReactNode;
+  asChild?: boolean;
+}
+
+const HoverCardTrigger = React.forwardRef<
+  React.ElementRef<typeof HoverCardPrimitive.Trigger>,
+  HoverCardTriggerProps
+>(({ children, ...props }, ref) => (
+  <HoverCardPrimitive.Trigger ref={ref} {...props}>
+    {children}
+  </HoverCardPrimitive.Trigger>
+))
+HoverCardTrigger.displayName = HoverCardPrimitive.Trigger.displayName
+
+export interface HoverCardContentProps extends React.ComponentPropsWithoutRef<typeof HoverCardPrimitive.Content> {
+  className?: string;
+  children?: React.ReactNode;
+}
 
 const HoverCardContent = React.forwardRef<
   React.ElementRef<typeof HoverCardPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof HoverCardPrimitive.Content>
->(({ className, align = "center", sideOffset = 4, ...props }, ref) => (
+  HoverCardContentProps
+>(({ className, align = "center", sideOffset = 4, children, ...props }, ref) => (
   <HoverCardPrimitive.Content
     ref={ref}
     align={align}
@@ -20,7 +39,9 @@ const HoverCardContent = React.forwardRef<
       className
     )}
     {...props}
-  />
+  >
+    {children}
+  </HoverCardPrimitive.Content>
 ))
 HoverCardContent.displayName = HoverCardPrimitive.Content.displayName
 

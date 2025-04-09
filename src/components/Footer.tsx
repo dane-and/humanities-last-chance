@@ -9,11 +9,6 @@ export const FOOTER_COMPONENT_REQUIRED = true;
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
-  
-  // Log navigation attempt to admin page for debugging
-  const handleAdminLinkClick = () => {
-    console.log('Footer: Admin link clicked, navigating to /admin');
-  };
 
   return (
     <footer className="bg-gray-100 py-8 mt-16">
@@ -21,14 +16,14 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
           {/* Column 1: Logo, Description and X link */}
           <div className="col-span-2 md:col-span-1">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               <img 
-                src="/lovable-uploads/71dce2e5-1d5f-4477-89d1-7e18ea84e7f2.png" 
+                src="/lovable-uploads/25d9abe1-5882-442f-acf4-d37c96268fb4.png" 
                 alt="Humanities Last Chance Logo" 
-                className="h-10 w-auto"
+                className="h-12 w-auto"
                 loading="lazy"
-                width="40"
-                height="40"
+                width="48"
+                height="48"
               />
               <h3 className="text-lg font-semibold text-gray-800">Humanities Last Chance</h3>
             </div>
@@ -89,16 +84,7 @@ const Footer: React.FC = () => {
                   <li>
                     <Link to="/contact" className="text-sm text-gray-600 hover:text-gray-900">Contact</Link>
                   </li>
-                  <li>
-                    <Link 
-                      to="/admin/login" 
-                      className="text-sm text-gray-600 hover:text-gray-900 flex items-center"
-                      onClick={handleAdminLinkClick}
-                    >
-                      Admin
-                      <ExternalLink size={14} className="ml-1" />
-                    </Link>
-                  </li>
+                  {/* Admin button removed as requested */}
                 </ul>
               </div>
             </div>

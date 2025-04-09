@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   Book, BookOpen, Globe, Database, Library, Monitor, 
@@ -34,6 +33,12 @@ export const categoriesData: ResourceCategory[] = [
         url: 'https://cosmosinstitute.substack.com/',
         description: 'Substack exploring the relationships between philosophy and AI.',
         icon: React.createElement(Globe, { className: "h-5 w-5 text-primary" })
+      },
+      {
+        name: 'Public Books',
+        url: 'https://www.publicbooks.org/',
+        description: 'Reviews, essays, and interviews at the intersection of arts and scholarship.',
+        icon: React.createElement(BookOpen, { className: "h-5 w-5 text-primary" })
       }
     ]
   },

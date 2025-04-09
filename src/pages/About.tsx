@@ -3,6 +3,7 @@ import React from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import OptimizedImage from '@/components/OptimizedImage';
+import CaptionedImage from '@/components/CaptionedImage';
 
 const About = () => {
   return (
@@ -11,14 +12,14 @@ const About = () => {
       
       {/* Main content area with proper padding to avoid toolbar overlap */}
       <main className="flex-grow pt-24 md:pt-28">
-        {/* Centered Image Container - positioned above the content */}
+        {/* Centered Image Container - positioned above the content with responsive scaling */}
         <div className="flex justify-center mx-auto max-w-3xl px-4 pb-6">
           <div className="w-full">
             <OptimizedImage
-              src="/lovable-uploads/579d21dc-2855-4f28-8b61-34b44b735095.png"
-              alt="Venice cityscape painting by Turner"
-              className="mx-auto rounded-md shadow-md"
-              caption="J.M.W. Turner, The Dogana and Santa Maria della Salute, 1834"
+              src="/lovable-uploads/614b5559-1102-4ab6-8e45-870ed31277cd.png"
+              alt="The Wedding at Cana by Paolo Veronese"
+              className="mx-auto rounded-md shadow-md w-full h-auto"
+              caption="Paolo Veronese, The Wedding at Cana, 1563"
             />
           </div>
         </div>
@@ -30,11 +31,12 @@ const About = () => {
               <p>Humanities Last Chance is a free digital platform and resource dedicated to connecting curious people of all backgrounds to academic humanities scholarship. Based in Washington D.C., our mission is to demonstrate the enduring value and relevance of the liberal arts in today's world.</p>
               
               <h2 className="text-2xl font-bold mt-8 mb-4">Why "Humanities Last Chance"?</h2>
-              <p>Our name reflects two critical realities. First, the humanities face significant challenges today—with university funding cuts and a widespread public perception that the academic humanities have become merely the R&D wing of left-wing political and social movements.</p>
-              <p>Yet more importantly, the humanities remain what they have always been: the essential arena for inquiry into life's ultimate questions. They offer us the space to explore how we should live, what we should believe, and who we should aspire to become. In this sense, the humanities represent our "last chance" for establishing meaningful principles as we collectively shape the world around us.</p>
+              <p>Our name reflects two critical realities. First, the humanities face significant challenges today. These include funding cuts, declining enrollments, and the public's widespread view that humanities departments are irredeemably tainted with political bias.</p>
+              
+              <p>But more importantly, the humanities remain what they have always been: an essential arena for inquiry into life's ultimate questions. They offer us the space to explore how we should live, what we should believe, and who we should aspire to become. In this sense, the humanities represent our "last chance" for establishing meaningful principles as we collectively shape the world around us.</p>
               
               <h2 className="text-2xl font-bold mt-8 mb-4">Our Purpose</h2>
-              <p>We believe the humanities offer essential perspectives and tools for understanding ourselves and our society. Through our platform, we aim to:</p>
+              <p>We believe the humanities offer essential perspectives and tools for understanding ourselves and others. Through our platform, we aim to:</p>
               <ul>
                 <li>Showcase the work of humanities scholars to non-specialists</li>
                 <li>Demonstrate the practical and intellectual value of liberal arts education</li>
@@ -49,11 +51,37 @@ const About = () => {
                 <li><strong>Humanities Last Chance U:</strong> A curated collection of resources for self-directed learning at all levels</li>
               </ul>
               
-              <h2 className="text-2xl font-bold mt-8 mb-4">Connect With Us</h2>
-              <p>We're committed to fostering a community of curious minds. Whether you're a student, educator, or simply someone interested in exploring the humanities, we invite you to join our conversation.</p>
-              <p><strong>Founder:</strong> Dane Anderson</p>
-              <p><strong>Email:</strong> <a href="mailto:dane.anderson@humanitieslastchance.org">dane.anderson@humanitieslastchance.org</a></p>
-              <p><strong>Location:</strong> Washington D.C.</p>
+              {/* "Who 'We' Are" section with improved layout and reduced spacing for mobile */}
+              <div className="mt-6 md:mt-6">
+                <div className="flex flex-col md:flex-row">
+                  <div className="md:w-3/5">
+                    <h2 className="text-2xl font-bold mb-4 mt-2 md:mt-0">Who 'We' Are</h2>
+                    <p>Dane Anderson founded Humanities Last Chance as a platform to push his pet theories, of which there are enough to fill a veterinary, and to use as a prop to interview people he would want to talk to anyway. Unless marked as a guest post, all blog posts, reviews, and interviews are written by Dane, with the help of his research assistant and personal gentleman's gentleman, Jeeves.</p>
+                    <p className="mt-3 mb-2 md:mb-0">You can reach Dane anytime at <a href="mailto:dane.anderson@humanitieslastchance.org">dane.anderson@humanitieslastchance.org</a>. Although he's a PhD candidate at the University of Michigan, Dane currently lives in the D.C. metro area and would be happy to meet if you're ever passing through.</p>
+                  </div>
+                  <div className="md:w-2/5 md:pl-6 flex md:justify-start justify-center md:items-start">
+                    {/* Desktop: Show beside text, aligned with title, with reduced max-width (80% of original) */}
+                    <div className="hidden md:block mt-0">
+                      <OptimizedImage
+                        src="/lovable-uploads/d2a073af-c735-4eba-b68f-8747596ab32c.png"
+                        alt="Dane Anderson pointing at a street sign for Rue Edward-Gibbon"
+                        className="w-full max-w-[192px] rounded-md shadow-md"
+                        caption="Dane having completed his search for vestiges of Edward Gibbon's residence in Lausanne, Switzerland"
+                      />
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Mobile: Show below text with reduced spacing */}
+                <div className="block md:hidden mt-2">
+                  <OptimizedImage
+                    src="/lovable-uploads/d2a073af-c735-4eba-b68f-8747596ab32c.png"
+                    alt="Dane Anderson pointing at a street sign for Rue Edward-Gibbon"
+                    className="w-4/5 max-w-[192px] mx-auto rounded-md shadow-md"
+                    caption="Dane having completed his search for vestiges of Edward Gibbon's residence in Lausanne, Switzerland"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </section>

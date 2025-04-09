@@ -61,6 +61,7 @@ const SchedulePublishDialog: React.FC<SchedulePublishDialogProps> = ({
                 onSelect={setDate}
                 initialFocus
                 disabled={(date) => date < new Date()}
+                className="p-3 pointer-events-auto"
               />
             </PopoverContent>
           </Popover>

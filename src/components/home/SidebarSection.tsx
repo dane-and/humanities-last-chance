@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { findCourse } from '@/components/resources/humanities/utils';
 import InterviewsSection from './sidebar/InterviewsSection';
@@ -5,6 +6,7 @@ import ReviewsSection from './sidebar/ReviewsSection';
 import HumanitiesPreview from './sidebar/HumanitiesPreview';
 import { Article } from '@/lib/types/article';
 import { fetchArticlesByCategory } from '@/lib/sanity';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const featuredCourseTitles = [
   "Shakespeare After All: The Later Plays",
@@ -91,10 +93,14 @@ const SidebarSection: React.FC = () => {
     .filter(course => course !== null);
 
   return (
-    <div className="space-y-8 sticky top-4">
-      <InterviewsSection interviews={interviews} />
-      <ReviewsSection reviews={reviews} />
-      <HumanitiesPreview featuredCourses={featuredCourses} />
+    <div className="hidden lg:block lg:h-screen sticky top-4">
+      <ScrollArea className="h-[calc(100vh-2rem)]">
+        <div className="space-y-8 pr-4">
+          <InterviewsSection interviews={interviews} />
+          <ReviewsSection reviews={reviews} />
+          <HumanitiesPreview featuredCourses={featuredCourses} />
+        </div>
+      </ScrollArea>
     </div>
   );
 };

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
@@ -62,7 +63,7 @@ const ArticlesInterviews: React.FC = () => {
     <div className="min-h-screen flex flex-col">
       <Navigation />
       
-      <main className="flex-grow pt-24 pb-16">
+      <main className="flex-grow pt-24 pb-16 md:pt-32 lg:pt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-serif font-bold mb-8">Interviews</h1>
           
