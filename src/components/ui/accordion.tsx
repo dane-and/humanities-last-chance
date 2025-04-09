@@ -4,7 +4,8 @@ import * as AccordionPrimitive from "@radix-ui/react-accordion"
 import { ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-export interface AccordionProps extends React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root> {
+export interface AccordionProps 
+  extends React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root> {
   children?: React.ReactNode;
   className?: string;
 }
@@ -61,7 +62,7 @@ const AccordionTrigger = React.forwardRef<
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ))
-AccordionTrigger.displayName = "AccordionTrigger"
+AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName
 
 export interface AccordionContentProps extends React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content> {
   className?: string;
@@ -83,7 +84,7 @@ const AccordionContent = React.forwardRef<
     <div className="pb-4 pt-0">{children}</div>
   </AccordionPrimitive.Content>
 ))
-AccordionContent.displayName = "AccordionContent"
+AccordionContent.displayName = AccordionPrimitive.Content.displayName
 
 export {
   Accordion,
