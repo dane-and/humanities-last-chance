@@ -172,6 +172,23 @@ const SelectSeparator = React.forwardRef<
 ))
 SelectSeparator.displayName = SelectPrimitive.Separator.displayName
 
+// Add the missing SelectValue component
+interface SelectValueProps extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Value> {
+  className?: string;
+}
+
+const SelectValue = React.forwardRef<
+  React.ElementRef<typeof SelectPrimitive.Value>,
+  SelectValueProps
+>(({ className, ...props }, ref) => (
+  <SelectPrimitive.Value
+    ref={ref}
+    className={cn("text-sm", className)}
+    {...props}
+  />
+))
+SelectValue.displayName = SelectPrimitive.Value.displayName
+
 export {
   Select,
   SelectContent,
@@ -181,4 +198,5 @@ export {
   SelectScrollUpButton,
   SelectSeparator,
   SelectTrigger,
+  SelectValue,  // Export the SelectValue component
 }
