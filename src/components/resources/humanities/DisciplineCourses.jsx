@@ -1,12 +1,14 @@
 
 import React from 'react';
-import Accordion, { 
+import Accordion from '@/components/ui/accordion.jsx';
+import { 
   AccordionItem, 
   AccordionTrigger, 
   AccordionContent 
-} from '@/components/ui/accordion';
+} from '@/components/ui/accordion.jsx';
 import CourseItem from './CourseItem';
 import { disciplines } from '@/lib/data/youtubeUniversity';
+import PropTypes from 'prop-types';
 
 const DisciplineCourses = ({ 
   activeDiscipline, 
@@ -69,6 +71,11 @@ const DisciplineCourses = ({
       )}
     </div>
   );
+};
+
+DisciplineCourses.propTypes = {
+  activeDiscipline: PropTypes.string,
+  setActiveDiscipline: PropTypes.func.isRequired
 };
 
 export default DisciplineCourses;

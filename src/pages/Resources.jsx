@@ -5,8 +5,8 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { usePages } from '@/lib/hooks/usePages';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import HumanitiesLastChanceU from '@/components/resources/HumanitiesLastChanceU';
-import OtherResources from '@/components/resources/OtherResources';
+import HumanitiesLastChanceU from '@/components/resources/HumanitiesLastChanceU.jsx';
+import OtherResources from '@/components/resources/OtherResources.jsx';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const Resources = () => {

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import Accordion from '@/components/ui/accordion';
+import Accordion from '@/components/ui/accordion.jsx';
 import ResourceCategory from './ResourceCategory';
 import { categoriesData } from './categories/categoriesData';
 

@@ -8,29 +8,22 @@ declare module 'fabric' {
     dispose(): void;
     getWidth(): number;
     getHeight(): number;
-    add(object: Object | Object[]): Canvas;
-    remove(object: Object | Object[]): Canvas;
-    setActiveObject(object: Object): Canvas;
-    getActiveObject(): Object | null;
-    getObjects(): Object[];
-    freeDrawingBrush: {
-      color: string;
-      width: number;
-    };
+    add(object: any): any;
+    remove(object: any): any;
+    setActiveObject(object: any): any;
+    getActiveObject(): any;
+    getObjects(): any[];
     isDrawingMode: boolean;
     backgroundColor: string;
   }
 
   export class Object {
     constructor(options?: any);
-    set(properties: any): Object;
+    set(properties: any): any;
     get(property: string): any;
-    toObject(): any;
-    setCoords(): void;
-    scale(value: number): Object;
-    rotate(angle: number): Object;
+    scale(value: number): any;
+    rotate(angle: number): any;
     toDataURL(options?: any): string;
-    type?: string;
   }
 
   export class Rect extends Object {
@@ -42,9 +35,8 @@ declare module 'fabric' {
   }
 
   export class Image extends Object {
-    static fromURL(url: string, options?: any): Promise<Image>;
-    width?: number;
-    height?: number;
+    static fromURL(url: string, callback: (img: any) => void): void;
+    static fromURL(url: string, options?: any): Promise<any>;
   }
 
   export class Point {
