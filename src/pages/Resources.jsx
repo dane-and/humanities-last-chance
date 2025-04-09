@@ -1,0 +1,72 @@
+
+import React, { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
+import { usePages } from '@/lib/hooks/usePages';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import HumanitiesLastChanceU from '@/components/resources/HumanitiesLastChanceU';
+import OtherResources from '@/components/resources/OtherResources';
+import { useIsMobile } from '@/hooks/use-mobile';
+
+const Resources = () => {
+  const { getPageBySlug, isLoading } = usePages();
+  const resourcesPage = getPageBySlug('resources');
+  const isMobile = useIsMobile();
+  
+  const location = useLocation();
+  const navigate = useNavigate();
+  
+  // Get the tab from the URL query parameter, defaulting to 'humanities-u'
+  const getTabFromURL = () => {
+    const searchParams = new URLSearchParams(location.search);
+    return searchParams.get('tab') || 'humanities-u';
+  };
+  
+  // Update the URL when the tab changes
+  const handleTabChange = (tab) => {
+    navigate(`/resources?tab=${tab}`, { replace: true });
+  };
+  
+  // Set the default tab based on URL on component mount
+  useEffect(() => {
+    if (!location.search) {
+      navigate(`/resources?tab=humanities-u`, { replace: true });
+    }
+  }, [navigate, location.search]);
+  
+  return (
+    <div className="page-transition min-h-screen flex flex-col">
+      <Navigation />
+      
+      <main className="flex-grow">
+        <section className="pt-16 pb-8 sm:pt-16 md:pt-32 lg:pt-24 md:pb-12">
+          <div className="container mx-auto px-4 lg:px-8 max-w-6xl">
+            <Tabs 
+              defaultValue={getTabFromURL()} 
+              value={getTabFromURL()}
+              onValueChange={handleTabChange}
+            >
+              <TabsList className="mb-6 w-full justify-start">
+                <TabsTrigger value="humanities-u">Humanities Last Chance U</TabsTrigger>
+                <TabsTrigger value="general">Other Resources</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="humanities-u">
+                <HumanitiesLastChanceU />
+              </TabsContent>
+              
+              <TabsContent value="general">
+                <OtherResources />
+              </TabsContent>
+            </Tabs>
+          </div>
+        </section>
+      </main>
+      
+      <Footer />
+    </div>
+  );
+};
+
+export default Resources;
