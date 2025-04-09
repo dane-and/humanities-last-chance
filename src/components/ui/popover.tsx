@@ -9,8 +9,8 @@ const Popover = PopoverPrimitive.Root
 const PopoverTrigger = React.forwardRef<
   React.ElementRef<typeof PopoverPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Trigger>
->(({ className, ...props }, ref) => (
-  <PopoverPrimitive.Trigger ref={ref} className={cn(className)} {...props} />
+>((props, ref) => (
+  <PopoverPrimitive.Trigger ref={ref} {...props} />
 ))
 PopoverTrigger.displayName = PopoverPrimitive.Trigger.displayName
 

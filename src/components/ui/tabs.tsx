@@ -7,10 +7,9 @@ import { cn } from "@/lib/utils"
 const Tabs = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.Root>
->(({ className, ...props }, ref) => (
+>((props, ref) => (
   <TabsPrimitive.Root
     ref={ref}
-    className={cn(className)}
     {...props}
   />
 ))
