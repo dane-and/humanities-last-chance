@@ -1,70 +1,22 @@
 
-import * as React from "react"
-import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group"
-import { type VariantProps } from "class-variance-authority"
+import * as React from "react";
+import { ToggleGroupPrimitive } from "@radix-ui/react-toggle-group";
+import { cn } from "../../utils";
 
-import { cn } from "@/lib/utils"
-import { toggleVariants } from "@/components/ui/toggle"
-
-const ToggleGroupContext = React.createContext<
-  VariantProps<typeof toggleVariants>
->({
-  size: "default",
-  variant: "default",
-})
-
-export interface ToggleGroupProps extends React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Root>,
-  VariantProps<typeof toggleVariants> {
+export interface ToggleGroupProps extends React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Root> {
   className?: string;
   children?: React.ReactNode;
+  type: string; // Added type property
 }
 
-const ToggleGroup = React.forwardRef<
-  React.ElementRef<typeof ToggleGroupPrimitive.Root>,
-  ToggleGroupProps
->(({ className, variant, size, children, ...props }, ref) => (
-  <ToggleGroupPrimitive.Root
-    ref={ref}
-    className={cn("flex items-center justify-center gap-1", className)}
-    {...props}
-  >
-    <ToggleGroupContext.Provider value={{ variant, size }}>
-      {children}
-    </ToggleGroupContext.Provider>
-  </ToggleGroupPrimitive.Root>
-))
-
-ToggleGroup.displayName = ToggleGroupPrimitive.Root.displayName
-
-export interface ToggleGroupItemProps extends React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Item>,
-  VariantProps<typeof toggleVariants> {
-  className?: string;
-  children?: React.ReactNode;
-}
-
-const ToggleGroupItem = React.forwardRef<
-  React.ElementRef<typeof ToggleGroupPrimitive.Item>,
-  ToggleGroupItemProps
->(({ className, children, variant, size, ...props }, ref) => {
-  const context = React.useContext(ToggleGroupContext)
-
+const ToggleGroup = React.forwardRef<HTMLDivElement, ToggleGroupProps>(({ children, className, type, ...props }, ref) => {
   return (
-    <ToggleGroupPrimitive.Item
-      ref={ref}
-      className={cn(
-        toggleVariants({
-          variant: context.variant || variant,
-          size: context.size || size,
-        }),
-        className
-      )}
-      {...props}
-    >
+    <ToggleGroupPrimitive.Root ref={ref} {...props} className={cn("toggle-group", className)}>
       {children}
-    </ToggleGroupPrimitive.Item>
-  )
-})
+    </ToggleGroupPrimitive.Root>
+  );
+});
 
-ToggleGroupItem.displayName = ToggleGroupPrimitive.Item.displayName
+ToggleGroup.displayName = "ToggleGroup";
 
-export { ToggleGroup, ToggleGroupItem }
+export default ToggleGroup;
