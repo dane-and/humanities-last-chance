@@ -2,34 +2,46 @@
 import * as React from "react";
 import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
 import { cn } from "@/lib/utils";
+import PropTypes from "prop-types";
 
-export interface ToggleGroupProps {
-  className?: string;
-  children?: React.ReactNode;
-  type?: "single" | "multiple";
-  value?: string | string[];
-  defaultValue?: string | string[];
-  onValueChange?: (value: string | string[]) => void;
-  disabled?: boolean;
-  rovingFocus?: boolean;
-  loop?: boolean;
-}
-
-const ToggleGroup = React.forwardRef<HTMLDivElement, ToggleGroupProps>(
-  ({ children, className, type = "single", ...props }, ref) => {
-    return (
-      <ToggleGroupPrimitive.Root
-        ref={ref}
-        type={type as any}
-        {...props}
-        className={cn("toggle-group", className)}
-      >
-        {children}
-      </ToggleGroupPrimitive.Root>
-    );
-  }
-);
+const ToggleGroup = React.forwardRef((props, ref) => {
+  const { 
+    children, 
+    className, 
+    type = "single", 
+    ...otherProps 
+  } = props;
+  
+  return (
+    <ToggleGroupPrimitive.Root
+      ref={ref}
+      type={type}
+      className={cn("toggle-group", className)}
+      {...otherProps}
+    >
+      {children}
+    </ToggleGroupPrimitive.Root>
+  );
+});
 
 ToggleGroup.displayName = "ToggleGroup";
+
+ToggleGroup.propTypes = {
+  className: PropTypes.string,
+  children: PropTypes.node,
+  type: PropTypes.oneOf(["single", "multiple"]),
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.string)
+  ]),
+  defaultValue: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.string)
+  ]),
+  onValueChange: PropTypes.func,
+  disabled: PropTypes.bool,
+  rovingFocus: PropTypes.bool,
+  loop: PropTypes.bool
+};
 
 export default ToggleGroup;
