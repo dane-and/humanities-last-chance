@@ -1,6 +1,7 @@
 
 import React from 'react';
-import Accordion, { 
+import { 
+  Accordion,
   AccordionItem, 
   AccordionTrigger, 
   AccordionContent 

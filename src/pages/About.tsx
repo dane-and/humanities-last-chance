@@ -12,14 +12,14 @@ const About = () => {
       
       {/* Main content area with proper padding to avoid toolbar overlap */}
       <main className="flex-grow pt-24 md:pt-28">
-        {/* Centered Image Container - positioned above the content with responsive scaling */}
+        {/* Centered Image Container - positioned above the content */}
         <div className="flex justify-center mx-auto max-w-3xl px-4 pb-6">
           <div className="w-full">
             <OptimizedImage
-              src="/lovable-uploads/614b5559-1102-4ab6-8e45-870ed31277cd.png"
-              alt="The Wedding at Cana by Paolo Veronese"
-              className="mx-auto rounded-md shadow-md w-full h-auto"
-              caption="Paolo Veronese, The Wedding at Cana, 1563"
+              src="/lovable-uploads/579d21dc-2855-4f28-8b61-34b44b735095.png"
+              alt="Venice cityscape painting by Turner"
+              className="mx-auto rounded-md shadow-md"
+              caption="J.M.W. Turner, The Dogana and Santa Maria della Salute, 1834"
             />
           </div>
         </div>
@@ -51,21 +51,21 @@ const About = () => {
                 <li><strong>Humanities Last Chance U:</strong> A curated collection of resources for self-directed learning at all levels</li>
               </ul>
               
-              {/* "Who 'We' Are" section with improved layout and reduced spacing for mobile */}
-              <div className="mt-6 md:mt-6">
+              {/* "Who 'We' Are" section with improved layout and reduced spacing */}
+              <div className="mt-6">
                 <div className="flex flex-col md:flex-row">
                   <div className="md:w-3/5">
-                    <h2 className="text-2xl font-bold mb-4 mt-2 md:mt-0">Who 'We' Are</h2>
+                    <h2 className="text-2xl font-bold mb-4">Who 'We' Are</h2>
                     <p>Dane Anderson founded Humanities Last Chance as a platform to push his pet theories, of which there are enough to fill a veterinary, and to use as a prop to interview people he would want to talk to anyway. Unless marked as a guest post, all blog posts, reviews, and interviews are written by Dane, with the help of his research assistant and personal gentleman's gentleman, Jeeves.</p>
-                    <p className="mt-3 mb-2 md:mb-0">You can reach Dane anytime at <a href="mailto:dane.anderson@humanitieslastchance.org">dane.anderson@humanitieslastchance.org</a>. Although he's a PhD candidate at the University of Michigan, Dane currently lives in the D.C. metro area and would be happy to meet if you're ever passing through.</p>
+                    <p className="mt-3 mb-3 md:mb-0">You can reach Dane anytime at <a href="mailto:dane.anderson@humanitieslastchance.org">dane.anderson@humanitieslastchance.org</a>. Although he's a PhD candidate at the University of Michigan, Dane currently lives in the D.C. metro area and would be happy to meet if you're ever passing through.</p>
                   </div>
                   <div className="md:w-2/5 md:pl-6 flex md:justify-start justify-center md:items-start">
-                    {/* Desktop: Show beside text, aligned with title, with reduced max-width (80% of original) */}
+                    {/* Desktop: Show beside text, aligned with title, scaled smaller (20% reduction) */}
                     <div className="hidden md:block mt-0">
                       <OptimizedImage
                         src="/lovable-uploads/d2a073af-c735-4eba-b68f-8747596ab32c.png"
                         alt="Dane Anderson pointing at a street sign for Rue Edward-Gibbon"
-                        className="w-full max-w-[192px] rounded-md shadow-md"
+                        className="w-9/12 max-w-[80%] rounded-md shadow-md"
                         caption="Dane having completed his search for vestiges of Edward Gibbon's residence in Lausanne, Switzerland"
                       />
                     </div>
@@ -73,11 +73,11 @@ const About = () => {
                 </div>
                 
                 {/* Mobile: Show below text with reduced spacing */}
-                <div className="block md:hidden mt-2">
+                <div className="block md:hidden mt-3">
                   <OptimizedImage
                     src="/lovable-uploads/d2a073af-c735-4eba-b68f-8747596ab32c.png"
                     alt="Dane Anderson pointing at a street sign for Rue Edward-Gibbon"
-                    className="w-4/5 max-w-[192px] mx-auto rounded-md shadow-md"
+                    className="w-4/5 max-w-xs mx-auto rounded-md shadow-md"
                     caption="Dane having completed his search for vestiges of Edward Gibbon's residence in Lausanne, Switzerland"
                   />
                 </div>
