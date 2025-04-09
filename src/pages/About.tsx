@@ -60,12 +60,12 @@ const About = () => {
                     <p className="mt-3 mb-3 md:mb-0">You can reach Dane anytime at <a href="mailto:dane.anderson@humanitieslastchance.org">dane.anderson@humanitieslastchance.org</a>. Although he's a PhD candidate at the University of Michigan, Dane currently lives in the D.C. metro area and would be happy to meet if you're ever passing through.</p>
                   </div>
                   <div className="md:w-2/5 md:pl-6 flex md:justify-start justify-center md:items-start">
-                    {/* Desktop: Show beside text, aligned with title, scaled smaller (20% reduction) */}
+                    {/* Desktop: Show beside text, aligned with title, with fixed max-width of 240px */}
                     <div className="hidden md:block mt-0">
                       <OptimizedImage
                         src="/lovable-uploads/d2a073af-c735-4eba-b68f-8747596ab32c.png"
                         alt="Dane Anderson pointing at a street sign for Rue Edward-Gibbon"
-                        className="w-9/12 max-w-[80%] rounded-md shadow-md"
+                        className="w-full max-w-[240px] rounded-md shadow-md"
                         caption="Dane having completed his search for vestiges of Edward Gibbon's residence in Lausanne, Switzerland"
                       />
                     </div>
