@@ -1,7 +1,7 @@
 
 import * as React from "react"
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
-import { Check, Circle, ChevronRight } from "lucide-react"
+import { Check, Circle } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export interface DropdownMenuItemProps extends React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> {
