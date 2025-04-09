@@ -57,12 +57,12 @@ const About = () => {
                   <p>Dane Anderson founded Humanities Last Chance as a platform to push his pet theories, of which there are enough to fill a veterinary, and to use as a prop to interview people he would want to talk to anyway. Unless marked as a guest post, all blog posts, reviews, and interviews are written by Dane, with the help of his research assistant and personal gentleman's gentleman, Jeeves.</p>
                   <p>You can reach Dane anytime at <a href="mailto:dane.anderson@humanitieslastchance.org">dane.anderson@humanitieslastchance.org</a>. Although he's a PhD candidate at the University of Michigan, Dane currently lives in the D.C. metro area and would be happy to meet if you're ever passing through.</p>
                 </div>
-                <div className="md:w-1/2">
+                <div className="md:w-1/2 md:-mt-8">
                   <OptimizedImage
                     src="/lovable-uploads/fe1f0e62-d341-407e-9735-69aa75e57a27.png"
                     alt="Dane Anderson pointing at a street sign for Rue Edward-Gibbon"
                     className="w-full rounded-md shadow-md"
-                    caption="Dane at Rue Edward Gibbon in Paris"
+                    caption="Dane having completed his search for any vestiges of Edward Gibbon's residence in Lausanne, Switzerland"
                   />
                 </div>
               </div>
