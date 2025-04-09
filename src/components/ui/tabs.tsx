@@ -1,14 +1,36 @@
+
 import * as React from "react"
 import * as TabsPrimitive from "@radix-ui/react-tabs"
 
 import { cn } from "@/lib/utils"
 
-const Tabs = TabsPrimitive.Root
+interface TabsProps extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Root> {
+  children: React.ReactNode;
+}
+
+const Tabs = React.forwardRef<
+  React.ElementRef<typeof TabsPrimitive.Root>,
+  TabsProps
+>(({ className, children, ...props }, ref) => (
+  <TabsPrimitive.Root
+    ref={ref}
+    className={cn(className)}
+    {...props}
+  >
+    {children}
+  </TabsPrimitive.Root>
+))
+Tabs.displayName = TabsPrimitive.Root.displayName
+
+interface TabsListProps extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.List> {
+  children: React.ReactNode;
+  className?: string;
+}
 
 const TabsList = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.List>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
->(({ className, ...props }, ref) => (
+  TabsListProps
+>(({ className, children, ...props }, ref) => (
   <TabsPrimitive.List
     ref={ref}
     className={cn(
@@ -16,14 +38,20 @@ const TabsList = React.forwardRef<
       className
     )}
     {...props}
-  />
+  >
+    {children}
+  </TabsPrimitive.List>
 ))
 TabsList.displayName = TabsPrimitive.List.displayName
 
+interface TabsTriggerProps extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger> {
+  children: React.ReactNode;
+}
+
 const TabsTrigger = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
->(({ className, ...props }, ref) => (
+  TabsTriggerProps
+>(({ className, children, ...props }, ref) => (
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
@@ -31,14 +59,20 @@ const TabsTrigger = React.forwardRef<
       className
     )}
     {...props}
-  />
+  >
+    {children}
+  </TabsPrimitive.Trigger>
 ))
 TabsTrigger.displayName = TabsPrimitive.Trigger.displayName
 
+interface TabsContentProps extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content> {
+  children: React.ReactNode;
+}
+
 const TabsContent = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>
->(({ className, ...props }, ref) => (
+  TabsContentProps
+>(({ className, children, ...props }, ref) => (
   <TabsPrimitive.Content
     ref={ref}
     className={cn(
@@ -46,7 +80,9 @@ const TabsContent = React.forwardRef<
       className
     )}
     {...props}
-  />
+  >
+    {children}
+  </TabsPrimitive.Content>
 ))
 TabsContent.displayName = TabsPrimitive.Content.displayName
 
