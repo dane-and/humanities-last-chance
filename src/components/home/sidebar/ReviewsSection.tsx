@@ -13,7 +13,7 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews }) => {
   return (
     <div className="space-y-4 bg-background border rounded-lg p-4">
       <div className="flex justify-between items-end mb-4">
-        <h2 className="font-serif text-2xl font-bold tracking-tight">
+        <h2 className="font-serif text-xl font-bold tracking-tight">
           Latest Reviews
         </h2>
         <Link

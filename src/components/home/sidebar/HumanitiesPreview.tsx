@@ -12,7 +12,7 @@ const HumanitiesPreview: React.FC<HumanitiesPreviewProps> = ({ featuredCourses }
   return (
     <div className="space-y-4 bg-background border rounded-lg p-4 flex flex-col">
       <div className="mb-4">
-        <h2 className="font-serif text-2xl font-bold tracking-tight">
+        <h2 className="font-serif text-xl font-bold tracking-tight">
           Humanities Last Chance U
         </h2>
       </div>
