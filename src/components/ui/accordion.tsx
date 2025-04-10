@@ -1,22 +1,22 @@
 
 import * as React from "react";
-import { AccordionPrimitive } from "@radix-ui/react-accordion";
+import { Accordion } from "@radix-ui/react-accordion"; // Changed from AccordionPrimitive
 import { cn } from "../../utils";
 
-export interface AccordionProps extends React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root> {
+export interface AccordionProps extends React.ComponentPropsWithoutRef<typeof Accordion> {
   children?: React.ReactNode;
   className?: string;
-  type: string; // Added type property
+  type: string;
 }
 
-const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(({ children, className, type, ...props }, ref) => {
+const AccordionComponent = React.forwardRef<HTMLDivElement, AccordionProps>(({ children, className, type, ...props }, ref) => {
   return (
-    <AccordionPrimitive.Root ref={ref} {...props} className={cn("accordion", className)}>
+    <Accordion ref={ref} {...props} className={cn("accordion", className)}>
       {children}
-    </AccordionPrimitive.Root>
+    </Accordion>
   );
 });
 
-Accordion.displayName = "Accordion";
+AccordionComponent.displayName = "Accordion";
 
-export default Accordion;
+export default AccordionComponent;
