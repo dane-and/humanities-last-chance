@@ -16,10 +16,12 @@ const About = () => {
         <div className="flex justify-center mx-auto max-w-3xl px-4 pb-6">
           <div className="w-full">
             <OptimizedImage
-              src="/lovable-uploads/579d21dc-2855-4f28-8b61-34b44b735095.png"
-              alt="Venice cityscape painting by Turner"
+              src="/lovable-uploads/f2ebe847-98d2-47f7-89c1-ee9c3175918f.png"
+              alt="The Wedding at Cana by Paolo Veronese"
               className="mx-auto rounded-md shadow-md"
-              caption="J.M.W. Turner, The Dogana and Santa Maria della Salute, 1834"
+              caption="Paolo Veronese, The Wedding at Cana, 1563"
+              width={1200}
+              height={900}
             />
           </div>
         </div>

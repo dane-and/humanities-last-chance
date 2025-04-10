@@ -87,25 +87,23 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
         </div>
       )}
       
-      {/* Image container with white background */}
+      {/* Image container with white background - improved responsive behavior */}
       <div className="bg-white w-full flex justify-center p-2 overflow-hidden">
         <img
           src={error ? fallbackImage : src}
           srcSet={!error ? generateSrcSet() : undefined}
-          sizes={`(max-width: 768px) ${width/2}px, ${width}px`}
+          sizes={`(max-width: 768px) 100vw, ${width}px`}
           alt={alt}
           width={width}
           height={height}
           loading={priority ? "eager" : "lazy"}
           decoding="async"
-          className={`max-w-full h-auto object-contain ${imageLoaded || error ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ${className}`}
+          className={`w-auto h-auto max-w-full object-contain ${imageLoaded || error ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ${className}`}
           onLoad={handleImageLoad}
           onError={handleImageError}
           style={{ 
-            maxWidth: `${width}px`,
             maxHeight: `${height}px`,
-            width: 'auto',  
-            height: 'auto',
+            aspectRatio: `${width} / ${height}`,
           }}
         />
       </div>
