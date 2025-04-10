@@ -1,4 +1,3 @@
-
 import * as React from "react"
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog"
 
@@ -7,32 +6,17 @@ import { buttonVariants } from "@/components/ui/button"
 
 const AlertDialog = AlertDialogPrimitive.Root
 
-export interface AlertDialogTriggerProps extends React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Trigger> {
-  children?: React.ReactNode;
-  asChild?: boolean;
-}
-
-const AlertDialogTrigger = React.forwardRef<
-  React.ElementRef<typeof AlertDialogPrimitive.Trigger>,
-  AlertDialogTriggerProps
->((props, ref) => (
-  <AlertDialogPrimitive.Trigger ref={ref} {...props} />
-))
-AlertDialogTrigger.displayName = AlertDialogPrimitive.Trigger.displayName
+const AlertDialogTrigger = AlertDialogPrimitive.Trigger
 
 const AlertDialogPortal = AlertDialogPrimitive.Portal
 
-export interface AlertDialogOverlayProps extends React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Overlay> {
-  className?: string;
-}
-
 const AlertDialogOverlay = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Overlay>,
-  AlertDialogOverlayProps
+  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Overlay
     className={cn(
-      "fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      "fixed inset-0 z-50 bg-black/80  data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
       className
     )}
     {...props}
@@ -41,15 +25,10 @@ const AlertDialogOverlay = React.forwardRef<
 ))
 AlertDialogOverlay.displayName = AlertDialogPrimitive.Overlay.displayName
 
-export interface AlertDialogContentProps extends React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content> {
-  className?: string;
-  children?: React.ReactNode;
-}
-
 const AlertDialogContent = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Content>,
-  AlertDialogContentProps
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content>
+>(({ className, ...props }, ref) => (
   <AlertDialogPortal>
     <AlertDialogOverlay />
     <AlertDialogPrimitive.Content
@@ -59,124 +38,80 @@ const AlertDialogContent = React.forwardRef<
         className
       )}
       {...props}
-    >
-      {children}
-    </AlertDialogPrimitive.Content>
+    />
   </AlertDialogPortal>
 ))
 AlertDialogContent.displayName = AlertDialogPrimitive.Content.displayName
 
-export interface AlertDialogHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
-  className?: string;
-  children?: React.ReactNode;
-}
-
 const AlertDialogHeader = ({
   className,
-  children,
   ...props
-}: AlertDialogHeaderProps) => (
+}: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
       "flex flex-col space-y-2 text-center sm:text-left",
       className
     )}
     {...props}
-  >
-    {children}
-  </div>
+  />
 )
 AlertDialogHeader.displayName = "AlertDialogHeader"
 
-export interface AlertDialogFooterProps extends React.HTMLAttributes<HTMLDivElement> {
-  className?: string;
-  children?: React.ReactNode;
-}
-
 const AlertDialogFooter = ({
   className,
-  children,
   ...props
-}: AlertDialogFooterProps) => (
+}: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
       "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
       className
     )}
     {...props}
-  >
-    {children}
-  </div>
+  />
 )
 AlertDialogFooter.displayName = "AlertDialogFooter"
 
-export interface AlertDialogTitleProps extends React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Title> {
-  className?: string;
-  children?: React.ReactNode;
-}
-
 const AlertDialogTitle = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Title>,
-  AlertDialogTitleProps
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Title>
+>(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Title
     ref={ref}
     className={cn("text-lg font-semibold", className)}
     {...props}
-  >
-    {children}
-  </AlertDialogPrimitive.Title>
+  />
 ))
 AlertDialogTitle.displayName = AlertDialogPrimitive.Title.displayName
 
-export interface AlertDialogDescriptionProps extends React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Description> {
-  className?: string;
-  children?: React.ReactNode;
-}
-
 const AlertDialogDescription = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Description>,
-  AlertDialogDescriptionProps
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Description>
+>(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Description
     ref={ref}
     className={cn("text-sm text-muted-foreground", className)}
     {...props}
-  >
-    {children}
-  </AlertDialogPrimitive.Description>
+  />
 ))
 AlertDialogDescription.displayName =
   AlertDialogPrimitive.Description.displayName
 
-export interface AlertDialogActionProps extends React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Action> {
-  className?: string;
-  children?: React.ReactNode;
-}
-
 const AlertDialogAction = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Action>,
-  AlertDialogActionProps
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Action>
+>(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Action
     ref={ref}
     className={cn(buttonVariants(), className)}
     {...props}
-  >
-    {children}
-  </AlertDialogPrimitive.Action>
+  />
 ))
 AlertDialogAction.displayName = AlertDialogPrimitive.Action.displayName
 
-export interface AlertDialogCancelProps extends React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Cancel> {
-  className?: string;
-  children?: React.ReactNode;
-}
-
 const AlertDialogCancel = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Cancel>,
-  AlertDialogCancelProps
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Cancel>
+>(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Cancel
     ref={ref}
     className={cn(
@@ -185,9 +120,7 @@ const AlertDialogCancel = React.forwardRef<
       className
     )}
     {...props}
-  >
-    {children}
-  </AlertDialogPrimitive.Cancel>
+  />
 ))
 AlertDialogCancel.displayName = AlertDialogPrimitive.Cancel.displayName
 

@@ -1,4 +1,3 @@
-
 import * as React from "react"
 import * as ToastPrimitives from "@radix-ui/react-toast"
 import { cva, type VariantProps } from "class-variance-authority"
@@ -6,26 +5,11 @@ import { X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
-export interface ToastProviderProps 
-  extends React.ComponentPropsWithoutRef<typeof ToastPrimitives.Provider> {
-  children?: React.ReactNode;
-}
-
-const ToastProvider = ({ children, ...props }: ToastProviderProps) => (
-  <ToastPrimitives.Provider {...props}>
-    {children}
-  </ToastPrimitives.Provider>
-)
-ToastProvider.displayName = ToastPrimitives.Provider.displayName
-
-export interface ToastViewportProps 
-  extends React.ComponentPropsWithoutRef<typeof ToastPrimitives.Viewport> {
-  className?: string;
-}
+const ToastProvider = ToastPrimitives.Provider
 
 const ToastViewport = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Viewport>,
-  ToastViewportProps
+  React.ComponentPropsWithoutRef<typeof ToastPrimitives.Viewport>
 >(({ className, ...props }, ref) => (
   <ToastPrimitives.Viewport
     ref={ref}
@@ -54,37 +38,25 @@ const toastVariants = cva(
   }
 )
 
-export interface ToastProps extends React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root>,
-  VariantProps<typeof toastVariants> {
-    className?: string;
-    children?: React.ReactNode;
-}
-
 const Toast = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Root>,
-  ToastProps
->(({ className, variant, children, ...props }, ref) => {
+  React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root> &
+    VariantProps<typeof toastVariants>
+>(({ className, variant, ...props }, ref) => {
   return (
     <ToastPrimitives.Root
       ref={ref}
       className={cn(toastVariants({ variant }), className)}
       {...props}
-    >
-      {children}
-    </ToastPrimitives.Root>
+    />
   )
 })
 Toast.displayName = ToastPrimitives.Root.displayName
 
-export interface ToastActionProps extends React.ComponentPropsWithoutRef<typeof ToastPrimitives.Action> {
-  className?: string;
-  children?: React.ReactNode;
-}
-
 const ToastAction = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Action>,
-  ToastActionProps
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof ToastPrimitives.Action>
+>(({ className, ...props }, ref) => (
   <ToastPrimitives.Action
     ref={ref}
     className={cn(
@@ -92,21 +64,14 @@ const ToastAction = React.forwardRef<
       className
     )}
     {...props}
-  >
-    {children}
-  </ToastPrimitives.Action>
+  />
 ))
 ToastAction.displayName = ToastPrimitives.Action.displayName
 
-export interface ToastCloseProps extends React.ComponentPropsWithoutRef<typeof ToastPrimitives.Close> {
-  className?: string;
-  children?: React.ReactNode;
-}
-
 const ToastClose = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Close>,
-  ToastCloseProps
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof ToastPrimitives.Close>
+>(({ className, ...props }, ref) => (
   <ToastPrimitives.Close
     ref={ref}
     className={cn(
@@ -116,54 +81,42 @@ const ToastClose = React.forwardRef<
     toast-close=""
     {...props}
   >
-    {children || <X className="h-4 w-4" />}
+    <X className="h-4 w-4" />
   </ToastPrimitives.Close>
 ))
 ToastClose.displayName = ToastPrimitives.Close.displayName
 
-export interface ToastTitleProps extends React.ComponentPropsWithoutRef<typeof ToastPrimitives.Title> {
-  className?: string;
-  children?: React.ReactNode;
-}
-
 const ToastTitle = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Title>,
-  ToastTitleProps
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof ToastPrimitives.Title>
+>(({ className, ...props }, ref) => (
   <ToastPrimitives.Title
     ref={ref}
     className={cn("text-sm font-semibold", className)}
     {...props}
-  >
-    {children}
-  </ToastPrimitives.Title>
+  />
 ))
 ToastTitle.displayName = ToastPrimitives.Title.displayName
 
-export interface ToastDescriptionProps extends React.ComponentPropsWithoutRef<typeof ToastPrimitives.Description> {
-  className?: string;
-  children?: React.ReactNode;
-}
-
 const ToastDescription = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Description>,
-  ToastDescriptionProps
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof ToastPrimitives.Description>
+>(({ className, ...props }, ref) => (
   <ToastPrimitives.Description
     ref={ref}
     className={cn("text-sm opacity-90", className)}
     {...props}
-  >
-    {children}
-  </ToastPrimitives.Description>
+  />
 ))
 ToastDescription.displayName = ToastPrimitives.Description.displayName
 
-export type { ToastProps as ToastRootProps }
+type ToastProps = React.ComponentPropsWithoutRef<typeof Toast>
 
-export type ToastActionElement = React.ReactElement<typeof ToastAction>
+type ToastActionElement = React.ReactElement<typeof ToastAction>
 
 export {
+  type ToastProps,
+  type ToastActionElement,
   ToastProvider,
   ToastViewport,
   Toast,

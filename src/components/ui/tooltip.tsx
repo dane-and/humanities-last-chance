@@ -1,55 +1,18 @@
-
 import * as React from "react"
 import * as TooltipPrimitive from "@radix-ui/react-tooltip"
 
 import { cn } from "@/lib/utils"
 
-export interface TooltipProviderProps extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Provider> {
-  children: React.ReactNode;
-}
+const TooltipProvider = TooltipPrimitive.Provider
 
-const TooltipProvider = ({ children, ...props }: TooltipProviderProps) => (
-  <TooltipPrimitive.Provider {...props}>
-    {children}
-  </TooltipPrimitive.Provider>
-)
-TooltipProvider.displayName = TooltipPrimitive.Provider.displayName
+const Tooltip = TooltipPrimitive.Root
 
-export interface TooltipProps extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Root> {
-  children?: React.ReactNode;
-}
-
-const Tooltip = ({ children, ...props }: TooltipProps) => (
-  <TooltipPrimitive.Root {...props}>
-    {children}
-  </TooltipPrimitive.Root>
-)
-Tooltip.displayName = TooltipPrimitive.Root.displayName
-
-export interface TooltipTriggerProps extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Trigger> {
-  children?: React.ReactNode;
-  asChild?: boolean;
-}
-
-const TooltipTrigger = React.forwardRef<
-  React.ElementRef<typeof TooltipPrimitive.Trigger>,
-  TooltipTriggerProps
->(({ children, ...props }, ref) => (
-  <TooltipPrimitive.Trigger ref={ref} {...props}>
-    {children}
-  </TooltipPrimitive.Trigger>
-))
-TooltipTrigger.displayName = TooltipPrimitive.Trigger.displayName
-
-export interface TooltipContentProps extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content> {
-  className?: string;
-  children?: React.ReactNode;
-}
+const TooltipTrigger = TooltipPrimitive.Trigger
 
 const TooltipContent = React.forwardRef<
   React.ElementRef<typeof TooltipPrimitive.Content>,
-  TooltipContentProps
->(({ className, sideOffset = 4, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>
+>(({ className, sideOffset = 4, ...props }, ref) => (
   <TooltipPrimitive.Content
     ref={ref}
     sideOffset={sideOffset}
@@ -58,9 +21,7 @@ const TooltipContent = React.forwardRef<
       className
     )}
     {...props}
-  >
-    {children}
-  </TooltipPrimitive.Content>
+  />
 ))
 TooltipContent.displayName = TooltipPrimitive.Content.displayName
 

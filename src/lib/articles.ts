@@ -3,7 +3,11 @@
 export type { Article } from './types/article';
 export { defaultArticles } from './types/article';
 export { useArticles } from './hooks/useArticles';
-export { fetchArticles, fetchArticlesFromApi, fetchArticlesFromSheet } from './api/articleApi';
+export { 
+  fetchArticles, 
+  fetchArticlesFromApi, 
+  fetchArticlesFromSheet 
+} from './api/articleApi';
 export { 
   getFeaturedArticles,
   getLatestArticles,
