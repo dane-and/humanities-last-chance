@@ -10,6 +10,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { 
   Pagination, 
   PaginationContent, 
+  PaginationEllipsis,
   PaginationItem, 
   PaginationLink, 
   PaginationNext, 
@@ -116,20 +117,65 @@ const BlogSection: React.FC<BlogSectionProps> = ({
                 />
               </PaginationItem>
               
-              {[...Array(totalPages)].map((_, i) => (
-                <PaginationItem key={i}>
+              {/* First page */}
+              <PaginationItem>
+                <PaginationLink 
+                  isActive={currentPage === 1}
+                  onClick={() => {
+                    setCurrentPage(1);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="cursor-pointer"
+                >
+                  1
+                </PaginationLink>
+              </PaginationItem>
+              
+              {/* Left ellipsis */}
+              {currentPage > 3 && (
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              )}
+              
+              {/* Current page (if not first or last) */}
+              {currentPage > 2 && currentPage < totalPages - 1 && (
+                <PaginationItem>
                   <PaginationLink 
-                    isActive={currentPage === i + 1}
+                    isActive={true}
                     onClick={() => {
-                      setCurrentPage(i + 1);
+                      setCurrentPage(currentPage);
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
                     className="cursor-pointer"
                   >
-                    {i + 1}
+                    {currentPage}
                   </PaginationLink>
                 </PaginationItem>
-              ))}
+              )}
+              
+              {/* Right ellipsis */}
+              {currentPage < totalPages - 2 && (
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              )}
+              
+              {/* Last page (if more than 1 page) */}
+              {totalPages > 1 && (
+                <PaginationItem>
+                  <PaginationLink 
+                    isActive={currentPage === totalPages}
+                    onClick={() => {
+                      setCurrentPage(totalPages);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="cursor-pointer"
+                  >
+                    {totalPages}
+                  </PaginationLink>
+                </PaginationItem>
+              )}
               
               <PaginationItem>
                 <PaginationNext 
