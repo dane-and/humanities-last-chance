@@ -92,7 +92,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
         <img
           src={error ? fallbackImage : src}
           srcSet={!error ? generateSrcSet() : undefined}
-          sizes={`(max-width: 768px) 100vw, ${width}px`}
+          sizes={`(max-width: 768px) 90vw, ${width}px`}
           alt={alt}
           width={width}
           height={height}
@@ -103,7 +103,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           onError={handleImageError}
           style={{ 
             maxHeight: `${height}px`,
-            aspectRatio: `${width} / ${height}`,
+            aspectRatio: `auto`,
           }}
         />
       </div>
