@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Public CMS snapshot is generated for every build.
+/public/interviews.json

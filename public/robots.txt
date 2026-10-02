@@ -2,4 +2,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://humanitieslastchance.org/sitemap.xml
+Sitemap: https://danecoleanderson.com/sitemap.xml

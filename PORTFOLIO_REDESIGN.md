@@ -1,27 +1,17 @@
-# Dane Anderson portfolio — review draft
+# Portfolio review branch
 
-This branch turns the public publication into a personal portfolio. It has not been merged or deployed to production.
+The public portfolio uses Dane Anderson’s name and the label **Interviews** throughout. It removes the old tagline and personal photograph, includes the owner’s revised dissertation and teaching descriptions, links to ProQuest TDM Studio, and uses danecoleanderson@gmail.com for contact.
 
-## Public pages
+## Interview delivery
 
-- `/`: personal introduction, research and teaching, interview series, favorite courses.
-- `/about`: personal biography using the existing Lausanne photograph.
-- `/research`: research and teaching overview.
-- `/interviews`: complete searchable Humanities Last Chance interview series.
-- `/article/:slug`: preserved interview addresses and original Sanity transcripts.
-- `/courses`: original course collection, searchable by subject, title, and instructor.
-- `/contact`: existing public email address.
+`npm run dev`, `npm run build`, and `npm run build:dev` run `scripts/export-interviews.mjs` first. The export fetches only published interviews from the public Sanity dataset and writes `public/interviews.json`, which is generated and ignored by Git. The browser loads that file from the site’s own origin. This fixes the confirmed Sanity “CORS Origin not allowed” response on Netlify preview domains without changing CMS permissions. Drafts, future posts, blogs, and reviews are excluded. The build fails on an unavailable, empty, duplicate, or incomplete export. CMS edits become public on the next successful site build.
 
-`/articles/interviews`, `/resources`, and `/search` retain working redirects. Blog and review pages are retired, including direct article addresses: the new public interface queries only published interviews. Unavailable pages carry `noindex`. The underlying Sanity records remain intact; this is public removal, not permanent data deletion. Existing admin routes remain available.
+All 15 existing interview slugs and transcripts are preserved. Legacy interview and course routes redirect to their new collection pages. Sanity source records are retained.
 
-## Domain and account follow-up
+## Domain and launch
 
-No domain was bought or changed. Before moving domains, set `VITE_SITE_URL` to the chosen domain, update `public/sitemap.xml`, `public/robots.txt`, `public/CNAME`, the manifest paths if needed, and hosting/DNS configuration. Preserve per-interview redirects from humanitieslastchance.org. Keep the current email address working until a replacement is verified.
+The owner purchased danecoleanderson.com and deactivated the X account. Canonicals, sitemap, robots.txt, and CNAME use the purchased domain. Netlify domain connection, Porkbun DNS, HTTPS verification, and production launch remain pending. Keep the old domain connected and preserve interview paths when redirecting. Do not use the legacy manual GitHub Pages workflow for this Netlify site.
 
-The public portfolio has no Twitter/X profile links, share buttons, or account metadata. Account deactivation is a separate action and has not been completed by this code change.
+## Checks
 
-## Review before launch
-
-Review the homepage headline, biography, and research/teaching descriptions. No CV download is shown because no current CV file was supplied. Images are reused from the existing site. No new content or guest quotations have been invented.
-
-Production build and TypeScript checks pass locally. Hosted visual and interaction checks are still required before merge. The local browser could not open a file-based preview because it permits only HTTP(S).
+Production build, application TypeScript, changed-code lint, and whitespace checks pass. The production export contains the same 15 interview URLs as the sitemap, with nonempty bodies. Hosted verification follows each preview deployment.
