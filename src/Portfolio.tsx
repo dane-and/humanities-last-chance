@@ -95,13 +95,13 @@ function Home() {
 }
 function About() {
   return <><Metadata title="About" description="About Dane Anderson, a scholar of British literature and intellectual history, teacher, and interviewer." />
-    <Intro eyebrow="About me" title="Dane Anderson"><p>Scholar and teacher based in the Washington, D.C. area.</p></Intro>
+    <Intro eyebrow="About me" title="Dane Anderson"><p>Ph.D. candidate and teacher based in the Washington, D.C. area.</p></Intro>
     <div className="pf-about"><div className="pf-prose"><p>I’m a PhD candidate in English Language and Literature at the University of Michigan. My research concerns nineteenth-century British literature and intellectual history, particularly how writers understood the relationship between the mind and the world.</p><p>My dissertation develops an intellectual history of nineteenth-century Britain through the concepts of subjectivity and objectivity, examining how they were introduced and how their meanings evolved throughout the century.</p><p>My teaching experience includes first-year writing, Shakespeare, and the Bible as literature at the University of Michigan and George Mason University.</p><p>I also researched, conducted, and edited a series of fifteen <Link to="/interviews">interviews</Link> with scholars working across literature, history, religion, and education.</p><p>This site collects that work alongside <Link to="/courses">some of my favorite free courses</Link>.</p><Link className="pf-text-link" to="/contact">Get in touch <span aria-hidden="true">↗</span></Link></div></div>
   </>;
 }
 function Research() {
   return <>
-    <Metadata title="Research & Teaching" description="Dane Anderson’s intellectual history of subjectivity and objectivity in nineteenth-century Britain, research using AI and ProQuest TDM Studio, and teaching experience." />
+    <Metadata title="Research & Teaching" description="Dane Anderson’s intellectual history of subjectivity and objectivity in nineteenth-century Britain, research using AI and ProQuest TDM Studio, teaching experience, and AI training and evaluation." />
     <div className="pf-research-intro"><h1 className="pf-eyebrow">Research & teaching</h1></div>
     <div className="pf-essay-sections">
       <section><p className="pf-eyebrow">Research</p><div className="pf-prose">
@@ -111,6 +111,9 @@ function Research() {
       </div></section>
       <section><p className="pf-eyebrow">Teaching</p><div className="pf-prose">
         <p>My teaching experience includes first-year writing, Shakespeare, and the Bible as literature at the University of Michigan and George Mason University.</p>
+      </div></section>
+      <section id="ai-training"><h2 className="pf-eyebrow">AI training and evaluation</h2><div className="pf-prose">
+        <p>As a contractor for leading AI labs, I help train and evaluate frontier AI models. I create and review training data, evaluate model responses, and identify weaknesses in reasoning and writing. I view this work as an extension of my teaching: by creating golden responses, developing rubrics, and eliminating AI slop, I help improve tools that people will use to learn far beyond my classroom.</p>
       </div></section>
     </div>
   </>;
@@ -138,7 +141,7 @@ function Courses() {
   return <><Metadata title="Favorite Courses" description="Dane Anderson’s collection of free lecture courses in literature, philosophy, history, religion, and other disciplines." /><Intro eyebrow="For the curious" title="My favorite free courses"><p>A collection of lectures and courses for learning at your own pace. Browse by subject, or search for a teacher or topic. Many entries include course sites and reading lists.</p></Intro><div className="pf-collection-bar"><span>Lectures, courses & reading lists</span><label className="pf-search"><span className="sr-only">Search courses</span><input type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder="Search courses or instructors" /></label></div><div className="pf-course-list">{matches.map(d => <details key={`${d.id}-${Boolean(query)}`} open={query ? true : undefined}><summary><h2>{d.name}</h2><span>{d.courses.length} courses <span aria-hidden="true">+</span></span></summary><div>{d.courses.map(c => <article className="pf-course" key={c.id}><h3><a href={c.link} target="_blank" rel="noopener noreferrer">{c.title} <span aria-hidden="true">↗</span></a></h3><p className="pf-course-instructor">{c.instructor}</p>{c.description && <p>{c.description}</p>}{c.alternateLinks?.length ? <div className="pf-course-links">{c.alternateLinks.map((l, i) => <a key={`${l.url}-${i}`} href={l.url} target="_blank" rel="noopener noreferrer">{l.platform} ↗</a>)}</div> : null}</article>)}</div></details>)}</div>{!matches.length && <p className="pf-status">No courses match that search.</p>}</>;
 }
 function Contact() {
-  return <><Metadata title="Contact" description="Get in touch with Dane Anderson about research, teaching, or his interviews." /><Intro eyebrow="Contact" title="Let’s talk."><p>For questions about my research, teaching, or interviews, you can reach me by email or connect with me on LinkedIn.</p></Intro><div className="pf-contact"><a href={`mailto:${email}`}>{email} <span aria-hidden="true">↗</span></a><a className="pf-contact-link" href={linkedin} target="_blank" rel="noopener noreferrer"><Linkedin size={20} aria-hidden="true" />Connect on LinkedIn <span aria-hidden="true">↗</span></a><p>Based in the Washington, D.C. area.</p></div></>;
+  return <><Metadata title="Contact" description="Get in touch with Dane Anderson about research, teaching, or his interviews." /><div className="pf-intro"><h1 className="pf-eyebrow">Contact</h1><div className="pf-lead"><p>For questions about my research, teaching, or interviews, you can reach me by email or connect with me on LinkedIn.</p></div></div><div className="pf-contact"><a href={`mailto:${email}`}>{email} <span aria-hidden="true">↗</span></a><a className="pf-contact-link" href={linkedin} target="_blank" rel="noopener noreferrer"><Linkedin size={20} aria-hidden="true" />Connect on LinkedIn <span aria-hidden="true">↗</span></a><p>Based in the Washington, D.C. area.</p></div></>;
 }
 function Unavailable() {
   return <><Metadata title="Page unavailable" description="This page is no longer available. Explore Dane Anderson’s research, interviews, and favorite courses." noindex /><Intro eyebrow="Page unavailable" title="This page is no longer here."><p>The blog and book reviews have been retired. You can still explore the complete interview series.</p></Intro><Link className="pf-button" to="/interviews">Browse the interviews <span aria-hidden="true">→</span></Link></>;
