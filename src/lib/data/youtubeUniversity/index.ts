@@ -6,7 +6,6 @@ import { literature } from './literature';
 import { religion } from './religion';
 import { music } from './music';
 import { architecture } from './architecture';
-import { blackStudies } from './blackStudies';
 import { mediaStudies } from './mediaStudies';
 import { linguistics } from './linguistics';
 import { politicalScience } from './politicalScience';
@@ -22,7 +21,6 @@ export const disciplines: Discipline[] = [
   religion,
   music,
   architecture,
-  blackStudies,
   mediaStudies,
   linguistics,
   politicalScience,

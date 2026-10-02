@@ -132,6 +132,20 @@ export const history: Discipline = {
       ]
     },
     {
+      id: 'black101',
+      title: 'African American History: From Emancipation to the Present Day',
+      instructor: 'Jonathan Holloway',
+      link: 'https://www.youtube.com/playlist?list=PLh9mgdi4rNeyqnC6Gj5VCZERhhy9CC1S6',
+      platform: 'youtube',
+      thumbnailVideoUrl: 'https://www.youtube.com/watch?v=Fp6mjKumW2g&list=PLh9mgdi4rNeyqnC6Gj5VCZERhhy9CC1S6',
+      alternateLinks: [
+        {
+          platform: 'Yale',
+          url: 'https://oyc.yale.edu/african-american-studies/afam-162'
+        }
+      ]
+    },
+    {
       id: 'hist108',
       title: 'France Since 1871',
       instructor: 'John Merriman',
