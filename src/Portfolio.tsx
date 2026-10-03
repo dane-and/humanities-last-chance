@@ -22,7 +22,7 @@ const email = 'danecoleanderson@gmail.com';
 const linkedin = 'https://www.linkedin.com/in/danecoleanderson/';
 const siteOrigin = (import.meta.env.VITE_SITE_URL || 'https://danecoleanderson.com').replace(/\/$/, '');
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
-const painting = asset('lovable-uploads/f2ebe847-98d2-47f7-89c1-ee9c3175918f.png');
+const painting = asset('images/st-matthew-ebbo-gospels.jpg');
 const nav = [['/about', 'About'], ['/research', 'Research & Teaching'], ['/interviews', 'Interviews'], ['/courses', 'Favorite Courses']];
 
 function useInterviews() {
@@ -79,14 +79,14 @@ function Home() {
   const selected = ['hollis-robbins-on-ai-and-thinking-across-boundaries', 'stanley-fish-on-interpretive-communities-viewpoint-diversity-and-frank-sinatra', 'michael-clune-on-aesthetic-judgment-ai-and-the-future-of-the-english-departments'].map(slug => data.find(i => i.slug.current === slug)).filter((i): i is Interview => Boolean(i));
   return <>
     <Metadata title="Dane Anderson" description="Dane Anderson is a scholar, teacher, and interviewer working on literature, intellectual history, and the humanities." />
-    <section className="pf-hero"><div className="pf-hero-copy"><h1 className="sr-only">Dane Anderson</h1><p className="pf-hero-description">I’m Dane Anderson, a PhD candidate in English at the University of Michigan. I study nineteenth-century British literature and intellectual history, teach, and talk with scholars about their work.</p><div className="pf-actions"><Link className="pf-button" to="/about">More about me <span aria-hidden="true">↗</span></Link><Link className="pf-text-link" to="/interviews">Explore the interviews <span aria-hidden="true">→</span></Link></div></div>
-    <figure className="pf-hero-art"><img src={painting} alt="A detail from Paolo Veronese’s The Wedding at Cana" /><figcaption>Paolo Veronese, <em>The Wedding at Cana</em>, 1563</figcaption></figure></section>
+    <section className="pf-hero"><div className="pf-hero-copy"><h1>PhD Candidate and University Teacher</h1><p className="pf-hero-description">I’m Dane Anderson, a PhD candidate in English at the University of Michigan. I study nineteenth-century British intellectual history, teach, and talk with scholars about their work.</p><div className="pf-actions"><Link className="pf-button" to="/about">More about me <span aria-hidden="true">↗</span></Link><Link className="pf-text-link" to="/interviews">Explore the interviews <span aria-hidden="true">→</span></Link></div></div>
+    <figure className="pf-hero-art"><img src={painting} alt="Saint Matthew writing at his desk, from the Ebbo Gospels" width="433" height="599" /><figcaption><em>Saint Matthew</em>, from the <em>Ebbo Gospels</em></figcaption></figure></section>
     <section className="pf-work" aria-labelledby="work-heading"><div className="pf-section-label"><p className="pf-eyebrow">An introduction</p><h2 id="work-heading">My work</h2></div><div className="pf-work-list">
-      <Link to="/research"><span className="pf-number">01</span><div><h3>Research & teaching</h3><p>Subjectivity and objectivity in nineteenth-century Britain, and teaching in literature and writing.</p></div><span aria-hidden="true">↗</span></Link>
-      <Link to="/interviews"><span className="pf-number">02</span><div><h3>Interviews</h3><p>A series of fifteen long-form conversations with scholars about books, education, and intellectual life.</p></div><span aria-hidden="true">↗</span></Link>
-      <Link to="/courses"><span className="pf-number">03</span><div><h3>Favorite courses</h3><p>Free lecture courses worth spending time with, from Shakespeare to the history of philosophy.</p></div><span aria-hidden="true">↗</span></Link>
+      <Link to="/research"><span className="pf-number">01</span><div><h3>Research & teaching</h3><p>I study nineteenth-century British intellectual culture by examining how writers across disciplines theorized the relationship between subjectivity and objectivity, mind and world.</p></div><span aria-hidden="true">↗</span></Link>
+      <Link to="/interviews"><span className="pf-number">02</span><div><h3>Interviews</h3><p>My series of interviews with leading scholars explores why the liberal arts are important and the best ways to ensure they remain relevant.</p></div><span aria-hidden="true">↗</span></Link>
+      <Link to="/courses"><span className="pf-number">03</span><div><h3>Favorite courses</h3><p>I curated a collection of my favorite open-source courses for self-directed learning.</p></div><span aria-hidden="true">↗</span></Link>
     </div></section>
-    <section className="pf-featured"><div className="pf-section-heading"><div><p className="pf-eyebrow">Selected interviews</p><h2>Interviews worth returning to.</h2></div><Link className="pf-text-link" to="/interviews">View the series <span aria-hidden="true">→</span></Link></div>{selected.length > 0 ? <InterviewCards interviews={selected} /> : <p>Conversations about literature, interpretation, AI, and the future of education. <Link to="/interviews">Explore the interview series.</Link></p>}</section>
+    <section className="pf-featured"><div className="pf-section-heading"><div><h2>Check out some of my favorite interviews</h2></div><Link className="pf-text-link" to="/interviews">View the series <span aria-hidden="true">→</span></Link></div>{selected.length > 0 ? <InterviewCards interviews={selected} /> : <p>Conversations about literature, interpretation, AI, and the future of education. <Link to="/interviews">Explore the interview series.</Link></p>}</section>
   </>;
 }
 function About() {
