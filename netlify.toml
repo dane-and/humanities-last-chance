@@ -9,6 +9,31 @@
   # Environment variables
   environment = { NETLIFY_USE_YARN = "false", NODE_VERSION = "18.17.0", NPM_FLAGS = "--legacy-peer-deps" }
 
+# Preserve old links while moving visitors to the primary domain.
+[[redirects]]
+  from = "https://humanitieslastchance.org/*"
+  to = "https://www.danecoleanderson.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.humanitieslastchance.org/*"
+  to = "https://www.danecoleanderson.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://humanitieslastchance.org/*"
+  to = "https://www.danecoleanderson.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.humanitieslastchance.org/*"
+  to = "https://www.danecoleanderson.com/:splat"
+  status = 301
+  force = true
+
 # Handle SPA routes - redirect all unknown paths to index.html
 [[redirects]]
   from = "/*"
