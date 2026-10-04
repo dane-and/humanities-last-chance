@@ -7,7 +7,7 @@ export const literature: Discipline = {
   courses: [
     {
       id: 'lit101',
-      title: 'Old English and Beowolf',
+      title: 'Old English and Beowulf',
       instructor: 'Arthur Bahr',
       link: 'https://www.youtube.com/playlist?list=PLUl4u3cNGP61XcBw73jdcpNO-pju-mFtw',
       platform: 'youtube',
@@ -40,7 +40,7 @@ export const literature: Discipline = {
     {
       id: 'lit103',
       title: 'Cervantes\' Don Quixote',
-      instructor: 'Roberto Gonzáles Echevarría',
+      instructor: 'Roberto González Echevarría',
       link: 'https://www.youtube.com/playlist?list=PL4A35EEAEE3880943',
       platform: 'youtube',
       thumbnailVideoUrl: 'https://www.youtube.com/watch?v=P-D0iXLZWO0',

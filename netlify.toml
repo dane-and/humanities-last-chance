@@ -34,6 +34,19 @@
   status = 301
   force = true
 
+# Use the hosted Sanity Studio for content management.
+[[redirects]]
+  from = "/admin"
+  to = "https://danecoleanderson.sanity.studio/"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/admin/*"
+  to = "https://danecoleanderson.sanity.studio/"
+  status = 302
+  force = true
+
 # Handle SPA routes - redirect all unknown paths to index.html
 [[redirects]]
   from = "/*"

@@ -6,34 +6,9 @@
     <link rel="icon" type="image/svg+xml" href="/portfolio-favicon.svg">
     <link rel="manifest" href="/site.webmanifest">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Dane Anderson — research, teaching, and interviews in the humanities." />
+    <meta data-react-helmet="true" name="description" content="Dane Anderson is a historian and teacher studying nineteenth-century British intellectual history, with interviews and free courses in the humanities." />
     <meta name="theme-color" content="#f7f6f0" />
     <title>Dane Anderson</title>
-    <!-- Handle GitHub Pages routing -->
-    <script>
-      // Handle redirects for SPA on GitHub Pages
-      (function() {
-        // Check if we need to redirect
-        const redirect = sessionStorage.redirect;
-        delete sessionStorage.redirect;
-        
-        // If we have a saved redirect path
-        if (redirect && redirect !== location.pathname) {
-          history.replaceState(null, null, redirect);
-        }
-        
-        // Check for query param redirects (from 404.html)
-        const p = new URLSearchParams(window.location.search).get('p');
-        if (p && p !== window.location.pathname) {
-          history.replaceState(null, null, p);
-          const newUrl = window.location.origin + 
-                        window.location.pathname.replace(/\/\?p=.*$/, '') + 
-                        p + 
-                        window.location.hash;
-          window.history.replaceState(null, null, newUrl);
-        }
-      })();
-    </script>
   </head>
   <body>
     <div id="root"></div>

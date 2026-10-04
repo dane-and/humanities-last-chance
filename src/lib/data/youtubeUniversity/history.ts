@@ -79,7 +79,7 @@ export const history: Discipline = {
     },
     {
       id: 'hist105',
-      title: 'European Civilization, 16480-1945',
+      title: 'European Civilization, 1648-1945',
       instructor: 'John Merriman',
       link: 'https://www.youtube.com/playlist?list=PL3A8E6CE294860A24',
       platform: 'youtube',

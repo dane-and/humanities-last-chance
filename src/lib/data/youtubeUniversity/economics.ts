@@ -72,7 +72,7 @@ export const economics: Discipline = {
     {
       id: 'econ106',
       title: 'Financial Markets',
-      instructor: 'Robert Schiller',
+      instructor: 'Robert Shiller',
       link: 'https://www.youtube.com/playlist?list=PL8FB14A2200B87185',
       platform: 'youtube',
       thumbnailVideoUrl: 'https://www.youtube.com/watch?v=WQui_3Hpmmc&list=PL8FB14A2200B87185',

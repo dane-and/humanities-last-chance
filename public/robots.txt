@@ -2,4 +2,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://danecoleanderson.com/sitemap.xml
+Sitemap: https://www.danecoleanderson.com/sitemap.xml
